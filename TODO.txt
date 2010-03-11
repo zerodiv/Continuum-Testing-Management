@@ -1,0 +1,49 @@
+Build plan:
+
+Test suites:
+- create
+- update
+- delete
+
+Phase 3 (Tests):
+- create
+- update
+- delete
+
+Phase 4 (Moderation):
+- approve / denial queue
+
+Phase 5 (Test runner):
+  * Test overrides make them back into available params
+- create session tracker
+- create runnner
+
+Phase 6 (Utilities):
+- .net job on host to maintain browsers: kill running away ones, etc
+- .mac job on host to maintain browsers: kill running away ones, etc
+
+Accounts Admin:
+- create
+- update
+- delete (disable)
+
+--------------------------------------------------------------------------------
+Built out:
+
+Phase 1 (Accounts):
+- login / logout
+- create user
+
+--------------------------------------------------------------------------------
+Revision history - future feature:
+* Revision history handled via a external tool such as svn?, git, etc? 
+<suite>
+  <id></id>
+  <account_id></account_id>
+  <name></name>
+  <description></description>
+  <suites>
+      <suite id="n"></suite>
+      <suite id="n"></suite>
+  </suites>
+</suite>

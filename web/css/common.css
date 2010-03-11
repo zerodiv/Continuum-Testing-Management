@@ -1,0 +1,140 @@
+body {
+   margin: 0;
+   padding: 0;
+   color: #00ff00;
+   background: #eeeeee;
+   font: 0.8em Verdana, arial, sans-serif;
+}
+
+font,th,td,p,li,div { font-family: Arial, Verdana, Helvetica, sans-serif }
+
+A {
+   color: #ffffff;
+   text-decoration: none;
+}
+
+A:visited { 
+   color: #ffffff;
+   text-decoration: none;
+}
+
+A:active { 
+   color: #ffffff;
+   text-decoration: none;
+}
+
+table.pflTable {
+   border-width: 1px 1px 1px 1px;
+   border-spacing: 2px;
+   border-style: outset outset outset outset;
+   border-color: black black black black;
+   border-collapse: collapse;
+   background-color: rgb(255, 245, 238);
+   color: #000000;
+}
+
+th {
+         font-style: bold;
+}
+
+table.pflTable th {
+   border-width: 1px 1px 1px 1px;
+   padding: 2px 2px 2px 2px;
+   border-style: inset inset inset inset;
+   border-color: gray gray gray gray;
+   background-color: #a5a08a;
+   -moz-border-radius: 0px 0px 0px 0px;
+   color: #000000;
+}
+
+table.pflTable td {
+   border-width: 1px 1px 1px 1px;
+   padding: 2px 2px 2px 2px;
+   border-style: inset inset inset inset;
+   border-color: gray gray gray gray;
+   background-color: white;
+   -moz-border-radius: 0px 0px 0px 0px;
+   color: #000000;
+}
+
+table.pflTable td.odd {
+   background-color: #d8d3bd;
+   color: #000000;
+}
+table.pflTable td.even {
+   background-color: #bfb79b;
+   color: #000000;
+}
+
+
+div.pflCentered {
+   width: 380px;
+   height: 125px;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   margin-left: -190px;
+   margin-top: -64px;
+   background: #000000;
+}
+
+.basictab{
+padding: 3px 0;
+         margin-left: 0;
+font: bold 12px;
+      border-bottom: 1px solid black;
+      list-style-type: none;
+      text-align: left; /*set to left, center, or right to align the menu as desired*/
+}
+
+.basictab li{
+display: inline;
+margin: 0;
+}
+
+.basictab div {
+   text-decoration: none;
+padding: 3px 7px;
+         margin-right: 3px;
+border: 1px solid black;
+        border-bottom: none;
+        background-color:  #44454c;
+}
+
+.basictab li a{
+   text-decoration: none;
+padding: 3px 7px;
+         margin-right: 3px;
+border: 1px solid black;
+        border-bottom: none;
+        background-color:  #44454c;
+color: #ffffff;
+}
+
+.basictab li a:visited {
+color: #ffffff;
+}
+
+.basictab li a:hover {
+   background-color: #DBFF6C;
+color: black;
+}
+
+.basictab li a:active {
+   background-color: #DBFF6C;
+color: black;
+}
+
+.basictab img {
+     border: 0px;
+               padding: 0px;
+}
+
+.basictab li.selected a{ /*selected tab effect*/
+position: relative;
+top: 1px;
+     padding-top: 4px;
+     background-color: #DBFF6C;
+color: #ffffff;
+}
+
