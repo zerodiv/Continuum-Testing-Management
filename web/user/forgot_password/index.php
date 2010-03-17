@@ -1,6 +1,9 @@
 <?php
 
-class PFL_Site_User_ForgotPassword extends PFL_Site {
+require_once( '../../../bootstrap.php' );
+require_once( 'CTM/Site.php' );
+
+class CTM_Site_User_ForgotPassword extends CTM_Site {
 
    public function setupPage() {
       $this->_pagetitle = 'Forgot Password';
@@ -16,7 +19,7 @@ class PFL_Site_User_ForgotPassword extends PFL_Site {
       } 
       
       try { 
-         $user_factory_obj = new PFL_User_Factory(); 
+         $user_factory_obj = new CTM_User_Factory(); 
          
          list( $user_rv, $user ) = $user_factory_obj->lookupByUsername( $username, $password );
          
@@ -59,7 +62,7 @@ class PFL_Site_User_ForgotPassword extends PFL_Site {
       
       $this->printHtml( '<center>' );
       $this->printHtml( '<form action="/user/forgot_password/" method="POST">' );
-      $this->printHtml( '<table class="pflTable">' );
+      $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">' . $this->_pagetitle . '</th>' );
       $this->printHtml( '</tr>' );
@@ -89,5 +92,5 @@ class PFL_Site_User_ForgotPassword extends PFL_Site {
 
 }
 
-$Verify_Page = new PFL_Site_User_ForgotPassword();
+$Verify_Page = new CTM_Site_User_ForgotPassword();
 $Verify_Page->displayPage();

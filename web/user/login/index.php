@@ -1,10 +1,10 @@
 <?php
 
 require_once( '../../../bootstrap.php' );
-require_once( 'PFL/Site.php' );
-require_once( 'PFL/User/Factory.php' );
+require_once( 'CTM/Site.php' );
+require_once( 'CTM/User/Factory.php' );
 
-class PFL_Site_User_Login extends PFL_Site { 
+class CTM_Site_User_Login extends CTM_Site { 
 
    public function setupPage() {
       $this->_pagetitle = 'Login';
@@ -24,7 +24,7 @@ class PFL_Site_User_Login extends PFL_Site {
       } 
       
       try {
-         $user_factory_obj = new PFL_User_Factory();
+         $user_factory_obj = new CTM_User_Factory();
          
          list( $login_rv, $user ) = $user_factory_obj->loginUser( $username, $password );
          
@@ -48,7 +48,7 @@ class PFL_Site_User_Login extends PFL_Site {
       $this->printHtml( '<center>' );
       $this->printHtml( '<br/><br/>' );
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/login/">' );
-      $this->printHtml( '<table class="pflTable">' );
+      $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
       $this->printHtml( '</tr>' );
@@ -65,19 +65,14 @@ class PFL_Site_User_Login extends PFL_Site {
       $this->printHtml( '<center><input type="submit" value="Login!"></center>' );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td colspan="2" class="even">' );
-      $this->printHtml( '<center><a href="/user/create/">[Create a new login]</a>' );
-      $this->printHtml( '<a href="/user/forgot_password/">[Forgot my password]</a>' );
-      $this->printHtml( '</center></td>' );
-      $this->printHtml( '</tr>' );
       $this->printHtml( '</table>' );
       $this->printHtml( '</form>' );
+      $this->printHtml( '<div class="ctmSmall"><a href="/user/forgot_password/">Forgot my password</a></div>' );
       $this->printHtml( '</center>' );
       return true;
    }
 
 }
 
-$user_login_page = new PFL_Site_User_Login();
+$user_login_page = new CTM_Site_User_Login();
 $user_login_page->displayPage();

@@ -9,21 +9,21 @@ body {
 font,th,td,p,li,div { font-family: Arial, Verdana, Helvetica, sans-serif }
 
 A {
-   color: #ffffff;
+   color: #000000;
    text-decoration: none;
 }
 
 A:visited { 
-   color: #ffffff;
+   color: #000000;
    text-decoration: none;
 }
 
 A:active { 
-   color: #ffffff;
+   color: #000000;
    text-decoration: none;
 }
 
-table.pflTable {
+table.ctmTable {
    border-width: 1px 1px 1px 1px;
    border-spacing: 2px;
    border-style: outset outset outset outset;
@@ -37,7 +37,7 @@ th {
          font-style: bold;
 }
 
-table.pflTable th {
+table.ctmTable th {
    border-width: 1px 1px 1px 1px;
    padding: 2px 2px 2px 2px;
    border-style: inset inset inset inset;
@@ -45,9 +45,10 @@ table.pflTable th {
    background-color: #a5a08a;
    -moz-border-radius: 0px 0px 0px 0px;
    color: #000000;
+   font-size: 14px;
 }
 
-table.pflTable td {
+table.ctmTable td {
    border-width: 1px 1px 1px 1px;
    padding: 2px 2px 2px 2px;
    border-style: inset inset inset inset;
@@ -55,19 +56,32 @@ table.pflTable td {
    background-color: white;
    -moz-border-radius: 0px 0px 0px 0px;
    color: #000000;
+   font-size: 12px;
 }
 
-table.pflTable td.odd {
+table.ctmTable td.odd {
    background-color: #d8d3bd;
    color: #000000;
 }
-table.pflTable td.even {
+table.ctmTable td.even {
    background-color: #bfb79b;
    color: #000000;
 }
 
+div.ctmSmall a {
+   color: #000000;
+}
+div.ctmSmall a:visited {
+   color: #000000;
+}
+div.ctmSmall a:hover {
+   color: #000000;
+}
+div.ctmSmall a:active {
+   color: #000000;
+}
 
-div.pflCentered {
+div.ctmCentered {
    width: 380px;
    height: 125px;
    position: absolute;

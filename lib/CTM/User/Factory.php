@@ -1,8 +1,9 @@
 <?php
 
-require_once( 'PFL/User.php' );
+require_once( 'CTM/User.php' );
+require_once( 'CTM/User/Factory/Config.php' );
 
-class PFL_User_Factory {
+class CTM_User_Factory {
    public $_dbh;
 
    function __construct() {
@@ -14,7 +15,7 @@ class PFL_User_Factory {
       }
       $this->_dbh = null;
       try {
-         $this->_dbh = new PDO( PFL_User_Factory_Config::DB_DSN(), PFL_User_Factory_Config::DB_USERNAME(), PFL_User_Factory_Config::DB_PASSWORD() );
+         $this->_dbh = new PDO( CTM_User_Factory_Config::DB_DSN(), CTM_User_Factory_Config::DB_USERNAME(), CTM_User_Factory_Config::DB_PASSWORD() );
       } catch ( Exception $e ) {
          return;
       }
@@ -74,7 +75,7 @@ class PFL_User_Factory {
          $verify_user = $verify_sth->fetch( PDO::FETCH_ASSOC );
 
          if ( isset( $verify_user['id'] ) && $verify_user['id'] > 0 ) {
-            $user = new PFL_User();
+            $user = new CTM_User();
             $user->consumeHash( $verify_user );
             return array( true, $user );
          }
@@ -145,7 +146,7 @@ class PFL_User_Factory {
          $login_user = $login_sth->fetch( PDO::FETCH_ASSOC );
 
          if ( isset( $login_user['id'] ) && $login_user['id'] > 0 ) {
-            $user = new PFL_User();
+            $user = new CTM_User();
             $user->consumeHash( $login_user );
             return array( true, $user );
          }
@@ -176,7 +177,7 @@ class PFL_User_Factory {
          $t_user = $user_sth->fetch( PDO::FETCH_ASSOC );
 
          if ( isset( $t_user['id'] ) && $t_user['id'] > 0 ) {
-            $user = new PFL_User();
+            $user = new CTM_User();
             $user->consumeHash( $t_user );
             return array( true, $user );
          }

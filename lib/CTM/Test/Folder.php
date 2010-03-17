@@ -2,13 +2,14 @@
 
 require_once( 'Light/Database/Object.php' );
 
-class PFL_Test_Folder extends Light_Database_Object {
+class CTM_Test_Folder extends Light_Database_Object {
    public $id;
    public $parent_id;
    public $name;
 
    public function init() {
-      $this->setSqlTable( 'folder' );
+      $this->setSqlTable( 'test_folder' );
+      $this->setDbName( 'folder' );
    }
 
 }

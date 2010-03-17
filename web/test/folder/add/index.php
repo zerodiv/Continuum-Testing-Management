@@ -1,10 +1,10 @@
 <?php
 
 require_once( '../../../../bootstrap.php' );
-require_once( 'PFL/Site.php' );
-require_once( 'PFL/Test/Folder.php' );
+require_once( 'CTM/Site.php' );
+require_once( 'CTM/Test/Folder.php' );
 
-class PFL_Site_Test_Folder_Add extends PFL_Site { 
+class CTM_Site_Test_Folder_Add extends CTM_Site { 
 
    public function setupPage() {
       $this->_pagetitle = 'Test Folders';
@@ -20,7 +20,7 @@ class PFL_Site_Test_Folder_Add extends PFL_Site {
       }
 
       try {
-         $new_folder = new PFL_Test_Folder();
+         $new_folder = new CTM_Test_Folder();
          $new_folder->parent_id = $parent_id;
          $new_folder->name = $name;
          $new_folder->save();
@@ -42,7 +42,7 @@ class PFL_Site_Test_Folder_Add extends PFL_Site {
 
       $this->printHtml( '<center>' );
 
-      $this->printHtml( '<table class="pflTable">' );
+      $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/add/">' );
       $this->printHtml( '<input type="hidden" value="' . $parent_id . '" name="parent_id">' );
 
@@ -69,5 +69,5 @@ class PFL_Site_Test_Folder_Add extends PFL_Site {
 
 }
 
-$test_folder_add_obj = new PFL_Site_Test_Folder_Add();
+$test_folder_add_obj = new CTM_Site_Test_Folder_Add();
 $test_folder_add_obj->displayPage();

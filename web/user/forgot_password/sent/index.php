@@ -1,6 +1,8 @@
 <?php
+require_once( '../../../../bootstrap.php' );
+require_once( 'CTM/Site.php' );
 
-class PFL_Site_User_ForgotPassword_Sent extends PFL_Site {
+class CTM_Site_User_ForgotPassword_Sent extends CTM_Site {
 
    public function setupPage() {
       $this->_pagetitle = 'Forgot Password - Email sent';
@@ -10,7 +12,7 @@ class PFL_Site_User_ForgotPassword_Sent extends PFL_Site {
    public function displayBody() {
       // temp login / registration form.
       $this->printHtml( '<center>' );
-      $this->printHtml( '<table class="pflTable">' );
+      $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">' . $this->_pagetitle . '</th>' );
       $this->printHtml( '</tr>' );
@@ -24,5 +26,5 @@ class PFL_Site_User_ForgotPassword_Sent extends PFL_Site {
 
 }
 
-$Verify_Page = new PFL_Site_User_ForgotPassword_Sent();
+$Verify_Page = new CTM_Site_User_ForgotPassword_Sent();
 $Verify_Page->displayPage();

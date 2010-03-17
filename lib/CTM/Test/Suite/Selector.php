@@ -1,10 +1,10 @@
 <?php
 
 require_once( 'Light/Database/Selector.php' );
-require_once( 'PFL/Test/Suite.php' );
+require_once( 'CTM/Test/Suite.php' );
 
-class PFL_Test_Suite_Selector extends Light_Database_Selector {
+class CTM_Test_Suite_Selector extends Light_Database_Selector {
    public function init() {
-      $this->setDbObject( 'PFL_Test_Suite' );
+      $this->setDbObject( 'CTM_Test_Suite' );
    }
 }

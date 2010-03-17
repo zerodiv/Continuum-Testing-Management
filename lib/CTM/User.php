@@ -1,9 +1,9 @@
 <?php
 
 require_once( 'Light/DBO.php' );
-require_once( 'PFL/User/Factory.php' );
+require_once( 'CTM/User/Factory.php' );
 
-class PFL_User extends Light_DBO {
+class CTM_User extends Light_DBO {
    public $id;
    public $account_role_id;
    public $username;
@@ -21,7 +21,7 @@ class PFL_User extends Light_DBO {
 
    public function getDBH() {
       try {
-         $user_factory = new PFL_User_Factory();
+         $user_factory = new CTM_User_Factory();
          return $user_factory->getDBH();
       } catch ( Exception $e ) {
          return null;

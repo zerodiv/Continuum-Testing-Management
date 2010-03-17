@@ -8,8 +8,7 @@ class Light_Database_Factory {
    static private $_db_factory;
 
    static public function getDBH( $name, $pooled = true ) {
-      if ( ! isset( $this->_db_factory ) ) {
-         echo "instanciate: impl\n";
+      if ( ! isset( Light_Database_Factory::$_db_factory ) ) {
          Light_Database_Factory::$_db_factory = new Light_Database_Factory_Impl();
       }
       return Light_Database_Factory::$_db_factory->getDBH( $name, $pooled );

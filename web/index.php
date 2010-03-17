@@ -2,9 +2,9 @@
 
 // bootstrap the include path
 require_once( '../bootstrap.php' );
-require_once( 'PFL/Site.php' );
+require_once( 'CTM/Site.php' );
 
-class PFL_Site_Main extends PFL_Site {
+class CTM_Site_Main extends CTM_Site {
    public function setupPage() {
       $this->_pagetitle = 'Main';
       return true;
@@ -14,7 +14,7 @@ class PFL_Site_Main extends PFL_Site {
       // temp login / registration form.
       if ( $this->isLoggedIn() == true ) {
          // bounce them to test suites.
-         header( 'Location: ' . $this->_baseurl . '/test/suites/' );
+         header( 'Location: ' . $this->_baseurl . '/test/folders/' );
          return false;
       }
       header( 'Location: ' . $this->_baseurl . '/user/login/' );
@@ -27,5 +27,5 @@ class PFL_Site_Main extends PFL_Site {
 
 }
 
-$mainPage = new PFL_Site_Main();
+$mainPage = new CTM_Site_Main();
 $mainPage->displayPage();

@@ -47,3 +47,5 @@ Revision history - future feature:
       <suite id="n"></suite>
   </suites>
 </suite>
+
+QTP, SilkTest, Selenium, Junit, Webload, TestComplete

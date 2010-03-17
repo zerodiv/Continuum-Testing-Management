@@ -1,22 +1,19 @@
 <?php
 
-class PFL_Test_Suite extends Light_DBO {
+require_once( 'Light/Database/Object.php' );
+
+class CTM_Test_Suite extends Light_Database_Object {
    public $id;
-   public $account_id;
+   public $test_folder_id;
    public $name;
    public $description;
+   public $created_at;
+   public $modified_at;
+   public $modified_by;
 
    public function init() {
-      $this->setSqlTable( 'suite' );
-   }
-
-   public function getDBH() {
-      try {
-         $user_factory = new PFL_Test_Suite_Factory();
-         return $user_factory->getDBH();
-      } catch ( Exception $e ) {
-         return null;
-      }
+      $this->setSqlTable( 'test_suite' );
+      $this->setDbName( 'suite' );
    }
 
 }

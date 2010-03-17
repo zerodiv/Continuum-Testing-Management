@@ -1,6 +1,8 @@
 <?php
+require_once( '../../../bootstrap.php' );
+require_once( 'CTM/Site.php' );
 
-class PFL_Site_User_Create extends PFL_Site {
+class CTM_Site_User_Create extends CTM_Site {
    private $_displayError;
 
    public function setupPage() {
@@ -26,7 +28,7 @@ class PFL_Site_User_Create extends PFL_Site {
 
       try {
 
-         $user_factory = new PFL_User_Factory();
+         $user_factory = new CTM_User_Factory();
          list( $user_rv, $user_message ) = $user_factory->createUser( $username, $password );
 
          if ( $user_rv == true ) {
@@ -46,8 +48,8 @@ class PFL_Site_User_Create extends PFL_Site {
             $message .= "Thank you.\n";
 
             $more_headers = '';
-            $more_headers .= "From: " . PFL_Site_User_Create_Config::CREATE_EMAIL_FROM() . "\r\n";
-            $more_headers .= "Reply-To: " . PFL_Site_User_Create_Config::CREATE_EMAIL_FROM() . "\r\n";
+            $more_headers .= "From: " . CTM_Site_User_Create_Config::CREATE_EMAIL_FROM() . "\r\n";
+            $more_headers .= "Reply-To: " . CTM_Site_User_Create_Config::CREATE_EMAIL_FROM() . "\r\n";
 
             mail( '<' . $username . '>', "Welcome to " . $this->_sitetitle, $message );
 
@@ -72,7 +74,7 @@ class PFL_Site_User_Create extends PFL_Site {
       $password = $this->getOrPost( 'password', '' );
       $this->printHtml( '<center>' );
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/create/">' );
-      $this->printHtml( '<table class="pflTable">' );
+      $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
       $this->printHtml( '</tr>' );
@@ -101,5 +103,5 @@ class PFL_Site_User_Create extends PFL_Site {
 
 }
 
-$CreateUser_Page = new PFL_Site_User_Create();
+$CreateUser_Page = new CTM_Site_User_Create();
 $CreateUser_Page->displayPage();

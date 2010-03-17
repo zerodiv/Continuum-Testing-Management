@@ -9,13 +9,29 @@ abstract class Light_MVC {
    public $_sitetitle;
    public $_sessionname;
    public $_css_files;
+   public $_js_files;
    
    function __construct() {
+      // load the default configuration into the vars
       $this->_basedir = Light_MVC_Config::BASE_DIR();
       $this->_baseurl = Light_MVC_Config::BASE_URL();
       $this->_sitetitle = Light_MVC_Config::SITE_TITLE();
       $this->_sessionname = Light_MVC_Config::SESSION_NAME();
-      $this->_css_files = Light_MVC_Config::CSS_FILES();
+      if ( is_callable( 'Light_MVC_Config::CSS_FILES' ) ) {
+         $this->_css_files = Light_MVC_Config::CSS_FILES();
+      }
+      if ( is_callable( 'Light_MVC_Config::JS_FILES' ) ) {
+         $this->_js_files = Light_MVC_Config::JS_FILES();
+      }
+
+      if ( ! is_array( $this->_css_files ) ) {
+         $this->_css_files = array();
+      }
+
+      if ( ! is_array( $this->_js_files ) ) {
+         $this->_js_files = array();
+      }
+
       // init this to nothing.
       $this->_pagetitle = '';
    } 
@@ -36,7 +52,7 @@ abstract class Light_MVC {
             'setupPage',
             'setupSession',
             'handleRequest',
-            'displayHeader',
+            'displayHeader', 
             'displayBody',
             'displayFooter',
             ); 
@@ -73,16 +89,33 @@ abstract class Light_MVC {
       $this->printHtml('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">' );
       $this->printHtml('<html>');
       $this->printHtml('<head>');
+
+      $title_string = $this->_sitetitle;
+      if ( isset( $this->_pagetitle) ) {
+         $title_string .= ' - ' . $this->_pagetitle;
+      }
+
+      $this->printHtml( '<title>' . $title_string .  '</title>' );
+
+      $this->displayHeader_CSS();
+      $this->displayHeader_JavaScript();
+
+      $this->printHtml( '</head>' );
+      $this->printHtml( '<body>' );
+      return true;
+   }
+
+   public function displayHeader_CSS() {
       foreach ( $this->_css_files as $css_file ) {
          $this->printHtml('<link href="' . $this->_baseurl . '/css/' . $css_file . '" type="text/css" rel="stylesheet"/>' );
       }
-      $this->printHtml( '<title>' . $this->_sitetitle );
-      if ( isset( $this->_pagetitle) ) {
-         $this->printHtml( ' - ' . $this->_pagetitle );
+      return true;
+   }
+
+   public function displayHeader_JavaScript() {
+      foreach ( $this->_js_files as $js_file ) {
+         $this->printHtml('<script type="text/javascript" src="' . $this->_baseurl . '/js/' . $js_file . '"></script>' );
       }
-      $this->printHtml( '</title>' );
-      $this->printHtml( '</head>' );
-      $this->printHtml( '<body>' );
       return true;
    }
    
@@ -115,6 +148,13 @@ abstract class Light_MVC {
    public function printHtml( $html ) {
       echo $html . "\n";
    }
+
+   public function printJs( $js ) {
+      echo '<script language="JavaScript">' . "\n";
+      echo $js;
+      echo '</script>' . "\n";
+   }
+
 
 }
 
