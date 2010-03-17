@@ -144,7 +144,12 @@ abstract class Light_MVC {
       }
       return false;
    } 
-   
+  
+   // yes you need to use this dammit.
+   public function escapeVariable( $var ) {
+      return htmlentities( $var, ENT_QUOTES, 'UTF-8' );
+   }
+
    public function printHtml( $html ) {
       echo $html . "\n";
    }

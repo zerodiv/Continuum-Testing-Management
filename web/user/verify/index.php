@@ -2,6 +2,8 @@
 
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
+require_once( 'CTM/User/Selector.php' );
+
 require_once( 'CTM/User/Factory.php' );
 
 class CTM_Site_User_Verify extends CTM_Site {
@@ -22,24 +24,33 @@ class CTM_Site_User_Verify extends CTM_Site {
       } 
       
       try {
-         $user_factory = new CTM_User_Factory();
-         
-         list( $v_rv, $v_message ) = $user_factory->verifyUser( $id );
-         
-         if ( $v_rv == true ) {
+         $sel = new CTM_User_Selector();
+         $and_params = array(
+               new Light_Database_Selector_Criteria( 'id', '=', $id )
+         );
+         $rows = $sel->find( $and_params );
+
+         if ( isset( $rows[0] ) ) {
+            $user = $rows[0];
+            if ( $user->is_verified == 0 ) {
+               // save the verification
+               $user->is_verified = 1;
+               $user->verified_when = time();
+               $user->save();
+            }
+            // already verified
             header( 'Location: ' . $this->_baseurl . '/user/login/' );
             return false;
-         } else {
-            $this->_pagetitle = $v_message;
-            return true;
          }
+
       } catch ( Exception $e ) {
          $this->_pagetitle = 'Failed to setup user session, try again later';
          return true;
-      } 
-      
-      $this->_pagetitle = 'Failed to setup user verification session, try again later.';
+      }
+
+      $this->_pagetitle = 'Failed to setup user session, try again later';
       return true;
+
    } 
    
    public function displayBody() {

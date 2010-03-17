@@ -90,43 +90,6 @@ class CTM_User_Factory {
 
    }
 
-   public function verifyUser( $id ) {
-      try {
-         $dbh = $this->getDBH();
-
-         if ( ! is_object( $dbh ) ) {
-            return array( false, 'Failed to verify user at this time.' );
-         }
-
-         $sel_sth = $dbh->prepare( 'SELECT id, is_verified FROM account WHERE id = ?' );
-         $sel_sth->bindParam( 1, $id );
-         $sel_sth->execute();
-
-         $sel_user = $sel_sth->fetch( PDO::FETCH_ASSOC );
-         $sel_sth = null;
-         if ( ! isset( $sel_user['id'] ) ) {
-            return array( false, 'Failed to find user to verify.' );
-         }
-
-         if ( isset( $sel_user['is_verified'] ) ) {
-            if ( $sel_user['is_verified'] == 1 ) {
-               return array( true, 'Already verified' );
-            } else {
-               $verified_when = time();
-               $upd_sth = $dbh->prepare( 'UPDATE account SET is_verified = 1, verified_when = ? WHERE id = ?' );
-               $upd_sth->bindParam( 1, $verified_when );
-               $upd_sth->bindParam( 2, $id );
-               $upd_sth->execute();
-               return array( true, 'Verified!' );
-            }
-         }
-         return array( false, 'Failed to verify user account.' );
-      } catch ( Exception $e ) {
-         return array( false, 'Failed to verify user account.' );
-      }
-      return array( false, 'Failed to verify user account.' );
-   }
-
    public function loginUser( $username, $password ) {
       try {
          

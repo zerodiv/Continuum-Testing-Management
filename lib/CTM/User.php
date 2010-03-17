@@ -1,9 +1,9 @@
 <?php
 
-require_once( 'Light/DBO.php' );
+require_once( 'Light/Database/Object.php' );
 require_once( 'CTM/User/Factory.php' );
 
-class CTM_User extends Light_DBO {
+class CTM_User extends Light_Database_Object {
    public $id;
    public $account_role_id;
    public $username;
@@ -17,15 +17,7 @@ class CTM_User extends Light_DBO {
 
    public function init() {
       $this->setSqlTable( 'account' );
-   }
-
-   public function getDBH() {
-      try {
-         $user_factory = new CTM_User_Factory();
-         return $user_factory->getDBH();
-      } catch ( Exception $e ) {
-         return null;
-      }
+      $this->setDbName( 'account' );
    }
 
    // jeo - swiped from a tutcity artical, because i am lazy today.
