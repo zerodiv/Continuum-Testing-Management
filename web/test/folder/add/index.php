@@ -42,12 +42,21 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
 
       $this->printHtml( '<center>' );
 
+      $this->printHtml( '<table>' );
+      $this->printHtml( '<tr>' );
+      $this->printHtml( '<td valign="top">' );
+      $this->_displayFolderBreadCrumb( $parent_id );
+      $this->printHtml( '</td>' );
+      $this->printHtml( '</tr>' );
+
+      $this->printHtml( '<tr>' );
+      $this->printHtml( '<td valign="top">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/add/">' );
       $this->printHtml( '<input type="hidden" value="' . $parent_id . '" name="parent_id">' );
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="4">Add Folder</th>' );
+      $this->printHtml( '<th colspan="2">Add Folder</th>' );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 
@@ -61,6 +70,10 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</form>' );
+
+      $this->printHtml( '</table>' );
+      $this->printHtml( '</td>' );
+      $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );
 

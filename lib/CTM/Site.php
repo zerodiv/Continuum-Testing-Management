@@ -4,6 +4,7 @@ require_once( 'Light/MVC.php' );
 
 // we have to include the user object to thaw it from the session
 require_once( 'CTM/User.php' );
+require_once( 'CTM/Test/Folder/Selector.php' );
 
 class CTM_Site extends Light_MVC {
    private $_odd_even_class;
@@ -58,6 +59,41 @@ class CTM_Site extends Light_MVC {
       $username = ltrim( $username );
       $username = rtrim( $username );
       return $username;
+   }
+
+   private function _getFolderParents( $parent_id, &$parents ) {
+      try {
+         $sel = new CTM_Test_Folder_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $parent_id ) );
+         $rows = $sel->find( $and_params );
+         if ( isset( $rows[0] ) ) {
+            $parents[] = $rows[0]; 
+            if ( $rows[0]->parent_id > 0 ) {
+               $this->_getFolderParents( $rows[0]->parent_id, $parents );
+            } 
+         }
+      } catch( Exception $e ) {
+         throw $e;
+      }
+   }
+
+   public function _displayFolderBreadCrumb( $parent_id = 0 ) {
+      // breadcrumb logic goes here.
+      if ( $parent_id == 0 ) {
+         $this->printHtml( '<ul class="basictab">' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
+         $this->printHtml( '</ul>' );
+      } else {
+         // Look up the chain as needed.
+         $parents = array(); $this->_getFolderParents( $parent_id, $parents );
+         $parents = array_reverse( $parents );
+         $this->printHtml( '<ul class="basictab">' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
+         foreach ( $parents as $parent ) {
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">' . $parent->name . '</a></li>' );
+         }
+         $this->printHtml( '</ul>' );
+      }
    }
 
 }

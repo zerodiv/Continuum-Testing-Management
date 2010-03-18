@@ -17,6 +17,10 @@ abstract class Light_MVC {
       $this->_baseurl = Light_MVC_Config::BASE_URL();
       $this->_sitetitle = Light_MVC_Config::SITE_TITLE();
       $this->_sessionname = Light_MVC_Config::SESSION_NAME();
+
+      // setup the default timezone.
+      date_default_timezone_set( Light_MVC_Config::DEFAULT_TIMEZONE() );
+
       if ( is_callable( 'Light_MVC_Config::CSS_FILES' ) ) {
          $this->_css_files = Light_MVC_Config::CSS_FILES();
       }
@@ -147,6 +151,7 @@ abstract class Light_MVC {
   
    // yes you need to use this dammit.
    public function escapeVariable( $var ) {
+      $var = stripslashes( $var );
       return htmlentities( $var, ENT_QUOTES, 'UTF-8' );
    }
 
@@ -160,6 +165,9 @@ abstract class Light_MVC {
       echo '</script>' . "\n";
    }
 
+   public function formatDate( $timestamp ) {
+      return date( Light_MVC_Config::TIME_FORMAT(), $timestamp );
+   }
 
 }
 

@@ -4,6 +4,7 @@ require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Folder/Selector.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
+require_once( 'CTM/User/Cache.php' );
 
 class CTM_Site_Test_Folders extends CTM_Site { 
 
@@ -39,33 +40,12 @@ class CTM_Site_Test_Folders extends CTM_Site {
          $parent_id = 0;
       }
 
-
-
       $this->printHtml( '<center>' );
       $this->printHtml( '<table>' );
+
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td valign="top" colspan="3">' );
-
-      // breadcrumb logic goes here.
-      if ( $parent_id == 0 ) {
-         $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
-         $this->printHtml( '</ul>' );
-      } else {
-         // Look up the chain as needed.
-         $parents = array();
-         $this->_getParents( $parent_id, $parents );
-
-         $parents = array_reverse( $parents );
-
-         $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
-         foreach ( $parents as $parent ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">' . $parent->name . '</a></li>' );
-         }
-         $this->printHtml( '</ul>' );
-      }
-
+      $this->_displayFolderBreadCrumb( $parent_id );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 
@@ -154,14 +134,23 @@ class CTM_Site_Test_Folders extends CTM_Site {
          $this->printHtml( '</tr>' );
       } else {
 
+         $user_cache = new CTM_User_Cache();
+
          foreach ( $suite_rows as $suite ) {
+
+            $user = $user_cache->getById( $suite->modified_by );
+
             $class = $this->oddEvenClass();
             $this->printHtml( '<tr>' );
             $this->printHtml( '<td class="' . $class . '">' . $suite->id . '</td>' );
-            $this->printHtml( '<td class="' . $class . '">' . $suite->name . '</td>' );
-            $this->printHtml( '<td class="' . $class . '">' . $suite->modified_at . '</td>' );
-            $this->printHtml( '<td class="' . $class . '">' . $suite->modified_by . '</td>' );
-            $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/suite/edit?id=' . $suite->id . '" class="ctmButton">Edit</a></center></td>' );
+            $this->printHtml( '<td class="' . $class . '">' . $this->escapeVariable( $suite->name ) . '</td>' );
+            $this->printHtml( '<td class="' . $class . '">' . $this->formatDate( $suite->modified_at ) . '</td>' );
+            if ( isset( $user ) ) {
+               $this->printHtml( '<td class="' . $class . '">' . $this->escapeVariable( $user->email_address ) . '</td>' );
+            } else {
+               $this->printHtml( '<td class="' . $class . '">Unknown</td>' );
+            }
+            $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/suite/edit/?id=' . $suite->id . '" class="ctmButton">Edit</a></center></td>' );
             $this->printHtml( '</tr>' );
          }
 

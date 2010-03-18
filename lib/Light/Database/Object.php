@@ -146,7 +146,8 @@ abstract class Light_Database_Object {
          // if we are doing a update we need to add the id
          if ( $is_insert != true ) {
             $field_id++;
-            $sth->bindParam( $field_id, $this->${ $this->_sql_id_field } );
+            $id_field = $this->_sql_id_field;
+            $sth->bindParam( $field_id, $this->$id_field );
          }
 
          // run the query
