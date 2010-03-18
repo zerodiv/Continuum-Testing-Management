@@ -8,7 +8,7 @@ class CTM_User extends Light_Database_Object {
    public $account_role_id;
    public $username;
    public $password;
-   public $display_name;
+   public $email_address;
    public $is_disabled;
    public $is_verified;
    public $verified_when;

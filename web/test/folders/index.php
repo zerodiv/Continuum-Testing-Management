@@ -106,7 +106,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
             $this->printHtml( '<tr>' );
             $this->printHtml( '<td class="' . $class . '">' . $row->id . '</td>' );
             $this->printHtml( '<td class="' . $class . '"><a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $row->id . '">' . $row->name . '</a></td>' );
-            $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/folder/edit/?id=' . $row->id . '">Edit</a></center></td>' );
+            $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/folder/edit/?id=' . $row->id . '" class="ctmButton">Edit</a></center></td>' );
             $this->printHtml( '</tr>' );
          }
       }
@@ -114,7 +114,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       $class = $this->oddEvenClass();
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="' . $class . '" colspan="3"><center><a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '">(Create New Sub Folder)</a></center></th>' );
+      $this->printHtml( '<td class="' . $class . '" colspan="3"><center><a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a></center></th>' );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 
@@ -161,7 +161,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
             $this->printHtml( '<td class="' . $class . '">' . $suite->name . '</td>' );
             $this->printHtml( '<td class="' . $class . '">' . $suite->modified_at . '</td>' );
             $this->printHtml( '<td class="' . $class . '">' . $suite->modified_by . '</td>' );
-            $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/suite/edit?id=' . $suite->id . '">Edit</a></center></td>' );
+            $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/suite/edit?id=' . $suite->id . '" class="ctmButton">Edit</a></center></td>' );
             $this->printHtml( '</tr>' );
          }
 
@@ -170,7 +170,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       $class = $this->oddEvenClass();
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="' . $class . '" colspan="5"><center><a href="' . $this->_baseurl . '/test/suite/add/?test_folder_id=' . $parent_id . '">(Create New Test Suite)</a></center></th>' );
+      $this->printHtml( '<td class="' . $class . '" colspan="5"><center><a href="' . $this->_baseurl . '/test/suite/add/?test_folder_id=' . $parent_id . '" class="ctmButton">New Test Suite</a></center></th>' );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 

@@ -2,7 +2,7 @@
 
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
-require_once( 'CTM/User/Factory.php' );
+require_once( 'CTM/User/Selector.php' );
 
 class CTM_Site_User_Login extends CTM_Site { 
 
@@ -22,19 +22,29 @@ class CTM_Site_User_Login extends CTM_Site {
       if ( ! isset( $password ) ) {
          return true;
       } 
-      
+
+      // cleanup the login name.
+      $username = $this->cleanupUserName( $username );
+
       try {
-         $user_factory_obj = new CTM_User_Factory();
+         $sel = new CTM_User_Selector();
+         $and_params = array(
+               new Light_Database_Selector_Criteria( 'username', '=', $username ),
+               new Light_Database_Selector_Criteria( 'password', '=', md5( $password ) ),
+         );
          
-         list( $login_rv, $user ) = $user_factory_obj->loginUser( $username, $password );
-         
-         if ( $login_rv == true ) {
-            $_SESSION['user'] = $user;
+         $rows = $sel->find( $and_params );
+
+         // print_r( $rows );
+
+         if ( isset( $rows[0] ) ) {
+            // found the user auth them in
+            $_SESSION['user'] = $rows[0];
             // they are logged in return them back to the main site.
             header( 'Location: ' . $this->_baseurl );
             return false;
          }
-         
+
       } catch ( Exception $e ) {
       }
       return true;
@@ -62,12 +72,14 @@ class CTM_Site_User_Login extends CTM_Site {
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td colspan="2" class="odd">' );
-      $this->printHtml( '<center><input type="submit" value="Login!"></center>' );
+      $this->printHtml( '<center>' );
+      $this->printHtml( '<input type="submit" value="Login!">' );
+      $this->printHtml( '<a href="/user/forgot_password/" class="ctmButton">Forgot my password</a>' );
+      $this->printHtml( '</center>' );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '</table>' );
       $this->printHtml( '</form>' );
-      $this->printHtml( '<div class="ctmSmall"><a href="/user/forgot_password/">Forgot my password</a></div>' );
       $this->printHtml( '</center>' );
       return true;
    }

@@ -1,6 +1,9 @@
 <?php
+
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
+require_once( 'CTM/User.php' );
+require_once( 'CTM/User/Selector.php' );
 
 class CTM_Site_User_Create extends CTM_Site {
    private $_displayError;
@@ -28,10 +31,40 @@ class CTM_Site_User_Create extends CTM_Site {
 
       try {
 
-         $user_factory = new CTM_User_Factory();
-         list( $user_rv, $user_message ) = $user_factory->createUser( $username, $password );
+         $email_address = $username;
 
-         if ( $user_rv == true ) {
+         $username = $this->cleanupUsername( $username );
+
+         $user_sel = new CTM_User_Selector();
+
+         $and_params = array(
+               new Light_Database_Selector_Criteria( 'username', '=', $username ),
+         ); 
+         
+         $rows = $user_sel->find( $and_params );
+
+         if ( count( $rows ) > 0 ) {
+            $this->_displayError = 'There is already a user by that username in the system.';
+            return true;
+         }
+
+         // create the new user.
+         $user = new CTM_User();
+         $user->account_role_id = 1; // Default login role. 
+         $user->username = $username;
+         $user->password = md5( $password );
+         $user->email_address = $email_address;
+         $user->is_disabled = 0;
+         $user->is_verified = 0;
+         $user->verified_when = 0;
+         $user->created_on = time();
+         $user->temp_password = '';
+         $user->save();
+
+         $rows = $user_sel->find( $and_params );
+
+         if ( count( $rows ) == 1 ) {
+            // found the user hooray.
 
             $verify_sign = md5( $user_message->id . 'jeorem' );
 
@@ -57,7 +90,7 @@ class CTM_Site_User_Create extends CTM_Site {
             return true;
          }
 
-         $this->_displayError = $user_message;
+         $this->_displayError = 'Failed to create user account at this time.';
          return true;
 
       } catch ( Exception $e ) {

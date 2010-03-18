@@ -117,6 +117,8 @@ abstract class Light_Database_Selector {
          }
       }
 
+      // echo "sql: $sql\n";
+
       try {
          $dbh = Light_Database_Factory::getDBH( $this->_db_name );
 
@@ -127,6 +129,7 @@ abstract class Light_Database_Selector {
 
          if ( count( $and_criteria ) > 0 ) {
             foreach ( $and_criteria as $and_criterion ) { 
+               // echo "bind(and): $bind_id " . $and_criterion->getValue() . "\n";
                $sth->bindParam( $bind_id, $and_criterion->getValue() );
                $bind_id++;
             }
@@ -134,6 +137,7 @@ abstract class Light_Database_Selector {
          
          if ( count( $or_criteria ) > 0 ) {
             foreach ( $or_criteria as $or_criterion ) { 
+               // echo "bind(or): $bind_id " . $or_criterion->getValue() . "\n";
                $sth->bindParam( $bind_id, $or_criterion->getValue() );
                $bind_id++;
             }
@@ -156,6 +160,7 @@ abstract class Light_Database_Selector {
          return $rows;
 
       } catch ( Exception $e ) {
+         print_r( $e );
          throw $e;
       }
    }

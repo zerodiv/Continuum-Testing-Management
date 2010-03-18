@@ -68,6 +68,10 @@ table.ctmTable td.even {
    color: #000000;
 }
 
+div.ctmSmall {
+   font-size: 10px;
+}
+
 div.ctmSmall a {
    color: #000000;
 }
@@ -151,4 +155,12 @@ top: 1px;
      background-color: #DBFF6C;
 color: #ffffff;
 }
+
+a.ctmButton{
+height:23px;
+padding:0 10px;
+        line-height:23px;
+        font-size:11px;
+        font-weight:bold;color:#fff;
+        text-shadow:-1px -1px 0 #333;-webkit-border-radius:3px;-moz-border-radius:3px;background:url(/images/buttons/black.gif) 0 0 repeat-x;}
 

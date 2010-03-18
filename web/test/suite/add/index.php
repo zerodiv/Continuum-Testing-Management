@@ -27,6 +27,7 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
          $new->description = $description;
          $create_at = time(); // yes i know this is paranoia
          $new->created_at = $create_at;
+         $new->created_by = $_SESSION['user']->id;
          $new->modified_at = $create_at;
          $new->modified_by = $_SESSION['user']->id;
          $new->save();

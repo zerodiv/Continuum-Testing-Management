@@ -53,4 +53,11 @@ class CTM_Site extends Light_MVC {
       return $this->_odd_even_class;
    }
 
+   public function cleanupUserName( $username ) {
+      $username = strtolower( $username );
+      $username = ltrim( $username );
+      $username = rtrim( $username );
+      return $username;
+   }
+
 }

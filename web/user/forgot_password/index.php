@@ -2,6 +2,7 @@
 
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
+require_once( 'CTM/User/Selector.php' );
 
 class CTM_Site_User_ForgotPassword extends CTM_Site {
 
@@ -19,11 +20,25 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
       } 
       
       try { 
-         $user_factory_obj = new CTM_User_Factory(); 
+         $sel = new CTM_User_Selector();
+        
+         $username = $this->cleanupUsername( $username ) ;
+
+         $and_params = array(
+               new Light_Database_Selector_Criteria( 'username', '=', $username ),
+         ); 
          
-         list( $user_rv, $user ) = $user_factory_obj->lookupByUsername( $username, $password );
-         
-         if ( $user_rv == true && is_object( $user ) ) {
+         $rows = $sel->find( $and_params );
+
+
+         if ( ! isset( $rows[0] ) ) {
+            return true;
+         }
+
+         // pull the user object off the stack
+         $user = $rows[0];
+
+         if ( is_object( $user ) ) {
             // we need to send a email after successfuly updating the db.
             $user->generateTempPassword();
             $user->save();
@@ -57,6 +72,7 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
       return true;
    
    }
+
    public function displayBody() {
       $username = $this->getOrPost( 'username', null ); 
       
