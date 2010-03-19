@@ -40,12 +40,20 @@ abstract class Light_MVC {
       $this->_pagetitle = '';
    } 
    
-   public function getOrPost( $var_name, $default_value = '' ) {
+   public function getOrPost( $var_name, $default_value = '', $strip_tags = true ) {
       if ( isset( $_POST[ $var_name ] ) ) {
-         return strip_tags($_POST[ $var_name ]);
+         if ( $strip_tags == false ) {
+            return $_POST[$var_name];
+         } else {
+            return strip_tags($_POST[ $var_name ]);
+         }
       }
       if ( isset( $_GET[ $var_name ] ) ) {
-         return strip_tags($_GET[$var_name]);
+         if ( $strip_tags == false ) {
+            return $_GET[$var_name];
+         } else {
+            return strip_tags($_GET[$var_name]);
+         }
       }
       return $default_value;
    } 

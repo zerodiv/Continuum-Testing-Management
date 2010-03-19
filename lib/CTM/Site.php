@@ -18,7 +18,6 @@ class CTM_Site extends Light_MVC {
       $this->printHtml( '<li><a href="' . $this->_baseurl . '">' . $this->_sitetitle . '</a></li>' );
       if ( $this->isLoggedIn() ) {
          $this->printHtml( '<li><a href="/test/folders/">Test Folders</a></li>' );
-         $this->printHtml( '<li><a href="/test/suites/">Test Suites</a></li>' );
          $this->printHtml( '<li><a href="/user/logout/">Logout</a></li>' );
       } else {
          $this->printHtml( '<li><a href="/user/login/">Login</a></li>' );
@@ -42,6 +41,10 @@ class CTM_Site extends Light_MVC {
       }
       return false;
    } 
+
+   public function oddEvenReset() {
+      $this->_odd_even_class = null;
+   }
 
    public function oddEvenClass() {
       if ( $this->_odd_even_class == 'odd' ) {

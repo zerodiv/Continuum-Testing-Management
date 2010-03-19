@@ -11,6 +11,7 @@ class CTM_Test_Suite extends Light_Database_Object {
    public $created_by;
    public $modified_at;
    public $modified_by;
+   public $test_status_id;
 
    public function init() {
       $this->setSqlTable( 'test_suite' );

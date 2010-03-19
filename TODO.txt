@@ -1,14 +1,15 @@
 Build plan:
 
-Test suites:
-- create
-- update
-- delete
-
 Phase 3 (Tests):
-- create
 - update
-- delete
+
+Phase 3.5 (Gluing):
+- associate suite -> suite
+- associate suite -> tests
+
+--------------------------------------------------------------------------------
+                          -= Review with team =-
+--------------------------------------------------------------------------------
 
 Phase 4 (Moderation):
 - approve / denial queue
@@ -23,20 +24,15 @@ Phase 6 (Utilities):
 - .mac job on host to maintain browsers: kill running away ones, etc
 
 Accounts Admin:
-- create
-- update
+- update / change password 
 - delete (disable)
 
 --------------------------------------------------------------------------------
-Built out:
+Notes for the future:
 
-Phase 1 (Accounts):
-- login / logout
-- create user
+Revision history - future feature: Revision history handled via a external tool such as svn?, git, etc? 
 
---------------------------------------------------------------------------------
-Revision history - future feature:
-* Revision history handled via a external tool such as svn?, git, etc? 
+No-db: Storing the entire dataset in xml on disk? 
 <suite>
   <id></id>
   <account_id></account_id>
@@ -48,4 +44,8 @@ Revision history - future feature:
   </suites>
 </suite>
 
-QTP, SilkTest, Selenium, Junit, Webload, TestComplete
+Test suites: - Deletion: We would need to write a dependency removal system. Would rather have this as disable at best.
+Tests: - Deletion: Same issue as Test Suites.
+
+Integrations with:
+- QTP, SilkTest, Selenium, Junit, Webload, TestComplete
