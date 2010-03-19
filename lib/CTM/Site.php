@@ -93,7 +93,7 @@ class CTM_Site extends Light_MVC {
          $this->printHtml( '<ul class="basictab">' );
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
          foreach ( $parents as $parent ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">' . $parent->name . '</a></li>' );
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $parent->id . '">' . $parent->name . '</a></li>' );
          }
          $this->printHtml( '</ul>' );
       }

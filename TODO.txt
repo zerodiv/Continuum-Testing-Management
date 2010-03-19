@@ -1,8 +1,5 @@
 Build plan:
 
-Phase 3 (Tests):
-- update
-
 Phase 3.5 (Gluing):
 - associate suite -> suite
 - associate suite -> tests

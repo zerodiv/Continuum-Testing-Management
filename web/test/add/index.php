@@ -80,14 +80,14 @@ class CTM_Site_Test_Add extends CTM_Site {
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td class="odd">Name:</td>' );
-      $this->printHtml( '<td class="odd"><input type="text" name="name" size="30" value="' . $name . '"></td>' );
+      $this->printHtml( '<td class="odd"><input type="text" name="name" size="30" value="' . $this->escapeVariable( $name ) . '"></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td class="odd" colspan="2">Description:</td>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd" colspan="2"><textarea name="description" rows="25" cols="60">' . $description . '</textarea></td>' );
+      $this->printHtml( '<td class="odd" colspan="2"><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $description ) . '</textarea></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr>' );
@@ -115,5 +115,5 @@ class CTM_Site_Test_Add extends CTM_Site {
 
 }
 
-$test_suite_add_obj = new CTM_Site_Test_Add();
-$test_suite_add_obj->displayPage();
+$test_add_obj = new CTM_Site_Test_Add();
+$test_add_obj->displayPage();

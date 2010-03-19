@@ -42,6 +42,10 @@ class CTM_Site_Test_Folders extends CTM_Site {
          $parent_id = 0;
       }
 
+      // need these caches for this page to hum.
+      $test_status_cache = new CTM_Test_Status_Cache();
+      $user_cache = new CTM_User_Cache();
+
       $this->printHtml( '<center>' );
       $this->printHtml( '<table>' );
 
@@ -114,7 +118,6 @@ class CTM_Site_Test_Folders extends CTM_Site {
       } catch ( Exception $e ) {
       }
 
-      $test_status_cache = new CTM_Test_Status_Cache();
 
       $this->printHtml( '<td valign="top">' );
       $this->printHtml( '<table class="ctmTable">' );
@@ -138,7 +141,6 @@ class CTM_Site_Test_Folders extends CTM_Site {
          $this->printHtml( '</tr>' );
       } else {
 
-         $user_cache = new CTM_User_Cache();
 
          foreach ( $suite_rows as $suite ) {
 
@@ -210,11 +212,10 @@ class CTM_Site_Test_Folders extends CTM_Site {
          $this->printHtml( '</tr>' );
       } else {
 
-
          foreach ( $test_rows as $test ) {
             $class = $this->oddEvenClass();
 
-            $user = $user_cache->getById( $suite->modified_by );
+            $user = $user_cache->getById( $test->modified_by );
             $test_status = $test_status_cache->getById( $test->test_status_id );
             
             $this->printHtml( '<tr>' );
