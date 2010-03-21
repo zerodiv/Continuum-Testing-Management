@@ -4,8 +4,6 @@ require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/User/Selector.php' );
 
-require_once( 'CTM/User/Factory.php' );
-
 class CTM_Site_User_Verify extends CTM_Site {
 
    public function setupPage() {

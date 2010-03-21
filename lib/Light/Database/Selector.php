@@ -117,6 +117,11 @@ abstract class Light_Database_Selector {
          }
       }
 
+      if ( count( $field_order ) > 0 ) {
+         $sql .= ' ORDER BY ';
+         $sql .= join( ',', $field_order );
+      }
+
       // echo "sql: $sql\n";
 
       try {

@@ -1,7 +1,6 @@
 <?php
 
 require_once( 'Light/Database/Object.php' );
-require_once( 'CTM/User/Factory.php' );
 
 class CTM_User extends Light_Database_Object {
    public $id;

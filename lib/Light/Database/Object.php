@@ -113,6 +113,30 @@ abstract class Light_Database_Object {
       return $upd_sql;
    }
 
+   public function remove() {
+
+      $sql = 'DELETE FROM ' . $this->_sql_table . ' WHERE ' . $this->_sql_id_field . ' = ?';
+
+      try {
+
+         $dbh = Light_Database_Factory::getDBH( $this->_db_name );
+
+         $sth = $dbh->prepare( $sql );
+         
+         $id_field = $this->_sql_id_field;
+
+         $sth->bindParam( 1, $this->$id_field );
+
+         $sth->execute();
+
+      } catch ( Exception $e ) {
+         throw $e;
+      }
+
+      return true;
+
+   }
+
    public function save() {
       $fields = $this->getFieldNames();
 
@@ -125,6 +149,8 @@ abstract class Light_Database_Object {
       } else {
          $sql = $this->_createUpdateStatement();
       }
+
+      // echo "sql: $sql\n";
 
       try {
         
@@ -139,6 +165,7 @@ abstract class Light_Database_Object {
             // both a insert and update skip their id fields
             if ( $this->_sql_id_field != $field ) {
                $field_id++;
+               // echo 'f- ' . $field . '[' . $field_id . '] - ' . $this->$field . "\n";
                $sth->bindParam( $field_id, $this->$field );
             }
          }
