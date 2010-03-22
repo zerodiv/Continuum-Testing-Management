@@ -177,5 +177,44 @@ abstract class Light_MVC {
       return date( Light_MVC_Config::TIME_FORMAT(), $timestamp );
    }
 
-}
+   public function isFileUploadAvailable() {
+      $uploads_status = ini_get( 'file_uploads' );
+      $uploads_status = trim( $uploads_status );
+      if ( $uploads_status == 'On' ) {
+         return true;
+      }
+      if ( $uploads_status == 1 ) {
+         return true;
+      }
+      // by default we assume it's not on.
+      return false;
+   }
 
+   public function maxFileUploadSize() {
+
+      // For whatever reason the php developers allow you to pull in upload_max_filesize whenever
+      // the variable for uploading is off I don't know. So instead of giving misleading results
+      // we will return 0 here.
+      if ( $this->isFileUploadAvailable() == false ) {
+         return 0;
+      }
+
+      // upload_max_filesize
+      $upload_max_filesize = ini_get( 'upload_max_filesize' );
+      $upload_max_filesize = trim( $upload_max_filesize );
+      if ( preg_match( '/^(\d+)G$/i', $upload_max_filesize, $pregs ) ) {
+         $upload_max_filesize = (1024*1024*1024)*($pregs[1]);
+      } else if ( preg_match( '/^(\d+)M$/i', $upload_max_filesize, $pregs ) ) {
+         $upload_max_filesize = (1024*1024)*($pregs[1]);
+      } else if ( preg_match( '/^(\d+)K$/i', $upload_max_filesize, $pregs ) ) {
+         $upload_max_filesize = (1024)*($pregs[1]);
+      } else if ( preg_match( '/^(\d+)$/i', $upload_max_filesize, $pregs ) ) {
+         // size in bytes.
+         $upload_max_filesize = $pregs[1];
+      } else {
+         throw new Exception( 'Failed to figure out upload max filesize from: ' . ini_get( 'upload_max_filesize' ) );
+      }
+      return $upload_max_filesize;
+   }
+
+}

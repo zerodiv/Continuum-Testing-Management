@@ -1,15 +1,16 @@
 Build plan:
 
-Phase 3.5 (Gluing):
-- associate suite -> suite
-- associate suite -> tests
+Accounts Admin:
+- manage accounts
+- update / change password 
+- delete (disable)
+
+Moderation:
+- approve / denial queue
 
 --------------------------------------------------------------------------------
                           -= Review with team =-
 --------------------------------------------------------------------------------
-
-Phase 4 (Moderation):
-- approve / denial queue
 
 Phase 5 (Test runner):
   * Test overrides make them back into available params
@@ -19,10 +20,6 @@ Phase 5 (Test runner):
 Phase 6 (Utilities):
 - .net job on host to maintain browsers: kill running away ones, etc
 - .mac job on host to maintain browsers: kill running away ones, etc
-
-Accounts Admin:
-- update / change password 
-- delete (disable)
 
 --------------------------------------------------------------------------------
 Notes for the future:

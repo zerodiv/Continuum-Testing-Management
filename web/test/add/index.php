@@ -21,6 +21,10 @@ class CTM_Site_Test_Add extends CTM_Site {
          return true;
       }
 
+      if ( isset( $_FILES['html_source_file']['tmp_name'] ) ) {
+         $html_source = file_get_contents( $_FILES['html_source_file']['tmp_name'] );
+      }
+
       if ( $html_source == '' ) {
          return true;
       }
@@ -70,7 +74,7 @@ class CTM_Site_Test_Add extends CTM_Site {
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td valign="top">' );
       $this->printHtml( '<table class="ctmTable">' );
-      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/add/">' );
+      $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/add/">' );
       $this->printHtml( '<input type="hidden" value="' . $test_folder_id . '" name="test_folder_id">' );
 
       $this->printHtml( '<tr>' );
@@ -96,6 +100,17 @@ class CTM_Site_Test_Add extends CTM_Site {
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td class="odd" colspan="2"><textarea name="html_source" rows="25" cols="60">' . $this->escapeVariable( $html_source ) . '</textarea></td>' );
       $this->printHtml( '</tr>' );
+
+      if ( $this->isFileUploadAvailable() ) {
+
+         $this->printHtml( '<input type="hidden" name="MAX_FILE_SIZE" value="' . $this->maxFileUploadSize() . '">' );
+      
+         $this->printHtml( '<tr>' );
+         $this->printHtml( '<td class="odd">File:</td>' );
+         $this->printHtml( '<td class="odd"><input type="file" name="html_source_file"></td>' );
+         $this->printHtml( '</tr>' );
+
+      }
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td colspan="2" class="even"><center><input type="submit" value="Add"></center></td>' );
