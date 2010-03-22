@@ -1,5 +1,17 @@
 Build plan:
 
+Test runner:
+  - Extract the available params from the test and collate them for the test. (A little R&D with selenium required here).
+  - Document the concepts around single session variable tracking for testing suites.
+
+Test Lab:
+  - create phone home app to configure a available node for use (.net for the windows stuff)
+   * CTM-ET - Phone home on a heartbeat basis, provides the basics for us to track health on the
+     test node also (if we want), right now I will settle for checking in and disabling of a node
+     upon no checkin
+  - create session tracker
+  - create runnner
+
 Accounts Admin:
 - manage accounts
 - update / change password 
@@ -8,18 +20,13 @@ Accounts Admin:
 Moderation:
 - approve / denial queue
 
+Runtime Operation:
+- .net job on host to maintain browsers: kill running away ones, etc
+- .mac job on host to maintain browsers: kill running away ones, etc
+
 --------------------------------------------------------------------------------
                           -= Review with team =-
 --------------------------------------------------------------------------------
-
-Phase 5 (Test runner):
-  * Test overrides make them back into available params
-- create session tracker
-- create runnner
-
-Phase 6 (Utilities):
-- .net job on host to maintain browsers: kill running away ones, etc
-- .mac job on host to maintain browsers: kill running away ones, etc
 
 --------------------------------------------------------------------------------
 Notes for the future:
