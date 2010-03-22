@@ -22,8 +22,10 @@ class CTM_Site_Test_Edit extends CTM_Site {
          return true;
       }
 
-      if ( isset( $_FILES['html_source_file']['tmp_name'] ) ) {
-         $html_source = file_get_contents( $_FILES['html_source_file']['tmp_name'] );
+      $html_source_file = $_FILES['html_source_file']['tmp_name'];
+
+      if ( isset( $html_source_file ) && filesize( $html_source_file) > 0 ) {
+         $html_source = file_get_contents( $html_source_file );
       }
 
       if ( $html_source == '' ) {
