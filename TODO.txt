@@ -1,6 +1,6 @@
 Build plan:
 
-Test runner:
+Test runner pre-req:
   - Extract the available params from the test and collate them for the test. (A little R&D with selenium required here).
   - Document the concepts around single session variable tracking for testing suites.
 
@@ -23,6 +23,11 @@ Moderation:
 Runtime Operation:
 - .net job on host to maintain browsers: kill running away ones, etc
 - .mac job on host to maintain browsers: kill running away ones, etc
+
+--
+1.0 - Release to world? 
+* Need to discuss license
+--
 
 --------------------------------------------------------------------------------
                           -= Review with team =-
@@ -50,3 +55,9 @@ Tests: - Deletion: Same issue as Test Suites.
 
 Integrations with:
 - QTP, SilkTest, Selenium, Junit, Webload, TestComplete
+
+-- Misc RC notes:
+We can pass a specific hardcode to browser path on selenium rc:
+*custom <path to browser>
+
+Will most likely use at for managing the various jobs needed to run the test in parallel.
