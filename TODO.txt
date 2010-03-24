@@ -1,7 +1,6 @@
 Build plan:
 
 Test runner pre-req:
-  - Extract the available params from the test and collate them for the test. (A little R&D with selenium required here).
   - Document the concepts around single session variable tracking for testing suites.
 
 Test Lab:
@@ -9,6 +8,16 @@ Test Lab:
    * CTM-ET - Phone home on a heartbeat basis, provides the basics for us to track health on the
      test node also (if we want), right now I will settle for checking in and disabling of a node
      upon no checkin
+   * http://foo/et/phone/home/1.0/ - Yep it's a fun egg.
+   * XML:
+     <ctmPhoneHome>
+         <guid></guid>
+         <os></os>
+         <browsers>
+            <browser></browser>
+         </browsers>
+     </ctmPhoneHome>
+
   - create session tracker
   - create runnner
 
@@ -61,3 +70,10 @@ We can pass a specific hardcode to browser path on selenium rc:
 *custom <path to browser>
 
 Will most likely use at for managing the various jobs needed to run the test in parallel.
+
+-- Basic notes about session variables:
+* ctm_(action)_(variable)
+* ctm_input_variable - Takes a variable from the running test session and places it into the selenium test.
+* ctm_output_variable - Takes a variable from the running test session and places it into the test runner session.
+* ctm_clear_variable - Removes a variable from the running test session.
+* ctm_clear_all - Removes all variables from the running test session.

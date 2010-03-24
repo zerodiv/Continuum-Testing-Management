@@ -35,6 +35,8 @@ class Light_Database_Factory_Impl {
          return $this->_connection_pool[ $name ];
       }
 
+      // print_r( $this->_config[$name] );
+
       $dbh = null;
       try {
          $dbh = new PDO(
