@@ -77,3 +77,5 @@ Will most likely use at for managing the various jobs needed to run the test in 
 * ctm_output_variable - Takes a variable from the running test session and places it into the test runner session.
 * ctm_clear_variable - Removes a variable from the running test session.
 * ctm_clear_all - Removes all variables from the running test session.
+
+-- Need to add a password / security to phone home system.

@@ -1,5 +1,7 @@
 <?php
 
+require_once( 'Light/CommandLine/Config.php' );
+
 class Light_CommandLine {
 
    function __construct() {
@@ -8,11 +10,18 @@ class Light_CommandLine {
 
       // $this->parseArguments();
 
+      $this->init();
+
       $this->run();
+
+      $this->done();
 
    }
 
    public function parseArguments() {
+   }
+
+   public function init() {
    }
 
    public function run() {
@@ -20,16 +29,13 @@ class Light_CommandLine {
       exit();
    }
 
-   private function message( $message ) {
-      $debug_data = debug_backtrace();
+   public function done( $rv = 0 ) {
+      $this->message( 'Done!' );
+      exit( $rv );
+   }
 
-      $stack_string = '';
-      if ( isset( $debug_data[1]['class'] ) ) {
-         $stack_string .= $debug_data[1]['class'] . '::';
-      }
-      $stack_string .= $debug_data[1]['function'];
-
-      echo date( 'r' ) . ' - ' . $stack_string . ' - ' . $message . "\n";
+   public function message( $message ) {
+      echo date( 'r' ) . ' - ' . $message . "\n";
    }
 
 }
