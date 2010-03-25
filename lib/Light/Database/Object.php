@@ -180,6 +180,27 @@ abstract class Light_Database_Object {
          // run the query
          $sth->execute();
 
+         // if it was a insert grab the id of the inserted item back from the db.
+         if ( $is_insert == true ) { 
+           
+            $last_id_sth = $dbh->prepare( 'SELECT LAST_INSERT_ID() as last_id' );
+            $last_id_sth->execute();
+
+            $last_id = $last_id_sth->fetchAll( PDO::FETCH_BOTH );
+            
+            if ( isset( $last_id[0]['last_id'] ) ) {
+               $last_id = intval( $last_id[0]['last_id'] );
+            } else {
+               $last_id = null;
+            } 
+            
+            if ( $last_id != null ) {
+               $id_field = $this->_sql_id_field;
+               $this->$id_field = $last_id;
+            }
+
+         } // end if this was a insert
+
       } catch ( Exception $e ) {
          return false;
       }

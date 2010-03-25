@@ -1,5 +1,9 @@
 Build plan:
 
+Schema refactor: 
+- test.command to be filled in via parsing test_html_source.html_source
+- test_suite.description to be move to test_suite_description
+
 Test runner pre-req:
   - Document the concepts around single session variable tracking for testing suites.
 
@@ -8,15 +12,6 @@ Test Lab:
    * CTM-ET - Phone home on a heartbeat basis, provides the basics for us to track health on the
      test node also (if we want), right now I will settle for checking in and disabling of a node
      upon no checkin
-   * http://foo/et/phone/home/1.0/ - Yep it's a fun egg.
-   * XML:
-     <ctmPhoneHome>
-         <guid></guid>
-         <os></os>
-         <browsers>
-            <browser></browser>
-         </browsers>
-     </ctmPhoneHome>
 
   - create session tracker
   - create runnner
@@ -32,6 +27,12 @@ Moderation:
 Runtime Operation:
 - .net job on host to maintain browsers: kill running away ones, etc
 - .mac job on host to maintain browsers: kill running away ones, etc
+
+Installer:
+- needs to determine php requirements
+- needs to determine mysql requirements
+- write config to etc/config.ini
+- self destruct upon writing to config
 
 --
 1.0 - Release to world? 

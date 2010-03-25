@@ -3,6 +3,8 @@
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test.php' );
+require_once( 'CTM/Test/Html/Source.php' );
+require_once( 'CTM/Test/Description.php' );
 
 class CTM_Site_Test_Add extends CTM_Site { 
 
@@ -32,11 +34,11 @@ class CTM_Site_Test_Add extends CTM_Site {
       }
 
       try {
+
+         // create the test.
          $new = new CTM_Test();
          $new->test_folder_id = $test_folder_id;
          $new->name = $name;
-         $new->description = $description;
-         $new->html_source = $html_source;
          $new->test_status_id = 1; // all tests are created in a pending state.
          $create_at = time(); // yes i know this is paranoia
          $new->created_at = $create_at;
@@ -45,7 +47,27 @@ class CTM_Site_Test_Add extends CTM_Site {
          $new->modified_by = $_SESSION['user']->id;
          $new->save();
 
+         if ( $new->id > 0 ) {
+
+            // add the html source.
+            $html_source_obj = new CTM_Test_Html_Source();
+            $html_source_obj->test_id     = $new->id;
+            $html_source_obj->html_source = $html_source;
+            $html_source_obj->save();
+
+            // add the description.
+            $test_description_obj = new CTM_Test_Description();
+            $test_description_obj->test_id      = $new->id;
+            $test_description_obj->description  = $description;
+            $test_description_obj->save();
+
+         }
+      
+         header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test_folder_id );
+         return false;
+
       } catch ( Exception $e ) {
+         print_r( $e );
          // failed to insert.
          return true;
       }
