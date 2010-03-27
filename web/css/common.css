@@ -1,89 +1,82 @@
+.clearfix:after {
+    content: .;
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+    width:0;
+}
+.clearfix {
+    display: inline-block;
+}
+
+html[xmlns] .clearfix {
+    display: block;
+}
+
 body {
-   margin: 0;
-   padding: 0;
-   color: #00ff00;
-   background: #eeeeee;
-   font: 0.8em Verdana, arial, sans-serif;
+   margin:0;
+   padding:0;
+   color:#000;
+   font-size:11px;
+   line-height:16px;
+   font-family:Arial, Verdana, Helvetica, sans-serif;
+   text-align:center;
 }
+a:link,
+a:visited {color:#000;}
 
-font,th,td,p,li,div { font-family: Arial, Verdana, Helvetica, sans-serif }
-
-A {
-   color: #000000;
-   text-decoration: none;
+a:hover { 
+   color:#7F917B;
+   text-decoration:none;
 }
+/* begin craigs buildouts */
 
-A:visited { 
-   color: #000000;
-   text-decoration: none;
+.aiMainContent {
+    position:relative;
+    margin:0 auto;
+    background-color:#fff;
+    text-align:left;
+    
 }
-
-A:active { 
-   color: #000000;
-   text-decoration: none;
-}
+    .aiTableContainer {
+        float:left;
+        margin:6px;
+    }
+    .aiTableTitle {background-color:#ccc;}
+        .aiTableTitle td,
+        .aiColumnOne {
+            text-align:center;
+            font-weight:bold;
+        }
+    .aiButtonRow {text-align:center;}
+    
+    
+    
+    
+/* end craigs buildouts */    
 
 table.ctmTable {
-   border-width: 1px 1px 1px 1px;
-   border-spacing: 2px;
-   border-style: outset outset outset outset;
-   border-color: black black black black;
+   border-width:1px solid #666;
    border-collapse: collapse;
-   background-color: rgb(255, 245, 238);
-   color: #000000;
 }
-
-th {
-         font-style: bold;
-}
-
 table.ctmTable th {
-   border-width: 1px 1px 1px 1px;
-   padding: 2px 2px 2px 2px;
-   border-style: inset inset inset inset;
-   border-color: gray gray gray gray;
-   background-color: #a5a08a;
-   -moz-border-radius: 0px 0px 0px 0px;
-   color: #000000;
+   background-color:#84807D;
    font-size: 14px;
+   text-align:center;
 }
-
+th {font-style:bold;}
+table.ctmTable th,
 table.ctmTable td {
-   border-width: 1px 1px 1px 1px;
-   padding: 2px 2px 2px 2px;
-   border-style: inset inset inset inset;
-   border-color: gray gray gray gray;
-   background-color: white;
-   -moz-border-radius: 0px 0px 0px 0px;
-   color: #000000;
-   font-size: 12px;
+   border:1px solid #666;
+   padding:6px;
 }
 
-table.ctmTable td.odd {
-   background-color: #d8d3bd;
-   color: #000000;
-}
-table.ctmTable td.even {
-   background-color: #bfb79b;
-   color: #000000;
-}
-
-div.ctmSmall {
-   font-size: 10px;
-}
-
-div.ctmSmall a {
-   color: #000000;
-}
-div.ctmSmall a:visited {
-   color: #000000;
-}
-div.ctmSmall a:hover {
-   color: #000000;
-}
-div.ctmSmall a:active {
-   color: #000000;
-}
+table.ctmTable tr.odd {background-color:#efeeee;}
+table.ctmTable tr.even {background-color:#dcf1fa;}
+table.ctmTable tr.even:hover,
+table.ctmTable tr.odd:hover {background-color:#b7e5f7;}
 
 div.ctmCentered {
    width: 380px;
@@ -97,70 +90,73 @@ div.ctmCentered {
 }
 
 .basictab{
-padding: 3px 0;
-         margin-left: 0;
-font: bold 12px;
-      border-bottom: 1px solid black;
-      list-style-type: none;
-      text-align: left; /*set to left, center, or right to align the menu as desired*/
+    padding: 3px 0;
+    margin-left: 0;
+    border-bottom: 1px solid black;
+    list-style-type: none;
+    text-align: left; /*set to left, center, or right to align the menu as desired*/
 }
 
 .basictab li{
-display: inline;
-margin: 0;
+    display: inline;
+    margin: 0;
 }
 
 .basictab div {
-   text-decoration: none;
-padding: 3px 7px;
-         margin-right: 3px;
-border: 1px solid black;
-        border-bottom: none;
-        background-color:  #44454c;
+   text-decoration:none;
+    padding:3px 7px;
+    margin-right:3px;
+    border:1px solid black;
+    border-bottom:none;
+    background-color:#44454c;
 }
 
 .basictab li a{
    text-decoration: none;
-padding: 3px 7px;
-         margin-right: 3px;
-border: 1px solid black;
-        border-bottom: none;
-        background-color:  #44454c;
-color: #ffffff;
+    padding: 3px 7px;
+    margin-right: 3px;
+    border: 1px solid black;
+    border-bottom: none;
+    background-color:  #44454c;
+    color: #ffffff;
 }
 
-.basictab li a:visited {
-color: #ffffff;
-}
+.basictab li a:visited {color:#ffffff;}
 
 .basictab li a:hover {
-   background-color: #DBFF6C;
-color: black;
+    background-color: #DBFF6C;
+    color: black;
 }
 
 .basictab li a:active {
-   background-color: #DBFF6C;
-color: black;
+    background-color:#DBFF6C;
+    color:black;
 }
 
 .basictab img {
-     border: 0px;
-               padding: 0px;
+    border: 0px;
+    padding: 0px;
 }
 
 .basictab li.selected a{ /*selected tab effect*/
-position: relative;
-top: 1px;
-     padding-top: 4px;
-     background-color: #DBFF6C;
-color: #ffffff;
+    position:relative;
+    top:1px;
+    padding-top:4px;
+    background-color:#DBFF6C;
+    color:#ffffff;
+}
+a.ctmButton{
+    padding:2px 4px;
+    font-size:11px;
+    border:1px solid #666;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    background:url(../images/grayButtonBg.gif) repeat-x left bottom;
+    text-decoration:none;
+}
+a.ctmButton:hover {
+    background:url(../images/grayButtonBgOn.gif) repeat-x left bottom;
+    color:#000;
 }
 
-a.ctmButton{
-height:23px;
-padding:0 10px;
-        line-height:23px;
-        font-size:11px;
-        font-weight:bold;color:#fff;
-        text-shadow:-1px -1px 0 #333;-webkit-border-radius:3px;-moz-border-radius:3px;background:url(/images/buttons/black.gif) 0 0 repeat-x;}
 

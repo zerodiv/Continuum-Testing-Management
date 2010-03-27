@@ -14,6 +14,9 @@ class CTM_Site extends Light_MVC {
       // display the normal header.
       parent::displayHeader();
 
+      $this->printHtml( '<div class="aiMainContent clearfix">' );
+
+      $this->printHtml( '<div class="aiTopNav">' );
       $this->printHtml( '<ul class="basictab">' );
       $this->printHtml( '<li><a href="' . $this->_baseurl . '">' . $this->_sitetitle . '</a></li>' );
       if ( $this->isLoggedIn() ) {
@@ -25,6 +28,17 @@ class CTM_Site extends Light_MVC {
          $this->printHtml( '<li><a href="/user/create/">Create Account</a></li>' );
       }
       $this->printHtml( '</ul>' );
+      $this->printHtml( '</div>' );
+
+      return true;
+   }
+
+   public function displayFooter() {
+
+      $this->printHtml( '</div>' );
+
+      parent::displayFooter();
+
       return true;
    }
 
