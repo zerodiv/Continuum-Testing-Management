@@ -91,8 +91,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       }
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="aiButtonRow" colspan="3"><center><a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a></center></th>' );
-      $this->printHtml( '</td>' );
+      $this->printHtml( '<td class="aiButtonRow" colspan="3"><center><a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );
@@ -193,11 +192,11 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
       $this->printHtml( '<tr class="aiTableTitle">' );
       $this->printHtml( '<td class="aiColumnOne">ID</td>' );
-      $this->printHtml( '<td>Name</th>' );
-      $this->printHtml( '<td>Test Status</th>' );
-      $this->printHtml( '<td>Modified At</th>' );
-      $this->printHtml( '<td>Modified By</th>' );
-      $this->printHtml( '<td>Action</th>' );
+      $this->printHtml( '<td>Name</td>' );
+      $this->printHtml( '<td>Test Status</td>' );
+      $this->printHtml( '<td>Modified At</td>' );
+      $this->printHtml( '<td>Modified By</td>' );
+      $this->printHtml( '<td>Action</td>' );
       $this->printHtml( '</tr>' );
 
       if ( count( $test_rows ) == 0 ) {
@@ -234,8 +233,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       }
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->_baseurl . '/test/add/?test_folder_id=' . $parent_id . '" class="ctmButton">New Test</a></center></th>' );
-      $this->printHtml( '</td>' );
+      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->_baseurl . '/test/add/?test_folder_id=' . $parent_id . '" class="ctmButton">New Test</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );
