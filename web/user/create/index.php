@@ -4,6 +4,7 @@ require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/User.php' );
 require_once( 'CTM/User/Selector.php' );
+require_once( 'CTM/Site/User/Create/Config.php' );
 
 class CTM_Site_User_Create extends CTM_Site {
    private $_displayError;
@@ -105,32 +106,33 @@ class CTM_Site_User_Create extends CTM_Site {
    public function displayBody() {
       $username = $this->getOrPost( 'username', '' );
       $password = $this->getOrPost( 'password', '' );
-      $this->printHtml( '<center>' );
+      $this->printHtml( '<div class="aiTableContainer">' );
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/create/">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
       $this->printHtml( '</tr>' );
       if ( isset( $this->_displayError ) ) {
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="even" colspan="2">' . $this->_displayError . '</td>' );
+         $this->printHtml( '<tr class="even">' );
+         $this->printHtml( '<td colspan="2">' . $this->_displayError . '</td>' );
          $this->printHtml( '</tr>' );
       }
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd">Email address:</td>' );
-      $this->printHtml( '<td class="even"><input type="text" size="40" name="username" value="' . $username . '"></td>' );
+      $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Email address:</td>' );
+      $this->printHtml( '<td><input type="text" size="40" name="username" value="' . $username . '"></td>' );
       $this->printHtml( '</tr>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd">Password:</td>' );
-      $this->printHtml( '<td class="even"><input type="password" size="40" name="password" value="' . $password . '"></td>' );
+      $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Password:</td>' );
+      $this->printHtml( '<td><input type="password" size="40" name="password" value="' . $password . '"></td>' );
       $this->printHtml( '</tr>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td colspan="2" class="even"><center>' );
+      $this->printHtml( '<tr class="aiButtonRow">' );
+      $this->printHtml( '<td colspan="2"><center>' );
       $this->printHtml( '<input type="submit" value="Create User!">' );
       $this->printHtml( '</center></td>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '</table>' );
       $this->printHtml( '</form>' );
+      $this->printHtml( '</div>' );
       return true;
    }
 

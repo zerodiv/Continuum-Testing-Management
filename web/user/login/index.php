@@ -54,24 +54,23 @@ class CTM_Site_User_Login extends CTM_Site {
       // temp login / registration form.
       $username = $this->getOrPost( 'username', '' );
       $password = $this->getOrPost( 'password', '' );
-      
-      $this->printHtml( '<center>' );
-      $this->printHtml( '<br/><br/>' );
+     
+      $this->printHtml( '<div class="aiTableContainer">' );
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/login/">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
       $this->printHtml( '</tr>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd">Email address:</td>' );
-      $this->printHtml( '<td class="even"><input type="text" size="40" name="username" value="' . $username . '"></td>' );
+      $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Email address:</td>' );
+      $this->printHtml( '<td><input type="text" size="40" name="username" value="' . $username . '"></td>' );
+      $this->printHtml( '</tr>' );
+      $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Password:</td>' );
+      $this->printHtml( '<td><input type="password" size="40" name="password" value="' . $password . '"></td>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd">Password:</td>' );
-      $this->printHtml( '<td class="even"><input type="password" size="40" name="password" value="' . $password . '"></td>' );
-      $this->printHtml( '</tr>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td colspan="2" class="odd">' );
+      $this->printHtml( '<td colspan="2" class="aiButtonRow">' );
       $this->printHtml( '<center>' );
       $this->printHtml( '<input type="submit" value="Login!">' );
       $this->printHtml( '<a href="/user/forgot_password/" class="ctmButton">Forgot my password</a>' );
@@ -80,7 +79,8 @@ class CTM_Site_User_Login extends CTM_Site {
       $this->printHtml( '</tr>' );
       $this->printHtml( '</table>' );
       $this->printHtml( '</form>' );
-      $this->printHtml( '</center>' );
+      $this->printHtml( '</div>' );
+
       return true;
    }
 
