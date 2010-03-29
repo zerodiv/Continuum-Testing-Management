@@ -40,6 +40,7 @@ a:hover {
     text-align:left;
     
 }
+
     .aiTableContainer {
         float:left;
         margin:6px;
@@ -52,11 +53,14 @@ a:hover {
         }
     .aiButtonRow {text-align:center;}
     
-    
-    
+.aiClearMe { clear: both; }
+
+.aiFullWidth {
+   width: 100%;
+margin: 6px auto;
+}
     
 /* end craigs buildouts */    
-
 table.ctmTable {
    border-width:1px solid #666;
    border-collapse: collapse;
@@ -77,17 +81,6 @@ table.ctmTable tr.odd {background-color:#efeeee;}
 table.ctmTable tr.even {background-color:#dcf1fa;}
 table.ctmTable tr.even:hover,
 table.ctmTable tr.odd:hover {background-color:#b7e5f7;}
-
-div.ctmCentered {
-   width: 380px;
-   height: 125px;
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   margin-left: -190px;
-   margin-top: -64px;
-   background: #000000;
-}
 
 .basictab{
     padding: 3px 0;

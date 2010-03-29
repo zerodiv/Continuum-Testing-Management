@@ -227,6 +227,9 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
 
       $rows = null;
+      $test_suite = null;
+      $test_suite_plans = null;
+      $test_suite_plan_type_cache = null;
       try {
          $sel = new CTM_Test_Suite_Selector();
          
@@ -234,72 +237,49 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
          $rows = $sel->find( $and_params );
 
-      } catch ( Exception $e ) {
-      }
-
-      $this->printHtml( '<center>' );
-
-      $this->printHtml( '<table>' );
-
-      if ( isset( $rows[0] ) ) {
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td valign="top">' );
-         $this->_displayFolderBreadCrumb( $rows[0]->test_folder_id );
-         $this->printHtml( '</td>' );
-         $this->printHtml( '</tr>' ); 
-      }
-      
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td valign="top">' );
-      $this->printHtml( '<table class="ctmTable">' );
-
-      if ( isset( $rows[0] ) ) {
-         $test_suite = $rows[0];
-
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<th colspan="2">Plan Test Suite</th>' );
-         $this->printHtml( '</td>' );
-         $this->printHtml( '</tr>' );
-
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="odd" colspan="2">Name: ' . $this->escapeVariable( $test_suite->name ) . '</td>' );
-         $this->printHtml( '</tr>' );
-
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<th>Plan:</th>' );
-         $this->printHtml( '<th>Add to Plan:</th>' );
-         $this->printHtml( '</tr>' );
-
-         $this->printHtml( '<tr>' );
-         // Plan is on the left side.
-         $this->printHtml( '<td class="even" valign="top">' );
-
-         $test_suite_plan_type_cache = new CTM_Test_Suite_Plan_Type_Cache();
-
-         $test_suite_plans = null;
-
-         try {
+         if ( isset( $rows[0] ) ) {
+            $test_suite = $rows[0];
+         
+            // pull up the plan 
+            $test_suite_plan_type_cache = new CTM_Test_Suite_Plan_Type_Cache();
+            
             $sel = new CTM_Test_Suite_Plan_Selector();
             $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $id ) );
             $or_params = array();
             $field_order = array( 'test_order' );
             $test_suite_plans = $sel->find( $and_params, $or_params, $field_order );
-         } catch ( Exception $e ) {
+
          }
+      } catch ( Exception $e ) {
+      }
+
+      if ( isset( $test_suite ) ) {
+         $this->printHtml( '<div class="aiTopNav">' );
+         $this->_displayFolderBreadCrumb( $rows[0]->test_folder_id );
+         $this->printHtml( '</div>' );
+      
+         $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
+         $this->printHtml( '<table class="ctmTable aiFullWidth">' );
+
+         $this->printHtml( '<tr>' );
+         $this->printHtml( '<th colspan="4">Plan Test Suite</th>' );
+         $this->printHtml( '</tr>' );
+
+         $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td colspan="4">Name: ' . $this->escapeVariable( $test_suite->name ) . '</td>' );
+         $this->printHtml( '</tr>' );
 
          $this->oddEvenReset();
 
-         $this->printHtml( '<table class="ctmTable">' );
-
          $this->printHtml( '<tr>' );
-         $this->printHtml( '<th colspan="4">Test Plan</th>' );
+         $this->printHtml( '<th colspan="4">Current Test Plan</th>' );
          $this->printHtml( '</tr>' );
 
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<th>Order</th>' );
-         $this->printHtml( '<th>Type</th>' );
-         $this->printHtml( '<th>Name</th>' );
-         $this->printHtml( '<th>Action</th>' );
+         $this->printHtml( '<tr class="aiTableTitle">' );
+         $this->printHtml( '<td class="aiColumnOne">Order</td>' );
+         $this->printHtml( '<td>Type</td>' );
+         $this->printHtml( '<td>Name</td>' );
+         $this->printHtml( '<td>Action</td>' );
          $this->printHtml( '</tr>' );
 
          if ( count( $test_suite_plans ) > 0 ) {
@@ -332,8 +312,8 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                   $test = $test_cache->getById( $test_suite_plan->linked_id );
                }
 
-               $this->printHtml('<tr>');
-               $this->printHtml('<td class="' . $class . '"><center>' );
+               $this->printHtml('<tr class="' . $class . '">');
+               $this->printHtml('<td><center>' );
                if ( $test_suite_plan->test_order != 0 && $test_suite_plan->test_order != $high_id ) {
                   $this->printHtml( '<a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&action=move_item_down&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '">&darr;</a>' );
                } else {
@@ -346,15 +326,15 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                   $this->printHtml( '&nbsp;' );
                }
                $this->printHtml( '</center></td>' );
-               $this->printHtml('<td class="' . $class . '">' . $plan_type->name . '</td>' );
+               $this->printHtml('<td>' . $plan_type->name . '</td>' );
                if ( isset( $test_suite ) ) {
-                  $this->printHtml('<td class="' . $class . '">' . $this->escapeVariable( $test_suite->name ) . '</td>' );
+                  $this->printHtml('<td>' . $this->escapeVariable( $test_suite->name ) . '</td>' );
                } else if ( isset( $test ) ) {
-                  $this->printHtml('<td class="' . $class . '">' . $this->escapeVariable( $test->name ) . '</td>' );
+                  $this->printHtml('<td>' . $this->escapeVariable( $test->name ) . '</td>' );
                } else {
-                  $this->printHtml('<td class="' . $class . '">Could not find suite or test associated.</td>' );
+                  $this->printHtml('<td>Could not find suite or test associated.</td>' );
                }
-               $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '&action=remove_from_plan" class="ctmButton">Remove from plan</a></center></td>' );
+               $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '&action=remove_from_plan" class="ctmButton">Remove from plan</a></center></td>' );
                $this->printHtml('</tr>');
             }
          } else {
@@ -364,12 +344,22 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          }
 
          $this->printHtml( '</table>' );
+         $this->printHtml( '</div>' );
 
-         $this->printHtml( '</td>' );
+         $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
+         $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 
-         // Available suites and tests on the right.
-         $this->printHtml( '<td class="even" valign="top">' );
+         $this->printHtml( '<tr>' );
+         $this->printHtml( '<th colspan="3">Add Items to Plan</th>' );
+         $this->printHtml( '</tr>' );
 
+         $this->printHtml( '<tr class="aiTableTitle">' );
+         $this->printHtml( '<td colspan="3">Current Position in Test Folders' );
+         $this->printHtml( '</tr>' );
+
+         $this->printHtml( '<tr class="odd">' );
+
+         $this->printHtml( '<td colspan="3">' );
          // Folder browser.
          $folder_cache = new CTM_Test_Folder_Cache();
          
@@ -395,6 +385,10 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
          }
 
+         $this->printHtml( '</td>' );
+         $this->printHtml( '</tr>' );
+
+
          $this->oddEvenReset();
 
          try {
@@ -404,17 +398,15 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          } catch ( Exception $e ) {
          } 
 
-         $this->printHtml( '<table class="ctmTable" width="100%">' );
-
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<th>Sub Folders</th>' );
+         $this->printHtml( '<tr class="aiTableTitle">' );
+         $this->printHtml( '<td colspan="3">Sub Folders</td>' );
          $this->printHtml( '</tr>' );
 
          if ( count( $test_folder_rows ) > 0 ) {
             foreach ( $test_folder_rows as $test_folder_row ) {
                $class = $this->oddEvenClass();
-               $this->printHtml( '<tr>' );
-               $this->printHtml( '<td class="' . $class . '"><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_row->id . '">' . $this->escapeVariable( $test_folder_row->name ) . '</a></td>' );
+               $this->printHtml( '<tr class="' . $class . '">' );
+               $this->printHtml( '<td colspan="3"><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_row->id . '">' . $this->escapeVariable( $test_folder_row->name ) . '</a></td>' );
                $this->printHtml( '</tr>' );
             }
          } else {
@@ -422,10 +414,6 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
             $this->printHtml( '<td class="row"><center>- No sub folders-</center></td>' );
             $this->printHtml( '</tr>' );
          }
-
-         $this->printHtml( '</table>' );
-
-         $this->printHtml( '<br/>' );
 
          /*
             $hiearchy = $folder_cache->getHierarchy();
@@ -460,24 +448,24 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          
          $this->oddEvenReset(); 
 
-         $this->printHtml( '<table class="ctmTable" width="100%">' );
          $this->printHtml( '<tr>' );
-         $this->printHtml( '<th colspan="3">Suites</th>' );
+         $this->printHtml( '<th colspan="3">Test Suites</th>' );
          $this->printHtml( '</tr>' );
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<th>Id</th>' );
-         $this->printHtml( '<th>Name</th>' );
-         $this->printHtml( '<th>Action</th>' );
-         $this->printHtml( '</th>' ); 
+         
+         $this->printHtml( '<tr class="aiTableTitle">' );
+         $this->printHtml( '<td class="aiColumnOne">ID</td>' );
+         $this->printHtml( '<td>Name</td>' );
+         $this->printHtml( '<td>Action</td>' );
+         $this->printHtml( '</tr>' );
          
          if ( count( $suite_rows ) > 0 ) {
             foreach ( $suite_rows as $suite_row ) {
                $class = $this->oddEvenClass();
 
-                  $this->printHtml( '<tr>' );
-                  $this->printHtml( '<td class="' . $class . '">' . $suite_row->id . '</td>' );
-                  $this->printHtml( '<td class="' . $class . '">' . $this->escapeVariable( $suite_row->name ) . '</td>' );
-                  $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_id . '&action=add_suite_to_plan&suite_id=' . $suite_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
+                  $this->printHtml( '<tr class="' . $class . '">' );
+                  $this->printHtml( '<td>' . $suite_row->id . '</td>' );
+                  $this->printHtml( '<td>' . $this->escapeVariable( $suite_row->name ) . '</td>' );
+                  $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_id . '&action=add_suite_to_plan&suite_id=' . $suite_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
                   $this->printHtml( '</tr>' );
 
                }
@@ -486,10 +474,6 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                $this->printHtml( '<td class="odd" colspan="3"><center>- No suites defined -</center></td>' );
                $this->printHtml( '</tr>' );
             }
-
-         $this->printHTml( '</table>' );
-
-         $this->printHtml( '<br/>' );
 
          // pull all the tests in for this folder.
          $test_rows = null;
@@ -502,19 +486,23 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
          $this->oddEvenReset();
 
-         $this->printHtml( '<table class="ctmTable" width="100%">' );
-
          $this->printHtml( '<tr>' );
          $this->printHtml( '<th colspan="3">Tests</th>' );
+         $this->printHtml( '</tr>' );
+
+         $this->printHtml( '<tr class="aiTableTitle">' );
+         $this->printHtml( '<td class="aiColumnOne">ID</td>' );
+         $this->printHtml( '<td>Name</td>' );
+         $this->printHtml( '<td>Action</td>' );
          $this->printHtml( '</tr>' );
 
          if ( count( $test_rows ) > 0 ) {
             foreach ( $test_rows as $test_row ) {
                $class = $this->oddEvenClass();
-               $this->printHtml( '<tr>' );
-               $this->printHtml( '<td class="' . $class . '">' . $test_row->id . '</td>' );
-               $this->printHtml( '<td class="' . $class . '">' . $this->escapeVariable( $test_row->name ) . '</td>' );
-               $this->printHtml( '<td class="' . $class . '"><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_id . '&action=add_test_to_plan&test_id=' . $test_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
+               $this->printHtml( '<tr class="' . $class . '">' );
+               $this->printHtml( '<td class="aiColumnOne">' . $test_row->id . '</td>' );
+               $this->printHtml( '<td>' . $this->escapeVariable( $test_row->name ) . '</td>' );
+               $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_id . '&action=add_test_to_plan&test_id=' . $test_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
                $this->printHtml( '</tr>' );
             }
          } else {
@@ -524,19 +512,10 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          }
 
          $this->printHtml( '</table>' );
-
-         $this->printHtml( '</td>' );
-
-         $this->printHtml( '</tr>' );
+         $this->printHtml( '</div>' );
 
       }
 
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' );
-
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</center>' );
 
       return true;
    }

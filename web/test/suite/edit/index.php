@@ -97,39 +97,31 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
       } catch ( Exception $e ) {
       }
 
-      $this->printHtml( '<div class="aiTopNav">' );
-      $this->printHtml( '<table>' );
-
       if ( $test_suite ) {
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td valign="top">' );
+         $this->printHtml( '<div class="aiTopNav">' );
          $this->_displayFolderBreadCrumb( $test_suite->test_folder_id );
-         $this->printHtml( '</td>' );
-         $this->printHtml( '</tr>' ); 
-      }
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</div>' );
-     
-      $this->printHtml( '<div class="aiTableContainer">' );
-      $this->printHtml( '<table class="ctmTable">' );
-
-      if ( isset( $test_suite ) ) {
+         $this->printHtml( '</div>' );
+         
+         $this->printHtml( '<div class="aiTableContainer aiFullWidth">' ); 
+         
          $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/suite/edit/">' );
-         $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' );
-
+         $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' ); 
+         
+         $this->printHtml( '<table class="ctmTable aiFullWidth">' ); 
+         
          $this->printHtml( '<tr>' );
          $this->printHtml( '<th colspan="4">Edit Test Suite</th>' );
-         $this->printHtml( '</td>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Name:</td>' );
          $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( $test_suite->name ) . '"></td>' );
-         $this->printHtml( '</tr>' );
-
+         $this->printHtml( '</tr>' ); 
+         
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td colspan="2">Description:</td>' );
          $this->printHtml( '</tr>' );
+
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td colspan="2"><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $test_suite_description->description ) . '</textarea></td>' );
          $this->printHtml( '</tr>' );
@@ -138,11 +130,12 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          $this->printHtml( '<td colspan="2" class="even"><center><input type="submit" value="Save"></center></td>' );
          $this->printHtml( '</tr>' );
 
-         $this->printHtml( '</form>' );
+         $this->printHtml( '</table>' ); 
+         $this->printHtml( '</form>' ); 
+         $this->printHtml( '</div>' );
+
       }
 
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</div>' );
 
       return true;
    }

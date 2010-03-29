@@ -65,21 +65,15 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
       $description      = $this->getOrPost( 'description', '' );
 
       $this->printHtml( '<div class="aiTopNav">' );
-      $this->printHtml( '<table>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td valign="top">' );
       $this->_displayFolderBreadCrumb( $test_folder_id );
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' ); 
       $this->printHtml( '</div>' );
 
-      $this->printHtml( '<div class="aiTableContainer">' );
+      $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/suite/add/">' );
-      $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<input type="hidden" value="' . $test_folder_id . '" name="test_folder_id">' );
+      $this->printHtml( '<table class="ctmTable aiFullWidth">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="4">Add Test Suite</th>' );
-      $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
