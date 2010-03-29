@@ -14,6 +14,9 @@ class CTM_Site_Test_Add extends CTM_Site {
    }
 
    public function handleRequest() {
+
+      $this->requiresAuth();
+
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );

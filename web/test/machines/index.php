@@ -11,6 +11,14 @@ class CTM_Site_Test_Suites extends CTM_Site {
       return true;
    }
 
+   public function handleRequest() {
+
+      $this->requiresAuth();
+
+      return true;
+
+   }
+
    public function displayBody() {
       $rows = array();
       try {

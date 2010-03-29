@@ -35,6 +35,14 @@ class CTM_Site_Test_Folders extends CTM_Site {
       }
    }
 
+   public function handleRequest() {
+
+      $this->requiresAuth();
+
+      return true;
+
+   }
+
    public function displayBody() {
       $parent_id = $this->getOrPost( 'parent_id', '' );
 
@@ -128,8 +136,8 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
       if ( count( $suite_rows ) == 0 ) {
          $class = $this->oddEvenClass();
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td colspan="6" class="' . $class . '"><center><b>- No suites defined -</b></center></td>' );
+         $this->printHtml( '<tr class="' . $class . '">' );
+         $this->printHtml( '<td colspan="6"><center><b>- No suites defined -</b></center></td>' );
          $this->printHtml( '</tr>' );
       } else {
 
@@ -201,8 +209,8 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
       if ( count( $test_rows ) == 0 ) {
          $class = $this->oddEvenClass();
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td colspan="6" class="' . $class . '"><center><b>- No tests defined -</b></center></td>' );
+         $this->printHtml( '<tr class="' . $class . '">' );
+         $this->printHtml( '<td colspan="6"><center><b>- No tests defined -</b></center></td>' );
          $this->printHtml( '</tr>' );
       } else {
 

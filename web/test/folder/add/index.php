@@ -12,6 +12,9 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
    }
 
    public function handleRequest() {
+      
+      $this->requiresAuth();
+
       $parent_id = $this->getOrPost( 'parent_id', '' );
       $name = $this->getOrPost( 'name', '' );
 
@@ -40,42 +43,33 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
       $parent_id = $this->getOrPost( 'parent_id', '' );
       $name = $this->getOrPost( 'name', '' );
 
-      $this->printHtml( '<center>' );
-
-      $this->printHtml( '<table>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td valign="top">' );
+      $this->printHtml( '<div class="aiTopNav">' );
       $this->_displayFolderBreadCrumb( $parent_id );
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' );
+      $this->printHtml( '</div>' );
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td valign="top">' );
-      $this->printHtml( '<table class="ctmTable">' );
+      $this->printHtml( '<div class="aiTableContainer">' );
+
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/add/">' );
       $this->printHtml( '<input type="hidden" value="' . $parent_id . '" name="parent_id">' );
 
+      $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">Add Folder</th>' );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd">Name:</td>' );
-      $this->printHtml( '<td class="odd"><input type="text" name="name" size="30" value="' . $name . '"></td>' );
+      $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Name:</td>' );
+      $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $name . '"></td>' );
       $this->printHtml( '</tr>' );
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td colspan="2" class="even"><center><input type="submit" value="Add"></center></td>' );
+      $this->printHtml( '<tr class="aiButtonRow">' );
+      $this->printHtml( '<td colspan="2"><center><input type="submit" value="Add"></center></td>' );
       $this->printHtml( '</tr>' );
 
+      $this->printHtml( '</table>' );
       $this->printHtml( '</form>' );
-
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' );
-
-      $this->printHtml( '</table>' );
+      $this->printHtml( '</div>' );
 
       return true;
    }

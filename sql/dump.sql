@@ -1,0 +1,11 @@
+TRUNCATE account;
+TRUNCATE test;
+TRUNCATE test_command;
+TRUNCATE test_description;
+TRUNCATE test_folder;
+TRUNCATE test_html_source;
+TRUNCATE test_machine;
+TRUNCATE test_machine_browser;
+TRUNCATE test_suite;
+TRUNCATE test_suite_description;
+TRUNCATE test_suite_plan;

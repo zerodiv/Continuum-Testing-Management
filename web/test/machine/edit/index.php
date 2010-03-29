@@ -16,6 +16,9 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
    }
 
    public function handleRequest() {
+
+      $this->requiresAuth();
+
       $id = $this->getOrPost( 'id', '' );
       $is_disabled = $this->getOrPost( 'is_disabled', '' );
 

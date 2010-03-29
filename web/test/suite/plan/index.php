@@ -19,6 +19,9 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
    }
 
    public function handleRequest() {
+
+      $this->requiresAuth();
+
       $id                     = $this->getOrPost( 'id', '' );
       $action                 = $this->getOrPost( 'action', '' );
       $suite_id               = $this->getOrPost( 'suite_id', '' );

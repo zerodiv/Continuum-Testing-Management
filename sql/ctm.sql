@@ -37,7 +37,7 @@ CREATE TABLE `account` (
   UNIQUE KEY `username` (`username`),
   KEY `is_disabled` (`is_disabled`),
   KEY `account_role_id` (`account_role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,6 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (2,1,'jorcutt@adicio.com','40676ea8edbaf48007422d4eac7608dc','jorcutt@adicio.com',0,1,1262065668,1262065668,NULL),(3,1,'test@adicio.com','40676ea8edbaf48007422d4eac7608dc','test@adicio.com',0,0,0,1269673951,''),(4,1,'testing@adicio.com','40676ea8edbaf48007422d4eac7608dc','testing@adicio.com',0,0,0,1269674105,''),(6,1,'zerodiv@zerodivide.net','40676ea8edbaf48007422d4eac7608dc','zerodiv@zerodivide.net',0,1,1269836757,1269836722,'');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,7 +91,7 @@ CREATE TABLE `test` (
   `modified_at` bigint(20) unsigned NOT NULL,
   `modified_by` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +100,6 @@ CREATE TABLE `test` (
 
 LOCK TABLES `test` WRITE;
 /*!40000 ALTER TABLE `test` DISABLE KEYS */;
-INSERT INTO `test` VALUES (1,0,'A Sample Test',1,1268963301,2,1269288133,0),(2,0,'This is my test create',1,1269469668,2,1269469668,2),(3,0,'This is my test create',1,1269469764,2,1269469764,2),(4,0,'This is my test create',1,1269469775,2,1269469775,2),(5,0,'This is my test create',1,1269469806,2,1269469806,2),(6,0,'This is my test create',1,1269469898,2,1269469898,2),(7,0,'This is my test create',1,1269469959,2,1269469959,2),(8,0,'This is my test create',1,1269469987,2,1269469987,2),(9,0,'Testing Creation',1,1269470044,2,1269471894,2);
 /*!40000 ALTER TABLE `test` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,7 +198,7 @@ CREATE TABLE `test_folder` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +207,6 @@ CREATE TABLE `test_folder` (
 
 LOCK TABLES `test_folder` WRITE;
 /*!40000 ALTER TABLE `test_folder` DISABLE KEYS */;
-INSERT INTO `test_folder` VALUES (4,0,'PFL'),(7,4,'Sample Child'),(9,7,'Grandchild'),(10,0,'Another sample tree'),(11,0,'Careers'),(12,11,'Login'),(13,0,'Real Estate'),(14,13,'Broker');
 /*!40000 ALTER TABLE `test_folder` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,7 +223,7 @@ CREATE TABLE `test_html_source` (
   `html_source` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_id` (`test_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +232,6 @@ CREATE TABLE `test_html_source` (
 
 LOCK TABLES `test_html_source` WRITE;
 /*!40000 ALTER TABLE `test_html_source` DISABLE KEYS */;
-INSERT INTO `test_html_source` VALUES (1,5,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head profile=\"http://selenium-ide.openqa.org/profiles/test-case\">\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"selenium.base\" href=\"http://jorcutt-desktop/\" />\n<title>sampleTestLogin</title>\n</head>\n<body>\n<table cellpadding=\"1\" cellspacing=\"1\" border=\"1\">\n<thead>\n<tr><td rowspan=\"1\" colspan=\"3\">sampleTestLogin</td></tr>\n</thead><tbody>\n<tr>\n	<td>store</td>\n	<td>jorcutt@adicio.com</td>\n	<td>ctm_input_username</td>\n</tr>\n<tr>\n	<td>open</td>\n	<td>/user/login/</td>\n	<td></td>\n</tr>\n<tr>\n	<td>type</td>\n	<td>username</td>\n	<td>${ctm_input_username}</td>\n</tr>\n<tr>\n	<td>type</td>\n	<td>password</td>\n	<td>11pass</td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>//input[@value=\'Login!\']</td>\n	<td></td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>link=Logout : jorcutt@adicio.com</td>\n	<td></td>\n</tr>\n\n</tbody></table>\n</body>\n</html>\n'),(2,6,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head profile=\"http://selenium-ide.openqa.org/profiles/test-case\">\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"selenium.base\" href=\"http://jorcutt-desktop/\" />\n<title>sampleTestLogin</title>\n</head>\n<body>\n<table cellpadding=\"1\" cellspacing=\"1\" border=\"1\">\n<thead>\n<tr><td rowspan=\"1\" colspan=\"3\">sampleTestLogin</td></tr>\n</thead><tbody>\n<tr>\n	<td>store</td>\n	<td>jorcutt@adicio.com</td>\n	<td>ctm_input_username</td>\n</tr>\n<tr>\n	<td>open</td>\n	<td>/user/login/</td>\n	<td></td>\n</tr>\n<tr>\n	<td>type</td>\n	<td>username</td>\n	<td>${ctm_input_username}</td>\n</tr>\n<tr>\n	<td>type</td>\n	<td>password</td>\n	<td>11pass</td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>//input[@value=\'Login!\']</td>\n	<td></td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>link=Logout : jorcutt@adicio.com</td>\n	<td></td>\n</tr>\n\n</tbody></table>\n</body>\n</html>\n'),(3,7,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head profile=\"http://selenium-ide.openqa.org/profiles/test-case\">\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"selenium.base\" href=\"http://jorcutt-desktop/\" />\n<title>sampleTestLogin</title>\n</head>\n<body>\n<table cellpadding=\"1\" cellspacing=\"1\" border=\"1\">\n<thead>\n<tr><td rowspan=\"1\" colspan=\"3\">sampleTestLogin</td></tr>\n</thead><tbody>\n<tr>\n	<td>store</td>\n	<td>jorcutt@adicio.com</td>\n	<td>ctm_input_username</td>\n</tr>\n<tr>\n	<td>open</td>\n	<td>/user/login/</td>\n	<td></td>\n</tr>\n<tr>\n	<td>type</td>\n	<td>username</td>\n	<td>${ctm_input_username}</td>\n</tr>\n<tr>\n	<td>type</td>\n	<td>password</td>\n	<td>11pass</td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>//input[@value=\'Login!\']</td>\n	<td></td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>link=Logout : jorcutt@adicio.com</td>\n	<td></td>\n</tr>\n\n</tbody></table>\n</body>\n</html>\n'),(4,8,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head profile=\"http://selenium-ide.openqa.org/profiles/test-case\">\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"selenium.base\" href=\"http://jorcutt-desktop/\" />\n<title>sampleTestLogin</title>\n</head>\n<body>\n<table cellpadding=\"1\" cellspacing=\"1\" border=\"1\">\n<thead>\n<tr><td rowspan=\"1\" colspan=\"3\">sampleTestLogin</td></tr>\n</thead><tbody>\n<tr>\n	<td>store</td>\n	<td>jorcutt@adicio.com</td>\n	<td>ctm_input_username</td>\n</tr>\n<tr>\n	<td>open</td>\n	<td>/user/login/</td>\n	<td></td>\n</tr>\n<tr>\n	<td>type</td>\n	<td>username</td>\n	<td>${ctm_input_username}</td>\n</tr>\n<tr>\n	<td>type</td>\n	<td>password</td>\n	<td>11pass</td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>//input[@value=\'Login!\']</td>\n	<td></td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>link=Logout : jorcutt@adicio.com</td>\n	<td></td>\n</tr>\n\n</tbody></table>\n</body>\n</html>\n'),(5,9,'<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\r\n<!DOCTYPE html PUBLIC \\\"-//W3C//DTD XHTML 1.0 Strict//EN\\\" \\\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\\">\r\n<html xmlns=\\\"http://www.w3.org/1999/xhtml\\\" xml:lang=\\\"en\\\" lang=\\\"en\\\">\r\n<head profile=\\\"http://selenium-ide.openqa.org/profiles/test-case\\\">\r\n<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=UTF-8\\\" />\r\n<link rel=\\\"selenium.base\\\" href=\\\"http://jorcutt-desktop/\\\" />\r\n<title>sampleTestLogin</title>\r\n</head>\r\n<body>\r\n<table cellpadding=\\\"1\\\" cellspacing=\\\"1\\\" border=\\\"1\\\">\r\n<thead>\r\n<tr><td rowspan=\\\"1\\\" colspan=\\\"3\\\">sampleTestLogin</td></tr>\r\n</thead><tbody>\r\n<tr>\r\n	<td>store</td>\r\n	<td>jorcutt@adicio.com</td>\r\n	<td>ctm_input_username</td>\r\n</tr>\r\n<tr>\r\n	<td>open</td>\r\n	<td>/user/login/</td>\r\n	<td></td>\r\n</tr>\r\n<tr>\r\n	<td>type</td>\r\n	<td>username</td>\r\n	<td>${ctm_input_username}</td>\r\n</tr>\r\n<tr>\r\n	<td>type</td>\r\n	<td>password</td>\r\n	<td>11pass</td>\r\n</tr>\r\n<tr>\r\n	<td>clickAndWait</td>\r\n	<td>//input[@value=\\\'Login!\\\']</td>\r\n	<td></td>\r\n</tr>\r\n<tr>\r\n	<td>clickAndWait</td>\r\n	<td>link=Logout : jorcutt@adicio.com</td>\r\n	<td></td>\r\n</tr>\r\n\r\n</tbody></table>\r\n</body>\r\n</html>\r\n');
 /*!40000 ALTER TABLE `test_html_source` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,7 +250,7 @@ CREATE TABLE `test_machine` (
   `last_modified` bigint(20) unsigned NOT NULL,
   `is_disabled` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,7 +259,6 @@ CREATE TABLE `test_machine` (
 
 LOCK TABLES `test_machine` WRITE;
 /*!40000 ALTER TABLE `test_machine` DISABLE KEYS */;
-INSERT INTO `test_machine` VALUES (4,'jorcutt-laptop','Darwin',1269411891,1269413024,0);
 /*!40000 ALTER TABLE `test_machine` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +276,7 @@ CREATE TABLE `test_machine_browser` (
   PRIMARY KEY (`id`),
   KEY `test_machine_id` (`test_machine_id`),
   KEY `test_browser_id` (`test_browser_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -290,7 +285,6 @@ CREATE TABLE `test_machine_browser` (
 
 LOCK TABLES `test_machine_browser` WRITE;
 /*!40000 ALTER TABLE `test_machine_browser` DISABLE KEYS */;
-INSERT INTO `test_machine_browser` VALUES (1,4,7),(2,4,6),(3,4,4);
 /*!40000 ALTER TABLE `test_machine_browser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -359,7 +353,7 @@ CREATE TABLE `test_suite` (
   `test_status_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_folder_id` (`test_folder_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -368,7 +362,6 @@ CREATE TABLE `test_suite` (
 
 LOCK TABLES `test_suite` WRITE;
 /*!40000 ALTER TABLE `test_suite` DISABLE KEYS */;
-INSERT INTO `test_suite` VALUES (1,0,'testing create',1268779744,0,1268779744,2,1),(2,0,'jorcutt\\\'s test for the holy grail',1268933499,2,1268944976,2,1),(3,10,'This is a sample Test for Association',1268965552,2,1268965552,2,1),(4,0,'This is a new suite',1269837834,2,1269837834,2,1),(5,0,'Test suite omega',1269837951,2,1269837951,2,1),(6,0,'Test suite omega',1269838033,2,1269838033,2,1),(7,0,'Test suite omega',1269838058,2,1269838058,2,1),(8,0,'Test suite omega',1269838154,2,1269838734,2,1);
 /*!40000 ALTER TABLE `test_suite` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -385,7 +378,7 @@ CREATE TABLE `test_suite_description` (
   `description` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_suite_id` (`test_suite_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -394,7 +387,6 @@ CREATE TABLE `test_suite_description` (
 
 LOCK TABLES `test_suite_description` WRITE;
 /*!40000 ALTER TABLE `test_suite_description` DISABLE KEYS */;
-INSERT INTO `test_suite_description` VALUES (1,7,'Test description delta'),(2,8,'Test description delta - with mods');
 /*!40000 ALTER TABLE `test_suite_description` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -413,7 +405,7 @@ CREATE TABLE `test_suite_plan` (
   `test_suite_plan_type_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_suite_id` (`test_suite_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -422,7 +414,6 @@ CREATE TABLE `test_suite_plan` (
 
 LOCK TABLES `test_suite_plan` WRITE;
 /*!40000 ALTER TABLE `test_suite_plan` DISABLE KEYS */;
-INSERT INTO `test_suite_plan` VALUES (1,3,1,1,1),(2,3,2,2,1),(3,3,1,4,2),(4,3,2,5,1),(5,3,1,3,1),(6,3,1,6,2),(7,8,1,1,1),(8,8,4,2,1),(9,8,4,3,1),(10,8,4,4,1),(11,8,4,5,1),(12,8,4,6,1),(13,8,4,7,1),(14,8,4,8,1),(15,8,4,9,1),(16,8,4,10,1),(17,8,4,11,1),(18,8,4,12,1),(19,8,4,13,1),(20,8,4,14,1),(21,8,4,15,1),(22,8,4,16,1),(23,8,4,17,1),(24,8,4,18,1),(25,8,4,19,1),(26,8,4,20,1),(27,8,4,21,1);
 /*!40000 ALTER TABLE `test_suite_plan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -459,4 +450,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-03-29  9:50:12
+-- Dump completed on 2010-03-29 14:00:31

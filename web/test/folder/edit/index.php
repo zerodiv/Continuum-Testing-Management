@@ -13,6 +13,9 @@ class CTM_Site_Test_Folder_Edit extends CTM_Site {
    }
 
    public function handleRequest() {
+
+      $this->requiresAuth();
+
       $id = $this->getOrPost( 'id', '' );
       $name = $this->getOrPost( 'name', '' );
 
@@ -30,7 +33,6 @@ class CTM_Site_Test_Folder_Edit extends CTM_Site {
 
          if ( isset( $rows[0] ) ) {
             $folder = $rows[0];
-            print_r( $folder );
             $folder->name = $name;
             $folder->save();
          }
@@ -47,6 +49,7 @@ class CTM_Site_Test_Folder_Edit extends CTM_Site {
       $id = $this->getOrPost( 'id', '' );
 
       $rows = null;
+      $folder = null;
 
       try {
          $sel = new CTM_Test_Folder_Selector();
@@ -55,59 +58,45 @@ class CTM_Site_Test_Folder_Edit extends CTM_Site {
          );
 
          $rows = $sel->find( $and_params );
+      
+         if ( count( $rows ) == 1 ) {
+            $folder = $rows[0];
+         }
+
       } catch ( Exception $e ) {
       }
 
       $name = $this->getOrPost( 'name', '' );
 
-      $this->printHtml( '<center>' );
-
-      $this->printHtml( '<table>' );
-      if ( count( $rows ) == 1 ) {
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td valign="top">' );
+      if ( isset( $folder ) ) {
+         $this->printHtml( '<div class="aiTopNav">' );
          $this->_displayFolderBreadCrumb( $rows[0]->parent_id );
-         $this->printHtml( '</td>' );
-         $this->printHtml( '</tr>' ); 
-      } 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td valign="top">' );
+         $this->printHtml( '</div>' );
 
-      $this->printHtml( '<table class="ctmTable">' );
-      if ( count( $rows ) == 1 ) {
-         $folder = $rows[0];
-
+         $this->printHtml( '<div class="aiTableContainer">' );
          $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/edit/">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' );
+         $this->printHtml( '<table class="ctmTable">' );
          
          $this->printHtml( '<tr>' );
          $this->printHtml( '<th colspan="4">Edit Folder</th>' );
-         $this->printHtml( '</td>' );
          $this->printHtml( '</tr>' ); 
          
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="odd">Name:</td>' );
-         $this->printHtml( '<td class="odd"><input type="text" name="name" size="30" value="' . $folder->name . '"></td>' );
+         $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td>Name:</td>' );
+         $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $folder->name . '"></td>' );
          $this->printHtml( '</tr>' ); 
          
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td colspan="2" class="even"><center><input type="submit" value="Save"></center></td>' );
+         $this->printHtml( '<tr class="aiButtonRow">' );
+         $this->printHtml( '<td colspan="2"><center><input type="submit" value="Save"></center></td>' );
          $this->printHtml( '</tr>' ); 
          
+         $this->printHtml( '</table>' );
+
          $this->printHtml( '</form>' ); 
-      } else {
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="row">Failed to find: ' . $this->escapeVariable( $id ) . '</td>' );
-         $this->printHtml( '</tr>' );
+         $this->printHtml( '</div>' );
+
       }
-
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' );
-
-      $this->printHtml( '</table>' );
-
-      $this->printHtml( '</center>' );
 
       return true;
    }
