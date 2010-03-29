@@ -119,7 +119,11 @@ abstract class Light_MVC {
 
    public function displayHeader_CSS() {
       foreach ( $this->_css_files as $css_file ) {
-         $this->printHtml('<link href="' . $this->_baseurl . '/css/' . $css_file . '" type="text/css" rel="stylesheet"/>' );
+         if ( preg_match( '/^http/', $css_file ) ) {
+            $this->printHtml('<link href="' . $css_file . '" type="text/css" rel="stylesheet"/>' );
+         } else {
+            $this->printHtml('<link href="' . $this->_baseurl . '/css/' . $css_file . '" type="text/css" rel="stylesheet"/>' );
+         }
       }
       return true;
    }

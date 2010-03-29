@@ -37,7 +37,7 @@ CREATE TABLE `account` (
   UNIQUE KEY `username` (`username`),
   KEY `is_disabled` (`is_disabled`),
   KEY `account_role_id` (`account_role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (2,1,'jorcutt@adicio.com','40676ea8edbaf48007422d4eac7608dc','jorcutt@adicio.com',0,1,1262065668,1262065668,NULL);
+INSERT INTO `account` VALUES (2,1,'jorcutt@adicio.com','40676ea8edbaf48007422d4eac7608dc','jorcutt@adicio.com',0,1,1262065668,1262065668,NULL),(3,1,'test@adicio.com','40676ea8edbaf48007422d4eac7608dc','test@adicio.com',0,0,0,1269673951,''),(4,1,'testing@adicio.com','40676ea8edbaf48007422d4eac7608dc','testing@adicio.com',0,0,0,1269674105,''),(6,1,'zerodiv@zerodivide.net','40676ea8edbaf48007422d4eac7608dc','zerodiv@zerodivide.net',0,1,1269836757,1269836722,'');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,7 +175,7 @@ CREATE TABLE `test_description` (
   `description` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_id` (`test_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,6 @@ CREATE TABLE `test_description` (
 
 LOCK TABLES `test_description` WRITE;
 /*!40000 ALTER TABLE `test_description` DISABLE KEYS */;
-INSERT INTO `test_description` VALUES (1,9,'Again with the update!');
 /*!40000 ALTER TABLE `test_description` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -353,7 +352,6 @@ CREATE TABLE `test_suite` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `test_folder_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
-  `description` text NOT NULL,
   `created_at` bigint(20) unsigned NOT NULL,
   `created_by` bigint(20) unsigned NOT NULL,
   `modified_at` bigint(20) unsigned NOT NULL,
@@ -361,7 +359,7 @@ CREATE TABLE `test_suite` (
   `test_status_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_folder_id` (`test_folder_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -370,8 +368,34 @@ CREATE TABLE `test_suite` (
 
 LOCK TABLES `test_suite` WRITE;
 /*!40000 ALTER TABLE `test_suite` DISABLE KEYS */;
-INSERT INTO `test_suite` VALUES (1,0,'testing create','fasdfasdf\r\n\r\nasdfasdf\r\n\r\nasfdfasd\r\n\r\nasdfasdf',1268779744,0,1268779744,2,1),(2,0,'jorcutt\\\'s test for the holy grail','The GRAIL! but beware of the jaberwocky!',1268933499,2,1268944976,2,1),(3,10,'This is a sample Test for Association','This test shows off the association capability of CTM',1268965552,2,1268965552,2,1);
+INSERT INTO `test_suite` VALUES (1,0,'testing create',1268779744,0,1268779744,2,1),(2,0,'jorcutt\\\'s test for the holy grail',1268933499,2,1268944976,2,1),(3,10,'This is a sample Test for Association',1268965552,2,1268965552,2,1),(4,0,'This is a new suite',1269837834,2,1269837834,2,1),(5,0,'Test suite omega',1269837951,2,1269837951,2,1),(6,0,'Test suite omega',1269838033,2,1269838033,2,1),(7,0,'Test suite omega',1269838058,2,1269838058,2,1),(8,0,'Test suite omega',1269838154,2,1269838734,2,1);
 /*!40000 ALTER TABLE `test_suite` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `test_suite_description`
+--
+
+DROP TABLE IF EXISTS `test_suite_description`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_suite_description` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `test_suite_id` bigint(20) unsigned NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `test_suite_id` (`test_suite_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_suite_description`
+--
+
+LOCK TABLES `test_suite_description` WRITE;
+/*!40000 ALTER TABLE `test_suite_description` DISABLE KEYS */;
+INSERT INTO `test_suite_description` VALUES (1,7,'Test description delta'),(2,8,'Test description delta - with mods');
+/*!40000 ALTER TABLE `test_suite_description` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -389,7 +413,7 @@ CREATE TABLE `test_suite_plan` (
   `test_suite_plan_type_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_suite_id` (`test_suite_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -398,7 +422,7 @@ CREATE TABLE `test_suite_plan` (
 
 LOCK TABLES `test_suite_plan` WRITE;
 /*!40000 ALTER TABLE `test_suite_plan` DISABLE KEYS */;
-INSERT INTO `test_suite_plan` VALUES (1,3,1,1,1),(2,3,2,2,1),(3,3,1,4,2),(4,3,2,5,1),(5,3,1,3,1),(6,3,1,6,2);
+INSERT INTO `test_suite_plan` VALUES (1,3,1,1,1),(2,3,2,2,1),(3,3,1,4,2),(4,3,2,5,1),(5,3,1,3,1),(6,3,1,6,2),(7,8,1,1,1),(8,8,4,2,1),(9,8,4,3,1),(10,8,4,4,1),(11,8,4,5,1),(12,8,4,6,1),(13,8,4,7,1),(14,8,4,8,1),(15,8,4,9,1),(16,8,4,10,1),(17,8,4,11,1),(18,8,4,12,1),(19,8,4,13,1),(20,8,4,14,1),(21,8,4,15,1),(22,8,4,16,1),(23,8,4,17,1),(24,8,4,18,1),(25,8,4,19,1),(26,8,4,20,1),(27,8,4,21,1);
 /*!40000 ALTER TABLE `test_suite_plan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -435,4 +459,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-03-26 21:15:35
+-- Dump completed on 2010-03-29  9:50:12
