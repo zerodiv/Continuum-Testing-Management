@@ -23,9 +23,11 @@ class CTM_Site_User_Verify extends CTM_Site {
       
       try {
          $sel = new CTM_User_Selector();
+
          $and_params = array(
                new Light_Database_Selector_Criteria( 'id', '=', $id )
          );
+
          $rows = $sel->find( $and_params );
 
          if ( isset( $rows[0] ) ) {
@@ -36,7 +38,7 @@ class CTM_Site_User_Verify extends CTM_Site {
                $user->verified_when = time();
                $user->save();
             }
-            // already verified
+            // verified
             header( 'Location: ' . $this->_baseurl . '/user/login/' );
             return false;
          }
@@ -52,13 +54,13 @@ class CTM_Site_User_Verify extends CTM_Site {
    } 
    
    public function displayBody() {
-      $this->printHtml( '<center>' );
+      $this->printHtml( '<div class="aiTableContainer">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th>' . $this->_pagetitle . '</th>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '</table>' );
-      $this->printHtml( '</center>' );
+      $this->printHtml( '</div>' );
       return true;
    }
 

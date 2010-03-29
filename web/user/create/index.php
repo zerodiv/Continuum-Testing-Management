@@ -62,14 +62,12 @@ class CTM_Site_User_Create extends CTM_Site {
          $user->temp_password = '';
          $user->save();
 
-         $rows = $user_sel->find( $and_params );
-
-         if ( count( $rows ) == 1 ) {
+         if ( $user->id > 0 ) {
             // found the user hooray.
 
-            $verify_sign = md5( $user_message->id . 'jeorem' );
+            $verify_sign = md5( $user->id . 'jeorem' );
 
-            $verify_url = $this->_baseurl . '/user/verify/?id=' . $user_message->id . '&checksum=' . $verify_sign;
+            $verify_url = $this->_baseurl . '/user/verify/?id=' . $user->id . '&checksum=' . $verify_sign;
 
             $message = '';
             $message .= 'Welcome to ' . $this->_sitetitle . "\n";
