@@ -1,10 +1,7 @@
 Build plan:
 
-Schema refactor: 
-- test.command to be filled in via parsing test_html_source.html_source
-- test_suite.description to be move to test_suite_description
-
 Test runner pre-req:
+  - test.command to be filled in via parsing test_html_source.html_source
   - Document the concepts around single session variable tracking for testing suites.
 
 Test Lab:
@@ -44,7 +41,11 @@ Installer:
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
-Notes for the future:
+Notes/plans for the future:
+
+Schema refactor: 
+  - need to review this again with perf in mind, we think it will scale to very
+    large test numbers, but we need to run in a bigger dataset to prove this.
 
 Revision history - future feature: Revision history handled via a external tool such as svn?, git, etc? 
 
