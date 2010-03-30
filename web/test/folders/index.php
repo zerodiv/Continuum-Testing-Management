@@ -150,7 +150,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
             $suite_status = $test_status_cache->getById( $suite->test_status_id );
 
             $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td class="aiColumnOne">' . $test->id . '</td>' );
+            $this->printHtml( '<td class="aiColumnOne">' . $suite->id . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $suite->name ) . '</td>' );
             if ( isset( $suite_status ) ) {
                $this->printHtml( '<td>' . $suite_status->name . '</td>' );

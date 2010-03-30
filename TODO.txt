@@ -1,17 +1,13 @@
 Build plan:
 
-Test runner pre-req:
-  - test.command to be filled in via parsing test_html_source.html_source
-  - Document the concepts around single session variable tracking for testing suites.
-
 Test Lab:
+  - create session tracker
+  - create runnner
   - create phone home app to configure a available node for use (.net for the windows stuff)
    * CTM-ET - Phone home on a heartbeat basis, provides the basics for us to track health on the
      test node also (if we want), right now I will settle for checking in and disabling of a node
      upon no checkin
 
-  - create session tracker
-  - create runnner
 
 Accounts Admin:
 - manage accounts
@@ -31,6 +27,8 @@ Installer:
 - write config to etc/config.ini
 - self destruct upon writing to config
 
+Test runner pre-req:
+  - Document the concepts around single session variable tracking for testing suites.
 --
 1.0 - Release to world? 
 * Need to discuss license

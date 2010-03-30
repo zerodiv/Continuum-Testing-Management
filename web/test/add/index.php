@@ -20,11 +20,12 @@ class CTM_Site_Test_Add extends CTM_Site {
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
-      $html_source      = $this->getOrPost( 'html_source', '', false );
 
       if ( $name == '' ) {
          return true;
       }
+
+      $html_source = null;
 
       $html_source_file = $_FILES['html_source_file']['tmp_name'];
 
@@ -32,7 +33,8 @@ class CTM_Site_Test_Add extends CTM_Site {
          $html_source = file_get_contents( $html_source_file );
       }
 
-      if ( $html_source == '' ) {
+      // no html file - skip me!
+      if ( ! isset( $html_source ) ) {
          return true;
       }
 
@@ -57,6 +59,8 @@ class CTM_Site_Test_Add extends CTM_Site {
             $html_source_obj->test_id     = $new->id;
             $html_source_obj->html_source = $html_source;
             $html_source_obj->save();
+
+            $html_source_obj->parseToTestCommands();
 
             // add the description.
             $test_description_obj = new CTM_Test_Description();
@@ -86,7 +90,6 @@ class CTM_Site_Test_Add extends CTM_Site {
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
-      $html_source      = $this->getOrPost( 'html_source', '', false );
 
       $this->printHtml( '<center>' );
 
@@ -119,13 +122,6 @@ class CTM_Site_Test_Add extends CTM_Site {
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td class="odd" colspan="2"><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $description ) . '</textarea></td>' );
-      $this->printHtml( '</tr>' );
-
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd" colspan="2">Html Source:</td>' );
-      $this->printHtml( '</tr>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd" colspan="2"><textarea name="html_source" rows="25" cols="60">' . $this->escapeVariable( $html_source ) . '</textarea></td>' );
       $this->printHtml( '</tr>' );
 
       if ( $this->isFileUploadAvailable() ) {

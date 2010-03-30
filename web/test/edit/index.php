@@ -23,20 +23,20 @@ class CTM_Site_Test_Edit extends CTM_Site {
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
-      $html_source      = $this->getOrPost( 'html_source', '', false );
 
       if ( $name == '' ) {
          return true;
       }
 
+      $had_file = false;
+
+      $html_source = '';
+
       $html_source_file = $_FILES['html_source_file']['tmp_name'];
 
       if ( isset( $html_source_file ) && filesize( $html_source_file) > 0 ) {
          $html_source = file_get_contents( $html_source_file );
-      }
-
-      if ( $html_source == '' ) {
-         return true;
+         $had_file == true;
       }
 
       $test                = null;
@@ -87,33 +87,12 @@ class CTM_Site_Test_Edit extends CTM_Site {
                $description_obj->save();
             }
 
-            if ( md5( $html_source_obj->html_source ) != md5( $html_source ) ) {
+            if ( $had_file == true && md5( $html_source_obj->html_source ) != md5( $html_source ) ) {
 
                $html_source_obj->html_source = $html_source;
                $html_source_obj->save();
 
-               /*
-TODO: jeo - need to finish the command parsing and push into the db.
-               // Assuming this item parses to be selenium formatted parse it and save it to the db.
-               // Remove existing commands (if any)
-               $selenium_xhtml = stripslashes( $html_source_obj->html_source ); 
-               
-               // echo "test:\n";
-               // echo $test->html_source . "\n";
-
-               $xml = simplexml_load_string( $selenium_xhtml );
-
-               if ( isset( $xml->body->table->tbody->tr ) ) {
-                  $selenium_command_cache = new CTM_Selenium_Command_Cache();
-
-                  foreach ( $xml->body->table->tbody->tr as $tr ) { 
-                     list( $command, $target, $value ) = $tr->td;
-
-                     $command_obj = $selenium_command_cache->getByName( $command );
-
-                  }
-               }
-               */
+               $html_source_obj->parseToTestCommands();
 
             }
 
@@ -134,7 +113,6 @@ TODO: jeo - need to finish the command parsing and push into the db.
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
-      $html_source      = $this->getOrPost( 'html_source', '', false );
 
       $rows = null;
       try {
@@ -211,16 +189,6 @@ TODO: jeo - need to finish the command parsing and push into the db.
             }
          } catch ( Exception $e ) {
          }
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="odd" colspan="2">Html Source:</td>' );
-         $this->printHtml( '</tr>' );
-         $this->printHtml( '<tr>' );
-         if ( isset( $html_source_obj ) ) {
-            $this->printHtml( '<td class="odd" colspan="2"><textarea name="html_source" rows="25" cols="60">' . $this->escapeVariable( $html_source_obj->html_source ) . '</textarea></td>' );
-         } else {
-            $this->printHtml( '<td class="odd" colspan="2"><textarea name="html_source" rows="25" cols="60">Failed to find associated html_source.</textarea></td>' );
-         }
-         $this->printHtml( '</tr>' ); 
 
          if ( $this->isFileUploadAvailable() ) {
 
