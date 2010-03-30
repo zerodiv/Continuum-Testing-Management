@@ -37,7 +37,7 @@ CREATE TABLE `account` (
   UNIQUE KEY `username` (`username`),
   KEY `is_disabled` (`is_disabled`),
   KEY `account_role_id` (`account_role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,6 +46,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
+INSERT INTO `account` VALUES (1,1,'jorcutt@adicio.com','40676ea8edbaf48007422d4eac7608dc','jorcutt@adicio.com',0,1,1269896473,1269896455,'');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +92,7 @@ CREATE TABLE `test` (
   `modified_at` bigint(20) unsigned NOT NULL,
   `modified_by` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,6 +101,7 @@ CREATE TABLE `test` (
 
 LOCK TABLES `test` WRITE;
 /*!40000 ALTER TABLE `test` DISABLE KEYS */;
+INSERT INTO `test` VALUES (1,0,'Test Me',1,1269900635,1,1269913831,1),(2,0,'My fancy new test',1,1269914010,1,1269914442,1);
 /*!40000 ALTER TABLE `test` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,11 +146,13 @@ DROP TABLE IF EXISTS `test_command`;
 CREATE TABLE `test_command` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `test_id` bigint(20) unsigned NOT NULL,
-  `selenium_command_id` bigint(20) unsigned NOT NULL,
+  `test_selenium_command_id` bigint(20) unsigned NOT NULL,
   `target` text NOT NULL,
   `value` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  KEY `test_id` (`test_id`),
+  KEY `test_selenium_command_id` (`test_selenium_command_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,6 +161,7 @@ CREATE TABLE `test_command` (
 
 LOCK TABLES `test_command` WRITE;
 /*!40000 ALTER TABLE `test_command` DISABLE KEYS */;
+INSERT INTO `test_command` VALUES (29,1,1,'jorcutt@adicio.com','ctm_input_username'),(30,1,1,'11pass','ctm_input_password'),(31,1,2,'/user/login/',''),(32,1,3,'username','${ctm_input_username}'),(33,1,3,'password','${ctm_input_password}'),(34,1,4,'//input[@value=\'Login!\']',''),(35,1,4,'link=Logout : ${ctm_input_username}',''),(43,2,2,'/test/folders/?parent_id=0',''),(44,2,4,'link=New Test',''),(45,2,4,'link=Test Folders',''),(46,2,4,'//a[@href=\'http://jorcutt-laptop/test/folder/edit/?id=11\']',''),(47,2,4,'link=Test Folders','');
 /*!40000 ALTER TABLE `test_command` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +178,7 @@ CREATE TABLE `test_description` (
   `description` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_id` (`test_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,6 +187,7 @@ CREATE TABLE `test_description` (
 
 LOCK TABLES `test_description` WRITE;
 /*!40000 ALTER TABLE `test_description` DISABLE KEYS */;
+INSERT INTO `test_description` VALUES (1,1,'Description'),(2,2,'Test Me Again');
 /*!40000 ALTER TABLE `test_description` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,7 +204,7 @@ CREATE TABLE `test_folder` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,6 +213,7 @@ CREATE TABLE `test_folder` (
 
 LOCK TABLES `test_folder` WRITE;
 /*!40000 ALTER TABLE `test_folder` DISABLE KEYS */;
+INSERT INTO `test_folder` VALUES (1,0,'Test Folder Edited');
 /*!40000 ALTER TABLE `test_folder` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,7 +230,7 @@ CREATE TABLE `test_html_source` (
   `html_source` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_id` (`test_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,6 +239,7 @@ CREATE TABLE `test_html_source` (
 
 LOCK TABLES `test_html_source` WRITE;
 /*!40000 ALTER TABLE `test_html_source` DISABLE KEYS */;
+INSERT INTO `test_html_source` VALUES (1,1,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head profile=\"http://selenium-ide.openqa.org/profiles/test-case\">\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"selenium.base\" href=\"http://jorcutt-desktop/\" />\n<title>sampleTestLogin</title>\n</head>\n<body>\n<table cellpadding=\"1\" cellspacing=\"1\" border=\"1\">\n<thead>\n<tr><td rowspan=\"1\" colspan=\"3\">sampleTestLogin</td></tr>\n</thead><tbody>\n<tr>\n        <td>store</td>\n        <td>jorcutt@adicio.com</td>\n        <td>ctm_input_username</td>\n</tr>\n<tr>\n        <td>store</td>\n        <td>11pass</td>\n        <td>ctm_input_password</td>\n</tr>\n<tr>\n        <td>open</td>\n        <td>/user/login/</td>\n        <td></td>\n</tr>\n<tr>\n        <td>type</td>\n        <td>username</td>\n        <td>${ctm_input_username}</td>\n</tr>\n<tr>\n        <td>type</td>\n        <td>password</td>\n        <td>${ctm_input_password}</td>\n</tr>\n<tr>\n        <td>clickAndWait</td>\n        <td>//input[@value=\'Login!\']</td>\n        <td></td>\n</tr>\n<tr>\n        <td>clickAndWait</td>\n        <td>link=Logout : ${ctm_input_username}</td>\n        <td></td>\n</tr>\n\n</tbody></table>\n</body>\n</html>\n'),(2,2,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head profile=\"http://selenium-ide.openqa.org/profiles/test-case\">\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"selenium.base\" href=\"\" />\n<title>testMe2</title>\n</head>\n<body>\n<table cellpadding=\"1\" cellspacing=\"1\" border=\"1\">\n<thead>\n<tr><td rowspan=\"1\" colspan=\"3\">testMe2</td></tr>\n</thead><tbody>\n<tr>\n	<td>open</td>\n	<td>/test/folders/?parent_id=0</td>\n	<td></td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>link=New Test</td>\n	<td></td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>link=Test Folders</td>\n	<td></td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>//a[@href=\'http://jorcutt-laptop/test/folder/edit/?id=11\']</td>\n	<td></td>\n</tr>\n<tr>\n	<td>clickAndWait</td>\n	<td>link=Test Folders</td>\n	<td></td>\n</tr>\n\n</tbody></table>\n</body>\n</html>\n');
 /*!40000 ALTER TABLE `test_html_source` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +258,7 @@ CREATE TABLE `test_machine` (
   `last_modified` bigint(20) unsigned NOT NULL,
   `is_disabled` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,6 +267,7 @@ CREATE TABLE `test_machine` (
 
 LOCK TABLES `test_machine` WRITE;
 /*!40000 ALTER TABLE `test_machine` DISABLE KEYS */;
+INSERT INTO `test_machine` VALUES (1,'jorcutt-laptop','Darwin',1269924830,1269924830,0);
 /*!40000 ALTER TABLE `test_machine` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,7 +285,7 @@ CREATE TABLE `test_machine_browser` (
   PRIMARY KEY (`id`),
   KEY `test_machine_id` (`test_machine_id`),
   KEY `test_browser_id` (`test_browser_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -285,7 +294,142 @@ CREATE TABLE `test_machine_browser` (
 
 LOCK TABLES `test_machine_browser` WRITE;
 /*!40000 ALTER TABLE `test_machine_browser` DISABLE KEYS */;
+INSERT INTO `test_machine_browser` VALUES (1,1,7),(2,1,6),(3,1,4);
 /*!40000 ALTER TABLE `test_machine_browser` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `test_param`
+--
+
+DROP TABLE IF EXISTS `test_param`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_param` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `test_id` bigint(20) unsigned NOT NULL,
+  `test_param_library_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `test_id` (`test_id`),
+  KEY `test_param_library_id` (`test_param_library_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_param`
+--
+
+LOCK TABLES `test_param` WRITE;
+/*!40000 ALTER TABLE `test_param` DISABLE KEYS */;
+/*!40000 ALTER TABLE `test_param` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `test_param_library`
+--
+
+DROP TABLE IF EXISTS `test_param_library`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_param_library` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `default_value` text NOT NULL,
+  `created_at` bigint(20) unsigned NOT NULL,
+  `created_by` bigint(20) unsigned NOT NULL,
+  `modified_at` bigint(20) unsigned NOT NULL,
+  `modified_by` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_param_library`
+--
+
+LOCK TABLES `test_param_library` WRITE;
+/*!40000 ALTER TABLE `test_param_library` DISABLE KEYS */;
+/*!40000 ALTER TABLE `test_param_library` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `test_run`
+--
+
+DROP TABLE IF EXISTS `test_run`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_run` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `test_suite_id` bigint(20) unsigned NOT NULL,
+  `test_run_type_id` bigint(20) unsigned NOT NULL,
+  `test_run_status_id` bigint(20) unsigned NOT NULL,
+  `iterations` bigint(20) unsigned NOT NULL DEFAULT '1',
+  `created_at` bigint(20) unsigned NOT NULL,
+  `created_by` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `test_suite_id` (`test_suite_id`),
+  KEY `test_run_type_id` (`test_run_type_id`),
+  KEY `test_run_status_id` (`test_run_status_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_run`
+--
+
+LOCK TABLES `test_run` WRITE;
+/*!40000 ALTER TABLE `test_run` DISABLE KEYS */;
+/*!40000 ALTER TABLE `test_run` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `test_run_state`
+--
+
+DROP TABLE IF EXISTS `test_run_state`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_run_state` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_run_state`
+--
+
+LOCK TABLES `test_run_state` WRITE;
+/*!40000 ALTER TABLE `test_run_state` DISABLE KEYS */;
+INSERT INTO `test_run_state` VALUES (1,'queued'),(2,'executing'),(3,'completed');
+/*!40000 ALTER TABLE `test_run_state` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `test_run_type`
+--
+
+DROP TABLE IF EXISTS `test_run_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_run_type` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_run_type`
+--
+
+LOCK TABLES `test_run_type` WRITE;
+/*!40000 ALTER TABLE `test_run_type` DISABLE KEYS */;
+INSERT INTO `test_run_type` VALUES (1,'once'),(2,'repetitive');
+/*!40000 ALTER TABLE `test_run_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -299,7 +443,7 @@ CREATE TABLE `test_selenium_command` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -308,6 +452,7 @@ CREATE TABLE `test_selenium_command` (
 
 LOCK TABLES `test_selenium_command` WRITE;
 /*!40000 ALTER TABLE `test_selenium_command` DISABLE KEYS */;
+INSERT INTO `test_selenium_command` VALUES (1,'store'),(2,'open'),(3,'type'),(4,'clickAndWait');
 /*!40000 ALTER TABLE `test_selenium_command` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -353,7 +498,7 @@ CREATE TABLE `test_suite` (
   `test_status_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_folder_id` (`test_folder_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,6 +507,7 @@ CREATE TABLE `test_suite` (
 
 LOCK TABLES `test_suite` WRITE;
 /*!40000 ALTER TABLE `test_suite` DISABLE KEYS */;
+INSERT INTO `test_suite` VALUES (1,0,'Test Suite Omega',1269899312,1,1269899312,1,1);
 /*!40000 ALTER TABLE `test_suite` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -378,7 +524,7 @@ CREATE TABLE `test_suite_description` (
   `description` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_suite_id` (`test_suite_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -387,6 +533,7 @@ CREATE TABLE `test_suite_description` (
 
 LOCK TABLES `test_suite_description` WRITE;
 /*!40000 ALTER TABLE `test_suite_description` DISABLE KEYS */;
+INSERT INTO `test_suite_description` VALUES (1,1,'Test Suite Omega - Grand Plan');
 /*!40000 ALTER TABLE `test_suite_description` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -450,4 +597,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-03-29 14:00:31
+-- Dump completed on 2010-03-29 23:08:58

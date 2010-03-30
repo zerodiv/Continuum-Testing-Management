@@ -1,8 +1,18 @@
 Build plan:
 
 Test Lab:
+  - build out test_param_library
+  - build out test_param
+  - add code to the test/html parser to add params to both the test_param and lib
+  - create admin pages for the param library
+  - build out test_suite_param
+  - modify suite editor to save test_params into test_suite_param enabling the test_run builder to be faster
+  - build out test_run
+  - build out test_run_state
+  - build out test_run_type
+  - build out test_run_log (TODO: Schema for this - would like to not store it all raw in the db - but for now meh)
+  - create test runnner
   - create session tracker
-  - create runnner
   - create phone home app to configure a available node for use (.net for the windows stuff)
    * CTM-ET - Phone home on a heartbeat basis, provides the basics for us to track health on the
      test node also (if we want), right now I will settle for checking in and disabling of a node

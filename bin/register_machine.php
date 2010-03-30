@@ -1,6 +1,11 @@
 #!/usr/bin/php -q
 <?php
 
+//--------------------------------------------------------------------------------
+// This is a PoC script to show how to talk to the CTM system to register
+// a host with a set of browsers... this would also fire up remote control and ping back
+// to the server on a regular interval
+//--------------------------------------------------------------------------------
 require_once( dirname( __FILE__ ) . '/../bootstrap.php' );
 require_once( 'Light/CommandLine.php' );
 
