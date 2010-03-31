@@ -1,7 +1,6 @@
 Build plan:
 
-  - test_command.target move to test_command_target (obey the cardinal rule of text fields in sep, optimized tables)
-  - test_command.value move to test_command_value
+  - add download test to local file, we cannot have the scripts not available to the person wanting to edit / modify
   - test_param = drop (yes?) - so far not needing it since test_command has most of the data needed. Eval after we're
     done with the test_runner.
 

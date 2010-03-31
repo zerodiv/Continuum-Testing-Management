@@ -55,6 +55,7 @@ class CTM_Test_Html_Source extends Light_Database_Object {
             foreach ( $xml->body->table->tbody->tr as $tr ) {
                list( $command, $target, $value ) = $tr->td;
 
+               // first lookup the slenium command object
                $command_obj = null;
                $command_obj = $test_command_cache->getByName( $command );
 
@@ -65,26 +66,21 @@ class CTM_Test_Html_Source extends Light_Database_Object {
                   $command_obj->save();
                }
 
+               // if they have a command
                if ( isset( $command_obj ) && $command_obj->id > 0 ) {
-                  $c = new CTM_Test_Command();
-                  $c->test_id = $this->test_id;
-                  $c->test_selenium_command_id = $command_obj->id;
-                  $c->target = $target;
-                  $c->value = $value;
-                  $c->save();
 
-                  if ( $command_obj->id == $store_command->id && preg_match( '/^ctm_input_(.*)/', $c->value ) ) {
-
-                     // we only care about input_variables at this time, output variables are moot
-                     // see if there is a library item for this value.
-                     $test_param_lib_obj = null;
-                     $test_param_lib_obj = $test_param_lib_cache->getByName( (string) $c->value );
+                  // try to pull up the test lib object if available.
+                  // we only care about input_variables at this time, output variables are moot
+                  // see if there is a library item for this value.
+                  $test_param_lib_obj = null;
+                  if ( $command_obj->id == $store_command->id && preg_match( '/^ctm_input_(.*)/', (string) $value ) ) {
+                     $test_param_lib_obj = $test_param_lib_cache->getByName( (string) $value );
 
                      if ( ! isset( $test_param_lib_obj ) ) {
 
                         $created_at = time();
                         $test_param_lib_obj = new CTM_Test_Param_Library();
-                        $test_param_lib_obj->name = (string) $c->value;
+                        $test_param_lib_obj->name = (string) $value;
                         $test_param_lib_obj->created_at = $created_at;
                         $test_param_lib_obj->created_by = $user->id;
                         $test_param_lib_obj->modified_at = $created_at;
@@ -93,15 +89,27 @@ class CTM_Test_Html_Source extends Light_Database_Object {
 
                         if ( isset( $test_param_lib_obj->id ) ) {
                            $test_param_lib_obj->setDescription( '' );
-                           $test_param_lib_obj->setDefault( $c->target );
-                        } else {
-                           return;
+                           $test_param_lib_obj->setDefault( $target );
                         }
 
                      }
+                  }
 
-                     // we have a test_param_lib_obj to work with.
+                  // create the test command
+                  $c = new CTM_Test_Command();
+                  $c->test_id = $this->test_id;
+                  $c->test_selenium_command_id = $command_obj->id;
+                  $c->test_param_library_id = 0;
 
+                  if ( isset( $test_param_lib_obj->id ) ) {
+                     $c->test_param_library_id = $test_param_lib_obj->id;
+                  }
+
+                  $c->save();
+                 
+                  if ( isset( $c->id ) && $c->id > 0 ) {
+                     $c->setTarget( $target );
+                     $c->setValue( $value );
                   }
 
                }

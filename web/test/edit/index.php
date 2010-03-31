@@ -8,6 +8,11 @@ require_once( 'CTM/Test/Html/Source.php' );
 require_once( 'CTM/Test/Html/Source/Selector.php' );
 require_once( 'CTM/Test/Description.php' );
 require_once( 'CTM/Test/Description/Selector.php' );
+require_once( 'CTM/Test/Command.php' );
+require_once( 'CTM/Test/Command/Selector.php' );
+require_once( 'CTM/Test/Param/Library.php' );
+require_once( 'CTM/Test/Param/Library/Cache.php' );
+require_once( 'CTM/Test/Selenium/Command/Cache.php' );
 
 class CTM_Site_Test_Edit extends CTM_Site { 
 
@@ -88,15 +93,14 @@ class CTM_Site_Test_Edit extends CTM_Site {
                $description_obj->save();
             }
 
-            // if ( $had_file == true && md5( $html_source_obj->html_source ) != md5( $html_source ) ) {
+            if ( $had_file == true && md5( $html_source_obj->html_source ) != md5( $html_source ) ) {
 
                $html_source_obj->html_source = $html_source;
                $html_source_obj->save();
 
                $html_source_obj->parseToTestCommands( $user_obj );
 
-               exit();
-            // }
+            }
 
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test->test_folder_id );
             return false;
@@ -125,38 +129,34 @@ class CTM_Site_Test_Edit extends CTM_Site {
       }
 
 
-      $this->printHtml( '<center>' );
-
       if ( ! isset( $rows[0] ) ) {
+         $this->printHtml( '<div class="aiTableContainer">' );
          $this->printHtml( '<table class="ctmTable">' );
          $this->printHtml( '<tr>' );
          $this->printHtml( '<td class="odd">Unable to find test: ' . $this->escapeVariable( $id ) . '</td>' );
          $this->printHtml( '</tr>' );
          $this->printHtml( '</table>' );
+         $this->printHtml( '</div>' );
       } else {
          $test = $rows[0];
-      
-         $this->printHtml( '<table>' );
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td valign="top">' );
+     
+         $this->printHtml( '<div class="aiTopNav aiFullWidth">' );
          $this->_displayFolderBreadCrumb( $test->test_folder_id );
-         $this->printHtml( '</td>' );
-         $this->printHtml( '</tr>' ); 
+         $this->printHtml( '</div>' );
       
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td valign="top">' );
-         $this->printHtml( '<table class="ctmTable">' );
+         $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/edit/">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' ); 
+         $this->printHtml( '<table class="ctmTable aiFullWidth">' );
          
          $this->printHtml( '<tr>' );
          $this->printHtml( '<th colspan="4">Edit Test</th>' );
          $this->printHtml( '</td>' );
          $this->printHtml( '</tr>' );
 
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="odd">Name:</td>' );
-         $this->printHtml( '<td class="odd"><input type="text" name="name" size="30" value="' . $this->escapeVariable( $test->name ) . '"></td>' );
+         $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td>Name:</td>' );
+         $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( $test->name ) . '"></td>' );
          $this->printHtml( '</tr>' );
 
          // lookup the description block
@@ -170,14 +170,14 @@ class CTM_Site_Test_Edit extends CTM_Site {
             }
          } catch ( Exception $e ) {
          }
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="odd" colspan="2">Description:</td>' );
+         $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td colspan="2">Description:</td>' );
          $this->printHtml( '</tr>' );
-         $this->printHtml( '<tr>' );
+         $this->printHtml( '<tr class="odd">' );
          if ( isset( $description_obj ) ) {
-            $this->printHtml( '<td class="odd" colspan="2"><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $description_obj->description ) . '</textarea></td>' );
+            $this->printHtml( '<td colspan="2"><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $description_obj->description ) . '</textarea></td>' );
          } else {
-            $this->printHtml( '<td class="odd" colspan="2"><textarea name="description" rows="25" cols="60">Failed to find associated description.</textarea></td>' );
+            $this->printHtml( '<td colspan="2"><textarea name="description" rows="25" cols="60">Failed to find associated description.</textarea></td>' );
          }
          $this->printHtml( '</tr>' );
 
@@ -195,24 +195,72 @@ class CTM_Site_Test_Edit extends CTM_Site {
          if ( $this->isFileUploadAvailable() ) {
 
             $this->printHtml( '<input type="hidden" name="MAX_FILE_SIZE" value="' . $this->maxFileUploadSize() . '">' ); 
-            $this->printHtml( '<tr>' );
-            $this->printHtml( '<td class="odd">File:</td>' );
-            $this->printHtml( '<td class="odd"><input type="file" name="html_source_file"></td>' );
+            $this->printHtml( '<tr class="odd">' );
+            $this->printHtml( '<td>File:</td>' );
+            $this->printHtml( '<td><input type="file" name="html_source_file"></td>' );
             $this->printHtml( '</tr>' ); 
          
          }
 
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td colspan="2" class="even"><center><input type="submit" value="Save"></center></td>' );
+         $this->printHtml( '<tr class="aiButtonRow">' );
+         $this->printHtml( '<td colspan="2"><center><input type="submit" value="Save"></center></td>' );
          $this->printHtml( '</tr>' ); 
          
+         $this->printHtml( '</table>' );
+
          $this->printHtml( '</form>' );
-         
-         $this->printHtml( '</table>' );
-         
-         $this->printHtml( '</td>' );
+        
+         $this->printHtml( '</div>' );
+
+         $commands = array();
+
+         try {
+            $sel = new CTM_Test_Command_Selector();
+            $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $id ) );
+            $or_params = array();
+            $order = array( 'id' );
+            $commands = $sel->find( $and_params, $or_params, $order );
+         } catch ( Exception $e ) {
+         }
+
+         $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
+         $this->printHtml( '<table class="ctmTable aiFullWidth">' );
+         $this->printHtml( '<tr>' );
+         $this->printHtml( '<th colspan="4">Current Test</th>' );
          $this->printHtml( '</tr>' );
+         $this->printHtml( '<tr class="aiTableTitle">' );
+         $this->printHtml( '<td>Step</td>' );
+         $this->printHtml( '<td>Command</td>' );
+         $this->printHtml( '<td>Target</td>' );
+         $this->printHtml( '<td>Value</td>' );
+         $this->printHtml( '</tr>' );
+         if ( count( $commands ) > 0 ) {
+            $n = 0;
+            $sel_comm_cache = new CTM_Test_Selenium_Command_Cache();
+            foreach ( $commands as $command ) {
+
+               $n++;
+               $class = $this->oddEvenClass();
+
+               $sel_obj = $sel_comm_cache->getById( $command->test_selenium_command_id );
+               $value_obj = $command->getValue();
+               $target_obj = $command->getTarget();
+
+               $this->printHtml( '<tr class="' . $class . '">' );
+               $this->printHtml( '<td>' . $n . '</td>' );
+               $this->printHtml( '<td>' . $sel_obj->name . '</td>' );
+               $this->printHTml( '<td>' . $this->escapeVariable( $target_obj->target ) . '</td>' );
+               $this->printHTml( '<td>' . $this->escapeVariable( $value_obj->value ) . '</td>' );
+               $this->printHtml( '</tr>' );
+
+            }
+         } else {
+            $this->printHtml( '<tr class="odd">' );
+            $this->printHtml( '<td colspan="4"><center>- There are no test commands currently -</center></td>' );
+            $this->printHtml( '</tr>' );
+         }
          $this->printHtml( '</table>' );
+         $this->printHtml( '</div>' );
 
       }
 
