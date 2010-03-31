@@ -1,12 +1,20 @@
+-- truncate all tables that might have development data in them
 TRUNCATE account;
 TRUNCATE test;
+TRUNCATE test_html_source;
+TRUNCATE test_browser;
 TRUNCATE test_command;
+TRUNCATE test_command_target;
+TRUNCATE test_command_value;
 TRUNCATE test_description;
 TRUNCATE test_folder;
-TRUNCATE test_html_source;
 TRUNCATE test_machine;
 TRUNCATE test_machine_browser;
+TRUNCATE test_param_library;
+TRUNCATE test_param_library_default_value;
+TRUNCATE test_param_library_description;
 TRUNCATE test_run;
+TRUNCATE test_selenium_command;
 TRUNCATE test_suite;
 TRUNCATE test_suite_description;
 TRUNCATE test_suite_plan;
