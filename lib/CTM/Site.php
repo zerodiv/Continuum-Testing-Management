@@ -59,6 +59,13 @@ class CTM_Site extends Light_MVC {
       return false;
    } 
 
+   public function getUser() {
+      if ( isset( $_SESSION['user'] ) && $_SESSION['user']->id > 0 ) {
+         return $_SESSION['user'];
+      }
+      return null;
+   }
+
    public function oddEvenReset() {
       $this->_odd_even_class = null;
    }

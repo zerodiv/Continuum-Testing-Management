@@ -73,9 +73,10 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
       if ( isset( $test ) ) {
          try {
+            $user_obj = $this->getUser();
             $test->name = $name;
             $test->modified_at = time();
-            $test->modified_by = $_SESSION['user']->id;
+            $test->modified_by = $user_obj->id;
             // jeo: TODO: We will need to set this via a drop down eventually.
             // $test->test_status_id = 1; // all tests are created in a pending state.
             $test->save();
@@ -87,14 +88,15 @@ class CTM_Site_Test_Edit extends CTM_Site {
                $description_obj->save();
             }
 
-            if ( $had_file == true && md5( $html_source_obj->html_source ) != md5( $html_source ) ) {
+            // if ( $had_file == true && md5( $html_source_obj->html_source ) != md5( $html_source ) ) {
 
                $html_source_obj->html_source = $html_source;
                $html_source_obj->save();
 
-               $html_source_obj->parseToTestCommands();
+               $html_source_obj->parseToTestCommands( $user_obj );
 
-            }
+               exit();
+            // }
 
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test->test_folder_id );
             return false;

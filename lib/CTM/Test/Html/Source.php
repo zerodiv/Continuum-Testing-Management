@@ -2,11 +2,14 @@
 
 require_once( 'Light/Database/Object.php' );
 
+require_once( 'CTM/User.php' );
 require_once( 'CTM/Test/Command.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
 require_once( 'CTM/Test/Selenium/Command.php' );
 require_once( 'CTM/Test/Selenium/Command/Cache.php' );
 require_once( 'CTM/Test/Selenium/Command/Selector.php' );
+require_once( 'CTM/Test/Param/Library.php' );
+require_once( 'CTM/Test/Param/Library/Cache.php' );
 
 class CTM_Test_Html_Source extends Light_Database_Object {
    public $id;
@@ -18,7 +21,7 @@ class CTM_Test_Html_Source extends Light_Database_Object {
       $this->setDbName( 'test' );
    }
 
-   public function parseToTestCommands() {
+   public function parseToTestCommands( CTM_User $user ) {
 
       try {
 
@@ -37,12 +40,18 @@ class CTM_Test_Html_Source extends Light_Database_Object {
          }
 
          $test_command_cache = new CTM_Test_Selenium_Command_Cache();
+         $test_param_lib_cache = new CTM_Test_Param_Library_Cache();
+
+         // pull out a store command so we have a id to work with.
+         $store_command = $test_command_cache->getByName( 'store' );
 
          $html_source = stripslashes( $this->html_source ); 
          
+         // TODO: Evailuate using something else to parse up the xml. This will have issues.
          $xml = simplexml_load_string( $html_source );
         
          if ( isset( $xml->body->table->tbody->tr ) ) {
+
             foreach ( $xml->body->table->tbody->tr as $tr ) {
                list( $command, $target, $value ) = $tr->td;
 
@@ -63,6 +72,38 @@ class CTM_Test_Html_Source extends Light_Database_Object {
                   $c->target = $target;
                   $c->value = $value;
                   $c->save();
+
+                  if ( $command_obj->id == $store_command->id && preg_match( '/^ctm_input_(.*)/', $c->value ) ) {
+
+                     // we only care about input_variables at this time, output variables are moot
+                     // see if there is a library item for this value.
+                     $test_param_lib_obj = null;
+                     $test_param_lib_obj = $test_param_lib_cache->getByName( (string) $c->value );
+
+                     if ( ! isset( $test_param_lib_obj ) ) {
+
+                        $created_at = time();
+                        $test_param_lib_obj = new CTM_Test_Param_Library();
+                        $test_param_lib_obj->name = (string) $c->value;
+                        $test_param_lib_obj->created_at = $created_at;
+                        $test_param_lib_obj->created_by = $user->id;
+                        $test_param_lib_obj->modified_at = $created_at;
+                        $test_param_lib_obj->modified_by = $user->id;
+                        $test_param_lib_obj->save();
+
+                        if ( isset( $test_param_lib_obj->id ) ) {
+                           $test_param_lib_obj->setDescription( '' );
+                           $test_param_lib_obj->setDefault( $c->target );
+                        } else {
+                           return;
+                        }
+
+                     }
+
+                     // we have a test_param_lib_obj to work with.
+
+                  }
+
                }
 
                /*
