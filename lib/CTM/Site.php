@@ -21,7 +21,7 @@ class CTM_Site extends Light_MVC {
       $this->printHtml( '<li><a href="' . $this->_baseurl . '">' . $this->_sitetitle . '</a></li>' );
       if ( $this->isLoggedIn() ) {
          $this->printHtml( '<li><a href="/test/folders/">Test Folders</a></li>' );
-         $this->printHtml( '<li><a href="/test/runs/">Test Parameter Library</a></li>' );
+         $this->printHtml( '<li><a href="/test/param/library/">Test Parameter Library</a></li>' );
          $this->printHtml( '<li><a href="/test/runs/">Test Runs</a></li>' );
          $this->printHtml( '<li><a href="/test/machines/">Test Machines</a></li>' );
          $this->printHtml( '<li><a href="/user/logout/">Logout : ' . $this->escapeVariable( $_SESSION['user']->username ) . '</a></li>' );
