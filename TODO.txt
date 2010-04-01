@@ -4,9 +4,6 @@ Build plan:
     done with the test_runner.
 
 Test Lab:
-  - build out test_param_library
-  - build out test_param
-  - add code to the test/html parser to add params to both the test_param and lib
   - create admin pages for the param library
   - build out test_suite_param
   - modify suite editor to save test_params into test_suite_param enabling the test_run builder to be faster
