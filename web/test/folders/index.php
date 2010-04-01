@@ -234,7 +234,10 @@ class CTM_Site_Test_Folders extends CTM_Site {
             } else {
                $this->printHtml( '<td>Unknown</td>' );
             }
-            $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/edit/?id=' . $test->id . '" class="ctmButton">Edit</a></center></td>' );
+            $this->printHtml( '<td><center>' );
+            $this->printHtml( '<a href="' . $this->_baseurl . '/test/edit/?id=' . $test->id . '" class="ctmButton">Edit</a>' );
+            $this->printHtml( '<a href="' . $this->_baseurl . '/test/download/?id=' . $test->id . '" class="ctmButton">Download</a>' );
+            $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
 
          }

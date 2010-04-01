@@ -1,6 +1,5 @@
 Build plan:
 
-  - add download test to local file, we cannot have the scripts not available to the person wanting to edit / modify
   - test_param = drop (yes?) - so far not needing it since test_command has most of the data needed. Eval after we're
     done with the test_runner.
 
