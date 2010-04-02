@@ -5,7 +5,7 @@ require_once( 'Light/Database/Object.php' );
 class CTM_Test_Run extends Light_Database_Object {
    public $id;
    public $test_suite_id;
-   public $test_run_status_id;
+   public $test_run_state_id;
    public $iterations;
    public $created_at;
    public $created_by;
