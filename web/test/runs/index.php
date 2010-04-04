@@ -3,6 +3,7 @@
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/User/Cache.php' );
+require_once( 'CTM/Test/Suite/Selector.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
 require_once( 'CTM/Test/Run/State/Cache.php' );
 

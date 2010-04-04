@@ -37,7 +37,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
             $test_run->created_by = $user->id;
             $test_run->save();
 
-            // TODO: Create execution plan.
+            $test_run->createTestRunCommands();
 
             if ( isset( $test_run->id ) ) {
                $_POST['test_run_id'] = $test_run->id;
@@ -46,7 +46,6 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
          }
 
       } catch ( Exception $e ) {
-         print_r( $e );
       }
 
       return true;
