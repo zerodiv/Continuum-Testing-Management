@@ -16,19 +16,16 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
 
    public function handleRequest() {
       $test_suite_id = $this->getOrPost( 'test_suite_id', '' );
-      $test_run_id = $this->getOrPost( 'test_run_id', '' );
       $iterations = $this->getOrPost( 'iterations', '' );
 
       $this->requiresAuth();
 
       try {
 
-         if ( $test_run_id > 0 ) {
-         }
-
          if ( $test_suite_id > 0 ) {
             $user = $this->getUser();
 
+            // create the provisional test.
             $test_run = new CTM_Test_Run();
             $test_run->test_suite_id = $test_suite_id;
             $test_run->test_run_state_id = 1;
@@ -40,7 +37,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
             $test_run->createTestRunCommands();
 
             if ( isset( $test_run->id ) ) {
-               $_POST['test_run_id'] = $test_run->id;
+               header( 'Location: ' . $this->_baseurl . '/test/run/add/step2/?id=' . $test_run->id );
             }
 
          }
@@ -55,66 +52,20 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
 
    public function displayBody() {
       $test_folder_id = $this->getOrPost( 'test_folder_id', '' );
-      $test_run_id = $this->getOrPost( 'test_run_id', '' );
       $test_suite_id = $this->getOrPost( 'test_suite_id', '' );
 
       $test_folder_id += 0;
-      $test_run_id += 0;
       $test_suite_id += 0;
 
-      if ( $test_run_id > 0 ) {
-
-         $test_run = null;
-         $test_suite = null;
-         try {
-
-            $sel = new CTM_Test_Run_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run_id ) );
-            $test_runs = $sel->find( $and_params );
-
-            if ( isset( $test_runs[0] ) ) {
-               $test_run = $test_runs[0];
-            }
-
-            if ( isset( $test_run->id ) ) {
-               $sel = new CTM_Test_Suite_Selector();
-               $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_suite_id ) );
-               $test_suites = $sel->find( $and_params );
-
-               if ( isset( $test_suites[0] ) ) {
-                  $test_suite = $test_suites[0];
-               }
-            }
-         } catch ( Exception $e ) {
-         }
-
-         if ( isset( $test_run->id ) ) {
-            $this->printHtml( '<table class="ctmTable">' );
-
-            $this->printHtml( '<tr>' );
-            $this->printHtml( '<th colspan="2">Add Test Run</th>' );
-            $this->printHtml( '</tr>' );
-
-            $this->printHtml( '<tr class="odd">' );
-            $this->printHtml( '<td>Test Suite:</td>' );
-            $this->printHtml( '<td>' . $this->escapeVariable( $test_suite->name ) . '</td>' );
-            $this->printHtml( '</tr>' );
-
-            $this->printHtml( '<tr class="odd">' );
-            $this->printHtml( '<td>Iterations:</td>' );
-            $this->printHtml( '<td><input type="text" name="iterations" size="3" value="1"></td>' );
-            $this->printHtml( '</tr>' );
-
-            $this->printHtml( '</table>' );
-         }
-
-         return true;
-      }
-
-      $this->printHtml( '<table class="ctmTable">' );
+      $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
+      $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="3">Add Test Run</th>' );
+      $this->printHtml( '</tr>' );
+
+      $this->printHtml( '<tr class="aiTableTitle">' );
+      $this->printHtml( '<td colspan="3">Pick a test suite from the test folders:</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<td colspan="3">' );
@@ -190,6 +141,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       }
 
       $this->printHtml( '</table>' );
+      $this->printHtml( '</div>' );
 
       return true;
    }

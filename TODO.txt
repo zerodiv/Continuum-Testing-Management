@@ -86,3 +86,7 @@ Will most likely use at for managing the various jobs needed to run the test in 
 * ctm_clear_all - Removes all variables from the running test session.
 
 -- Need to add a password / security to phone home system.
+
+-- Tests require a base url to root themselves to. If we context seneitive the suites we will be locking ourselves
+into a suite cannot span multiple sites. Ideally we would like to be able to test edge cases where we have single
+sign on or other functionality based in logging into multiple sites via single auth credentials. 
