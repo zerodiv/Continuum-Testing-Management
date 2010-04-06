@@ -23,6 +23,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
+      $baseurl          = $this->getOrPost( 'baseurl', '' );
       $description      = $this->getOrPost( 'description', '' );
 
       if ( $name == '' ) {
@@ -65,6 +66,13 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
             if ( $had_file == true ) {
                $test->setHtmlSource( $user_obj, $html_source );
+            }
+
+            $baseurl_obj = $test->getBaseUrl();
+
+            if ( isset( $baseurl_obj ) && $baseurl_obj->baseurl != $baseurl ) {
+               $baseurl_obj->baseurl = $baseurl;
+               $baseurl_obj->save();
             }
 
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test->test_folder_id );
@@ -122,6 +130,13 @@ class CTM_Site_Test_Edit extends CTM_Site {
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Name:</td>' );
          $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( $test->name ) . '"></td>' );
+         $this->printHtml( '</tr>' );
+
+         $baseurl_obj = $test->getBaseUrl();
+
+         $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td>Base URL:</td>' );
+         $this->printHtml( '<td><input type="text" name="baseurl" size="30" value="' . $this->escapeVariable( $baseurl_obj->baseurl ) . '"></td>' );
          $this->printHtml( '</tr>' );
 
          // lookup the description block

@@ -3,6 +3,8 @@
 require_once( 'Light/Database/Object.php' );
 
 require_once( 'CTM/User.php' );
+require_once( 'CTM/Test.php' );
+require_once( 'CTM/Test/Selector.php' );
 require_once( 'CTM/Test/Command.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
 require_once( 'CTM/Test/Selenium/Command.php' );
@@ -58,7 +60,18 @@ class CTM_Test_Html_Source extends Light_Database_Object {
          
          // TODO: Evailuate using something else to parse up the xml. This will have issues.
          $xml = simplexml_load_string( $html_source );
-        
+
+         // attempt to parse up a baseurl setting.
+         if ( $xml->head->link['rel'] == 'selenium.base' ) {
+            $test_sel = new CTM_Test_Selector();
+            $test_params = array( new Light_Database_Selector_Criteria( 'id', '=', $this->test_id ) );
+            $tests = $test_sel->find( $test_params );
+            if ( isset( $tests[0] ) ) {
+               $test = $tests[0];
+               $test->setBaseUrl( (string) $xml->head->link['href'] );
+            }
+         }
+            
          if ( isset( $xml->body->table->tbody->tr ) ) {
 
             foreach ( $xml->body->table->tbody->tr as $tr ) {

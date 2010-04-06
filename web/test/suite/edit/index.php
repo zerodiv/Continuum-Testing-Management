@@ -4,8 +4,6 @@ require_once( '../../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Suite.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
-require_once( 'CTM/Test/Suite/Description.php' );
-require_once( 'CTM/Test/Suite/Description/Selector.php' );
 
 class CTM_Site_Test_Suite_Edit extends CTM_Site { 
 
@@ -20,6 +18,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
 
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
+      $baseurl          = $this->getOrPost( 'baseurl', '' );
       $description      = $this->getOrPost( 'description', '' );
 
       if ( $name == '' ) {
@@ -34,27 +33,23 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
 
          $rows = $sel->find( $and_params );
 
-      } catch ( Exception $e ) {
-      }
+         if ( isset( $rows[0] ) ) {
+            $user_obj = $this->getUser();
 
-      if ( isset( $rows[0] ) ) {
-         $suite = $rows[0];
-         $suite->name = $name;
-         $suite->modified_at = time();
-         $suite->modified_by = $_SESSION['user']->id;
-         $suite->save();
+            $suite = $rows[0];
+            $suite->name = $name;
+            $suite->modified_at = time();
+            $suite->modified_by = $_SESSION['user']->id;
+            $suite->save();
 
+            $suite->setDescription( $description );
+            $suite->setBaseUrl( $baseurl ); 
 
-         $d_sel = new CTM_Test_Suite_Description_Selector();
-         $d_and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $suite->id ) );
-         $d_rows = $d_sel->find( $d_and_params );
+            header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $suite->test_folder_id );
 
-         if ( isset( $d_rows[0] ) ) {
-            $suite_description = $d_rows[0];
-            $suite_description->description = $description;
-            $suite_description->save();
          }
 
+      } catch ( Exception $e ) {
       }
 
       return true;
@@ -66,10 +61,12 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
+      $baseurl          = $this->getOrPost( 'baseurl', '' );
 
-      $rows = null;
       $test_suite = null;
-      $test_suite_description = null;
+      $description_obj = null;
+      $baseurl_obj = null;
+
       try {
          $sel = new CTM_Test_Suite_Selector();
          
@@ -79,23 +76,10 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
 
          if ( isset( $rows[0] ) ) { 
             $test_suite = $rows[0];
-
-            $sel = null; 
-            $and_params = null;
-            $rows = null;
-
-            $d_sel = new CTM_Test_Suite_Description_Selector();
-            $d_and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite->id ) );
-            $d_rows = $d_sel->find( $d_and_params );
-
-            if ( isset( $d_rows[0] ) ) {
-               $test_suite_description = $d_rows[0];
-            }
-
-            $d_sel = null;
-            $d_and_params = null;
-            $d_rows = null;
+            $description_obj = $test_suite->getDescription();
+            $baseurl_obj = $test_suite->getBaseUrl();
          }
+
 
       } catch ( Exception $e ) {
       }
@@ -122,11 +106,16 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          $this->printHtml( '</tr>' ); 
          
          $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td>Name:</td>' );
+         $this->printHtml( '<td><input type="text" name="baseurl" size="60" value="' . $this->escapeVariable( $baseurl_obj->baseurl ) . '"></td>' );
+         $this->printHtml( '</tr>' ); 
+
+         $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td colspan="2">Description:</td>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );
-         $this->printHtml( '<td colspan="2"><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $test_suite_description->description ) . '</textarea></td>' );
+         $this->printHtml( '<td colspan="2"><center><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $description_obj->description ) . '</textarea></center></td>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="aiButtonRow">' );

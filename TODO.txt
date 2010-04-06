@@ -1,7 +1,5 @@
 Build plan:
 
-  - test_suite_baseurl 
-  - test_baseurl
   - ${ctm_input_variable}        // avail in both
   - ${ctm_test_run_baseurl}      // avail in both
   - ${ctm_suite_baseurl}         // avail in both, allows us to chain it upwards

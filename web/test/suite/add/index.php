@@ -18,35 +18,38 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
 
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
       $name             = $this->getOrPost( 'name', '' );
+      $baseurl          = $this->getOrPost( 'baseurl', '' );
       $description      = $this->getOrPost( 'description', '' );
 
       if ( $name == '' ) {
          return true;
       }
 
+      if ( $baseurl == '' ) {
+         return true;
+      }
+
       try {
+
+         $user_obj = $this->getUser();
+
          // create the test suite and it's associated description.
          $new = new CTM_Test_Suite();
          $new->test_folder_id = $test_folder_id;
          $new->name = $name;
          $create_at = time(); // yes i know this is paranoia
          $new->created_at = $create_at;
-         $new->created_by = $_SESSION['user']->id;
+         $new->created_by = $user_obj->id;
          $new->modified_at = $create_at;
-         $new->modified_by = $_SESSION['user']->id;
+         $new->modified_by = $user_obj->id;
          $new->test_status_id = 1; // all test_suites start life as pending
          $new->save();
 
-         $new_description = null;
-
          if ( $new->id > 0 ) {
-            $new_description = new CTM_Test_Suite_Description();
-            $new_description->test_suite_id = $new->id;
-            $new_description->description = $description;
-            $new_description->save();
-         }
-      
-         if ( is_object( $new) && $new->id > 0 && is_object( $new_description ) && $new_description->id > 0 ) {
+
+            $new->setBaseUrl( $baseurl );
+            $new->setDescription( $description );
+
             // added our child send us back to our parent
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test_folder_id );
             return false;
@@ -85,10 +88,15 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Base URL:</td>' );
+      $this->printHtml( '<td><input type="text" name="baseurl" size="60" value="' . $baseurl . '"></td>' );
+      $this->printHtml( '</tr>' );
+
+      $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td colspan="2">Description:</td>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr class="odd">' );
-      $this->printHtml( '<td colspan="2"><textarea name="description" rows="25" cols="60">' . $description . '</textarea></td>' );
+      $this->printHtml( '<td colspan="2"><center><textarea name="description" rows="25" cols="60">' . $description . '</textarea></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiButtonRow">' );
