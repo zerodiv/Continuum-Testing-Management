@@ -3,13 +3,11 @@
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test.php' );
-require_once( 'CTM/Test/Html/Source.php' );
-require_once( 'CTM/Test/Description.php' );
 
 class CTM_Site_Test_Add extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Folders';
+      $this->_pagetitle = 'Add Test';
       return true;
    }
 
@@ -40,6 +38,8 @@ class CTM_Site_Test_Add extends CTM_Site {
 
       try {
 
+         $user_obj = $this->getUser();
+
          // create the test.
          $new = new CTM_Test();
          $new->test_folder_id = $test_folder_id;
@@ -47,26 +47,18 @@ class CTM_Site_Test_Add extends CTM_Site {
          $new->test_status_id = 1; // all tests are created in a pending state.
          $create_at = time(); // yes i know this is paranoia
          $new->created_at = $create_at;
-         $new->created_by = $_SESSION['user']->id;
+         $new->created_by = $user_obj->id;
          $new->modified_at = $create_at;
-         $new->modified_by = $_SESSION['user']->id;
+         $new->modified_by = $user_obj->id;
          $new->save();
 
          if ( $new->id > 0 ) {
 
             // add the html source.
-            $html_source_obj = new CTM_Test_Html_Source();
-            $html_source_obj->test_id     = $new->id;
-            $html_source_obj->html_source = $html_source;
-            $html_source_obj->save();
-
-            $html_source_obj->parseToTestCommands();
+            $new->setHtmlSource( $user_obj, $html_source );
 
             // add the description.
-            $test_description_obj = new CTM_Test_Description();
-            $test_description_obj->test_id      = $new->id;
-            $test_description_obj->description  = $description;
-            $test_description_obj->save();
+            $new->setDescription( $description );
 
          }
       
@@ -74,7 +66,6 @@ class CTM_Site_Test_Add extends CTM_Site {
          return false;
 
       } catch ( Exception $e ) {
-         print_r( $e );
          // failed to insert.
          return true;
       }

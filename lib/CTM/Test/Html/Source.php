@@ -21,6 +21,15 @@ class CTM_Test_Html_Source extends Light_Database_Object {
       $this->setDbName( 'test' );
    }
 
+   public function save( CTM_User $user ) {
+
+      parent::save();
+
+      // pass the user down into the save.
+      $this->parseToTestCommands( $user );
+
+   }
+
    public function parseToTestCommands( CTM_User $user ) {
 
       try {

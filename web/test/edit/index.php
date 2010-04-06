@@ -4,10 +4,6 @@ require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test.php' );
 require_once( 'CTM/Test/Selector.php' );
-require_once( 'CTM/Test/Html/Source.php' );
-require_once( 'CTM/Test/Html/Source/Selector.php' );
-require_once( 'CTM/Test/Description.php' );
-require_once( 'CTM/Test/Description/Selector.php' );
 require_once( 'CTM/Test/Command.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
 require_once( 'CTM/Test/Param/Library.php' );
@@ -17,7 +13,7 @@ require_once( 'CTM/Test/Selenium/Command/Cache.php' );
 class CTM_Site_Test_Edit extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Folders';
+      $this->_pagetitle = 'Edit Test';
       return true;
    }
 
@@ -41,37 +37,16 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
       if ( isset( $html_source_file ) && filesize( $html_source_file) > 0 ) {
          $html_source = file_get_contents( $html_source_file );
-         $had_file == true;
+         $had_file = true;
       }
 
       $test                = null;
-      $html_source_obj     = null;
-      $description_obj     = null;
       try {
          $sel = new CTM_Test_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) ); 
          $rows = $sel->find( $and_params ); 
          if ( isset( $rows[0] ) ) {
             $test = $rows[0];
-            $rows = null;
-
-
-            // find the html_source_obj
-            $sel = new CTM_Test_Html_Source_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test->id ) );
-            $rows = $sel->find( $and_params );
-            if ( isset( $rows[0] ) ) {
-               $html_source_obj = $rows[0];
-            }
-            $rows = null;
-
-            $sel = new CTM_Test_Description_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test->id ) );
-            $rows = $sel->find( $and_params );
-            if ( isset( $rows[0] ) ) {
-               $description_obj = $rows[0];
-            }
-            $rows = null;
          }
       } catch ( Exception $e ) {
       }
@@ -86,20 +61,10 @@ class CTM_Site_Test_Edit extends CTM_Site {
             // $test->test_status_id = 1; // all tests are created in a pending state.
             $test->save();
 
-            // save out the description and html_source
-            if ( md5( $description_obj->description ) != md5( $description ) ) {
-               // if no change don't save
-               $description_obj->description = $description;
-               $description_obj->save();
-            }
+            $test->setDescription( $description );
 
-            if ( $had_file == true && md5( $html_source_obj->html_source ) != md5( $html_source ) ) {
-
-               $html_source_obj->html_source = $html_source;
-               $html_source_obj->save();
-
-               $html_source_obj->parseToTestCommands( $user_obj );
-
+            if ( $had_file == true ) {
+               $test->setHtmlSource( $user_obj, $html_source );
             }
 
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test->test_folder_id );
@@ -160,16 +125,8 @@ class CTM_Site_Test_Edit extends CTM_Site {
          $this->printHtml( '</tr>' );
 
          // lookup the description block
-         $description_obj = null;
-         try {
-            $sel = new CTM_Test_Description_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $id ) );
-            $rows = $sel->find( $and_params );
-            if ( isset( $rows[0] ) ) {
-               $description_obj = $rows[0];
-            }
-         } catch ( Exception $e ) {
-         }
+         $description_obj = $test->getDescription();
+
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td colspan="2">Description:</td>' );
          $this->printHtml( '</tr>' );
@@ -181,16 +138,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
          }
          $this->printHtml( '</tr>' );
 
-         $html_source_obj = null;
-         try {
-            $sel = new CTM_Test_Html_Source_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $id ) );
-            $rows = $sel->find( $and_params );
-            if ( isset( $rows[0] ) ) {
-               $html_source_obj = $rows[0];
-            }
-         } catch ( Exception $e ) {
-         }
+         $html_source_obj = $test->getHtmlSource();
 
          if ( $this->isFileUploadAvailable() ) {
 

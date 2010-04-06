@@ -1,5 +1,11 @@
 Build plan:
 
+  - test_suite_baseurl 
+  - test_baseurl
+  - ${ctm_input_variable}        // avail in both
+  - ${ctm_test_run_baseurl}      // avail in both
+  - ${ctm_suite_baseurl}         // avail in both, allows us to chain it upwards
+
 Test Lab:
   - finish the add test run wizard
   - download test run (exports to a html file so that we can debug the app's run choices)
