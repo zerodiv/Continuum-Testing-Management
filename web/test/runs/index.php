@@ -15,7 +15,27 @@ class CTM_Site_Test_Runs extends CTM_Site {
    }
 
    public function handleRequest() {
+      $action = $this->getOrPost( 'action', '' );
+      $test_run_id = $this->getOrPost( 'test_run_id', '' );
+
       $this->requiresAuth();
+
+      if ( $action == 'remove_test_run' ) {
+         // try to find the target test_run
+         try {
+            $sel = new CTM_Test_Run_Selector();
+            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run_id ) );
+            $test_runs = $sel->find( $and_params );
+            if ( isset( $test_runs[0] ) ) {
+               $test_run = $test_runs[0];
+               $test_run->remove();
+            }
+         } catch ( Exception $e ) {
+            // we failed to delete.
+            return true;
+         }
+      }
+
       return true;
    }
 
@@ -98,8 +118,9 @@ class CTM_Site_Test_Runs extends CTM_Site {
             $this->printHtml( '<td>' . $test_run->iterations . '</td>' );
             $this->printHtml( '<td>' . $this->formatDate( $test_run->created_at ) . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $created_by->username ) . '</td>' );
-            $this->printHtml( '<td>' );
-            $this->printHtml( '</td>' );
+            $this->printHtml( '<td><center>' );
+            $this->printHtml( '<a href="' . $this->_baseurl . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
+            $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
 
          }

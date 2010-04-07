@@ -2,6 +2,7 @@
 
 require_once( 'Light/Database/Object.php' );
 require_once( 'CTM/Test/Run/Builder.php' );
+require_once( 'CTM/Test/Run/Command/Selector.php' );
 
 class CTM_Test_Run extends Light_Database_Object {
    public $id;
@@ -14,6 +15,26 @@ class CTM_Test_Run extends Light_Database_Object {
    public function init() {
       $this->setSqlTable( 'test_run' );
       $this->setDbName( 'test' );
+   }
+
+   public function remove() {
+
+      if ( isset( $this->id ) ) {
+
+         try {
+            $sel = new CTM_Test_Run_Command_Selector();
+            $and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $this->id ) );
+            $commands = $sel->find( $and_params );
+            foreach ( $commands as $command ) {
+               $command->remove();
+            }
+         } catch ( Exception $e ) {
+            throw $e;
+         }
+      }
+
+      parent::remove();
+
    }
 
    public function createTestRunCommands() {

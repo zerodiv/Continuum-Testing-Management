@@ -14,12 +14,16 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
    }
 
    public function handleRequest() {
-
+      $action = $this->getOrPost( 'action', '' );
       $id = $this->getOrPost( 'id', '' );
       $default_value = $this->getOrPost( 'default_value', '' );
       $description = $this->getOrPost( 'description', '' );
-      
+     
       $this->requiresAuth();
+
+      if ( $action != 'save' ) {
+         return true;
+      }
 
       try {
          $param = null;
@@ -70,6 +74,7 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
       
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/param/library/edit/">' );
       $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' );
+      $this->printHtml( '<input type="hidden" value="save" name="action">' );
 
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
       

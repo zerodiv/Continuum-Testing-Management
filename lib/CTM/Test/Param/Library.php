@@ -24,12 +24,8 @@ class CTM_Test_Param_Library extends Light_Database_Object {
          return false;
       }
       try {
-         $sel = new CTM_Test_Param_Library_Default_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
-
-         if ( isset( $rows[0] ) ) {
-            $def_obj = $rows[0];
+         $def_obj = $this->getDefault();
+         if ( isset( $def_obj ) ) {
             $def_obj->default_value = $default;
             $def_obj->save();
             return true;
@@ -53,22 +49,17 @@ class CTM_Test_Param_Library extends Light_Database_Object {
       if ( ! isset( $this->id ) ) {
          return null;
       }
-
       try {
          $sel = new CTM_Test_Param_Library_Default_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $this->id ) );
          $rows = $sel->find( $and_params );
-
          if ( isset( $rows[0] ) ) {
             return $rows[0];
          }
-
          return null;
-
       } catch ( Exception $e ) {
          throw $e;
       }
-
       return null;
    }
 
@@ -77,12 +68,8 @@ class CTM_Test_Param_Library extends Light_Database_Object {
          return false;
       }
       try {
-         $sel = new CTM_Test_Param_Library_Description_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
-
-         if ( isset( $rows[0] ) ) {
-            $def_obj = $rows[0];
+         $def_obj = $this->getDescription();
+         if ( isset( $def_obj ) ) {
             $def_obj->description = $description;
             $def_obj->save();
             return true;
@@ -106,22 +93,17 @@ class CTM_Test_Param_Library extends Light_Database_Object {
       if ( ! isset( $this->id ) ) {
          return null;
       }
-
       try {
          $sel = new CTM_Test_Param_Library_Description_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $this->id ) );
          $rows = $sel->find( $and_params );
-
          if ( isset( $rows[0] ) ) {
             return $rows[0];
          }
-
          return null;
-
       } catch ( Exception $e ) {
          throw $e;
       }
-
       return null;
    }
 

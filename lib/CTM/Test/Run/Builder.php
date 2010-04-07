@@ -7,6 +7,7 @@ require_once( 'CTM/Test/Run/Command.php' );
 require_once( 'CTM/Test/Run/Command/Selector.php' );
 require_once( 'CTM/Test/Suite/Plan/Type/Cache.php' );
 require_once( 'CTM/Test/Suite/Plan/Selector.php' );
+require_once( 'CTM/Test/Param/Library/Cache.php' );
 
 class CTM_Test_Run_Builder {
    
@@ -81,6 +82,8 @@ class CTM_Test_Run_Builder {
 
    private function _addTestToPlan( CTM_Test_Run $test_run, $test_suite_id, $test_id ) {
       try {
+         $param_lib_cache = new CTM_Test_Param_Library_Cache();
+
          $sel = new CTM_Test_Command_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test_id ) );
          $or_params = array();
@@ -119,8 +122,20 @@ class CTM_Test_Run_Builder {
                   $test_run_command->save();
 
                   // copy the text blobs over.
-                  $test_run_command->setTarget( $test_command->getTarget()->target );
-                  $test_run_command->setValue( $test_command->getValue()->value );
+                  if ( $test_run_command->test_param_library_id > 0 ) {
+                     // pull the test library item out-
+                     $param_lib_obj = $param_lib_cache->getById( $test_run_command->test_param_library_id );
+                     $default_obj = $param_lib_obj->getDefault();
+                     $test_run_command->setTarget( $default_obj->default_value );
+                     $test_run_command->setValue( $param_lib_obj->name );
+                  } else {
+                     $target_obj = $test_command->getTarget();
+                     $value_obj = $test_command->getValue();
+
+                     $test_run_command->setTarget( $target_obj->target );
+                     $test_run_command->setValue( $value_obj->value );
+                  }
+
                }
 
             }

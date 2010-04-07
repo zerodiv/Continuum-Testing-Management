@@ -51,16 +51,13 @@ class CTM_Test_Run_Command extends Light_Database_Object {
          return false;
       }
       try {
-         $sel = new CTM_Test_Run_Command_Target_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_command_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
-         if ( isset( $rows[0] ) ) {
-            $a_obj = $rows[0];
+         $a_obj = $this->getTarget();
+         if ( isset( $a_obj ) ) {
             $a_obj->target = $target;
             $a_obj->save();
          } else {
             $a_obj = new CTM_Test_Run_Command_Target();
-            $a_obj->test_command_id = $this->id;
+            $a_obj->test_run_command_id = $this->id;
             $a_obj->target = $target;
             $a_obj->save();
          }
@@ -76,7 +73,7 @@ class CTM_Test_Run_Command extends Light_Database_Object {
       } 
       try {
          $sel = new CTM_Test_Run_Command_Target_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_command_id', '=', $this->id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'test_run_command_id', '=', $this->id ) );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
             return $rows[0];
@@ -92,16 +89,13 @@ class CTM_Test_Run_Command extends Light_Database_Object {
          return false;
       }
       try {
-         $sel = new CTM_Test_Run_Command_Value_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_command_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
-         if ( isset( $rows[0] ) ) {
-            $a_obj = $rows[0];
+         $a_obj = $this->getValue();
+         if ( isset( $a_obj ) ) {
             $a_obj->value = $target;
             $a_obj->save();
          } else {
             $a_obj = new CTM_Test_Run_Command_Value();
-            $a_obj->test_command_id = $this->id;
+            $a_obj->test_run_command_id = $this->id;
             $a_obj->value = $value;
             $a_obj->save();
          }
@@ -117,7 +111,7 @@ class CTM_Test_Run_Command extends Light_Database_Object {
       }
       try {
          $sel = new CTM_Test_Run_Command_Value_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_command_id', '=', $this->id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'test_run_command_id', '=', $this->id ) );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
             return $rows[0];
