@@ -30,7 +30,7 @@ class CTM_Site_User_Login extends CTM_Site {
          $sel = new CTM_User_Selector();
          $and_params = array(
                new Light_Database_Selector_Criteria( 'username', '=', $username ),
-               new Light_Database_Selector_Criteria( 'password', '=', md5( $password ) ),
+               new Light_Database_Selector_Criteria( 'password', '=', md5( $password ) )
          );
          
          $rows = $sel->find( $and_params );
@@ -38,8 +38,13 @@ class CTM_Site_User_Login extends CTM_Site {
          // print_r( $rows );
 
          if ( isset( $rows[0] ) ) {
+            $user = $rows[0];
+            if ( $user->is_verified != 1 ) {
+               header( 'Location: ' . $this->_baseurl . '/user/verification/' );
+               return false;
+            }
             // found the user auth them in
-            $_SESSION['user'] = $rows[0];
+            $_SESSION['user'] = $user;
             // they are logged in return them back to the main site.
             header( 'Location: ' . $this->_baseurl );
             return false;
