@@ -2,17 +2,28 @@
 
 require_once( 'CTM/Test/Run.php' );
 
+require_once( 'CTM/Test/Cache.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
+require_once( 'CTM/Test/Run/BaseUrl.php' );
+require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
 require_once( 'CTM/Test/Run/Command.php' );
 require_once( 'CTM/Test/Run/Command/Selector.php' );
+require_once( 'CTM/Test/Suite/Cache.php' );
 require_once( 'CTM/Test/Suite/Plan/Type/Cache.php' );
 require_once( 'CTM/Test/Suite/Plan/Selector.php' );
 require_once( 'CTM/Test/Param/Library/Cache.php' );
 
 class CTM_Test_Run_Builder {
-   
+   private $_plan_type_cache;
+   private $_test_suite_cache;
+   private $_test_cache;
+   private $_param_lib_cache;
+
    function __construct() {
       $this->_plan_type_cache = new CTM_Test_Suite_Plan_Type_Cache();
+      $this->_test_suite_cache = new CTM_Test_Suite_Cache();
+      $this->_test_cache = new CTM_Test_Cache();
+      $this->_param_lib_cache = new CTM_Test_Param_Library_Cache();
    }
 
    public function build( CTM_Test_Run $test_run ) {
@@ -52,6 +63,29 @@ class CTM_Test_Run_Builder {
       // loop across the test_suite_plan and assemble the run.
       try {
 
+         $test_suite = $this->_test_suite_cache->getById( $test_suite_id );
+
+         $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
+         $baseurl_and_params = array( 
+               new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ),
+               new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ),
+               new Light_Database_Selector_Criteria( 'test_id', '=', 0 )
+         );
+         $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
+
+         if ( count($run_baseurls) == 0 ) {
+            $suite_baseurl_obj = $test_suite->getBaseUrl();
+            if ( is_object( $suite_baseurl_obj ) ) {
+               $base_suite_obj = new CTM_Test_Run_BaseUrl();
+               $base_suite_obj->test_run_id = $test_run->id;
+               $base_suite_obj->test_suite_id = $test_suite_id;
+               $base_suite_obj->test_id = 0;
+               $base_suite_obj->baseurl = $suite_baseurl_obj->baseurl;
+               $base_suite_obj->save();
+            }
+         }
+
+
          $sel = new CTM_Test_Suite_Plan_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ) );
          $plan_steps = $sel->find( $and_params );
@@ -82,7 +116,29 @@ class CTM_Test_Run_Builder {
 
    private function _addTestToPlan( CTM_Test_Run $test_run, $test_suite_id, $test_id ) {
       try {
-         $param_lib_cache = new CTM_Test_Param_Library_Cache();
+
+         $test_obj = $this->_test_cache->getById( $test_id );
+
+         if ( is_object( $test_obj ) ) {
+            $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
+            $baseurl_and_params = array( 
+               new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ),
+               new Light_Database_Selector_Criteria( 'test_suite_id', '=', 0 ),
+               new Light_Database_Selector_Criteria( 'test_id', '=', $test_id )
+            );
+            $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
+            if ( count( $run_baseurls ) == 0 ) {
+               $test_baseurl_obj = $test_obj->getBaseUrl();
+               if ( is_object( $test_baseurl_obj ) ) {
+                  $base_suite_obj = new CTM_Test_Run_BaseUrl();
+                  $base_suite_obj->test_run_id = $test_run->id;
+                  $base_suite_obj->test_suite_id = 0;
+                  $base_suite_obj->test_id = $test_id;
+                  $base_suite_obj->baseurl = $test_baseurl_obj->baseurl;
+                  $base_suite_obj->save();
+               }
+            }
+         }
 
          $sel = new CTM_Test_Command_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test_id ) );
@@ -124,7 +180,7 @@ class CTM_Test_Run_Builder {
                   // copy the text blobs over.
                   if ( $test_run_command->test_param_library_id > 0 ) {
                      // pull the test library item out-
-                     $param_lib_obj = $param_lib_cache->getById( $test_run_command->test_param_library_id );
+                     $param_lib_obj = $this->_param_lib_cache->getById( $test_run_command->test_param_library_id );
                      $default_obj = $param_lib_obj->getDefault();
                      $test_run_command->setTarget( $default_obj->default_value );
                      $test_run_command->setValue( $param_lib_obj->name );

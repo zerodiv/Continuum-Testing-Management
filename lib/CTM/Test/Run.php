@@ -3,6 +3,7 @@
 require_once( 'Light/Database/Object.php' );
 require_once( 'CTM/Test/Run/Builder.php' );
 require_once( 'CTM/Test/Run/Command/Selector.php' );
+require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
 
 class CTM_Test_Run extends Light_Database_Object {
    public $id;
@@ -22,11 +23,17 @@ class CTM_Test_Run extends Light_Database_Object {
       if ( isset( $this->id ) ) {
 
          try {
-            $sel = new CTM_Test_Run_Command_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $this->id ) );
-            $commands = $sel->find( $and_params );
+            $command_sel = new CTM_Test_Run_Command_Selector();
+            $command_and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $this->id ) );
+            $commands = $command_sel->find( $command_and_params );
             foreach ( $commands as $command ) {
                $command->remove();
+            }
+            $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
+            $baseurl_and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $this->id ) );
+            $baseurls = $baseurl_sel->find( $baseurl_and_params );
+            foreach ( $baseurls as $baseurl ) {
+               $baseurl->remove();
             }
          } catch ( Exception $e ) {
             throw $e;

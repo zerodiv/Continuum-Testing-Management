@@ -107,7 +107,11 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Name:</td>' );
-         $this->printHtml( '<td><input type="text" name="baseurl" size="60" value="' . $this->escapeVariable( $baseurl_obj->baseurl ) . '"></td>' );
+         if ( is_object( $baseurl_obj ) ) {
+            $this->printHtml( '<td><input type="text" name="baseurl" size="60" value="' . $this->escapeVariable( $baseurl_obj->baseurl ) . '"></td>' );
+         } else {
+            $this->printHtml( '<td><input type="text" name="baseurl" size="60" value=""></td>' );
+         }
          $this->printHtml( '</tr>' ); 
 
          $this->printHtml( '<tr class="odd">' );

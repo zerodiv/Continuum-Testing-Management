@@ -10,7 +10,7 @@ require_once( 'CTM/Test/Folder/Cache.php' );
 class CTM_Site_Test_Run_Add extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Run - Add';
+      $this->_pagetitle = 'Test Run - Add - Step 1 of 3';
       return true;
    }
 
@@ -61,7 +61,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="3">Add Test Run</th>' );
+      $this->printHtml( '<th colspan="3">Add Test Run (Step 1 of 3)</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiTableTitle">' );

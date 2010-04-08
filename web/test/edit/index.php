@@ -73,6 +73,8 @@ class CTM_Site_Test_Edit extends CTM_Site {
             if ( isset( $baseurl_obj ) && $baseurl_obj->baseurl != $baseurl ) {
                $baseurl_obj->baseurl = $baseurl;
                $baseurl_obj->save();
+            } else {
+               $test->setBaseUrl( $baseurl );
             }
 
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test->test_folder_id );
@@ -136,7 +138,11 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Base URL:</td>' );
-         $this->printHtml( '<td><input type="text" name="baseurl" size="30" value="' . $this->escapeVariable( $baseurl_obj->baseurl ) . '"></td>' );
+         if ( isset( $baseurl_obj ) ) {
+            $this->printHtml( '<td><input type="text" name="baseurl" size="30" value="' . $this->escapeVariable( $baseurl_obj->baseurl ) . '"></td>' );
+         } else {
+            $this->printHtml( '<td><input type="text" name="baseurl" size="30" value=""></td>' );
+         }
          $this->printHtml( '</tr>' );
 
          // lookup the description block
