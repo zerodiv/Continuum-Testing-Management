@@ -95,7 +95,8 @@ class CTM_Test_Html_Source extends Light_Database_Object {
                   // we only care about input_variables at this time, output variables are moot
                   // see if there is a library item for this value.
                   $test_param_lib_obj = null;
-                  if ( $command_obj->id == $store_command->id && preg_match( '/^ctm_input_(.*)/', (string) $value ) ) {
+                  if ( $command_obj->id == $store_command->id && preg_match( '/^ctm_var_(.*)/', (string) $value ) ) {
+
                      $test_param_lib_obj = $test_param_lib_cache->getByName( (string) $value );
 
                      if ( ! isset( $test_param_lib_obj ) ) {

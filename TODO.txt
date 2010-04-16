@@ -10,10 +10,6 @@ Test Lab:
   - create session tracker
   - create test runnner
   - build out test_run_log (TODO: Schema for this - would like to not store it all raw in the db - but for now meh)
-  - create phone home app to configure a available node for use (.net for the windows stuff)
-   * CTM-ET - Phone home on a heartbeat basis, provides the basics for us to track health on the
-     test node also (if we want), right now I will settle for checking in and disabling of a node
-     upon no checkin
 
 General Features:
  - pagnation object need a pagnaitor that works with the selectors to move back and forth through

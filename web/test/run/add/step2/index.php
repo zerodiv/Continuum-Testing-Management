@@ -88,11 +88,6 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          $this->printHtml( '<td>' . $this->escapeVariable( $test_suite->name ) . '</td>' );
          $this->printHtml( '</tr>' );
 
-         $this->printHtml( '<tr class="odd">' );
-         $this->printHtml( '<td>Iterations:</td>' );
-         $this->printHtml( '<td><input type="text" name="iterations" size="3" value="1"></td>' );
-         $this->printHtml( '</tr>' );
-
          $this->printHtml( '</table>' );
 
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );

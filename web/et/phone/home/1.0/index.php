@@ -17,10 +17,10 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       return true;
    } 
   
-   private function _findMachineByHostname( $hostname ) {
+   private function _findMachineByGuid( $guid ) {
       try {
          $sel = new CTM_Test_Machine_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'hostname', '=', $hostname ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'guid', '=', $guid ) );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
             return $rows[0];
@@ -31,9 +31,34 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       return null;
    }
 
+   private function _serviceOutput( $status, $message, $test_machine = null ) {
+      echo "<?xml version=\"1.0\"?>\n";
+      echo "<etResponse>\n";
+      echo "   <version>1.0</version>\n";
+      echo "   <status>$status</status>\n";
+      echo "   <message>$message</message>\n";
+      if ( is_object( $test_machine ) ) {
+         echo '   <id>' . $test_machine->id . '</id>' . "\n";
+         echo '   <created_at>' . $test_machine->created_at . '</created_at>' . "\n";
+         echo '   <last_modified>' . $test_machine->last_modified . '</last_modified>' . "\n";
+         echo '   <is_disabled>' . $test_machine->is_disabled . '</is_disabled>' . "\n";
+      }
+      echo "</etResponse>\n";
+
+
+   }
+
    public function handleRequest() {
-      $hostname         = $this->getOrPost( 'hostname', '' );
+
+      $fh = fopen( '/tmp/jeo.txt', 'w');
+      fputs( $fh, print_r( $GLOBALS, true ) );
+      fclose( $fh );
+
+      $guid             = $this->getOrPost( 'guid', '' );
+      $ip               = $this->getOrPost( 'ip', '' );
       $os               = $this->getOrPost( 'os', '' );
+      $ie               = $this->getOrPost( 'ie', '' );
+      $ie_version       = $this->getOrPost( 'ie_version', '' );
       $chrome           = $this->getOrPost( 'chrome', '' );
       $chrome_version   = $this->getOrPost( 'chrome_version', '' );
       $firefox          = $this->getOrPost( 'firefox', '' );
@@ -41,32 +66,42 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       $safari           = $this->getOrPost( 'safari', '' );
       $safari_version   = $this->getOrPost( 'safari_version', '' );
 
-      if ( $hostname == '' ) {
-         echo "hostname is required!\n";
+      if ( $guid == '' ) {
+         $this->_serviceOutput( 'FAIL', "guid is required!" );
          return false;
       }
 
-      // Since PHP is bastard for OS detection - so we need ghetto detection here.
-      // TODO: jeo this may / may not be needed
+      if ( $ip == '' ) {
+         $this->_serviceOutput( 'FAIL', "ip is required!" );
+         return false;
+      }
+
+      if ( $os == '' ) {
+         $this->_serviceOutput( 'FAIL', "os is required!" );
+         return false;
+      }
 
       // see if there is a test machine available for this hostname.
-      $test_machine = $this->_findMachineByHostname( $hostname );
+      $test_machine = $this->_findMachineByGuid( $guid );
 
+      // if the test machine isn't found try adding it to the system.
       try {
-         if ( $test_machine == null ) {
+         if ( ! isset( $test_machine ) ) {
 
             $new = new CTM_Test_Machine();
-            $new->hostname       = $hostname;
+            $new->guid           = $guid;
+            $new->ip             = $ip;
             $new->os             = $os;
             $new->created_at     = time();
             $new->last_modified  = time();
             $new->is_disabled    = 0;
             $new->save();
 
-            $test_machine = $this->_findMachineByHostname( $hostname );
+            $test_machine = $this->_findMachineByGuid( $guid );
 
-            if ( $test_machine == null ) {
-               echo "failed to create\n";
+            if ( ! isset( $test_machine ) ) {
+               $this->_serviceOutput( 'FAIL', "failed to create test machine" );
+               return false;
             }
 
          } else {
@@ -75,7 +110,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          }
 
       } catch ( Exception $e ) {
-         echo "failed to find test_machine\n";
+         $this->_serviceOutput( 'FAIL', "failed to find test_machine" );
          return false;
       }
 
@@ -95,12 +130,32 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             }
 
          } catch ( Exception $e ) {
+            $this->_serviceOutput( 'FAIL', "failed to find test_machine browsers" );
+            return false;
          }
 
          // okay so we have a test_machine save up browsers...
+         if ( $ie == 'yes' ) {
+            if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $ie_version, $version_preg ) ) {
+               $browser = $this->_findBrowser( 'Internet Explorer', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
+
+               // associate this browser to the machine
+               try {
+                  $browser_link = new CTM_Test_Machine_Browser();
+                  $browser_link->test_machine_id = $test_machine->id;
+                  $browser_link->test_browser_id = $browser->id;
+                  $browser_link->save();
+               } catch ( Exception $e ) {
+                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for IE" );
+                  return false;
+               }
+            
+            }
+         }
+
          if ( $chrome == 'yes' ) {
             // 5.0.307.11 - major.minor.patch.subversion --? what the if anyone wants to figure that out have at it.
-            if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/', $chrome_version, $version_preg ) ) {
+            if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $chrome_version, $version_preg ) ) {
                $browser = $this->_findBrowser( 'Chrome', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine
@@ -110,6 +165,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                   $browser_link->test_browser_id = $browser->id;
                   $browser_link->save();
                } catch ( Exception $e ) {
+                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for chrome" );
+                  return false;
                }
             
             }
@@ -126,6 +183,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                   $browser_link->test_browser_id = $browser->id;
                   $browser_link->save();
                } catch ( Exception $e ) {
+                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for firefox" );
+                  return false;
                }
 
             }
@@ -143,19 +202,14 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                   $browser_link->test_browser_id = $browser->id;
                   $browser_link->save();
                } catch ( Exception $e ) {
+                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for safari" );
+                  return false;
                }
 
             }
          }
 
-         echo '<?xml version="1.0" encoding="UTF-8" ?>' . "\n";
-         echo '<ctm_test_machine>' . "\n";
-         echo '   <id>' . $test_machine->id . '</id>' . "\n";
-         echo '   <hostname>' . $test_machine->hostname . '</hostname>' . "\n";
-         echo '   <created_at>' . $test_machine->created_at . '</created_at>' . "\n";
-         echo '   <last_modified>' . $test_machine->last_modified . '</last_modified>' . "\n";
-         echo '   <is_disabled>' . $test_machine->is_disabled . '</is_disabled>' . "\n";
-         echo '</ctm_test_machine>' . "\n";
+         $this->_serviceOutput( 'OK', '', $test_machine );
 
          return false;
       }

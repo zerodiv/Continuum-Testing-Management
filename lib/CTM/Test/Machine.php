@@ -4,7 +4,8 @@ require_once( 'Light/Database/Object.php' );
 
 class CTM_Test_Machine extends Light_Database_Object {
    public $id;
-   public $hostname;
+   public $guid;
+   public $ip;
    public $os;
    public $created_at;
    public $last_modified;
