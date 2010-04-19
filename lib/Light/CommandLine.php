@@ -1,25 +1,27 @@
 <?php
 
 require_once( 'Light/CommandLine/Config.php' );
+require_once( 'Light/CommandLine/Option/Container.php' );
 
 class Light_CommandLine {
+   public $options;
 
    function __construct() {
 
       // setup the default timezone.
       date_default_timezone_set( Light_CommandLine_Config::DEFAULT_TIMEZONE() );
 
-      // $this->parseArguments();
 
-      $this->init();
+      $this->options = new Light_CommandLine_Option_Container();
 
-      $this->run();
-
-      $this->done();
+      $this->main();
 
    }
 
-   public function parseArguments() {
+   public function main() {
+      $this->init();
+      $this->run();
+      $this->done();
    }
 
    public function init() {
