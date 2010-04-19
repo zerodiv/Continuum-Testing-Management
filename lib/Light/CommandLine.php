@@ -6,6 +6,7 @@ class Light_CommandLine {
 
    function __construct() {
 
+      // setup the default timezone.
       date_default_timezone_set( Light_CommandLine_Config::DEFAULT_TIMEZONE() );
 
       // $this->parseArguments();
@@ -34,8 +35,12 @@ class Light_CommandLine {
       exit( $rv );
    }
 
+   public function formatDate( $timestamp ) {
+      return date( Light_CommandLine_Config::TIME_FORMAT(), $timestamp );
+   }
+
    public function message( $message ) {
-      echo date( 'r' ) . ' - ' . $message . "\n";
+      echo $this->formatDate( time() ) . ' - ' . $message . "\n";
    }
 
 }

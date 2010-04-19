@@ -35,6 +35,7 @@ Installer:
 
 Test runner pre-req:
   - Document the concepts around single session variable tracking for testing suites.
+
 --
 1.0 - Release to world? 
 * Need to discuss license
