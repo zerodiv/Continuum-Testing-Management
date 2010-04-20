@@ -6,10 +6,10 @@ require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
 require_once( 'CTM/Test/Suite/Cache.php' );
 require_once( 'CTM/Test/Cache.php' );
 
-class CTM_Site_Test_Run_Add_Step2 extends CTM_Site { 
+class CTM_Site_Test_Run_Add_Step3 extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Run - Add - Step 3 of 3';
+      $this->_pagetitle = 'Test Run - Add - Step 3 of 4';
       return true;
    }
 
@@ -38,7 +38,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                   }
                }
 
-               header( 'Location: ' . $this->_baseurl . '/test/runs/' );
+               header( 'Location: ' . $this->_baseurl . '/test/run/add/step4/?id=' . $id);
                return false;
 
             } catch ( Exception $e ) {
@@ -94,7 +94,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 
          $this->printHtml( '<tr>' );
-         $this->printHtml( '<th colspan="3">Add Test Run (Step 3 of 3)</th>' );
+         $this->printHtml( '<th colspan="3">Add Test Run (Step 3 of 4)</th>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );
@@ -143,7 +143,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          }
 
          $this->printHtml( '<tr class="aiButtonRow">' );
-         $this->printHtml( '<td colspan="3"><center><input type="submit" value="Next: Configure Urls"></center></td>' );
+         $this->printHtml( '<td colspan="3"><center><input type="submit" value="Next: Configure Browsers"></center></td>' );
          $this->printHtml( '</tr>' ); 
 
          $this->printHtml( '</table>' );
@@ -160,5 +160,5 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
 }
 
-$test_add_obj = new CTM_Site_Test_Run_Add_Step2();
+$test_add_obj = new CTM_Site_Test_Run_Add_Step3();
 $test_add_obj->displayPage();

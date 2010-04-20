@@ -91,7 +91,7 @@ class CTM_Test_Run_Command extends Light_Database_Object {
       try {
          $a_obj = $this->getValue();
          if ( isset( $a_obj ) ) {
-            $a_obj->value = $target;
+            $a_obj->value = $value;
             $a_obj->save();
          } else {
             $a_obj = new CTM_Test_Run_Command_Value();

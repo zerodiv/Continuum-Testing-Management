@@ -230,15 +230,24 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
-            // return the browser =)
-            return $rows[0];
+            // return the browser
+            $browser = $rows[0];
+            $browser->is_available = true;
+            $browser->last_seen = time();
+            $browser->save();
+            return $browser;
          } else {
             $browser = new CTM_Test_Browser();
             $browser->name = $name;
             $browser->major_version = $major;
             $browser->minor_version = $minor;
             $browser->patch_version = $patch;
+            $browser->is_availble = true;
+            $browser->last_seen = time();
             $browser->save();
+            if ( $browser->id > 0 ) {
+               return $browser;
+            }
          }
       } catch ( Exception $e ) {
       }

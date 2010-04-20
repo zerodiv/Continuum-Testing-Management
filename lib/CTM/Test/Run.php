@@ -4,6 +4,7 @@ require_once( 'Light/Database/Object.php' );
 require_once( 'CTM/Test/Run/Builder.php' );
 require_once( 'CTM/Test/Run/Command/Selector.php' );
 require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
+require_once( 'CTM/Test/Run/Browser/Selector.php' );
 
 class CTM_Test_Run extends Light_Database_Object {
    public $id;
@@ -34,6 +35,12 @@ class CTM_Test_Run extends Light_Database_Object {
             $baseurls = $baseurl_sel->find( $baseurl_and_params );
             foreach ( $baseurls as $baseurl ) {
                $baseurl->remove();
+            }
+            $browser_sel = new CTM_Test_Run_Browser_Selector();
+            $browser_and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $this->id ) );
+            $browsers = $browser_sel->find( $browser_and_params );
+            foreach ( $browsers as $browser ) {
+               $browser->remove();
             }
          } catch ( Exception $e ) {
             throw $e;

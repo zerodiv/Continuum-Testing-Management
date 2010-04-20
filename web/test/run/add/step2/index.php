@@ -10,18 +10,49 @@ require_once( 'CTM/Test/Selenium/Command/Cache.php' );
 class CTM_Site_Test_Run_Add_Step2 extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Run - Add - Step 2 of 3';
+      $this->_pagetitle = 'Test Run - Add - Step 2 of 4';
       return true;
    }
 
    public function handleRequest() {
-      $test_suite_id = $this->getOrPost( 'test_suite_id', '' );
-      $test_run_id = $this->getOrPost( 'test_run_id', '' );
-      $iterations = $this->getOrPost( 'iterations', '' );
+      $id = $this->getOrPost( 'id', '' );
+      $action = $this->getOrPost( 'action', '' );
+      $test_params = $this->getOrPost( 'test_params', array() );
 
       $this->requiresAuth();
 
+      if ( $action != 'step2' ) {
+         return true;
+      }
+      
+      if ( count( $test_params ) == 0 ) {
+         header( 'Location: ' . $this->_baseurl . '/test/run/add/step3/?id=' . $id );
+         return false;
+      }
+
       try {
+         $test_run = null;
+         $sel = new CTM_Test_Run_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) );
+         $test_runs = $sel->find( $and_params );
+         
+         if ( isset( $test_runs[0] ) ) {
+            $test_run = $test_runs[0];
+
+            $sel = new CTM_Test_Run_Command_Selector();
+            foreach ( $test_params as $test_param_id => $test_param_value ) {
+               $and_params = array( 
+                  new Light_Database_Selector_Criteria( 'id', '=', $test_param_id ),
+               );
+               $t_parms = $sel->find( $and_params );
+               if ( isset( $t_parms[0] ) ) {
+                  $t_parm = $t_parms[0];
+                  $t_parm->setTarget( $test_param_value );
+               }
+            }
+            header( 'Location: ' . $this->_baseurl . '/test/run/add/step3/?id=' . $id );
+            return false;
+         }
       } catch ( Exception $e ) {
       }
 
@@ -73,14 +104,14 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 
-         $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/run/add/step3/">' );
+         $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/run/add/step2/">' );
          $this->printHtml( '<input type="hidden" name="action" value="step2">' );
          $this->printHtml( '<input type="hidden" name="id" value="' . $test_run->id .'">' );
 
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 
          $this->printHtml( '<tr>' );
-         $this->printHtml( '<th colspan="2">Add Test Run (Step 2 of 3)</th>' );
+         $this->printHtml( '<th colspan="2">Add Test Run (Step 2 of 4)</th>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );
@@ -114,7 +145,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
                $this->printHtml( '<tr class="' . $class . '">' );
                $this->printHtml( '<td>' . $this->escapeVariable( $value_obj->value ) . '</td>' );
-               $this->printHtml( '<td><input type="text" size="40" value="' . $this->escapeVariable( $target_obj->target ) . '" name="target[' . $test_parm->id . ']"></td>' );
+               $this->printHtml( '<td><input type="text" size="40" value="' . $this->escapeVariable( $target_obj->target ) . '" name="test_params[' . $test_parm->id . ']"></td>' );
                $this->printHtml( '</tr>' );
 
             }
