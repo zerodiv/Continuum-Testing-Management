@@ -2,7 +2,7 @@
 <?php
 
 // creates static impl classes with the configuration variables pre filled in.
-$config_file = './etc/config.ini';
+$config_file = dirname( __FILE__ ) . '/../etc/config.ini';
 
 if ( ! is_file( $config_file ) ) {
    echo 'no such file: ' . $this->_config_file . "\n";
@@ -50,6 +50,6 @@ exit();
 function convertClassToFile( $class ) {
    $file_name = $class;
    $file_name = str_replace( '_', '/', $class );
-   $file_name = './lib/' . $file_name . '.php';
+   $file_name = dirname( __FILE__ ) . '/../lib/' . $file_name . '.php';
    return $file_name;
 }

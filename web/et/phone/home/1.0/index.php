@@ -105,6 +105,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             }
 
          } else {
+            $test_machine->ip = $ip;
             $test_machine->last_modified = time();
             $test_machine->save();
          }
