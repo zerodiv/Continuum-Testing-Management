@@ -139,9 +139,6 @@ class CTM_Test_Run_Builder {
 
    private function _addTestToSuiteDir( CTM_Test_Run $test_run, $test_id ) {
 
-      // TODO: jeo - We need to pull test params from the actual run, this is currently pulling off
-      // the param library values. 
-
       try {
          // fetch the test_obj
          $test_obj = $this->_test_cache->getById( $test_id );
@@ -189,6 +186,21 @@ class CTM_Test_Run_Builder {
          // dump all the test command combos to the file.
          if ( count( $test_commands ) > 0 ) {
             foreach ( $test_commands as $test_command ) {
+
+               if ( $test_command->test_param_library_id > 0 ) {
+                  // get the runtime override from the test_run_version.
+                  // fetch the test run commands that need their values changed / adjusted.
+                  $sel = new CTM_Test_Run_Command_Selector();
+                  $and_params = array( 
+                     new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ),
+                     new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $test_command->test_param_library_id )
+                  );
+                  $override_commands = $sel->find( $and_params );
+                  if ( count( $override_commands ) > 0 ) {
+                     $test_command = $override_commands[0];
+                  }
+               }
+         
                $sel_obj = $this->_selenium_command_cache->getById( $test_command->test_selenium_command_id );
                $value_obj = $test_command->getValue();
                $target_obj = $test_command->getTarget();
@@ -395,28 +407,21 @@ class CTM_Test_Run_Builder {
                }
 
                if ( $add_to_stack == true ) {
-                  // copy the object in.
-                  $test_run_command = new CTM_Test_Run_Command();
-                  $test_run_command->test_run_id = $test_run->id;
-                  $test_run_command->test_suite_id = $test_suite_id;
-                  $test_run_command->test_id = $test_id;
-                  $test_run_command->test_selenium_command_id = $test_command->test_selenium_command_id;
-                  $test_run_command->test_param_library_id = $test_command->test_param_library_id;
-                  $test_run_command->save();
+                  // copy only the parameter objects in.
+                  if ( $test_command->test_param_library_id > 0 ) {
+                     $test_run_command = new CTM_Test_Run_Command();
+                     $test_run_command->test_run_id = $test_run->id;
+                     $test_run_command->test_suite_id = $test_suite_id;
+                     $test_run_command->test_id = $test_id;
+                     $test_run_command->test_selenium_command_id = $test_command->test_selenium_command_id;
+                     $test_run_command->test_param_library_id = $test_command->test_param_library_id;
+                     $test_run_command->save();
 
-                  // copy the text blobs over.
-                  if ( $test_run_command->test_param_library_id > 0 ) {
                      // pull the test library item out-
                      $param_lib_obj = $this->_param_lib_cache->getById( $test_run_command->test_param_library_id );
                      $default_obj = $param_lib_obj->getDefault();
                      $test_run_command->setTarget( $default_obj->default_value );
                      $test_run_command->setValue( $param_lib_obj->name );
-                  } else {
-                     $target_obj = $test_command->getTarget();
-                     $value_obj = $test_command->getValue();
-
-                     $test_run_command->setTarget( $target_obj->target );
-                     $test_run_command->setValue( $value_obj->value );
                   }
 
                }
