@@ -60,26 +60,42 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          // print_r( $test_browsers );
 
          // push the on ones as requests to specific machines by browser type.
-         foreach ( $test_browsers as $test_browser_id => $on_off ) {
-            // on_off is kinda a misnomer since some browsers don't transmit the off ones.
-            // but since we're paranoid we will check anyways.
-            if ( $on_off == 'on' ) {
-               // find all machines with a browser_id that matches to this testing set.
-               $test_machines = $this->_availableMachinesForBrowser( $test_browser_id );
-               if ( count( $test_machines ) > 0 ) {
-                  $test_machine = $test_machines[0];
-                  try {
-                     // inject the test_run -> machine relationship.
-                     $test_run_browser_obj = new CTM_Test_Run_Browser();
-                     $test_run_browser_obj->test_run_id = $id;
-                     $test_run_browser_obj->test_browser_id = $test_browser_id;
-                     $test_run_browser_obj->test_machine_id = $test_machine->id;
-                     $test_run_browser_obj->test_run_state_id = 1;
-                     $test_run_browser_obj->save();
-                  } catch ( Exception $e ) {
+         if ( is_array( $test_browsers ) && count($test_browsers) > 0 ) {
+            foreach ( $test_browsers as $test_browser_id => $on_off ) {
+               // on_off is kinda a misnomer since some browsers don't transmit the off ones.
+               // but since we're paranoid we will check anyways.
+               if ( $on_off == 'on' ) {
+                  // find all machines with a browser_id that matches to this testing set.
+                  $test_machines = $this->_availableMachinesForBrowser( $test_browser_id );
+                  if ( count( $test_machines ) > 0 ) {
+                     $test_machine = $test_machines[0];
+                     try {
+                        // inject the test_run -> machine relationship.
+                        $test_run_browser_obj = new CTM_Test_Run_Browser();
+                        $test_run_browser_obj->test_run_id = $id;
+                        $test_run_browser_obj->test_browser_id = $test_browser_id;
+                        $test_run_browser_obj->test_machine_id = $test_machine->id;
+                        $test_run_browser_obj->test_run_state_id = 1;
+                        $test_run_browser_obj->save();
+                     } catch ( Exception $e ) {
+                     }
                   }
                }
             }
+         } // end test_browsers.
+
+         $sel = new CTM_Test_Run_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) );
+         $test_runs = $sel->find( $and_params );
+         
+         if ( isset( $test_runs[0] ) ) {
+            $test_run = $test_runs[0];
+         }
+
+         if ( isset( $test_run->id ) ) {
+            echo "build test_run html\n";
+            $test_run->createTestSuite();
+            exit();
          }
 
          header( 'Location: ' . $this->_baseurl . '/test/runs/' );
@@ -163,19 +179,28 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          $this->printHtml( '<td>Version:</td>' );
          $this->printHtml( '</tr>' );
 
-         foreach ( $test_browsers as $test_browser ) {
-            $class = $this->oddEvenClass();
+         if ( count( $test_browsers ) > 0 ) {
 
-            $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td><center><input type="checkbox" name="test_browsers[' . $test_browser->id . ']" checked></center></td>' );
-            $this->printHtml( '<td>' . $test_browser->name . '</td>' );
-            $this->printHtml( '<td>' . 
+            foreach ( $test_browsers as $test_browser ) {
+               $class = $this->oddEvenClass();
+
+               $this->printHtml( '<tr class="' . $class . '">' );
+               $this->printHtml( '<td><center><input type="checkbox" name="test_browsers[' . $test_browser->id . ']" checked></center></td>' );
+               $this->printHtml( '<td>' . $test_browser->name . '</td>' );
+               $this->printHtml( '<td>' . 
                   $test_browser->major_version . '.' .
                   $test_browser->minor_version . '.' .
                   $test_browser->patch_version .
                '</td>' );
+               $this->printHtml( '</tr>' );
+            }
+
+         } else {
+            $this->printHtml( '<tr class="odd">' );
+            $this->printHtml( '<td colspan="3"><center>- No available machines / browsers at this time. -</center></td>' );
             $this->printHtml( '</tr>' );
          }
+
 
          $this->printHtml( '<tr class="aiButtonRow">' );
          $this->printHtml( '<td colspan="3"><center><input type="submit" value="Start Test"></center></td>' );

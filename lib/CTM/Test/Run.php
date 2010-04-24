@@ -56,11 +56,18 @@ class CTM_Test_Run extends Light_Database_Object {
       if ( ! isset( $this->id ) ) {
          return;
       }
-      
       // create a builder object for this Test_Run
       $ctm_run_builder = new CTM_Test_Run_Builder();
       $ctm_run_builder->build( $this );
+   }
 
+   public function createTestSuite() {
+      if ( ! isset( $this->id ) ) {
+         return;
+      }
+      // create a builder object for this Test_Run
+      $ctm_run_builder = new CTM_Test_Run_Builder();
+      $ctm_run_builder->buildTestSuite( $this );
    }
 
 }
