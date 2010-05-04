@@ -2,9 +2,9 @@
 
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
+require_once( 'CTM/Site/Config.php' );
 require_once( 'CTM/User.php' );
 require_once( 'CTM/User/Selector.php' );
-require_once( 'CTM/Site/User/Create/Config.php' );
 
 class CTM_Site_User_Create extends CTM_Site {
    private $_displayError;
@@ -80,8 +80,8 @@ class CTM_Site_User_Create extends CTM_Site {
             $message .= "Thank you.\n";
 
             $more_headers = '';
-            $more_headers .= "From: " . CTM_Site_User_Create_Config::CREATE_EMAIL_FROM() . "\r\n";
-            $more_headers .= "Reply-To: " . CTM_Site_User_Create_Config::CREATE_EMAIL_FROM() . "\r\n";
+            $more_headers .= "From: " . CTM_Site_Config::CREATE_EMAIL_FROM() . "\r\n";
+            $more_headers .= "Reply-To: " . CTM_Site_Config::CREATE_EMAIL_FROM() . "\r\n";
 
             mail( '<' . $username . '>', "Welcome to " . $this->_sitetitle, $message );
 

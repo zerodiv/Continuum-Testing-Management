@@ -16,8 +16,26 @@ if ( ! is_readable( $config_file ) ) {
 
 $config = parse_ini_file( $config_file, true );
 
+// create and load the ctm class so that we can do evals on the further template items.
 foreach ( $config as $config_class => $config_values ) {
+   if ( $config_class == 'CTM_Config' || $config_class == 'CTM_Site_Config' ) {
+      foreach ( $config_values as $config_name => $config_value ) {
+         define( $config_class . '_' . strtoupper($config_name), $config_value );
+      }
+   }
+}
 
+// reparse the config file to get all the constants interpolated
+$config = parse_ini_file( $config_file, true );
+
+foreach ( $config as $config_class => $config_values ) {
+   $class_file = writeToFile( $config_class, $config_values );
+}
+
+echo "Done!\n";
+exit();
+
+function writeToFile( $config_class, $config_values ) {
    echo "config_class: $config_class\n";
 
    $class_file = convertClassToFile( $config_class );
@@ -42,10 +60,9 @@ foreach ( $config as $config_class => $config_values ) {
 
    fwrite( $fh, '}' . "\n" );
 
-}
+   return $class_file;
 
-echo "Done!\n";
-exit();
+}
 
 function convertClassToFile( $class ) {
    $file_name = $class;
