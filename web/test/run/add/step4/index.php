@@ -93,9 +93,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          }
 
          if ( isset( $test_run->id ) ) {
-            echo "build test_run html\n";
             $test_run->createTestSuite();
-            exit();
          }
 
          header( 'Location: ' . $this->_baseurl . '/test/runs/' );

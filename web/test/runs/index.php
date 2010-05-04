@@ -119,7 +119,16 @@ class CTM_Site_Test_Runs extends CTM_Site {
             $this->printHtml( '<td>' . $this->formatDate( $test_run->created_at ) . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $created_by->username ) . '</td>' );
             $this->printHtml( '<td><center>' );
-            $this->printHtml( '<a href="' . $this->_baseurl . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
+            $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
+            // while a test is executing we cannot do any admin actions to it.
+            if ( $test_run->test_run_state_id == $completed_state->id ) {
+               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/archive/?id=' . $test_run->id . '" class="ctmButton">Archive</a>' );
+            }
+            if ( $test_run->test_run_state_id == $queued_state->id || 
+                 $test_run->test_run_state_id == $completed_state->id ||
+                 $test_run->test_run_state_id == $archived_state->id ) {
+               $this->printHtml( '<a href="' . $this->_baseurl . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
+            }
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
 

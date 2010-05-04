@@ -66,8 +66,6 @@ class CTM_Test_Run_Builder {
    public function buildTestSuite( CTM_Test_Run $test_run ) {
          try {
         
-            print_r( $test_run );
-
             // bring the suite in so we can get the name
             $test_suite = $this->_test_suite_cache->getById( $test_run->test_suite_id );
 
@@ -99,7 +97,7 @@ class CTM_Test_Run_Builder {
             $this->_writeSuiteHtml();
 
             // compress off the suite and make it easy for the agent to download.
-            system( 'cd /tmp/ctm_test_runs ; zip -r ' . $this->_suite_compressed_file . ' ' . $test_run->id );
+            system( 'cd /tmp/ctm_test_runs ; zip -q -r ' . $this->_suite_compressed_file . ' ' . $test_run->id );
 
          } catch ( Exception $e ) {
             throw $e;
@@ -109,8 +107,6 @@ class CTM_Test_Run_Builder {
 
    private function _addTestSuiteToSuiteDir( CTM_Test_Run $test_run, $test_suite_id ) {
       try {
-         echo "test_suite_id: $test_suite_id\n";
-         print_r( $test_run );
 
          $sel = new CTM_Test_Suite_Plan_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ) );
