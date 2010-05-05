@@ -2,7 +2,6 @@ Build plan:
 
 
 Test Lab:
-  - download test run (exports to a html file so that we can debug the app's run choices)
   - build out test_run_log (TODO: Schema for this - would like to not store it all raw in the db - but for now meh)
 
 Windows App:
