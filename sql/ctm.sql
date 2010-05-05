@@ -47,6 +47,7 @@ CREATE TABLE `account` (
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
 INSERT INTO `account` VALUES (1,1,'jorcutt@adicio.com','40676ea8edbaf48007422d4eac7608dc','jorcutt@adicio.com',0,1,0,1270710882,'');
+INSERT INTO `account` VALUES (2,1,'bseydioglu','622d0ed3f9b06b2e83851f7859c76c6c','bseydioglu@adicio.com',0,1,0,1270710882,'');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
