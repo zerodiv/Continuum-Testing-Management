@@ -20,12 +20,12 @@ class CTM_Site_Test_Run_Download extends CTM_Site {
 
             $test_run_sel = new CTM_Test_Run_Selector();
             $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) );
-            $test_runs = $sel->find( $and_params );
+            $test_runs = $test_run_sel->find( $and_params );
 
             if ( isset( $test_runs[0] ) ) {
                $test_run = $test_runs[0];
                // test run found, check for a zip file.
-               $zip_file = CTM_Config::SUITE_DIR() . '/' . $test_run->id . '/' . $test_run->id . '.zip';
+               $zip_file = CTM_Config::SUITE_DIR() . '/' . $test_run->id . '.zip';
 
                if ( is_file($zip_file) ) {
 
