@@ -1,31 +1,27 @@
 Build plan:
 
-  - ${ctm_input_variable}        // avail in both
-  - ${ctm_test_run_baseurl}      // avail in both
-  - ${ctm_suite_baseurl}         // avail in both, allows us to chain it upwards
 
 Test Lab:
-  - finish the add test run wizard
   - download test run (exports to a html file so that we can debug the app's run choices)
-  - create session tracker
-  - create test runnner
   - build out test_run_log (TODO: Schema for this - would like to not store it all raw in the db - but for now meh)
 
+Windows App:
+  - download test run
+  - run test run
+  - report back to home base results
+  - .net job on host to maintain browsers: kill running away ones, etc
+
 General Features:
- - pagnation object need a pagnaitor that works with the selectors to move back and forth through
-   a given set.
+  - pagnation object need a pagnaitor that works with the selectors to move back and forth through
+    a given set.
 
 Accounts Admin:
-- manage accounts
-- update / change password 
-- delete (disable)
+  - manage accounts
+  - update / change password 
+  - delete (disable)
 
 Moderation:
 - approve / denial queue
-
-Runtime Operation:
-- .net job on host to maintain browsers: kill running away ones, etc
-- .mac job on host to maintain browsers: kill running away ones, etc
 
 Installer:
 - needs to determine php requirements
@@ -35,6 +31,9 @@ Installer:
 
 Test runner pre-req:
   - Document the concepts around single session variable tracking for testing suites.
+
+Runtime Operation:
+- .mac job on host to maintain browsers: kill running away ones, etc
 
 --
 1.0 - Release to world? 
@@ -70,24 +69,12 @@ revisit it as part of the revision history concept.
 Test suites: - Deletion: We would need to write a dependency removal system. Would rather have this as disable at best.
 Tests: - Deletion: Same issue as Test Suites.
 
-Integrations with:
-- QTP, SilkTest, Selenium, Junit, Webload, TestComplete
-
--- Misc RC notes:
-We can pass a specific hardcode to browser path on selenium rc:
-*custom <path to browser>
-
-Will most likely use at for managing the various jobs needed to run the test in parallel.
-
--- Basic notes about session variables:
-* ctm_(action)_(variable)
-* ctm_input_variable - Takes a variable from the running test session and places it into the selenium test.
-* ctm_output_variable - Takes a variable from the running test session and places it into the test runner session.
-* ctm_clear_variable - Removes a variable from the running test session.
-* ctm_clear_all - Removes all variables from the running test session.
-
 -- Need to add a password / security to phone home system.
 
 -- Tests require a base url to root themselves to. If we context seneitive the suites we will be locking ourselves
 into a suite cannot span multiple sites. Ideally we would like to be able to test edge cases where we have single
 sign on or other functionality based in logging into multiple sites via single auth credentials. 
+
+Integrations with:
+- QTP, SilkTest, Selenium, Junit, Webload, TestComplete
+- We can accomplish this via different builders, and possibly re-thinking our creation scheme here
