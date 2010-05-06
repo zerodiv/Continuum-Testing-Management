@@ -243,7 +243,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             $browser->major_version = $major;
             $browser->minor_version = $minor;
             $browser->patch_version = $patch;
-            $browser->is_availble = true;
+            $browser->is_available = true;
             $browser->last_seen = time();
             $browser->save();
             if ( $browser->id > 0 ) {
