@@ -31,8 +31,10 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
             foreach ( $test_machine_browsers as $test_machine_browser ) {
                // lookup the test_machine
                $test_machine = $this->_test_machine_cache->getById( $test_machine_browser->test_machine_id );
-               if ( $test_machine->is_disabled == 0 ) {
-                  $available_machines[] = $test_machine;
+               if ($test_machine->is_disabled == 0) {
+                  // we may have multiple machines with the same OS
+                  // no need to add them all to the pool
+                  $available_machines[$test_machine->os] = $test_machine;
                }
             }
          }
@@ -67,19 +69,21 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                if ( $on_off == 'on' ) {
                   // find all machines with a browser_id that matches to this testing set.
                   $test_machines = $this->_availableMachinesForBrowser( $test_browser_id );
-                  if ( count( $test_machines ) > 0 ) {
-                     $test_machine = $test_machines[0];
-                     try {
-                        // inject the test_run -> machine relationship.
-                        $test_run_browser_obj = new CTM_Test_Run_Browser();
-                        $test_run_browser_obj->test_run_id = $id;
-                        $test_run_browser_obj->test_browser_id = $test_browser_id;
-                        $test_run_browser_obj->test_machine_id = $test_machine->id;
-                        $test_run_browser_obj->test_run_state_id = 1;
-                        $test_run_browser_obj->save();
-                     } catch ( Exception $e ) {
-                     }
-                  }
+                    if (count($test_machines) > 0) {
+                        foreach ($test_machines as $test_machine) {
+                            try {
+                                // inject the test_run -> machine relationship.
+                                $test_run_browser_obj = new CTM_Test_Run_Browser();
+                                $test_run_browser_obj->test_run_id = $id;
+                                $test_run_browser_obj->test_browser_id = $test_browser_id;
+                                $test_run_browser_obj->test_machine_id = $test_machine->id;
+                                $test_run_browser_obj->test_run_state_id = 1;
+                                $test_run_browser_obj->save();
+                            } catch (Exception $e) {
+                                $e = null;
+                            }
+                        }
+                    }
                }
             }
          } // end test_browsers.
