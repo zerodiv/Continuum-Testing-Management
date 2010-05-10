@@ -39,39 +39,17 @@ class CTM_Test_Agent extends Light_CommandLine_Script
 
             if ($this->testBrowser) {
 
-                $this->message("Converting tests to individual suites.");
+                $this->message("Running suite.");
+                $commandString = "java -jar selenium-server.jar -multiwindow -htmlSuite '*" . $this->testBrowser . "' 'http://www.adicio.com/' '" .  $this->files->getSuite() . "' '" . $this->files->getLogFile() . "'";
+                $this->message("Running $commandString");
+                system($commandString, $returnValue);
 
-                $this->files->convertTestsToSuites();
-
-                $this->message("Running suites.");
-
-                // loop through the suite
-                foreach ($this->files->getSuites() as $suite) {
-
-                    $testFile = dirname($suite) . "/test.html";
-
-                    try {
-                        $testXml = simplexml_load_file($testFile);
-                    } catch(Exception $e) {
-                        throw $e;
-                    }
-
-                    $this->message("Preparing $testTitle.");
-
-                    $testTitle = (string) $testXml->html->head->title;
-                    $testUrl = (string) $testXml->html->head->link['href'];
-
-                    // time to run the suite
-                    $commandString = "java -jar selenium-server.jar -multiwindow -htmlSuite '*" . $this->testBrowser . "' '" . $testUrl . "' '" .  $suite . "' '" . $this->files->getLogFile() . "'";
-                    $this->message("Running $commandString");
-                    system($commandString, $returnValue);
-
-                    if ($returnValue == 0) {
-                        $this->message("############# $testTitle succeeded! #############");
-                    } else {
-                        $this->message("############# $testTitle failed! #############");
-                    }
+                if ($returnValue == 0) {
+                    $this->message("############# Succeeded! #############");
+                } else {
+                    $this->message("############# Failed! #############");
                 }
+
             }
             
         } else {

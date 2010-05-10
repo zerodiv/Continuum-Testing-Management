@@ -179,6 +179,13 @@ class CTM_Test_Run_Builder {
          fwrite( $fh, '<thead>' . "\n" );
          fwrite( $fh, '<tr><td rowspan="1" colspan="3">' . $this->_escapeVariable( $test_obj->name ) . '</td></tr>' . "\n" );
          fwrite( $fh, '</thead><tbody>' . "\n" );
+
+         fwrite($fh, '<tr>' . "\n" );
+         fwrite($fh, '         <td>open</td>' . "\n" );
+         fwrite($fh, '         <td>' . $baseurl_obj->baseurl . '</td>' . "\n" );
+         fwrite($fh, '         <td></td>' . "\n" );
+         fwrite($fh, '</tr>' . "\n" );
+
          // dump all the test command combos to the file.
          if ( count( $test_commands ) > 0 ) {
             foreach ( $test_commands as $test_command ) {
