@@ -138,7 +138,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          // okay so we have a test_machine save up browsers...
          if ( $ie == 'yes' ) {
             if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $ie_version, $version_preg ) ) {
-               $browser = $this->_findBrowser( 'Internet Explorer', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
+               $browser = $this->_findBrowser( 'iexplore', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine
                try {
@@ -157,7 +157,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          if ( $chrome == 'yes' ) {
             // 5.0.307.11 - major.minor.patch.subversion --? what the if anyone wants to figure that out have at it.
             if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $chrome_version, $version_preg ) ) {
-               $browser = $this->_findBrowser( 'Chrome', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
+               $browser = $this->_findBrowser( 'chrome', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine
                try {
@@ -175,7 +175,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
 
          if ( $firefox == 'yes' ) {
             if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $firefox_version, $version_preg ) ) {
-               $browser = $this->_findBrowser( 'Firefox', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
+               $browser = $this->_findBrowser( 'firefox', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine?
                try {
@@ -194,7 +194,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          if ( $safari == 'yes' ) {
             // safari comes in major.minor.patch (ints)
             if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $safari_version, $version_preg ) ) {
-               $browser = $this->_findBrowser( 'Safari', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
+               $browser = $this->_findBrowser( 'safari', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine?
                try {
