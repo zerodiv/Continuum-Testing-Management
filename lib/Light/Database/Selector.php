@@ -170,4 +170,16 @@ abstract class Light_Database_Selector {
       }
    }
 
+    public function lock()
+    {
+        $dbh = Light_Database_Factory::getDBH( $this->_db_name );
+        $dbh->exec("LOCK TABLES {$this->_sql_table} WRITE");
+    }
+
+    public function unlock()
+    {
+        $dbh = Light_Database_Factory::getDBH( $this->_db_name );
+        $dbh->exec("UNLOCK TABLES");
+    }
+
 }
