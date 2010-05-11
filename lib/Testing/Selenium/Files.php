@@ -59,17 +59,14 @@ class Testing_Selenium_Files
     public function remove($path)
     {
         if (is_file($path)) {
-            echo "Removing $path\n";
             unlink($path);
         }
 
         if (is_dir($path)) {
-            echo "Removing $path\n";
             $d = dir($path);
             while($item = $d->read()) {
                 if ($item != "." && $item != "..") {
-                    echo "Removing item $item\n";
-                    $this->remove($item);
+                    $this->remove($path . '/' . $item);
                 }
             }
             $d->close();
