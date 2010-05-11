@@ -208,9 +208,15 @@ class CTM_Test_Run_Builder {
                $value_obj = $test_command->getValue();
                $target_obj = $test_command->getTarget();
 
+               if ($sel_obj->name == 'open') {
+                   $target = preg_replace('#/$#', '', $baseurl_obj->baseurl) . $target_obj->target;
+               } else {
+                   $target = $target_obj->target;
+               }
+
                fwrite($fh, '<tr>' . "\n" );
                fwrite($fh, '         <td>' . $sel_obj->name . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $target_obj->target . '</td>' . "\n" );
+               fwrite($fh, '         <td>' . $target . '</td>' . "\n" );
                fwrite($fh, '         <td>' . $value_obj->value . '</td>' . "\n" );
                fwrite($fh, '</tr>' . "\n" );
                
