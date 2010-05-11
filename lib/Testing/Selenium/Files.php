@@ -64,14 +64,15 @@ class Testing_Selenium_Files
         }
 
         if (is_dir($path)) {
+            echo "Removing $path\n";
             $d = dir($path);
             while($item = $d->read()) {
                 if ($item != "." && $item != "..") {
+                    echo "Removing item $item\n";
                     $this->remove($item);
                 }
             }
             $d->close();
-            echo "Removing $path\n";
             rmdir($path);
         }
     }
