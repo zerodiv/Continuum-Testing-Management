@@ -4,30 +4,38 @@
 require_once dirname( __FILE__ ) . '/../bootstrap.php';
 require_once 'Light/CommandLine/Script.php';
 require_once 'CTM/Site/Config.php';
-require_once 'Testing/Machine/Factory.php';
-require_once 'Testing/Selenium/Files.php';
+require_once 'CTM/Machine/Factory.php';
+require_once 'CTM/Files.php';
+require_once 'CTM/Test/Run.php';
+require_once 'CTM/Test/Run/Selector.php';
+require_once 'CTM/Test/Browser.php';
+require_once 'CTM/Test/Browser/Selector.php';
 
 class CTM_Test_Agent extends Light_CommandLine_Script
 {
     protected $machine;
     protected $files;
+    protected $testRunBrowserId;
     protected $downloadUrl;
     protected $testBrowser;
+    protected $testStatus; // 1 success, 0 failure
+    protected $testDuration;
 
     public function init()
     {
-        $this->machine = Testing_Machine_Factory::factory();
-        $this->files = new Testing_Selenium_Files();
+        $this->machine = CTM_Machine_Factory::factory();
+        $this->files = new CTM_Files();
+        $this->testStatus = 0;
+        $this->testDuration = 0;
     }
 
     /**
-     * @todo Figure out how to execute selenium test using java
-     * @todo Implement log collection
+     * @todo selenium-server.jar path should be inside the config?
+     * @todo Is this going to execute on Windows or Mac?
      * 
      */
     public function run()
     {
-//        ob_start();
         $this->message("Running CTM_Test_Agent.");
         $this->message("Requesting work.");
         $this->getTestData();
@@ -40,26 +48,37 @@ class CTM_Test_Agent extends Light_CommandLine_Script
             if ($this->testBrowser) {
 
                 $this->message("Running suite.");
+
+                // see -browserSideLog and -log for debugging information at
+                // http://seleniumhq.org/docs/05_selenium_rc.html#selenium-server-logging
                 $commandString = "java -jar selenium-server.jar -multiwindow -htmlSuite '*" . $this->testBrowser . "' 'http://www.adicio.com/' '" .  $this->files->getSuite() . "' '" . $this->files->getLogFile() . "'";
+
                 $this->message("Running $commandString");
+
+                $testStart = microtime(true);
                 system($commandString, $returnValue);
+                $testEnd = microtime(true);
+
+                $this->testDuration = $testEnd - $testStart;
 
                 if ($returnValue == 0) {
                     $this->message("############# Succeeded! #############");
+                    $this->testStatus = 1;
                 } else {
                     $this->message("############# Failed! #############");
+                    $this->testStatus = 0;
                 }
-
+            } else {
+                $this->message("No test browser defined");
+                $this->testStatus = 0;
             }
             
         } else {
             $this->message("Could not get the download URL.");
+            $this->testStatus = 0;
         }
 
-//        $log_data = ob_get_contents();
-//        $this->sendLog($log_data);
-
-//        ob_end_clean();
+        $this->sendLog();
     }
 
     /**
@@ -91,9 +110,10 @@ class CTM_Test_Agent extends Light_CommandLine_Script
             // if we have a valid download url
             $xml = simplexml_load_string($return_xml);
             
+            $this->testRunBrowserId = (string) @$xml->testRunBrowserId;
             $this->downloadUrl = (string) @$xml->downloadUrl;
             $this->testBrowser = (string) @$xml->testBrowser;
-           
+
         } catch (Exception $e) {
             $this->message("Could not parse XML: {$e->getMessage()}");
             $e = null;
@@ -134,9 +154,14 @@ class CTM_Test_Agent extends Light_CommandLine_Script
     protected function sendLog()
     {
         // send the output back to CTM
-        $ch = curl_init(CTM_Site_Config::BASE_URL() . '/et/log/1.0/');
+        $ch = curl_init(CTM_Site_Config::BASE_URL() . '/et/log/');
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, array('log_data' => file_get_contents($this->files->getLogFile())));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+            'testRunBrowserId' => $this->testRunBrowserId,
+            'testDuration' => $this->testDuration,
+            'tsetStatus' => $this->testStatus,
+            'logData' => file_get_contents($this->files->getLogFile())
+        ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $return_xml = curl_exec($ch);
@@ -147,6 +172,7 @@ class CTM_Test_Agent extends Light_CommandLine_Script
         $this->message("Return Status for sendLog(): " . $return_status);
         $this->message("Return XML for sendLog():\n" . $return_xml);
     }
+
 }
 
 

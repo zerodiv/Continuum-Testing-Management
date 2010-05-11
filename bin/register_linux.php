@@ -4,7 +4,7 @@
 require_once dirname(__FILE__) . '/../bootstrap.php';
 require_once 'Light/CommandLine/Script.php';
 require_once 'CTM/Site/Config.php';
-require_once 'Testing/Machine/Linux.php';
+require_once 'CTM/Machine/Linux.php';
 
 class CTM_Register_Linux extends Light_CommandLine_Script
 {
@@ -36,7 +36,7 @@ class CTM_Register_Linux extends Light_CommandLine_Script
 
       $this->message('Hostname as detected: ' . $this->_hostname);
 
-      $machine = new Testing_Machine_Linux();
+      $machine = new CTM_Machine_Linux();
 
       $post_values = array();
       $post_values['guid'] = $machine->getGuid();

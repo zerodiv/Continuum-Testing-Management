@@ -105,16 +105,23 @@ abstract class Light_Database_Selector {
       }
       
       if ( count( $or_criteria ) > 0 ) {
+
+          if (count($and_criteria) > 0) {
+                $sql .= ' AND ';
+          }
+
          $is_first = true;
+         $sql .= '(';
          foreach ( $or_criteria as $or_criterion ) {
             if ( $is_first == false ) {
-               $sql .= ' AND ';
+               $sql .= ' OR ';
             }
             $sql .= ' ' . $or_criterion->getField();
             $sql .= ' ' . $or_criterion->getOperator();
             $sql .= ' ? ';
             $is_first = false;
          }
+         $sql .= ')';
       }
 
       if ( count( $field_order ) > 0 ) {
