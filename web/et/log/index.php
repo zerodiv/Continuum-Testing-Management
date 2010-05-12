@@ -9,12 +9,11 @@ require_once 'CTM/Test/Run/Browser/Selector.php';
 require_once 'CTM/Test/Run.php';
 require_once 'CTM/Test/Run/Selector.php';
 require_once 'CTM/Test/Run/Log.php';
+require_once 'CTM/Test/Run/State.php';
 
 
 class CTM_ET_Log extends CTM_Site
 {
-    const TEST_RUN_STATUS_COMPLETED = 3;
-    const TEST_RUN_STATUS_FAILED = 5;
 
     public function setupPage()
     {
@@ -44,60 +43,73 @@ class CTM_ET_Log extends CTM_Site
         $testDuration = $this->getOrPost('testDuration', '');
         $logData = $this->getOrPost('logData', '', false);
 
-        if (!empty($testStatus)) {
-            $testStatus = self::TEST_RUN_STATUS_COMPLETED;
-        } else {
-            $testStatus = self::TEST_RUN_STATUS_FAILED;
-        }
-
         // let's get the first test available browser run for this machine
-        $sel = new CTM_Test_Run_Browser_Selector();
+        $test_run_browser_sel = new CTM_Test_Run_Browser_Selector();
 
         $and_params = array(
             new Light_Database_Selector_Criteria('id', '=', $testRunBrowserId),
         );
 
-        $rows = $sel->find($and_params);
+        $test_run_browsers = $test_run_browser_sel->find($and_params);
 
-        if (!empty($rows[0])) {
+        if (!empty($test_run_browsers[0])) {
 
             // update test_run_browser state
-            $test_run_browser = $rows[0];
-            $test_run_browser->test_run_state_id = $testStatus;
+            $test_run_browser = $test_run_browsers[0];
+            $test_run_browser->test_run_state_id = !empty($testStatus) ? CTM_Test_Run_State::STATE_COMPLETED : CTM_Test_Run_State::STATE_FAILED;
             $test_run_browser->save();
 
             // update test_run state
 
-            // see if we have any other queued or running tests
-            
-            $sel = new CTM_Test_Run_Browser_Selector();
-            
+            $test_run_sel = new CTM_Test_Run_Selector();
             $and_params = array(
-                new Light_Database_Selector_Criteria('test_run_id', '=', $test_run_browser->test_run_id),
-                new Light_Database_Selector_Criteria('id', '!=', $test_run_browser->id),
+                new Light_Database_Selector_Criteria('id', '=', $test_run_browser->test_run_id),
             );
 
-            $or_params = array(
-                new Light_Database_Selector_Criteria('test_run_state_id', '=', 1),
-                new Light_Database_Selector_Criteria('test_run_state_id', '=', 2),
-            );
+            $test_runs = $test_run_sel->find($and_params);
 
-            $rows = $sel->find($and_params, $or_params);
+            // valid test run?
+            if (!empty($test_runs[0])) {
 
-            // if not, update test_run state
-            if (count($rows) == 0) {
+                $test_run = $test_runs[0];
 
-                $sel = new CTM_Test_Run_Selector();
-                $and_params = array(
-                    new Light_Database_Selector_Criteria('id', '=', $test_run_browser->test_run_id),
-                );
+                // only continue with test run state update if the test run is being executed
+                // this is to prevent multiple test browser runs updating test run status when
+                // a previous browser test fails
+                if ($test_run->test_run_state_id == CTM_Test_Run_State::STATE_EXECUTING) {
 
-                $rows = $sel->find($and_params);
+                    // if the test run browser failed, fail the test run
+                    if ($test_run_browser->test_run_state_id == CTM_Test_Run_State::STATE_FAILED) {
+                        $test_run->test_run_state_id = CTM_Test_Run_State::STATE_FAILED;
+                        $test_run->save();
+                    }
 
-                if (!empty($rows[0])) {
-                    $test_run = $rows[0];
-                    $test_run->test_run_state_id = $testStatus;
-                    $test_run->save();
+                    // if the test run browser completed, check to see if there are any other
+                    // running tests... Do not update test run if we have other tests running.
+                    if ($test_run_browser->test_run_state_id == CTM_Test_Run_State::STATE_COMPLETED) {
+
+                        // see if we have any other queued or running tests
+
+                        $test_run_browser_other_sel = new CTM_Test_Run_Browser_Selector();
+
+                        $and_params = array(
+                            new Light_Database_Selector_Criteria('test_run_id', '=', $test_run_browser->test_run_id),
+                            new Light_Database_Selector_Criteria('id', '!=', $test_run_browser->id),
+                        );
+
+                        $or_params = array(
+                            new Light_Database_Selector_Criteria('test_run_state_id', '=', CTM_Test_Run_State::STATE_QUEUED),
+                            new Light_Database_Selector_Criteria('test_run_state_id', '=', CTM_Test_Run_State::STATE_EXECUTING),
+                        );
+
+                        $test_run_browser_others = $test_run_browser_other_sel->find($and_params, $or_params);
+
+                        // if not, update test_run state
+                        if (count($test_run_browser_others) == 0) {
+                            $test_run->test_run_state_id = CTM_Test_Run_State::STATE_COMPLETED;
+                            $test_run->save();
+                        }
+                    }
                 }
             }
 
