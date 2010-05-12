@@ -42,7 +42,7 @@ class CTM_ET_Log extends CTM_Site
         $testRunBrowserId = $this->getOrPost('testRunBrowserId', '');
         $testStatus = $this->getOrPost('testStatus', '');
         $testDuration = $this->getOrPost('testDuration', '');
-        $logData = $this->getOrPost('logData', '');
+        $logData = $this->getOrPost('logData', '', false);
 
         if (!empty($testStatus)) {
             $testStatus = self::TEST_RUN_STATUS_COMPLETED;

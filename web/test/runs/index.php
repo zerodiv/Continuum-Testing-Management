@@ -6,6 +6,8 @@ require_once( 'CTM/User/Cache.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
 require_once( 'CTM/Test/Run/State/Cache.php' );
+require_once( 'CTM/Test/Machine/Cache.php' );
+require_once( 'CTM/Test/Browser/Cache.php' );
 
 class CTM_Site_Test_Runs extends CTM_Site { 
 
@@ -44,11 +46,14 @@ class CTM_Site_Test_Runs extends CTM_Site {
 
       $run_state_cache = new CTM_Test_Run_State_Cache();
       $user_cache = new CTM_User_Cache();
+      $test_machine_cache = new CTM_Test_Machine_Cache();
+      $test_browser_cache = new CTM_Test_Browser_Cache();
 
       $queued_state = $run_state_cache->getById( 1 );
       $executing_state = $run_state_cache->getById( 2 );
       $completed_state = $run_state_cache->getById( 3 );
       $archived_state = $run_state_cache->getById( 4 );
+      $failed_state = $run_state_cache->getById(5);
 
       // we should have a cached value for this.
       $run_state = $run_state_cache->getById( $test_run_state_id );
@@ -72,6 +77,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
       $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/?test_run_state_id=' . $executing_state->id . '">' . ucfirst( $executing_state->name ) . ' Runs</li>' );
       $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/?test_run_state_id=' . $completed_state->id . '">' . ucfirst( $completed_state->name ) . ' Runs</li>' );
       $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/?test_run_state_id=' . $archived_state->id . '">' . ucfirst( $archived_state->name ) . ' Runs</li>' );
+      $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/?test_run_state_id=' . $failed_state->id . '">' . ucfirst( $failed_state->name ) . ' Runs</li>' );
       $this->printHtml( '</ul>' );
       $this->printHtml( '</div>' );
 
@@ -129,9 +135,48 @@ class CTM_Site_Test_Runs extends CTM_Site {
                  $test_run->test_run_state_id == $archived_state->id ) {
                $this->printHtml( '<a href="' . $this->_baseurl . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
             }
+
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
 
+            $sel = new CTM_Test_Run_Browser_Selector();
+            $and_params = array(new Light_Database_Selector_Criteria('test_run_id', '=', $test_run->id));
+            $test_run_browsers = $sel->find($and_params);
+
+            if (count($test_run_browsers) > 0) {
+
+                $this->printHtml('<tr>');
+                    $this->printHtml('<td colspan="6">');
+                        $this->printHtml('<b>Test Browser Runs<b>');
+                    $this->printHtml('</td>');
+                $this->printHtml('</tr>');
+
+                foreach ($test_run_browsers as $test_run_browser) {
+
+                    // failed?
+                    if ($test_run_browser->test_run_state_id == 5) {
+                        $testRunBrowserColor = '#FF0000';
+                    } else {
+                        $testRunBrowserColor = '#00FF00';
+                    }
+
+                    $this->printHtml('<tr>');
+                        $this->printHtml('<td colspan="6" style="border-bottom: none;">');
+                            $this->printHtml('<table style="width:100%;">');
+                                $this->printHtml('<tr>');
+                                    $this->printHtml('<td>' . $test_run_browser->id . '</td>');
+                                    $this->printHtml('<td>' . $test_machine_cache->getById($test_run_browser->test_machine_id)->os . ' @ ' . $test_machine_cache->getById($test_run_browser->test_machine_id)->ip . '</td>');
+                                    $this->printHtml('<td>' . $test_browser_cache->getById($test_run_browser->test_browser_id)->name . '</td>');
+                                    $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';">' . $run_state_cache->getById($test_run_browser->test_run_state_id)->name . '</td>');
+                                    $this->printHtml('<td><center><a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '" class="ctmButton" target="_blank">Logs</a></center></td>');
+                                $this->printHtml('</tr>');
+                            $this->printHtml('</table>');
+                        $this->printHtml('</td>');
+                    $this->printHtml('</tr>');
+                }
+
+            }
+            
          }
       }
 

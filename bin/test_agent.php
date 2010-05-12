@@ -68,17 +68,17 @@ class CTM_Test_Agent extends Light_CommandLine_Script
                     $this->message("############# Failed! #############");
                     $this->testStatus = 0;
                 }
+
+                $this->sendLog();
+                
             } else {
                 $this->message("No test browser defined");
-                $this->testStatus = 0;
             }
             
         } else {
             $this->message("Could not get the download URL.");
-            $this->testStatus = 0;
         }
 
-        $this->sendLog();
     }
 
     /**
@@ -160,7 +160,7 @@ class CTM_Test_Agent extends Light_CommandLine_Script
             'testRunBrowserId' => $this->testRunBrowserId,
             'testDuration' => $this->testDuration,
             'tsetStatus' => $this->testStatus,
-            'logData' => file_get_contents($this->files->getLogFile())
+            'logData' => file_exists($this->files->getLogFile()) ? file_get_contents($this->files->getLogFile()) : null,
         ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
