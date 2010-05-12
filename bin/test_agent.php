@@ -159,7 +159,7 @@ class CTM_Test_Agent extends Light_CommandLine_Script
         curl_setopt($ch, CURLOPT_POSTFIELDS, array(
             'testRunBrowserId' => $this->testRunBrowserId,
             'testDuration' => $this->testDuration,
-            'tsetStatus' => $this->testStatus,
+            'testStatus' => $this->testStatus,
             'logData' => file_exists($this->files->getLogFile()) ? file_get_contents($this->files->getLogFile()) : null,
         ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
