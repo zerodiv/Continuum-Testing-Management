@@ -1,9 +1,5 @@
 Build plan:
 
-
-Test Lab:
-  - build out test_run_log (TODO: Schema for this - would like to not store it all raw in the db - but for now meh)
-
 Windows App:
   - download test run
   - run test run
@@ -50,6 +46,10 @@ Schema refactor:
   - need to review this again with perf in mind, we think it will scale to very
     large test numbers, but we need to run in a bigger dataset to prove this.
 
+    Need table locking...
+    Need transactions...
+    Need foreign key restrictions...
+
 Revision history - future feature: Revision history handled via a external tool such as svn?, git, etc? 
 
 No-db: Storing the entire dataset in xml on disk? At this point I want to skip this, but perhaps I will
@@ -77,3 +77,9 @@ sign on or other functionality based in logging into multiple sites via single a
 Integrations with:
 - QTP, SilkTest, Selenium, Junit, Webload, TestComplete
 - We can accomplish this via different builders, and possibly re-thinking our creation scheme here
+
+
+
+
+
+
