@@ -68,8 +68,6 @@ revisit it as part of the revision history concept.
 Test suites: - Deletion: We would need to write a dependency removal system. Would rather have this as disable at best.
 Tests: - Deletion: Same issue as Test Suites.
 
-There is no iteration support right now.
-
 -- Need to add a password / security to phone home system.
 
 -- Tests require a base url to root themselves to. If we context seneitive the suites we will be locking ourselves
