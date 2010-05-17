@@ -50,21 +50,21 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
 
    public function handleRequest() {
 
-      $fh = fopen( '/tmp/jeo.txt', 'w');
-      fputs( $fh, print_r( $GLOBALS, true ) );
-      fclose( $fh );
+      $fh = fopen('/tmp/jeo.txt', 'w');
+      fputs($fh, print_r($GLOBALS, true));
+      fclose($fh);
 
-      $guid             = $this->getOrPost( 'guid', '' );
-      $ip               = $this->getOrPost( 'ip', '' );
-      $os               = $this->getOrPost( 'os', '' );
-      $ie               = $this->getOrPost( 'ie', '' );
-      $ie_version       = $this->getOrPost( 'ie_version', '' );
-      $chrome           = $this->getOrPost( 'chrome', '' );
-      $chrome_version   = $this->getOrPost( 'chrome_version', '' );
-      $firefox          = $this->getOrPost( 'firefox', '' );
-      $firefox_version  = $this->getOrPost( 'firefox_version', '' );
-      $safari           = $this->getOrPost( 'safari', '' );
-      $safari_version   = $this->getOrPost( 'safari_version', '' );
+      $guid             = $this->getOrPost('guid', '');
+      $ip               = $_SERVER['REMOTE_ADDR'];
+      $os               = $this->getOrPost('os', '');
+      $ie               = $this->getOrPost('ie', '');
+      $ie_version       = $this->getOrPost('ie_version', '');
+      $chrome           = $this->getOrPost('chrome', '');
+      $chrome_version   = $this->getOrPost('chrome_version', '');
+      $firefox          = $this->getOrPost('firefox', '');
+      $firefox_version  = $this->getOrPost('firefox_version', '');
+      $safari           = $this->getOrPost('safari', '');
+      $safari_version   = $this->getOrPost('safari_version', '');
 
       if ( $guid == '' ) {
          $this->_serviceOutput( 'FAIL', "guid is required!" );
