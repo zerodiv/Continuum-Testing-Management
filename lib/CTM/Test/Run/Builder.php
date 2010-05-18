@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'CTM/Config.php' );
+require_once( 'Light/Config.php' );
 require_once( 'CTM/Test/Run.php' );
 require_once( 'CTM/Test/Cache.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
@@ -70,7 +70,7 @@ class CTM_Test_Run_Builder {
             $test_suite = $this->_test_suite_cache->getById( $test_run->test_suite_id );
 
             $this->_suite_name = $test_suite->name;
-            $this->_suite_dir = CTM_Config::SUITE_DIR() . '/' . $test_run->id;
+            $this->_suite_dir = Light_Config::get('CTM_Config', 'SUITE_DIR' ) . '/' . $test_run->id;
             $this->_suite_compressed_file = $this->_suite_dir . '.zip';
             $this->_suite_tests = array();
             $this->_suite_test_id = 0;
@@ -97,7 +97,7 @@ class CTM_Test_Run_Builder {
             $this->_writeSuiteHtml();
 
             // compress off the suite and make it easy for the agent to download.
-            system( 'cd ' . CTM_Config::SUITE_DIR() . ' ; zip -q -r ' . $this->_suite_compressed_file . ' ' . $test_run->id . ' >/dev/null 2> /dev/null' );
+            system( 'cd ' . Light_Config::get( 'CTM_Config', 'SUITE_DIR' ) . ' ; zip -q -r ' . $this->_suite_compressed_file . ' ' . $test_run->id . ' >/dev/null 2> /dev/null' );
 
          } catch ( Exception $e ) {
             throw $e;
