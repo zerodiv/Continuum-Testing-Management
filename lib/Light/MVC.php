@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'Light/MVC/Config.php' );
+require_once( 'Light/Config.php' );
 
 abstract class Light_MVC {
    public $_basedir;
@@ -13,31 +13,27 @@ abstract class Light_MVC {
    
    function __construct() {
       // load the default configuration into the vars
-      $this->_basedir = Light_MVC_Config::BASE_DIR();
-      $this->_baseurl = Light_MVC_Config::BASE_URL();
-      $this->_sitetitle = Light_MVC_Config::SITE_TITLE();
-      $this->_sessionname = Light_MVC_Config::SESSION_NAME();
+      $this->_basedir = Light_Config::get( 'Light_MVC_Config', 'BASE_DIR' );
+      $this->_baseurl = Light_Config::get( 'Light_MVC_Config', 'BASE_URL' );
+      $this->_sitetitle = Light_Config::get( 'Light_MVC_Config', 'SITE_TITLE' );
+      $this->_sessionname = Light_Config::get( 'Light_MVC_Config', 'SESSION_NAME' );
 
       // setup the default timezone.
-      date_default_timezone_set( Light_MVC_Config::DEFAULT_TIMEZONE() );
+      date_default_timezone_set( Light_Config::get( 'Light_MVC_Config', 'DEFAULT_TIMEZONE' ) );
 
-      if ( is_callable( 'Light_MVC_Config::CSS_FILES' ) ) {
-         $this->_css_files = Light_MVC_Config::CSS_FILES();
-      }
-      if ( is_callable( 'Light_MVC_Config::JS_FILES' ) ) {
-         $this->_js_files = Light_MVC_Config::JS_FILES();
-      }
+      $this->_css_files = array();
+      $this->_js_files = array();
 
-      if ( ! is_array( $this->_css_files ) ) {
-         $this->_css_files = array();
+      if ( is_array( Light_Config::get( 'Light_MVC_Config', 'CSS_FILES' ) ) ) {
+         $this->_css_files = Light_Config::get( 'Light_MVC_Config', 'CSS_FILES' );
       }
-
-      if ( ! is_array( $this->_js_files ) ) {
-         $this->_js_files = array();
+      if ( is_array( Light_Config::get( 'Light_MVC_Config', 'JS_FILES' ) ) ) {
+         $this->_js_files = Light_Config::get( 'Light_MVC_Config', 'JS_FILES' );
       }
 
       // init this to nothing.
       $this->_pagetitle = '';
+
    } 
    
    public function getOrPost( $var_name, $default_value = '', $strip_tags = true ) {
@@ -183,7 +179,7 @@ abstract class Light_MVC {
    }
 
    public function formatDate( $timestamp ) {
-      return date( Light_MVC_Config::TIME_FORMAT(), $timestamp );
+      return date( Light_Config::get( 'Light_MVC_Config', 'TIME_FORMAT' ), $timestamp );
    }
 
    public function isFileUploadAvailable() {

@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'Light/Database/Factory/Config.php' );
+require_once( 'Light/Config.php' );
 
 // Factory class that is the static container for the impl that handles the actual
 // Heavy 'work' for creating connections and handleing pooling.
@@ -22,7 +22,7 @@ class Light_Database_Factory_Impl {
 
    function __construct() {
       // load our database configs.
-      $this->_config = parse_ini_file( Light_Database_Factory_Config::CONFIG_FILE(), true );
+      $this->_config = parse_ini_file( Light_Config::get( 'Light_Database_Factory_Config', 'CONFIG_FILE' ), true );
    } 
 
    public function getDBH( $name, $pooled = true ) {

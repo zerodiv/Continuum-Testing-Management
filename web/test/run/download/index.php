@@ -1,8 +1,8 @@
 <?php
 
 require_once( '../../../../bootstrap.php' );
+require_once( 'Light/Config.php' );
 require_once( 'CTM/Site.php' );
-require_once( 'CTM/Config.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
 
 class CTM_Site_Test_Run_Download extends CTM_Site { 
@@ -25,7 +25,7 @@ class CTM_Site_Test_Run_Download extends CTM_Site {
             if ( isset( $test_runs[0] ) ) {
                $test_run = $test_runs[0];
                // test run found, check for a zip file.
-               $zip_file = CTM_Config::SUITE_DIR() . '/' . $test_run->id . '.zip';
+               $zip_file = Light_Config::get('CTM_Config', 'SUITE_DIR') . '/' . $test_run->id . '.zip';
 
                if ( is_file($zip_file) ) {
 

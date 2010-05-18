@@ -2,7 +2,6 @@
 
 require_once( '../../../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
-require_once( 'CTM/Config.php' );
 require_once( 'CTM/Test/Run/Log/Selector.php' );
 
 class CTM_Site_Test_Run_Browser_Log extends CTM_Site {

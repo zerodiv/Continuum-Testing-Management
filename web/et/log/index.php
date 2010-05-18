@@ -3,7 +3,6 @@
 // bootstrap the include path
 require_once dirname(__FILE__) . '/../../../bootstrap.php';
 require_once 'CTM/Site.php';
-require_once 'CTM/Site/Config.php';
 require_once 'CTM/Test/Run/Browser.php';
 require_once 'CTM/Test/Run/Browser/Selector.php';
 require_once 'CTM/Test/Run.php';
