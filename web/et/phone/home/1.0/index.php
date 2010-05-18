@@ -156,7 +156,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
 
          if ( $chrome == 'yes' ) {
             // 5.0.307.11 - major.minor.patch.subversion --? what the if anyone wants to figure that out have at it.
-            if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $chrome_version, $version_preg ) ) {
+            if ( preg_match( '/^(\d+)\.(\d+)\.(\d+).(\d+)$/', $chrome_version, $version_preg ) ) {
                $browser = $this->_findBrowser( 'chrome', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine
