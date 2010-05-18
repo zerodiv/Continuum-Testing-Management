@@ -59,8 +59,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       $os               = $this->getOrPost('os', '');
       $ie               = $this->getOrPost('ie', '');
       $ie_version       = $this->getOrPost('ie_version', '');
-      $chrome           = $this->getOrPost('chrome', '');
-      $chrome_version   = $this->getOrPost('chrome_version', '');
+      $googlechrome           = $this->getOrPost('googlechrome', '');
+      $googlechrome_version   = $this->getOrPost('googlechrome_version', '');
       $firefox          = $this->getOrPost('firefox', '');
       $firefox_version  = $this->getOrPost('firefox_version', '');
       $safari           = $this->getOrPost('safari', '');
@@ -154,10 +154,10 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             }
          }
 
-         if ( $chrome == 'yes' ) {
+         if ( $googlechrome == 'yes' ) {
             // 5.0.307.11 - major.minor.patch.subversion --? what the if anyone wants to figure that out have at it.
-            if ( preg_match( '/^(\d+)\.(\d+)\.(\d+).(\d+)$/', $chrome_version, $version_preg ) ) {
-               $browser = $this->_findBrowser( 'chrome', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
+            if ( preg_match( '/^(\d+)\.(\d+)\.(\d+).(\d+)$/', $googlechrome_version, $version_preg ) ) {
+               $browser = $this->_findBrowser( 'googlechrome', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine
                try {
@@ -166,7 +166,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                   $browser_link->test_browser_id = $browser->id;
                   $browser_link->save();
                } catch ( Exception $e ) {
-                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for chrome" );
+                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for google chrome" );
                   return false;
                }
             
