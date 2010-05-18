@@ -36,6 +36,7 @@ class CTM_Site_Test_Run_Download extends CTM_Site {
                      header( 'Content-disposition: attatchment; filename="test_run_' . $id . '.zip"' );
                      fpassthru( $fh );
                      fclose( $fh );
+                     exit;
                      return false;
                   }
 

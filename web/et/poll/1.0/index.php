@@ -98,7 +98,7 @@ class CTM_ET_Poll extends CTM_Site {
 
                     // update test_run_browser state
                     $test_run_browser = $rows[0];
-                    $downloadUrl = CTM_Site_Config::BASE_URL() . '/test/run/download/?id=' . $test_run_browser->test_run_id;
+                    $downloadUrl = CTM_Site_Config::BASE_URL() . '/test/run/download/index.php?id=' . $test_run_browser->test_run_id;
                     $test_run_browser->test_run_state_id = 2; // set state to "executing"
                     $test_run_browser->save();
 
