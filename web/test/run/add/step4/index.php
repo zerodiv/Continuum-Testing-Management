@@ -3,15 +3,20 @@ require_once( '../../../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
 require_once( 'CTM/Test/Browser/Selector.php' );
+require_once( 'CTM/Test/Browser/Cache.php' );
 require_once( 'CTM/Test/Machine/Browser/Selector.php' );
+require_once( 'CTM/Test/Machine/Browser/Cache.php' );
 require_once( 'CTM/Test/Machine/Cache.php' );
 require_once( 'CTM/Test/Run/Browser.php' );
 
 class CTM_Site_Test_Run_Add_Step2 extends CTM_Site { 
    private $_test_machine_cache;
+   private $_test_browser_cache;
 
    public function setupPage() {
       $this->_test_machine_cache = new CTM_Test_Machine_Cache();
+      $this->_test_browser_cache = new CTM_Test_Browser_Cache();
+      $this->_test_machine_browser_cache = new CTM_Test_Machine_Browser_Cache();
 
       $this->_pagetitle = 'Test Run - Add - Step 4 of 4';
       return true;
@@ -59,31 +64,34 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       $this->requiresAuth();
 
       if ( $action == 'step4' ) {
-         // print_r( $test_browsers );
+         print_r( $test_browsers );
 
          // push the on ones as requests to specific machines by browser type.
          if ( is_array( $test_browsers ) && count($test_browsers) > 0 ) {
-            foreach ( $test_browsers as $test_browser_id => $on_off ) {
+                  echo "??";
+            foreach ( $test_browsers as $test_machine_browser_id => $on_off ) {
+
+               $test_machine_browser = $this->_test_machine_browser_cache->getById( $test_machine_browser_id );
+
                // on_off is kinda a misnomer since some browsers don't transmit the off ones.
                // but since we're paranoid we will check anyways.
                if ( $on_off == 'on' ) {
-                  // find all machines with a browser_id that matches to this testing set.
-                  $test_machines = $this->_availableMachinesForBrowser( $test_browser_id );
-                    if (count($test_machines) > 0) {
-                        foreach ($test_machines as $test_machine) {
-                            try {
-                                // inject the test_run -> machine relationship.
-                                $test_run_browser_obj = new CTM_Test_Run_Browser();
-                                $test_run_browser_obj->test_run_id = $id;
-                                $test_run_browser_obj->test_browser_id = $test_browser_id;
-                                $test_run_browser_obj->test_machine_id = $test_machine->id;
-                                $test_run_browser_obj->test_run_state_id = 1;
-                                $test_run_browser_obj->save();
-                            } catch (Exception $e) {
-                                $e = null;
-                            }
-                        }
-                    }
+                  // inject the test_run -> machine relationship.
+                  echo "??";
+                  if ( isset( $test_machine_browser->id ) ) {
+                     try {
+                        // inject the test_run -> machine relationship.
+                        $test_run_browser_obj = new CTM_Test_Run_Browser();
+                        $test_run_browser_obj->test_run_id = $id;
+                        $test_run_browser_obj->test_browser_id = $test_machine_browser->test_browser_id;
+                        $test_run_browser_obj->test_machine_id = $test_machine_browser->test_machine_id;
+                        $test_run_browser_obj->test_run_state_id = 1;
+                        $test_run_browser_obj->save();
+                        print_r( $test_run_browser_obj );
+                     } catch (Exception $e) {
+                        $e = null;
+                     }
+                  }
                }
             }
          } // end test_browsers.
@@ -113,7 +121,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       $test_run_id = $this->getOrPost( 'id', '' );
       $test_run = null;
       $test_suite = null;
-      $test_browsers = null;
+      $avail_machines_and_browsers = null;
 
       try {
 
@@ -136,14 +144,18 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
             $floor_time = time() - (3600*3);
 
-            $sel = new CTM_Test_Browser_Selector();
+            $sel = new CTM_Test_Machine_Browser_Selector();
+
             $and_params = array( 
                   new Light_Database_Selector_Criteria( 'is_available', '=', 1 ),
                   new Light_Database_Selector_Criteria( 'last_seen', '>', $floor_time )
             );
 
-            $test_browsers = $sel->find( $and_params, array(), array( 'name', 'major_version', 'minor_version', 'patch_version' ) );
+            $avail_machines_and_browsers = $sel->find( $and_params, array(), array( 'test_browser_id' ) );
 
+            // $test_browsers = $sel->find( $and_params, array(), array( 'name', 'major_version', 'minor_version', 'patch_version' ) );
+
+            // $sel = new CTM_Test_Browser_Selector();
          }
       } catch ( Exception $e ) {
       }
@@ -175,24 +187,38 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          $this->printHtml( '<th colspan="3">Test Browsers</th>' );
          $this->printHtml( '</tr>' );
 
-         $this->printHtml( '<tr class="aiTableTitle">' );
-         $this->printHtml( '<td>Test;</td>' );
-         $this->printHtml( '<td>Browser:</td>' );
-         $this->printHtml( '<td>Version:</td>' );
-         $this->printHtml( '</tr>' );
 
-         if ( count( $test_browsers ) > 0 ) {
+         if ( count( $avail_machines_and_browsers ) > 0 ) {
 
-            foreach ( $test_browsers as $test_browser ) {
+            $current_browser = null;
+            $current_browser_id = 0;
+
+            foreach ( $avail_machines_and_browsers as $avail_machine_browser ) {
+
+               if ( $current_browser_id != $avail_machine_browser->test_browser_id ) {
+                  $this->oddEvenReset();
+                  $current_browser = $this->_test_browser_cache->getById( $avail_machine_browser->test_browser_id );
+
+                  $this->printHtml( '<tr class="aiTableTitle">' );
+                  $this->printHtml( '<th colspan="3">' . $current_browser->getPrettyName() . '</th>' );
+                  $this->printHtml( '<tr class="aiTableTitle">' );
+                  $this->printHtml( '<td>Test:</td>' );
+                  $this->printHtml( '<td>OS:</td>' );
+                  $this->printHtml( '<td>Version:</td>' );
+                  $this->printHtml( '</tr>' );
+               }
+
                $class = $this->oddEvenClass();
 
+               $test_machine = $this->_test_machine_cache->getById( $avail_machine_browser->test_machine_id );
+
                $this->printHtml( '<tr class="' . $class . '">' );
-               $this->printHtml( '<td><center><input type="checkbox" name="test_browsers[' . $test_browser->id . ']" checked></center></td>' );
-               $this->printHtml( '<td>' . $test_browser->name . '</td>' );
+               $this->printHtml( '<td><center><input type="checkbox" name="test_browsers[' . $avail_machine_browser->id . ']"></center></td>' );
+               $this->printHtml( '<td>' . $test_machine->os . '</td>' );
                $this->printHtml( '<td>' . 
-                  $test_browser->major_version . '.' .
-                  $test_browser->minor_version . '.' .
-                  $test_browser->patch_version .
+                  $current_browser->major_version . '.' .
+                  $current_browser->minor_version . '.' .
+                  $current_browser->patch_version .
                '</td>' );
                $this->printHtml( '</tr>' );
             }

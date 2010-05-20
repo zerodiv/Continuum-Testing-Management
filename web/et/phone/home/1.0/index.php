@@ -145,6 +145,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                   $browser_link = new CTM_Test_Machine_Browser();
                   $browser_link->test_machine_id = $test_machine->id;
                   $browser_link->test_browser_id = $browser->id;
+                  $browser_link->is_available = 1;
+                  $browser_link->last_seen = time();
                   $browser_link->save();
                } catch ( Exception $e ) {
                   $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for IE" );
@@ -164,6 +166,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                   $browser_link = new CTM_Test_Machine_Browser();
                   $browser_link->test_machine_id = $test_machine->id;
                   $browser_link->test_browser_id = $browser->id;
+                  $browser_link->is_available = 1;
+                  $browser_link->last_seen = time();
                   $browser_link->save();
                } catch ( Exception $e ) {
                   $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for google chrome" );
@@ -182,6 +186,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                   $browser_link = new CTM_Test_Machine_Browser();
                   $browser_link->test_machine_id = $test_machine->id;
                   $browser_link->test_browser_id = $browser->id;
+                  $browser_link->is_available = 1;
+                  $browser_link->last_seen = time();
                   $browser_link->save();
                } catch ( Exception $e ) {
                   $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for firefox" );
@@ -201,6 +207,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                   $browser_link = new CTM_Test_Machine_Browser();
                   $browser_link->test_machine_id = $test_machine->id;
                   $browser_link->test_browser_id = $browser->id;
+                  $browser_link->is_available = 1;
+                  $browser_link->last_seen = time();
                   $browser_link->save();
                } catch ( Exception $e ) {
                   $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for safari" );

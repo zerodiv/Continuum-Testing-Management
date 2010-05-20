@@ -16,4 +16,19 @@ class CTM_Test_Browser extends Light_Database_Object {
       $this->setDbName( 'test' );
    }
 
+   public function getPrettyName() {
+      if ( $this->name == 'firefox' ) {
+         return 'FireFox';
+      }
+      if ( $this->name == 'iexplore' ) {
+         return 'Internet Explorer';
+      }
+      if ( $this->name == 'googlechrome' ) {
+         return 'Google Chrome';
+      }
+      if ( $this->name == 'safari' ) {
+         return 'Safari';
+      }
+   }
+
 }
