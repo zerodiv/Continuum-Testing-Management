@@ -8,6 +8,7 @@ class CTM_Test_Run_Browser extends Light_Database_Object {
    public $test_browser_id;
    public $test_machine_id;
    public $test_run_state_id;
+   public $has_log;
 
    public function init() {
       $this->setSqlTable( 'test_run_browser' );

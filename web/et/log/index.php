@@ -112,6 +112,10 @@ class CTM_ET_Log extends CTM_Site
                 }
             }
 
+            // update the existance of a log for this run.
+            $test_run_browser->has_log = true;
+            $test_run_browser->save();
+
             $test_run_log = new CTM_Test_Run_Log();
             $test_run_log->test_run_browser_id = $test_run_browser->id;
             $test_run_log->data = $logData;

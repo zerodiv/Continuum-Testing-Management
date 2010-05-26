@@ -64,11 +64,10 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       $this->requiresAuth();
 
       if ( $action == 'step4' ) {
-         print_r( $test_browsers );
+         // print_r( $test_browsers );
 
          // push the on ones as requests to specific machines by browser type.
          if ( is_array( $test_browsers ) && count($test_browsers) > 0 ) {
-                  echo "??";
             foreach ( $test_browsers as $test_machine_browser_id => $on_off ) {
 
                $test_machine_browser = $this->_test_machine_browser_cache->getById( $test_machine_browser_id );
@@ -77,7 +76,6 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                // but since we're paranoid we will check anyways.
                if ( $on_off == 'on' ) {
                   // inject the test_run -> machine relationship.
-                  echo "??";
                   if ( isset( $test_machine_browser->id ) ) {
                      try {
                         // inject the test_run -> machine relationship.
@@ -87,7 +85,6 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                         $test_run_browser_obj->test_machine_id = $test_machine_browser->test_machine_id;
                         $test_run_browser_obj->test_run_state_id = 1;
                         $test_run_browser_obj->save();
-                        print_r( $test_run_browser_obj );
                      } catch (Exception $e) {
                         $e = null;
                      }

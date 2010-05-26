@@ -127,15 +127,16 @@ class CTM_Site_Test_Runs extends CTM_Site {
             $this->printHtml( '<td><center>' );
             $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
             // while a test is executing we cannot do any admin actions to it.
+            /*
             if ( $test_run->test_run_state_id == $completed_state->id ) {
                $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/archive/?id=' . $test_run->id . '" class="ctmButton">Archive</a>' );
             }
+            */
             if ( $test_run->test_run_state_id == $queued_state->id || 
                  $test_run->test_run_state_id == $completed_state->id ||
                  $test_run->test_run_state_id == $archived_state->id ) {
                $this->printHtml( '<a href="' . $this->_baseurl . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
             }
-
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
 
@@ -145,11 +146,20 @@ class CTM_Site_Test_Runs extends CTM_Site {
 
             if (count($test_run_browsers) > 0) {
 
-                $this->printHtml('<tr>');
-                    $this->printHtml('<td colspan="6" style="border-bottom: 0px;">');
-                        $this->printHtml('<b>Test Browser Runs<b>');
-                    $this->printHtml('</td>');
+                $this->printHtml('<tr><td valign="top" colspan="6">' );
+                $this->printHtml( '<table class="ctmTable aiFullWidth">' );
+
+                $this->printHtml('<tr class="aiTableTitle">');
+                $this->printHtml('<td colspan="6">Test Browser Runs for: ' . $this->escapeVariable( $test_suite->name ) . '</td>');
                 $this->printHtml('</tr>');
+
+                $this->printHtml('<tr class="aiTableTitle">' );
+                $this->printHtml('<td>ID</td>' );
+                $this->printHtml('<td>OS</td>' );
+                $this->printHtml('<td>Browser</td>' );
+                $this->printHtml('<td>Status</td>' );
+                $this->printHtml('<td>Actions</td>' );
+                $this->printHtml('</tr>' );
 
                 foreach ($test_run_browsers as $test_run_browser) {
 
@@ -160,20 +170,22 @@ class CTM_Site_Test_Runs extends CTM_Site {
                         $testRunBrowserColor = '#00FF00';
                     }
 
-                    $this->printHtml('<tr>');
-                        $this->printHtml('<td colspan="6" style="border-top: 0px; border-bottom: 0px; padding: 0px; padding-bottom: 2px;">');
-                            $this->printHtml('<table style="width:100%;" cellspacing="0" cellpadding="0">');
-                                $this->printHtml('<tr>');
-                                    $this->printHtml('<td style="width:5%;border:0px;">' . $test_run_browser->id . '</td>');
-                                    $this->printHtml('<td style="width:35%;border:0px;"><i>' . $test_machine_cache->getById($test_run_browser->test_machine_id)->os . ' @ ' . $test_machine_cache->getById($test_run_browser->test_machine_id)->ip . '</i></td>');
-                                    $this->printHtml('<td style="width:30%;border:0px;">' . $test_browser_cache->getById($test_run_browser->test_browser_id)->name . '</td>');
-                                    $this->printHtml('<td style="width:20%;border:0px;background-color:' . $testRunBrowserColor . ';">' . $run_state_cache->getById($test_run_browser->test_run_state_id)->name . '</td>');
-                                    $this->printHtml('<td style="width:10%;border:0px;"><center><a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '" class="ctmButton" target="_blank">Logs</a></center></td>');
-                                $this->printHtml('</tr>');
-                            $this->printHtml('</table>');
-                        $this->printHtml('</td>');
+                    $this->printHtml('<tr class="' . $this->oddEvenClass() . '">');
+                    $this->printHtml('<td>' . $test_run_browser->id . '</td>');
+                    $this->printHtml('<td>' . $test_machine_cache->getById($test_run_browser->test_machine_id)->os . ' @ ' . $test_machine_cache->getById($test_run_browser->test_machine_id)->ip . '</td>');
+                    $this->printHtml('<td>' . $test_browser_cache->getById($test_run_browser->test_browser_id)->getPrettyName() . '</td>');
+                    $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';"><center>' . $run_state_cache->getById($test_run_browser->test_run_state_id)->name . '</center></td>');
+                    if ( $test_run_browser->has_log == true ) {
+                        $this->printHtml('<td><center><a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '" class="ctmButton" target="_blank">View Log</a></center></td>');
+                    } else {
+                       $this->printHtml( '<td>&nbsp;</td>' );
+                    }
                     $this->printHtml('</tr>');
                 }
+
+                $this->printHtml('</table>');
+                $this->printHtml('</td>' );
+                $this->printHtml('</tr>' );
 
             }
             
