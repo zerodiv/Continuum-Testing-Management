@@ -360,14 +360,16 @@ class CTM_Test_Run_Builder {
          // increment the _suite_test_id
          $this->_suite_test_id++;
 
+         $test_obj = $this->_test_cache->getById( $test_id );
+
          $this->_suite_tests[] = array(
                'suite_test_id' => $this->_suite_test_id,
                'test_obj' => $test_obj
          );
 
-         $test_obj = $this->_test_cache->getById( $test_id );
-
          if ( is_object( $test_obj ) ) {
+         
+
             $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
             $baseurl_and_params = array( 
                new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ),

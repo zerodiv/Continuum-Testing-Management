@@ -150,7 +150,7 @@ CREATE TABLE `test_browser` (
   KEY `major_version` (`major_version`),
   KEY `minor_version` (`minor_version`),
   KEY `patch_version` (`patch_version`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,7 +159,7 @@ CREATE TABLE `test_browser` (
 
 LOCK TABLES `test_browser` WRITE;
 /*!40000 ALTER TABLE `test_browser` DISABLE KEYS */;
-INSERT INTO `test_browser` VALUES (7,'firefox',3,0,15,1,1273594028),(8,'iexplore',8,0,6001,1,1274306124),(9,'chrome',4,1,249,1,1274227091),(10,'firefox',3,6,3,1,1274306124),(11,'safari',5,31,22,1,1274306124),(12,'googlechrome',4,1,2,1,1274306124);
+INSERT INTO `test_browser` VALUES (7,'firefox',3,0,15,1,1273594028),(8,'iexplore',8,0,6001,1,1275082656),(9,'chrome',4,1,249,1,1274227091),(10,'firefox',3,6,3,1,1275082656),(11,'safari',5,31,22,1,1275082656),(12,'googlechrome',4,1,2,1,1275082656),(13,'safari',5,31,22,1,1275080038);
 /*!40000 ALTER TABLE `test_browser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -347,7 +347,7 @@ CREATE TABLE `test_machine` (
 
 LOCK TABLES `test_machine` WRITE;
 /*!40000 ALTER TABLE `test_machine` DISABLE KEYS */;
-INSERT INTO `test_machine` VALUES (1,'e94b7d45-7e51-4027-bc51-484eb4b4edaa','192.168.100.115','Windows XP - Professional - Service Pack 3',1271723482,1274306124,0),(3,'007f0100','192.168.100.26','Linux x86_64',1273177970,1273594028,0);
+INSERT INTO `test_machine` VALUES (1,'e94b7d45-7e51-4027-bc51-484eb4b4edaa','192.168.100.115','Windows XP - Professional - Service Pack 3',1271723482,1275082656,0),(3,'007f0100','192.168.100.26','Linux x86_64',1273177970,1273594028,0);
 /*!40000 ALTER TABLE `test_machine` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -376,7 +376,7 @@ CREATE TABLE `test_machine_browser` (
 
 LOCK TABLES `test_machine_browser` WRITE;
 /*!40000 ALTER TABLE `test_machine_browser` DISABLE KEYS */;
-INSERT INTO `test_machine_browser` VALUES (1111,3,7,0,0),(1264,1,8,1,1274306124),(1265,1,12,1,1274306124),(1266,1,10,1,1274306124),(1267,1,11,1,1274306124);
+INSERT INTO `test_machine_browser` VALUES (1111,3,7,0,0),(1264,1,8,1,1275082656),(1265,1,12,1,1275082656),(1266,1,10,1,1275082656),(1267,1,11,1,1275082656);
 /*!40000 ALTER TABLE `test_machine_browser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -477,7 +477,7 @@ CREATE TABLE `test_run` (
   PRIMARY KEY (`id`),
   KEY `test_suite_id` (`test_suite_id`),
   KEY `test_run_state_id` (`test_run_state_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -486,7 +486,7 @@ CREATE TABLE `test_run` (
 
 LOCK TABLES `test_run` WRITE;
 /*!40000 ALTER TABLE `test_run` DISABLE KEYS */;
-INSERT INTO `test_run` VALUES (49,1,3,1,1273535589,2),(51,4,1,1,1274290274,1),(52,4,1,1,1274306111,1);
+INSERT INTO `test_run` VALUES (56,4,1,1,1275082632,1);
 /*!40000 ALTER TABLE `test_run` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -507,7 +507,7 @@ CREATE TABLE `test_run_baseurl` (
   KEY `test_run_id` (`test_run_id`),
   KEY `test_suite_id` (`test_suite_id`),
   KEY `test_id` (`test_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -516,7 +516,7 @@ CREATE TABLE `test_run_baseurl` (
 
 LOCK TABLES `test_run_baseurl` WRITE;
 /*!40000 ALTER TABLE `test_run_baseurl` DISABLE KEYS */;
-INSERT INTO `test_run_baseurl` VALUES (104,43,1,0,'http://jorcutt-laptop/'),(105,43,0,1,'http://jorcutt-desktop/'),(106,43,2,0,'http://continuum.localhost'),(107,43,0,3,'https://rally1.rallydev.com/'),(108,43,0,2,'http://adicio.ning.com'),(109,43,3,0,'http://continuum.localhost'),(110,44,1,0,'http://jorcutt-laptop/'),(111,44,0,1,'http://jorcutt-desktop/'),(112,44,2,0,'http://continuum.localhost'),(113,44,0,3,'https://rally1.rallydev.com/'),(114,44,0,2,'http://adicio.ning.com'),(115,44,3,0,'http://continuum.localhost'),(140,49,1,0,'http://jorcutt-laptop/'),(141,49,0,1,'http://jorcutt-desktop/'),(142,49,2,0,'http://continuum.localhost'),(143,49,0,3,'https://rally1.rallydev.com/'),(144,49,0,2,'http://adicio.ning.com'),(145,49,3,0,'http://continuum.localhost'),(147,51,4,0,'http://jorcutt-desktop/'),(148,51,0,1,'http://jorcutt-desktop/'),(149,52,4,0,'http://jorcutt-desktop/'),(150,52,0,1,'http://jorcutt-desktop/');
+INSERT INTO `test_run_baseurl` VALUES (104,43,1,0,'http://jorcutt-laptop/'),(105,43,0,1,'http://jorcutt-desktop/'),(106,43,2,0,'http://continuum.localhost'),(107,43,0,3,'https://rally1.rallydev.com/'),(108,43,0,2,'http://adicio.ning.com'),(109,43,3,0,'http://continuum.localhost'),(110,44,1,0,'http://jorcutt-laptop/'),(111,44,0,1,'http://jorcutt-desktop/'),(112,44,2,0,'http://continuum.localhost'),(113,44,0,3,'https://rally1.rallydev.com/'),(114,44,0,2,'http://adicio.ning.com'),(115,44,3,0,'http://continuum.localhost'),(157,56,4,0,'http://jorcutt-desktop/'),(158,56,0,1,'http://jorcutt-desktop/');
 /*!40000 ALTER TABLE `test_run_baseurl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -533,8 +533,9 @@ CREATE TABLE `test_run_browser` (
   `test_browser_id` bigint(20) unsigned NOT NULL,
   `test_machine_id` bigint(20) unsigned NOT NULL,
   `test_run_state_id` bigint(20) unsigned NOT NULL,
+  `has_log` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -543,7 +544,7 @@ CREATE TABLE `test_run_browser` (
 
 LOCK TABLES `test_run_browser` WRITE;
 /*!40000 ALTER TABLE `test_run_browser` DISABLE KEYS */;
-INSERT INTO `test_run_browser` VALUES (19,49,7,3,3),(20,52,8,1,1),(21,52,8,1,1);
+INSERT INTO `test_run_browser` VALUES (19,49,7,3,3,0),(20,52,8,1,5,1),(21,52,8,1,2,0),(22,56,8,1,1,0);
 /*!40000 ALTER TABLE `test_run_browser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -565,7 +566,7 @@ CREATE TABLE `test_run_command` (
   KEY `test_selenium_command_id` (`test_selenium_command_id`),
   KEY `test_run_id` (`test_run_id`),
   KEY `test_param_library_id` (`test_param_library_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=175 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -574,7 +575,7 @@ CREATE TABLE `test_run_command` (
 
 LOCK TABLES `test_run_command` WRITE;
 /*!40000 ALTER TABLE `test_run_command` DISABLE KEYS */;
-INSERT INTO `test_run_command` VALUES (157,43,1,1,1,1),(158,43,1,1,1,2),(159,44,1,1,1,1),(160,44,1,1,1,2),(169,49,1,1,1,1),(170,49,1,1,1,2),(171,51,4,1,1,1),(172,51,4,1,1,2),(173,52,4,1,1,1),(174,52,4,1,1,2);
+INSERT INTO `test_run_command` VALUES (157,43,1,1,1,1),(158,43,1,1,1,2),(159,44,1,1,1,1),(160,44,1,1,1,2),(181,56,4,1,1,1),(182,56,4,1,1,2);
 /*!40000 ALTER TABLE `test_run_command` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -591,7 +592,7 @@ CREATE TABLE `test_run_command_target` (
   `target` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_run_command_id` (`test_run_command_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -600,7 +601,7 @@ CREATE TABLE `test_run_command_target` (
 
 LOCK TABLES `test_run_command_target` WRITE;
 /*!40000 ALTER TABLE `test_run_command_target` DISABLE KEYS */;
-INSERT INTO `test_run_command_target` VALUES (152,157,'jorcutt@adicio.com'),(153,158,'11pass'),(154,159,'jorcutt@adicio.com'),(155,160,'11pass'),(164,169,'jorcutt@adicio.com'),(165,170,'11pass'),(166,171,'jorcutt@adicio.com'),(167,172,'11pass'),(168,173,'jorcutt@adicio.com'),(169,174,'11pass');
+INSERT INTO `test_run_command_target` VALUES (152,157,'jorcutt@adicio.com'),(153,158,'11pass'),(154,159,'jorcutt@adicio.com'),(155,160,'11pass'),(176,181,'jorcutt@adicio.com'),(177,182,'11pass');
 /*!40000 ALTER TABLE `test_run_command_target` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -617,7 +618,7 @@ CREATE TABLE `test_run_command_value` (
   `value` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `test_run_command_id` (`test_run_command_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -626,7 +627,7 @@ CREATE TABLE `test_run_command_value` (
 
 LOCK TABLES `test_run_command_value` WRITE;
 /*!40000 ALTER TABLE `test_run_command_value` DISABLE KEYS */;
-INSERT INTO `test_run_command_value` VALUES (152,157,'ctm_var_username'),(153,158,'ctm_var_password'),(154,159,'ctm_var_username'),(155,160,'ctm_var_password'),(164,169,'ctm_var_username'),(165,170,'ctm_var_password'),(166,171,'ctm_var_username'),(167,172,'ctm_var_password'),(168,173,'ctm_var_username'),(169,174,'ctm_var_password');
+INSERT INTO `test_run_command_value` VALUES (152,157,'ctm_var_username'),(153,158,'ctm_var_password'),(154,159,'ctm_var_username'),(155,160,'ctm_var_password'),(176,181,'ctm_var_username'),(177,182,'ctm_var_password');
 /*!40000 ALTER TABLE `test_run_command_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -644,7 +645,7 @@ CREATE TABLE `test_run_log` (
   `duration` int(10) unsigned DEFAULT NULL,
   `created_at` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -653,7 +654,7 @@ CREATE TABLE `test_run_log` (
 
 LOCK TABLES `test_run_log` WRITE;
 /*!40000 ALTER TABLE `test_run_log` DISABLE KEYS */;
-INSERT INTO `test_run_log` VALUES (1,49,'text',10,1273599477);
+INSERT INTO `test_run_log` VALUES (1,49,'text',10,1273599477),(2,20,'<html>\n<head><style type=\\\'text/css\\\'>\nbody, table {\n    font-family: Verdana, Arial, sans-serif;\n    font-size: 12;\n}\n\ntable {\n    border-collapse: collapse;\n    border: 1px solid #ccc;\n}\n\nth, td {\n    padding-left: 0.3em;\n    padding-right: 0.3em;\n}\n\na {\n    text-decoration: none;\n}\n\n.title {\n    font-style: italic;\n}\n\n.selected {\n    background-color: #ffffcc;\n}\n\n.status_done {\n    background-color: #eeffee;\n}\n\n.status_passed {\n    background-color: #ccffcc;\n}\n\n.status_failed {\n    background-color: #ffcccc;\n}\n\n.breakpoint {\n    background-color: #cccccc;\n    border: 1px solid black;\n}\n</style><title>Test suite results</title></head>\n<body>\n<h1>Test suite results </h1>\n\n<table>\n<tr>\n<td>result:</td>\n<td>failed</td>\n</tr>\n<tr>\n<td>totalTime:</td>\n<td>0</td>\n</tr>\n<tr>\n<td>numTestTotal:</td>\n<td>1</td>\n</tr>\n<tr>\n<td>numTestPasses:</td>\n<td>0</td>\n</tr>\n<tr>\n<td>numTestFailures:</td>\n<td>1</td>\n</tr>\n<tr>\n<td>numCommandPasses:</td>\n<td>0</td>\n</tr>\n<tr>\n<td>numCommandFailures:</td>\n<td>0</td>\n</tr>\n<tr>\n<td>numCommandErrors:</td>\n<td>1</td>\n</tr>\n<tr>\n<td>Selenium Version:</td>\n<td>2.0</td>\n</tr>\n<tr>\n<td>Selenium Revision:</td>\n<td>a1</td>\n</tr>\n<tr>\n<td>\r\n<table>\r\n<tbody><tr class=\\\"title status_failed\\\"><td><b>jorcutt\\\'s test for the holy grail</b></td></tr>\r\n<tr class=\\\"  status_failed\\\"><td><a href=\\\"#testresult0\\\">Sample Test</a></td></tr>\r\n</tbody></table>\r\n</td>\n<td>&nbsp;</td>\n</tr>\n</table><table><tr>\n<td><a name=\\\"testresult0\\\">./1.html</a><br/><div>\r\n<table border=\\\"1\\\" cellpadding=\\\"1\\\" cellspacing=\\\"1\\\">\r\n<thead>\r\n<tr class=\\\"title status_failed\\\"><td rowspan=\\\"1\\\" colspan=\\\"3\\\">Sample Test</td></tr>\r\n</thead><tbody>\r\n<tr class=\\\"  status_done\\\" style=\\\"cursor: pointer;\\\">\r\n         <td>open</td>\r\n         <td>http://jorcutt-desktop/</td>\r\n         <td></td>\r\n</tr>\r\n<tr class=\\\"  status_done\\\" style=\\\"cursor: pointer;\\\">\r\n         <td>store</td>\r\n         <td>jorcutt@adicio.com</td>\r\n         <td>ctm_var_username</td>\r\n</tr>\r\n<tr class=\\\"  status_done\\\" style=\\\"cursor: pointer;\\\">\r\n         <td>store</td>\r\n         <td>11pass</td>\r\n         <td>ctm_var_password</td>\r\n</tr>\r\n<tr class=\\\"  status_done\\\" style=\\\"cursor: pointer;\\\">\r\n         <td>open</td>\r\n         <td>http://jorcutt-desktop/user/login/</td>\r\n         <td></td>\r\n</tr>\r\n<tr class=\\\"  status_done\\\" style=\\\"cursor: pointer;\\\">\r\n         <td>type</td>\r\n         <td>username</td>\r\n         <td>${ctm_input_username}</td>\r\n</tr>\r\n<tr class=\\\"  status_done\\\" style=\\\"cursor: pointer;\\\">\r\n         <td>type</td>\r\n         <td>password</td>\r\n         <td>${ctm_input_password}</td>\r\n</tr>\r\n<tr class=\\\"  status_done\\\" style=\\\"cursor: pointer;\\\">\r\n         <td>clickAndWait</td>\r\n         <td>//input[@value=\\\'Login!\\\']</td>\r\n         <td></td>\r\n</tr>\r\n<tr class=\\\"  status_failed\\\" style=\\\"cursor: pointer;\\\">\r\n         <td>clickAndWait</td>\r\n         <td>link=Logout : ${ctm_input_username}</td>\r\n         <td>Element&nbsp;link=Logout&nbsp;:&nbsp;${ctm_input_username}&nbsp;not&nbsp;found</td>\r\n</tr>\r\n</tbody></table>\r\n</div></td>\n<td>&nbsp;</td>\n</tr></table><pre>\ninfo: Starting test /selenium-server/tests/1.html\r\ninfo: Executing: |open | http://jorcutt-desktop/ |  |\r\ninfo: onXhrStateChange(): xhr.readyState = 1 method = HEAD time = 1275082627128\r\ninfo: onXhrStateChange(): xhr.readyState = 1 method = HEAD time = 1275082627147\r\ninfo: onXhrStateChange(): xhr.readyState = 2 method = HEAD time = 1275082627199\r\ninfo: onXhrStateChange(): xhr.readyState = 3 method = HEAD time = 1275082627199\r\ninfo: onXhrStateChange(): xhr.readyState = 4 method = HEAD time = 1275082627199\r\ninfo: Executing: |store | jorcutt@adicio.com | ctm_var_username |\r\ninfo: Executing: |store | 11pass | ctm_var_password |\r\ninfo: Executing: |open | http://jorcutt-desktop/user/login/ |  |\r\ninfo: onXhrStateChange(): xhr.readyState = 1 method = HEAD time = 1275082627255\r\ninfo: onXhrStateChange(): xhr.readyState = 1 method = HEAD time = 1275082627255\r\ninfo: onXhrStateChange(): xhr.readyState = 2 method = HEAD time = 1275082627273\r\ninfo: onXhrStateChange(): xhr.readyState = 4 method = HEAD time = 1275082627273\r\ninfo: Executing: |type | username | ${ctm_input_username} |\r\ninfo: Executing: |type | password | ${ctm_input_password} |\r\ninfo: Executing: |clickAndWait | //input[@value=&apos;Login!&apos;] |  |\r\ninfo: Executing: |clickAndWait | link=Logout : ${ctm_input_username} |  |\r\nerror: Element link=Logout : ${ctm_input_username} not found\r\nwarn: currentTest.recordFailure: Element link=Logout : ${ctm_input_username} not found\r\n</pre></body></html>',123880088,1275082642);
 /*!40000 ALTER TABLE `test_run_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -872,4 +873,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-05-20  9:14:54
+-- Dump completed on 2010-05-28 14:37:40
