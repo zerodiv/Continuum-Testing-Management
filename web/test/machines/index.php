@@ -38,7 +38,7 @@ class CTM_Site_Test_Suites extends CTM_Site {
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th>Id</th>' );
-      $this->printHtml( '<th>Hostname</th>' );
+      $this->printHtml( '<th>GUID</th>' );
       $this->printHtml( '<th>OS</th>' );
       $this->printHtml( '<th>Created At</th>' );
       $this->printHtml( '<th>Last Checkin</th>' );
@@ -54,7 +54,7 @@ class CTM_Site_Test_Suites extends CTM_Site {
             $class = $this->oddEvenClass();
             $this->printHtml( '<tr>' );
             $this->printHtml( '<td class="' . $class . '">' . $row->id . '</td>' );
-            $this->printHtml( '<td class="' . $class . '">' . $row->hostname . '</td>' );
+            $this->printHtml( '<td class="' . $class . '">' . $row->guid . '</td>' );
             $this->printHtml( '<td class="' . $class . '">' . $row->os . '</td>' );
             $this->printHtml( '<td class="' . $class . '">' . $this->formatDate( $row->created_at ) . '</td>' );
             $this->printHtml( '<td class="' . $class . '">' . $this->formatDate( $row->last_modified ) . '</td>' );

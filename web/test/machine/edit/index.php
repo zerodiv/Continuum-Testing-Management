@@ -134,6 +134,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
          $sel = new CTM_Test_Machine_Browser_Selector();
          $and_params = array( 
                new Light_Database_Selector_Criteria( 'test_machine_id', '=', $id ),
+               new Light_Database_Selector_Criteria( 'is_available', '=', 1 ),
          );
          $machine_browsers = $sel->find( $and_params );
       } catch ( Exception $e ) {
