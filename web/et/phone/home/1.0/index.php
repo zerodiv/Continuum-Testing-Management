@@ -31,6 +31,40 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       return null;
    }
 
+   private function _findBrowserByMachine( $machine_id, $browser_id ) {
+      try {
+         $sel = new CTM_Test_Machine_Browser_Selector();
+         $and_params = array(
+               new Light_Database_Selector_Criteria( 'test_machine_id', '=', $machine_id ),
+               new Light_Database_Selector_Criteria( 'test_browser_id', '=', $browser_id )
+         );
+         $rows = $sel->find( $and_params );
+         if ( isset( $rows[0] ) ) {
+            return $rows[0];
+         }
+         return null;
+      } catch ( Exception $e ) {
+      }
+      return null;
+   }
+
+   private function _associateBrowserToMachine( CTM_Test_Machine $test_machine, CTM_Test_Browser $browser ) {
+      try {
+         $browser_link = $this->_findBrowserByMachine( $test_machine->id, $browser->id );
+         if ( $browser_link == null ) { 
+            $browser_link = new CTM_Test_Machine_Browser();
+         }
+         $browser_link->test_machine_id = $test_machine->id;
+         $browser_link->test_browser_id = $browser->id;
+         $browser_link->is_available = 1;
+         $browser_link->last_seen = time();
+         $browser_link->save();
+      } catch ( Exception $e ) {
+         $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for: " . $browser->name );
+         return false;
+      }
+   }
+
    private function _serviceOutput( $status, $message, $test_machine = null ) {
       echo "<?xml version=\"1.0\"?>\n";
       echo "<etResponse>\n";
@@ -124,9 +158,11 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             );
             $machine_browsers = $sel->find( $and_params );
 
+            // disable all of the browsers.
             if ( count( $machine_browsers ) > 0 ) {
                foreach ( $machine_browsers as $machine_browser ) {
-                  $machine_browser->remove();
+                  $machine_browser->is_available = 0;
+                  $machine_browser->save();
                }
             }
 
@@ -141,18 +177,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                $browser = $this->_findBrowser( 'iexplore', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine
-               try {
-                  $browser_link = new CTM_Test_Machine_Browser();
-                  $browser_link->test_machine_id = $test_machine->id;
-                  $browser_link->test_browser_id = $browser->id;
-                  $browser_link->is_available = 1;
-                  $browser_link->last_seen = time();
-                  $browser_link->save();
-               } catch ( Exception $e ) {
-                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for IE" );
-                  return false;
-               }
-            
+               $this->_associateBrowserToMachine( $test_machine, $browser );
             }
          }
 
@@ -162,18 +187,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
                $browser = $this->_findBrowser( 'googlechrome', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
                // associate this browser to the machine
-               try {
-                  $browser_link = new CTM_Test_Machine_Browser();
-                  $browser_link->test_machine_id = $test_machine->id;
-                  $browser_link->test_browser_id = $browser->id;
-                  $browser_link->is_available = 1;
-                  $browser_link->last_seen = time();
-                  $browser_link->save();
-               } catch ( Exception $e ) {
-                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for google chrome" );
-                  return false;
-               }
-            
+               $this->_associateBrowserToMachine( $test_machine, $browser );
             }
          }
 
@@ -181,18 +195,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $firefox_version, $version_preg ) ) {
                $browser = $this->_findBrowser( 'firefox', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
-               // associate this browser to the machine?
-               try {
-                  $browser_link = new CTM_Test_Machine_Browser();
-                  $browser_link->test_machine_id = $test_machine->id;
-                  $browser_link->test_browser_id = $browser->id;
-                  $browser_link->is_available = 1;
-                  $browser_link->last_seen = time();
-                  $browser_link->save();
-               } catch ( Exception $e ) {
-                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for firefox" );
-                  return false;
-               }
+               // associate this browser to the machine
+               $this->_associateBrowserToMachine( $test_machine, $browser );
 
             }
          }
@@ -202,19 +206,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             if ( preg_match( '/^(\d+)\.(\d+)\.(\d+)$/', $safari_version, $version_preg ) ) {
                $browser = $this->_findBrowser( 'safari', (int) $version_preg[1], (int) $version_preg[2], (int) $version_preg[3] );
 
-               // associate this browser to the machine?
-               try {
-                  $browser_link = new CTM_Test_Machine_Browser();
-                  $browser_link->test_machine_id = $test_machine->id;
-                  $browser_link->test_browser_id = $browser->id;
-                  $browser_link->is_available = 1;
-                  $browser_link->last_seen = time();
-                  $browser_link->save();
-               } catch ( Exception $e ) {
-                  $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for safari" );
-                  return false;
-               }
-
+               // associate this browser to the machine
+               $this->_associateBrowserToMachine( $test_machine, $browser );
             }
          }
 

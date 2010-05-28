@@ -22,40 +22,6 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       return true;
    }
 
-   private function _availableMachinesForBrowser( $test_browser_id ) {
-      $available_machines = array();
-
-      try {
-         $test_machine_browser_sel = new CTM_Test_Machine_Browser_Selector();
-         $and_params = array(
-               new Light_Database_Selector_Criteria( 'test_browser_id', '=', $test_browser_id ),
-         );
-         $test_machine_browsers = $test_machine_browser_sel->find( $and_params );
-
-         if ( count( $test_machine_browsers ) > 0 ) {
-            foreach ( $test_machine_browsers as $test_machine_browser ) {
-               // lookup the test_machine
-               $test_machine = $this->_test_machine_cache->getById( $test_machine_browser->test_machine_id );
-               if ($test_machine->is_disabled == 0) {
-                  // we may have multiple machines with the same OS
-                  // no need to add them all to the pool
-                  $available_machines[$test_machine->os] = $test_machine;
-               }
-            }
-         }
-
-      } catch ( Exception $e ) {
-      }
-
-      // randomize our return to seed the requests to a few machines.
-      if ( count( $available_machines ) > 0 ) {
-         shuffle( $available_machines );
-      }
-
-      return $available_machines;
-
-   }
-
    public function handleRequest() {
       $id = $this->getOrPost( 'id', '' );
       $action = $this->getOrPost( 'action', '' );
@@ -64,7 +30,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       $this->requiresAuth();
 
       if ( $action == 'step4' ) {
-         // print_r( $test_browsers );
+         //print_r( $test_browsers );
 
          // push the on ones as requests to specific machines by browser type.
          if ( is_array( $test_browsers ) && count($test_browsers) > 0 ) {
@@ -84,7 +50,9 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                         $test_run_browser_obj->test_browser_id = $test_machine_browser->test_browser_id;
                         $test_run_browser_obj->test_machine_id = $test_machine_browser->test_machine_id;
                         $test_run_browser_obj->test_run_state_id = 1;
+                        $test_run_browser_obj->has_log = 0;
                         $test_run_browser_obj->save();
+                        // print_r( $test_run_browser_obj );
                      } catch (Exception $e) {
                         $e = null;
                      }
@@ -92,6 +60,10 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                }
             }
          } // end test_browsers.
+
+         // fin!
+         // echo "fin?\n";
+         // exit();
 
          $sel = new CTM_Test_Run_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) );
