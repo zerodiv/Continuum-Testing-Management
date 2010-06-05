@@ -47,7 +47,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       $parent_id = $this->getOrPost( 'parent_id', '' );
 
       if ( $parent_id == '' ) {
-         $parent_id = 0;
+         $parent_id = 1;
       }
 
       // need these caches for this page to hum.
@@ -73,11 +73,10 @@ class CTM_Site_Test_Folders extends CTM_Site {
       $this->printHtml( '<table class="ctmTable">' );
       
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="3">Sub Folders</th>' );
+      $this->printHtml( '<th colspan="2">Sub Folders</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiTableTitle">' );
-      $this->printHtml( '<td class="aiColumnOne">ID</td>' );
       $this->printHtml( '<td>Name</td>' );
       $this->printHtml( '<td>Action</td>' );
       $this->printHtml( '</tr>' );
@@ -85,21 +84,21 @@ class CTM_Site_Test_Folders extends CTM_Site {
       if ( count( $folder_rows ) == 0 ) {
          $class = $this->oddEvenClass();
          $this->printHtml( '<tr class="' . $class . '">' );
-         $this->printHtml( '<td colspan="3"><center><b>- There are no sub folders defined -</b></td>' );
+         $this->printHtml( '<td colspan="2"><center><b>- There are no sub folders defined -</b></td>' );
          $this->printHtml( '</tr>' );
       } else {
          foreach ( $folder_rows as $row ) {
             $class = $this->oddEvenClass();
             $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td class="aiColumnOne">' . $row->id . '</td>' );
-            $this->printHtml( '<td><a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $row->id . '">' . $row->name . '</a></td>' );
+            $this->printHtml( '<td>' . 
+                        '<a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $row->id . '">' . $row->name . '</a></td>' );
             $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/folder/edit/?id=' . $row->id . '" class="ctmButton">Edit</a></center></td>' );
             $this->printHtml( '</tr>' );
          }
       }
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="aiButtonRow" colspan="3"><center><a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a></center></td>' );
+      $this->printHtml( '<td class="aiButtonRow" colspan="2"><center><a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );
@@ -122,11 +121,10 @@ class CTM_Site_Test_Folders extends CTM_Site {
       $this->printHtml( '<div class="aiTableContainer">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="6">Test Suites</th>' );
+      $this->printHtml( '<th colspan="5">Test Suites</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiTableTitle">' );
-      $this->printHtml( '<td class="aiColumnOne">ID</td>' );
       $this->printHtml( '<td>Name</td>' );
       $this->printHtml( '<td>Status</td>' );
       $this->printHtml( '<td>Modified At</td>' );
@@ -137,7 +135,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       if ( count( $suite_rows ) == 0 ) {
          $class = $this->oddEvenClass();
          $this->printHtml( '<tr class="' . $class . '">' );
-         $this->printHtml( '<td colspan="6"><center><b>- No suites defined -</b></center></td>' );
+         $this->printHtml( '<td colspan="5"><center><b>- No suites defined -</b></center></td>' );
          $this->printHtml( '</tr>' );
       } else {
 
@@ -150,7 +148,6 @@ class CTM_Site_Test_Folders extends CTM_Site {
             $suite_status = $test_status_cache->getById( $suite->test_status_id );
 
             $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td class="aiColumnOne">' . $suite->id . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $suite->name ) . '</td>' );
             if ( isset( $suite_status ) ) {
                $this->printHtml( '<td>' . $suite_status->name . '</td>' );
@@ -195,11 +192,10 @@ class CTM_Site_Test_Folders extends CTM_Site {
       $this->printHtml( '<div class="aiTableContainer">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="6">Tests</th>' );
+      $this->printHtml( '<th colspan="5">Tests</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiTableTitle">' );
-      $this->printHtml( '<td class="aiColumnOne">ID</td>' );
       $this->printHtml( '<td>Name</td>' );
       $this->printHtml( '<td>Test Status</td>' );
       $this->printHtml( '<td>Modified At</td>' );
@@ -210,7 +206,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       if ( count( $test_rows ) == 0 ) {
          $class = $this->oddEvenClass();
          $this->printHtml( '<tr class="' . $class . '">' );
-         $this->printHtml( '<td colspan="6"><center><b>- No tests defined -</b></center></td>' );
+         $this->printHtml( '<td colspan="5"><center><b>- No tests defined -</b></center></td>' );
          $this->printHtml( '</tr>' );
       } else {
 
@@ -221,7 +217,6 @@ class CTM_Site_Test_Folders extends CTM_Site {
             $test_status = $test_status_cache->getById( $test->test_status_id );
             
             $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td class="aiColumnOne">' . $test->id . '</td>' );
             $this->printHtml( '<td>' . $test->name . '</td>' );
             if ( isset( $test_status ) ) {
                $this->printHtml( '<td>' . $test_status->name . '</td>' );

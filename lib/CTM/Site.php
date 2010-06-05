@@ -20,14 +20,14 @@ class CTM_Site extends Light_MVC {
       $this->printHtml( '<ul class="basictab">' );
       $this->printHtml( '<li><a href="' . $this->_baseurl . '">' . $this->_sitetitle . '</a></li>' );
       if ( $this->isLoggedIn() ) {
-         $this->printHtml( '<li><a href="/test/folders/">Test Folders</a></li>' );
-         $this->printHtml( '<li><a href="/test/param/library/">Test Parameter Library</a></li>' );
-         $this->printHtml( '<li><a href="/test/runs/">Test Runs</a></li>' );
-         $this->printHtml( '<li><a href="/test/machines/">Test Machines</a></li>' );
-         $this->printHtml( '<li><a href="/user/logout/">Logout : ' . $this->escapeVariable( $_SESSION['user']->username ) . '</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/param/library/">Test Parameter Library</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/">Test Runs</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/machines/">Test Machines</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/logout/">Logout : ' . $this->escapeVariable( $_SESSION['user']->username ) . '</a></li>' );
       } else {
-         $this->printHtml( '<li><a href="/user/login/">Login</a></li>' );
-         $this->printHtml( '<li><a href="/user/create/">Create Account</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/login/">Login</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/create/">Create Account</a></li>' );
       }
       $this->printHtml( '</ul>' );
       $this->printHtml( '</div>' );
@@ -105,22 +105,28 @@ class CTM_Site extends Light_MVC {
    }
 
    public function _displayFolderBreadCrumb( $parent_id = 0 ) {
-      // breadcrumb logic goes here.
-      if ( $parent_id == 0 ) {
-         $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
-         $this->printHtml( '</ul>' );
-      } else {
          // Look up the chain as needed.
          $parents = array(); $this->_getFolderParents( $parent_id, $parents );
          $parents = array_reverse( $parents );
+         $parents_cnt = count( $parents );
+         $current_parent = 0;
          $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
          foreach ( $parents as $parent ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $parent->id . '">' . $parent->name . '</a></li>' );
+            $current_parent++;
+
+            $src = '<li><a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $parent->id . '">';
+            if ( $current_parent == $parents_cnt ) {
+               $src .= '<img src="' . $this->_baseurl . '/images/folders/folder_yellow.png" border="0" height="10" width="10">';
+            } else {
+               $src .= '<img src="' . $this->_baseurl . '/images/folders/folder_blue.png" border="0" height="10" width="10">';
+            }
+
+            $src .= '&nbsp;' . $parent->name . '</a></li>';
+
+            $this->printHtml( $src );
+
          }
-         $this->printHtml( '</ul>' );
-      }
+         $this->printHtml( '<br/>' );
    }
 
 }

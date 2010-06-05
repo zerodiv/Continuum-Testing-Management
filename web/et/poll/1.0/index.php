@@ -45,12 +45,15 @@ class CTM_ET_Poll extends CTM_Site {
         return null;
     }
 
-    private function _serviceOutput($status, $message, $testRunBrowserId = null, $downloadUrl = null, $testBrowser = null) {
+    private function _serviceOutput($status, $message, $testRunId = null, $testRunBrowserId = null, $downloadUrl = null, $testBrowser = null) {
         echo "<?xml version=\"1.0\"?>\n";
         echo "<etResponse>\n";
         echo "   <version>1.0</version>\n";
         echo "   <status>$status</status>\n";
         echo "   <message>$message</message>\n";
+        if (!empty($testRunId)) {
+            echo "   <testRunId>$testRunId</testRunId>\n";
+        }
         if (!empty($testRunBrowserId)) {
             echo "   <testRunBrowserId>$testRunBrowserId</testRunBrowserId>\n";
         }
@@ -92,7 +95,18 @@ class CTM_ET_Poll extends CTM_Site {
                         new Light_Database_Selector_Criteria('test_run_state_id', '=', 1), // queued
                 );
 
-                $rows = $sel->find($and_params, array(), array('id'), 1);
+                $queued_rows = $sel->find($and_params, array(), array('id'), 1);
+
+                // pick up any work that might of failed in progress
+                $and_params = array(
+                        new Light_Database_Selector_Criteria('test_machine_id', '=', $test_machine->id),
+                        new Light_Database_Selector_Criteria('test_run_state_id', '=', 2), // executing
+                );
+                
+                $executing_rows = $sel->find($and_params, array(), array('id'), 1);
+
+                $rows = array();
+                $rows = array_merge( $queued_rows, $executing_rows );
 
                 if (!empty($rows[0])) {
 
@@ -121,7 +135,7 @@ class CTM_ET_Poll extends CTM_Site {
                         $test_run->save();
                     }
 
-                    $this->_serviceOutput('OK', '', $test_run_browser->id, $downloadUrl, $testBrowser);
+                    $this->_serviceOutput('OK', '', $test_run_browser->test_run_id, $test_run_browser->id, $downloadUrl, $testBrowser);
 
                 } else {
                     $this->_serviceOutput('FAIL', "Failed to find test run for this machine");
