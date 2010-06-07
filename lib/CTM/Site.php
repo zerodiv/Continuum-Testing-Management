@@ -104,29 +104,61 @@ class CTM_Site extends Light_MVC {
       }
    }
 
+   private function _getFolderChildren( $parent_id ) {
+         $sel = new CTM_Test_Folder_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'parent_id', '=', $parent_id ) );
+         $rows = $sel->find( $and_params );
+         return $rows;
+      try {
+      } catch ( Exception $e ) {
+         throw $e;
+      }
+   }
+
    public function _displayFolderBreadCrumb( $parent_id = 0 ) {
          // Look up the chain as needed.
-         $parents = array(); $this->_getFolderParents( $parent_id, $parents );
+         $parents = array(); 
+         $this->_getFolderParents( $parent_id, $parents );
          $parents = array_reverse( $parents );
          $parents_cnt = count( $parents );
+
+         $children = array();
+         if ( $parents_cnt > 0 ) {
+            $children = $this->_getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
+         }
+
+         $folder_path = '';
          $current_parent = 0;
-         $this->printHtml( '<ul class="basictab">' );
          foreach ( $parents as $parent ) {
             $current_parent++;
-
-            $src = '<li><a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $parent->id . '">';
-            if ( $current_parent == $parents_cnt ) {
-               $src .= '<img src="' . $this->_baseurl . '/images/folders/folder_yellow.png" border="0" height="10" width="10">';
-            } else {
-               $src .= '<img src="' . $this->_baseurl . '/images/folders/folder_blue.png" border="0" height="10" width="10">';
-            }
-
-            $src .= '&nbsp;' . $parent->name . '</a></li>';
-
-            $this->printHtml( $src );
-
+            $folder_path .= '/';
+            $folder_path .= '<a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $parent->id . '">' . $parent->name . '</a>';
          }
-         $this->printHtml( '<br/>' );
+         $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
+         $this->printHtml( '<table class="ctmTable aiFullWidth">' );
+         $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td>Current folder path: ' .  $folder_path . '</td>' );
+         if ( count( $children ) > 0 ) {
+            $this->printHtml( '<form action="' . $this->_baseurl . '/test/folders/" method="POST">' );
+            $this->printHtml( '<td><center>' );
+            $this->printHtml( 'Switch to Sub Folder: ' );
+            $this->printHtml( '<select name="parent_id">' );
+            foreach ( $children as $child ) {
+               $this->printHtml( '<option value="' . $child->id . '">' . $child->name . '</option>' );
+            }
+            $this->printHtml( '</select>' );
+            $this->printHtml( '<input type="submit" value="Go!">' );
+            $this->printHtml( '&nbsp;<a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a>' );
+            $this->printHtml( '</center></td>' );
+            $this->printHtml( '</form>' );
+         } else {
+            $this->printHtml( '<td><center>' );
+            $this->printHtml( '<a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a>' );
+            $this->printHtml( '</center></td>' );
+         }
+         $this->printHtml( '</table>' );
+         $this->printHtml( '</div>' );
+
    }
 
 }

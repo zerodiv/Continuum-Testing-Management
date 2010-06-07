@@ -58,53 +58,6 @@ class CTM_Site_Test_Folders extends CTM_Site {
       $this->_displayFolderBreadCrumb( $parent_id );
       $this->printHtml( '</div>' );
 
-      // load up the rows for the invidiual folder
-      $folder_rows = array();
-      try {
-         $sel = new CTM_Test_Folder_Selector();
-         $and_params = array(
-               new Light_Database_Selector_Criteria( 'parent_id', '=', $parent_id )
-         );
-         $folder_rows = $sel->find( $and_params );
-      } catch ( Exception $e ) {
-      }
-
-      $this->printHtml( '<div class="aiTableContainer">' );
-      $this->printHtml( '<table class="ctmTable">' );
-      
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">Sub Folders</th>' );
-      $this->printHtml( '</tr>' );
-
-      $this->printHtml( '<tr class="aiTableTitle">' );
-      $this->printHtml( '<td>Name</td>' );
-      $this->printHtml( '<td>Action</td>' );
-      $this->printHtml( '</tr>' );
-
-      if ( count( $folder_rows ) == 0 ) {
-         $class = $this->oddEvenClass();
-         $this->printHtml( '<tr class="' . $class . '">' );
-         $this->printHtml( '<td colspan="2"><center><b>- There are no sub folders defined -</b></td>' );
-         $this->printHtml( '</tr>' );
-      } else {
-         foreach ( $folder_rows as $row ) {
-            $class = $this->oddEvenClass();
-            $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td>' . 
-                        '<a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $row->id . '">' . $row->name . '</a></td>' );
-            $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/folder/edit/?id=' . $row->id . '" class="ctmButton">Edit</a></center></td>' );
-            $this->printHtml( '</tr>' );
-         }
-      }
-
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="aiButtonRow" colspan="2"><center><a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a></center></td>' );
-      $this->printHtml( '</tr>' );
-
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</div>' );
-
-      $folder_rows = null; // deallocate the folder_rows - not needed anymore.
       $this->oddEvenReset();
 
       $suite_rows = array();
