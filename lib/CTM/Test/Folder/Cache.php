@@ -50,6 +50,17 @@ class CTM_Test_Folder_Cache {
       }
    }
 
+   public function getFolderChildren( $parent_id ) {
+         $sel = new CTM_Test_Folder_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'parent_id', '=', $parent_id ) );
+         $rows = $sel->find( $and_params );
+         return $rows;
+      try {
+      } catch ( Exception $e ) {
+         throw $e;
+      }
+   }
+
    public function getHierarchy() {
       // this will build a hash with the key being 'Name'/'Child'/'Grand Child'/...
       try {

@@ -4,7 +4,7 @@ require_once( 'Light/MVC.php' );
 
 // we have to include the user object to thaw it from the session
 require_once( 'CTM/User.php' );
-require_once( 'CTM/Test/Folder/Selector.php' );
+require_once( 'CTM/Test/Folder/Cache.php' );
 
 class CTM_Site extends Light_MVC {
    private $_odd_even_class;
@@ -88,43 +88,19 @@ class CTM_Site extends Light_MVC {
       return $username;
    }
 
-   private function _getFolderParents( $parent_id, &$parents ) {
-      try {
-         $sel = new CTM_Test_Folder_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $parent_id ) );
-         $rows = $sel->find( $and_params );
-         if ( isset( $rows[0] ) ) {
-            $parents[] = $rows[0]; 
-            if ( $rows[0]->parent_id > 0 ) {
-               $this->_getFolderParents( $rows[0]->parent_id, $parents );
-            } 
-         }
-      } catch( Exception $e ) {
-         throw $e;
-      }
-   }
-
-   private function _getFolderChildren( $parent_id ) {
-         $sel = new CTM_Test_Folder_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'parent_id', '=', $parent_id ) );
-         $rows = $sel->find( $and_params );
-         return $rows;
-      try {
-      } catch ( Exception $e ) {
-         throw $e;
-      }
-   }
-
    public function _displayFolderBreadCrumb( $parent_id = 0 ) {
          // Look up the chain as needed.
+         $folder_cache = new CTM_Test_Folder_Cache();
          $parents = array(); 
-         $this->_getFolderParents( $parent_id, $parents );
+         $folder_cache->getFolderParents( $parent_id, $parents );
+         // $this->_getFolderParents( $parent_id, $parents );
          $parents = array_reverse( $parents );
          $parents_cnt = count( $parents );
 
          $children = array();
          if ( $parents_cnt > 0 ) {
-            $children = $this->_getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
+            $children = $folder_cache->getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
+            // $children = $this->_getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
          }
 
          $folder_path = '';

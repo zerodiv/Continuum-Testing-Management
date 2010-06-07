@@ -51,73 +51,62 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
                            
 
    public function displayBody() {
-      $test_folder_id = $this->getOrPost( 'test_folder_id', '' );
+      $test_folder_id = $this->getOrPost( 'test_folder_id', 1 );
       $test_suite_id = $this->getOrPost( 'test_suite_id', '' );
 
       $test_folder_id += 0;
       $test_suite_id += 0;
 
+      // folder_cacheing
+      $folder_cache = new CTM_Test_Folder_Cache();
+
+      // New style folder browser.
+      $parents = array(); 
+      $folder_cache->getFolderParents( $test_folder_id, $parents );
+      $parents = array_reverse( $parents );
+      $parents_cnt = count( $parents );
+
+      $children = array();
+      if ( $parents_cnt > 0 ) {
+         $children = $folder_cache->getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
+      } 
+      
+      $folder_path = '';
+      $current_parent = 0;
+      foreach ( $parents as $parent ) {
+         $current_parent++;
+         $folder_path .= '/';
+         $folder_path .= '<a href="' . $this->_baseurl . '/test/run/add/?test_folder_id=' . $parent->id . '">' . $parent->name . '</a>';
+      }
+
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
-
+      
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="3">Add Test Run (Step 1 of 4)</th>' );
+      $this->printHtml( '<th colspan="2">Add Test Run (Step 1 of 4)</th>' );
       $this->printHtml( '</tr>' );
-
-      $this->printHtml( '<tr class="aiTableTitle">' );
-      $this->printHtml( '<td colspan="3">Pick a test suite from the test folders:</td>' );
-      $this->printHtml( '</tr>' );
-
-      $this->printHtml( '<td colspan="3">' );
-      
-      // Folder browser.
-      $folder_cache = new CTM_Test_Folder_Cache();
-      
-      if ( $test_folder_id > 0 ) {
-         // Look up the chain as needed.
-         $parents = array();
-         $folder_cache->getFolderParents( $test_folder_id, $parents );
-         $parents = array_reverse( $parents );
-         $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/run/add/">Test Folder</a></li>' );
-         foreach ( $parents as $parent ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/run/add/?test_folder_id=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a></li>' );
-         }
-         $this->printHtml( '</ul>' ); 
-      } else { 
-         $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/run/add/">Test Folders</a></li>' );
-         $this->printHtml( '</ul>' ); 
-      } 
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' );
-
-      $this->oddEvenReset();
-
-      $test_folder_rows = null;
-      try {
-         $sel = new CTM_Test_Folder_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'parent_id', '=', $test_folder_id ) ); 
-         $test_folder_rows = $sel->find( $and_params );
-      } catch ( Exception $e ) {
-      } 
       
       $this->printHtml( '<tr class="aiTableTitle">' );
-      $this->printHtml( '<td colspan="3">Sub Folders</td>' );
+      $this->printHtml( '<td colspan="2">Pick a test suite from the test folders:</td>' );
       $this->printHtml( '</tr>' );
-      
-      if ( count( $test_folder_rows ) > 0 ) {
-         foreach ( $test_folder_rows as $test_folder_row ) {
-            $class = $this->oddEvenClass();
-            $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td colspan="3"><a href="' . $this->_baseurl . '/test/run/add/?test_folder_id=' . $test_folder_row->id . '">' . $this->escapeVariable( $test_folder_row->name ) . '</a></td>' );
-            $this->printHtml( '</tr>' );
+
+      $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Current folder path: ' . $folder_path . '</td>' );
+      if ( count( $children ) > 0 ) {
+         $this->printHtml( '<form action="' . $this->_baseurl . '/test/run/add/" method="POST">' );
+         $this->printHtml( '<td>Sub Folders: <select name="test_folder_id">' );
+         foreach ( $children as $child ) {
+            $this->printHtml( '<option value="' . $child->id . '">' . $child->name . '</option>' );
          }
+         $this->printHtml( '</select>' );
+         $this->printHtml( '<input type="submit" value="Change Folder">' );
+         $this->printHtml( '</td>' );
+         $this->printHtml( '</form>' );
       } else {
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="row"><center>- No sub folders-</center></td>' );
-         $this->printHtml( '</tr>' );
+         $this->printHtml( '<td>No sub-folders available</td>' );
       }
+      $this->printHtml( '</tr>' );
+
       $this->oddEvenReset();
 
       $test_suites = null;
@@ -129,14 +118,21 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
          $test_suites = $sel->find( $and_params, $or_params, $order );
       } catch ( Exception $e ) {
       }
+
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">Pick a test Suite: </th>' );
       $this->printHtml( '</tr>' );
 
-      foreach ( $test_suites as $test_suite ) {
-         $class = $this->oddEvenClass();
-         $this->printHtml( '<tr class="' . $class . '">' );
-         $this->printHtml( '<td><a href="' . $this->_baseurl . '/test/run/add/?test_suite_id=' . $test_suite->id . '">' . $this->escapeVariable( $test_suite->name ) . '</a></td>' );
+      if ( count( $test_suites ) > 0 ) {
+         foreach ( $test_suites as $test_suite ) {
+            $class = $this->oddEvenClass();
+            $this->printHtml( '<tr class="' . $class . '">' );
+            $this->printHtml( '<td colspan="2"><a href="' . $this->_baseurl . '/test/run/add/?test_suite_id=' . $test_suite->id . '">' . $this->escapeVariable( $test_suite->name ) . '</a></td>' );
+            $this->printHtml( '</tr>' );
+         } 
+      } else {
+         $this->printHtml( '<tr>' );
+         $this->printHtml( '<td colspan="2"><center>No test suites available for this folder.</center></td>' );
          $this->printHtml( '</tr>' );
       }
 
