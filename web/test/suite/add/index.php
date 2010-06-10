@@ -18,14 +18,9 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
 
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
       $name             = $this->getOrPost( 'name', '' );
-      $baseurl          = $this->getOrPost( 'baseurl', '' );
       $description      = $this->getOrPost( 'description', '' );
 
       if ( $name == '' ) {
-         return true;
-      }
-
-      if ( $baseurl == '' ) {
          return true;
       }
 
@@ -47,7 +42,6 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
 
          if ( $new->id > 0 ) {
 
-            $new->setBaseUrl( $baseurl );
             $new->setDescription( $description );
 
             // added our child send us back to our parent
@@ -84,19 +78,14 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Name:</td>' );
-      $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $name . '"></td>' );
-      $this->printHtml( '</tr>' );
-
-      $this->printHtml( '<tr class="odd">' );
-      $this->printHtml( '<td>Base URL:</td>' );
-      $this->printHtml( '<td><input type="text" name="baseurl" size="60" value="' . $baseurl . '"></td>' );
+      $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( name ) . '"></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td colspan="2">Description:</td>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr class="odd">' );
-      $this->printHtml( '<td colspan="2"><center><textarea name="description" rows="25" cols="60">' . $description . '</textarea></center></td>' );
+      $this->printHtml( '<td colspan="2"><center><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $description ) . '</textarea></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiButtonRow">' );

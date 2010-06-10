@@ -18,7 +18,6 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
 
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
-      $baseurl          = $this->getOrPost( 'baseurl', '' );
       $description      = $this->getOrPost( 'description', '' );
 
       if ( $name == '' ) {
@@ -43,7 +42,6 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
             $suite->save();
 
             $suite->setDescription( $description );
-            $suite->setBaseUrl( $baseurl ); 
 
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $suite->test_folder_id );
 
@@ -61,11 +59,9 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
-      $baseurl          = $this->getOrPost( 'baseurl', '' );
 
       $test_suite = null;
       $description_obj = null;
-      $baseurl_obj = null;
 
       try {
          $sel = new CTM_Test_Suite_Selector();
@@ -77,7 +73,6 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          if ( isset( $rows[0] ) ) { 
             $test_suite = $rows[0];
             $description_obj = $test_suite->getDescription();
-            $baseurl_obj = $test_suite->getBaseUrl();
          }
 
 
@@ -105,15 +100,6 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( $test_suite->name ) . '"></td>' );
          $this->printHtml( '</tr>' ); 
          
-         $this->printHtml( '<tr class="odd">' );
-         $this->printHtml( '<td>Name:</td>' );
-         if ( is_object( $baseurl_obj ) ) {
-            $this->printHtml( '<td><input type="text" name="baseurl" size="60" value="' . $this->escapeVariable( $baseurl_obj->baseurl ) . '"></td>' );
-         } else {
-            $this->printHtml( '<td><input type="text" name="baseurl" size="60" value=""></td>' );
-         }
-         $this->printHtml( '</tr>' ); 
-
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td colspan="2">Description:</td>' );
          $this->printHtml( '</tr>' );
