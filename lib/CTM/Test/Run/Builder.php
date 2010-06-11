@@ -313,19 +313,6 @@ class CTM_Test_Run_Builder {
          );
          $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
 
-         if ( count($run_baseurls) == 0 ) {
-            $suite_baseurl_obj = $test_suite->getBaseUrl();
-            if ( is_object( $suite_baseurl_obj ) ) {
-               $base_suite_obj = new CTM_Test_Run_BaseUrl();
-               $base_suite_obj->test_run_id = $test_run->id;
-               $base_suite_obj->test_suite_id = $test_suite_id;
-               $base_suite_obj->test_id = 0;
-               $base_suite_obj->baseurl = $suite_baseurl_obj->baseurl;
-               $base_suite_obj->save();
-            }
-         }
-
-
          $sel = new CTM_Test_Suite_Plan_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ) );
          $plan_steps = $sel->find( $and_params );
