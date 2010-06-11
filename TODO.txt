@@ -1,6 +1,5 @@
 Bugs:
-- if you set a baseurl to nothing via the test when adding it refuses to make the baseurl object for the test
-- comments for tests are being lost currently
+- comments for tests are being lost currently - DomDocument is losing them / it's choosing to not let me see them.
 
 Build plan:
 

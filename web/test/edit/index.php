@@ -22,10 +22,15 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
       $this->requiresAuth();
 
+      $action           = $this->getOrPost( 'action', '' );
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $baseurl          = $this->getOrPost( 'baseurl', '' );
       $description      = $this->getOrPost( 'description', '' );
+
+      if ( $action != 'save' ) {
+         return true;
+      }
 
       if ( $name == '' ) {
          $this->_error_message = 'Test Name is a required field';
@@ -128,17 +133,18 @@ class CTM_Site_Test_Edit extends CTM_Site {
       
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/edit/">' );
+         $this->printHtml( '<input type="hidden" value="save" name="action">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' ); 
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
          
          $this->printHtml( '<tr>' );
-         $this->printHtml( '<th colspan="4">Edit Test</th>' );
+         $this->printHtml( '<th colspan="2">Edit Test</th>' );
          $this->printHtml( '</td>' );
          $this->printHtml( '</tr>' );
 
          if ( isset( $this->_error_message ) ) {
             $this->printHtml( '<tr class="odd">' );
-            $this->printHtml( '<td><center><font color="#ff0000">' . $this->_error_message . '</font></td>' );
+            $this->printHtml( '<td colspan="2"><center><font color="#ff0000">' . $this->_error_message . '</font></td>' );
             $this->printHtml( '</tr>' );
          }
 
