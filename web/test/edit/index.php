@@ -11,6 +11,7 @@ require_once( 'CTM/Test/Param/Library/Cache.php' );
 require_once( 'CTM/Test/Selenium/Command/Cache.php' );
 
 class CTM_Site_Test_Edit extends CTM_Site { 
+   private $_error_message;
 
    public function setupPage() {
       $this->_pagetitle = 'Edit Test';
@@ -27,6 +28,12 @@ class CTM_Site_Test_Edit extends CTM_Site {
       $description      = $this->getOrPost( 'description', '' );
 
       if ( $name == '' ) {
+         $this->_error_message = 'Test Name is a required field';
+         return true;
+      }
+
+      if ( $baseurl == '' ) {
+         $this->_error_message = 'Base URL is a required field';
          return true;
       }
 
@@ -128,6 +135,12 @@ class CTM_Site_Test_Edit extends CTM_Site {
          $this->printHtml( '<th colspan="4">Edit Test</th>' );
          $this->printHtml( '</td>' );
          $this->printHtml( '</tr>' );
+
+         if ( isset( $this->_error_message ) ) {
+            $this->printHtml( '<tr class="odd">' );
+            $this->printHtml( '<td><center><font color="#ff0000">' . $this->_error_message . '</font></td>' );
+            $this->printHtml( '</tr>' );
+         }
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Name:</td>' );

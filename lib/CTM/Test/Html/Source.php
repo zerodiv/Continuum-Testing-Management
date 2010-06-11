@@ -62,6 +62,7 @@ class CTM_Test_Html_Source extends Light_Database_Object {
          $xml = simplexml_load_string( $html_source );
 
          // attempt to parse up a baseurl setting.
+         // JEO - There is a bug with adding urls to the system and we need to figure it out.
          if ( $xml->head->link['rel'] == 'selenium.base' ) {
             $test_sel = new CTM_Test_Selector();
             $test_params = array( new Light_Database_Selector_Criteria( 'id', '=', $this->test_id ) );

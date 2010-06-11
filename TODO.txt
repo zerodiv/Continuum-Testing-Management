@@ -1,10 +1,8 @@
-Build plan:
+Bugs:
+- if you set a baseurl to nothing via the test when adding it refuses to make the baseurl object for the test
+- comments for tests are being lost currently
 
-Windows App:
-  - download test run
-  - run test run
-  - report back to home base results
-  - .net job on host to maintain browsers: kill running away ones, etc
+Build plan:
 
 General Features:
   - pagnation object need a pagnaitor that works with the selectors to move back and forth through
@@ -34,10 +32,6 @@ Runtime Operation:
 1.0 - Release to world? 
 * Need to discuss license
 --
-
---------------------------------------------------------------------------------
-                          -= Review with team =-
---------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
 Notes/plans for the future:
