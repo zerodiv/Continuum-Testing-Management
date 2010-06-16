@@ -204,8 +204,8 @@ class CTM_Test_Run_Builder {
                $target_obj = $test_command->getTarget();
                fwrite($fh, '<tr>' . "\n" );
                fwrite($fh, '         <td>' . $sel_obj->name . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $target_obj->target . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $value_obj->value . '</td>' . "\n" );
+               fwrite($fh, '         <td>' . $this->_escapeVariable( $target_obj->target ) . '</td>' . "\n" );
+               fwrite($fh, '         <td>' . $this->_escapeVariable( $value_obj->value ) . '</td>' . "\n" );
                fwrite($fh, '</tr>' . "\n" );
             }
          }
@@ -243,8 +243,8 @@ class CTM_Test_Run_Builder {
 
                fwrite($fh, '<tr>' . "\n" );
                fwrite($fh, '         <td>' . $sel_obj->name . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $target_obj->target . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $value_obj->value . '</td>' . "\n" );
+               fwrite($fh, '         <td>' . $this->_escapeVariable( $target_obj->target ) . '</td>' . "\n" );
+               fwrite($fh, '         <td>' . $this->_escapeVariable( $value_obj->value ) . '</td>' . "\n" );
                fwrite($fh, '</tr>' . "\n" );
                
             }
