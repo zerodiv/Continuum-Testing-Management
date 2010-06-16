@@ -1,6 +1,8 @@
 <?php
 
 require_once( 'Light/Config.php' );
+require_once( 'CTM/Test/Param.php' );
+require_once( 'CTM/Test/Param/Selector.php' );
 require_once( 'CTM/Test/Run.php' );
 require_once( 'CTM/Test/Cache.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
@@ -166,25 +168,47 @@ class CTM_Test_Run_Builder {
          $baseurl_obj = $this->_test_run_baseurl_cache->getByCompoundKey( $test_run->id, 0, $test_id );
 
          // eject the headers.
-         fwrite( $fh, '<?xml version="1.0" encoding="UTF-8"?>' . "\n" );
-         fwrite( $fh, '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\n" );
-         fwrite( $fh, '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . "\n" );
-         fwrite( $fh, '<head profile="http://selenium-ide.openqa.org/profiles/test-case">' . "\n" );
-         fwrite( $fh, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' . "\n" );
-         fwrite( $fh, '<link rel="selenium.base" href="' . $baseurl_obj->baseurl . '" />' . "\n" ); 
-         fwrite( $fh, '<title>' . $this->_escapeVariable( $test_obj->name ) . '</title>' . "\n" );
-         fwrite( $fh, '</head>' . "\n" );
-         fwrite( $fh, '<body>' . "\n" );
-         fwrite( $fh, '<table cellpadding="1" cellspacing="1" border="1">' . "\n" );
-         fwrite( $fh, '<thead>' . "\n" );
-         fwrite( $fh, '<tr><td rowspan="1" colspan="3">' . $this->_escapeVariable( $test_obj->name ) . '</td></tr>' . "\n" );
-         fwrite( $fh, '</thead><tbody>' . "\n" );
+         fwrite($fh, '<?xml version="1.0" encoding="UTF-8"?>' . "\n" );
+         fwrite($fh, '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\n" );
+         fwrite($fh, '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . "\n" );
+         fwrite($fh, '<head profile="http://selenium-ide.openqa.org/profiles/test-case">' . "\n" );
+         fwrite($fh, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' . "\n" );
+         fwrite($fh, '<link rel="selenium.base" href="' . $baseurl_obj->baseurl . '" />' . "\n" ); 
+         fwrite($fh, '<title>' . $this->_escapeVariable( $test_obj->name ) . '</title>' . "\n" );
+         fwrite($fh, '</head>' . "\n" );
+         fwrite($fh, '<body>' . "\n" );
+         fwrite($fh, '<table cellpadding="1" cellspacing="1" border="1">' . "\n" );
+         fwrite($fh, '<thead>' . "\n" );
+         fwrite($fh, '<tr><td rowspan="1" colspan="3">' . $this->_escapeVariable( $test_obj->name ) . '</td></tr>' . "\n" );
+         fwrite($fh, '</thead><tbody>' . "\n" );
 
+         /*
          fwrite($fh, '<tr>' . "\n" );
          fwrite($fh, '         <td>open</td>' . "\n" );
          fwrite($fh, '         <td>' . $baseurl_obj->baseurl . '</td>' . "\n" );
          fwrite($fh, '         <td></td>' . "\n" );
          fwrite($fh, '</tr>' . "\n" );
+         */
+
+         // pull in all the test_param_library_id values
+         $sel = new CTM_Test_Run_Command_Selector();
+         $and_params = array( 
+               new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ),
+               new Light_Database_Selector_Criteria( 'test_param_library_id', '!=', 0 )
+         );
+         $test_params = $sel->find( $and_params );
+         if ( count( $test_params ) > 0 ) {
+            foreach ( $test_params as $test_command ) {
+               $sel_obj = $this->_selenium_command_cache->getById( $test_command->test_selenium_command_id );
+               $value_obj = $test_command->getValue();
+               $target_obj = $test_command->getTarget();
+               fwrite($fh, '<tr>' . "\n" );
+               fwrite($fh, '         <td>' . $sel_obj->name . '</td>' . "\n" );
+               fwrite($fh, '         <td>' . $target_obj->target . '</td>' . "\n" );
+               fwrite($fh, '         <td>' . $value_obj->value . '</td>' . "\n" );
+               fwrite($fh, '</tr>' . "\n" );
+            }
+         }
 
          // dump all the test command combos to the file.
          if ( count( $test_commands ) > 0 ) {
@@ -208,15 +232,18 @@ class CTM_Test_Run_Builder {
                $value_obj = $test_command->getValue();
                $target_obj = $test_command->getTarget();
 
+               /*
+               JEO - This adds the base url to the open call.. we shouldn't be needing this anymore
                if ($sel_obj->name == 'open') {
                    $target = preg_replace('#/$#', '', $baseurl_obj->baseurl) . $target_obj->target;
                } else {
                    $target = $target_obj->target;
                }
+               */
 
                fwrite($fh, '<tr>' . "\n" );
                fwrite($fh, '         <td>' . $sel_obj->name . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $target . '</td>' . "\n" );
+               fwrite($fh, '         <td>' . $target_obj->target . '</td>' . "\n" );
                fwrite($fh, '         <td>' . $value_obj->value . '</td>' . "\n" );
                fwrite($fh, '</tr>' . "\n" );
                
@@ -377,6 +404,31 @@ class CTM_Test_Run_Builder {
             }
          }
 
+         // pull in all the ctm test parameters that this test needs first.
+         $sel = new CTM_Test_Param_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test_id ) );
+         $test_params = $sel->find( $and_params );
+
+         if ( count( $test_params ) > 0 ) {
+            foreach ( $test_params as $test_param ) {
+               $param_lib_obj = $this->_param_lib_cache->getById( $test_param->test_param_library_id );
+
+               $test_run_command = new CTM_Test_Run_Command();
+               $test_run_command->test_run_id = $test_run->id;
+               $test_run_command->test_suite_id = $test_suite_id;
+               $test_run_command->test_id = $test_id;
+               $test_run_command->test_selenium_command_id = 1; // store.
+               $test_run_command->test_param_library_id = $test_param->test_param_library_id;
+               $test_run_command->save();
+
+               $default_obj = $param_lib_obj->getDefault();
+               $test_run_command->setTarget( $default_obj->default_value );
+               $test_run_command->setValue( $param_lib_obj->name );
+
+            }
+         }
+
+         // now loop across the normal commands for the 
          $sel = new CTM_Test_Command_Selector();
          $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test_id ) );
          $or_params = array();

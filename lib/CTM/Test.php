@@ -8,6 +8,10 @@ require_once( 'CTM/Test/Description.php' );
 require_once( 'CTM/Test/Description/Selector.php' );
 require_once( 'CTM/Test/Html/Source.php' );
 require_once( 'CTM/Test/Html/Source/Selector.php' );
+require_once( 'CTM/Test/Param.php' );
+require_once( 'CTM/Test/Param/Selector.php' );
+require_once( 'CTM/Test/Command.php' );
+require_once( 'CTM/Test/Command/Selector.php' );
 
 class CTM_Test extends Light_Database_Object {
    public $id;
@@ -45,7 +49,23 @@ class CTM_Test extends Light_Database_Object {
          if ( isset( $html_source_obj ) ) {
             $html_source_obj->remove();
          } 
-         
+
+         // test command removal
+         $sel = new CTM_Test_Command_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $this->id ) );
+         $test_commands = $sel->find( $and_params );
+         foreach ( $test_commands as $test_command ) {
+            $test_command->remove();
+         }
+
+         // test params removal
+         $sel = new CTM_Test_Param_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $this->id ) );
+         $test_params = $sel->find( $and_params );
+         foreach ( $test_params as $test_param ) {
+            $test_param->remove();
+         }
+
          // now remove ourselves
          parent::remove(); 
 

@@ -12,6 +12,7 @@ require_once 'CTM/Test/Run.php';
 require_once 'CTM/Test/Run/Selector.php';
 require_once 'CTM/Test/Browser.php';
 require_once 'CTM/Test/Browser/Selector.php';
+require_once 'CTM/Test/Run/BaseUrl/Selector.php';
 
 
 class CTM_ET_Poll extends CTM_Site {
@@ -45,7 +46,7 @@ class CTM_ET_Poll extends CTM_Site {
         return null;
     }
 
-    private function _serviceOutput($status, $message, $testRunId = null, $testRunBrowserId = null, $downloadUrl = null, $testBrowser = null) {
+    private function _serviceOutput($status, $message, $testRunId = null, $testRunBrowserId = null, $downloadUrl = null, $testBrowser = null, $testBaseurl = null ) {
         echo "<?xml version=\"1.0\"?>\n";
         echo "<etResponse>\n";
         echo "   <version>1.0</version>\n";
@@ -62,6 +63,9 @@ class CTM_ET_Poll extends CTM_Site {
         }
         if (!empty($testBrowser)) {
             echo "   <testBrowser>$testBrowser</testBrowser>\n";
+        }
+        if (!empty($testBaseurl)) {
+            echo "   <testBaseurl>$testBaseurl</testBaseurl>\n";
         }
         echo "</etResponse>\n";
     }
@@ -135,7 +139,19 @@ class CTM_ET_Poll extends CTM_Site {
                         $test_run->save();
                     }
 
-                    $this->_serviceOutput('OK', '', $test_run_browser->test_run_id, $test_run_browser->id, $downloadUrl, $testBrowser);
+                    // baseUrl from the first test.
+                    $sel = new CTM_Test_Run_BaseUrl_Selector();
+                    $and_params = array(
+                          new Light_Database_Selector_Criteria('test_run_id', '=', $test_run_browser->test_run_id)
+                    );
+                    $test_run_baseurls = $sel->find( $and_params );
+
+                    $test_run_baseurl = 'http://www.google.com';
+                    if ( isset( $test_run_baseurls[0] ) ) {
+                       $test_run_baseurl = $test_run_baseurls[0]->baseurl;
+                    }
+
+                    $this->_serviceOutput('OK', '', $test_run_browser->test_run_id, $test_run_browser->id, $downloadUrl, $testBrowser, $test_run_baseurl );
 
                 } else {
                     $this->_serviceOutput('FAIL', "Failed to find test run for this machine");
