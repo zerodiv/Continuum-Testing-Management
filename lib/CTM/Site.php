@@ -30,6 +30,13 @@ class CTM_Site extends Light_MVC {
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/create/">Create Account</a></li>' );
       }
       $this->printHtml( '</ul>' );
+
+      if ( $this->isLoggedIn() ) {
+         $this->printHtml( '<ul class="basictab">' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/manager/">Manage Users</a></li>' );
+         $this->printHtml( '</ul>' );
+      }
+
       $this->printHtml( '</div>' );
 
       return true;

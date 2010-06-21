@@ -120,11 +120,8 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                   new Light_Database_Selector_Criteria( 'last_seen', '>', $floor_time )
             );
 
-            $avail_machines_and_browsers = $sel->find( $and_params, array(), array( 'test_browser_id' ) );
+            $avail_machines_and_browsers = $sel->find( $and_params, array(), array( 'test_machine_id' ) );
 
-            // $test_browsers = $sel->find( $and_params, array(), array( 'name', 'major_version', 'minor_version', 'patch_version' ) );
-
-            // $sel = new CTM_Test_Browser_Selector();
          }
       } catch ( Exception $e ) {
       }
@@ -160,30 +157,34 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          if ( count( $avail_machines_and_browsers ) > 0 ) {
 
             $current_browser = null;
-            $current_browser_id = 0;
+            $current_machine_id = 0;
 
             foreach ( $avail_machines_and_browsers as $avail_machine_browser ) {
+               
+               $current_browser = $this->_test_browser_cache->getById( $avail_machine_browser->test_browser_id );
+               $test_machine = $this->_test_machine_cache->getById( $avail_machine_browser->test_machine_id );
 
-               if ( $current_browser_id != $avail_machine_browser->test_browser_id ) {
+               if ( $current_machine_id != $avail_machine_browser->test_machine_id ) {
                   $this->oddEvenReset();
-                  $current_browser = $this->_test_browser_cache->getById( $avail_machine_browser->test_browser_id );
 
                   $this->printHtml( '<tr class="aiTableTitle">' );
-                  $this->printHtml( '<th colspan="3">' . $current_browser->getPrettyName() . '</th>' );
+                  $this->printHtml( '<th colspan="3">' . $test_machine->os . ' @ ' .  $test_machine->ip  . '</th>' );
+                  $this->printHtml( '</tr>' );
                   $this->printHtml( '<tr class="aiTableTitle">' );
                   $this->printHtml( '<td>Test:</td>' );
-                  $this->printHtml( '<td>OS:</td>' );
+                  $this->printHtml( '<td>Browser:</td>' );
                   $this->printHtml( '<td>Version:</td>' );
                   $this->printHtml( '</tr>' );
+                  
+                  $current_machine_id = $avail_machine_browser->test_machine_id;
                }
 
                $class = $this->oddEvenClass();
 
-               $test_machine = $this->_test_machine_cache->getById( $avail_machine_browser->test_machine_id );
 
                $this->printHtml( '<tr class="' . $class . '">' );
                $this->printHtml( '<td><center><input type="checkbox" name="test_browsers[' . $avail_machine_browser->id . ']"></center></td>' );
-               $this->printHtml( '<td>' . $test_machine->os . '</td>' );
+               $this->printHtml( '<td>' . $current_browser->getPrettyName() . '</td>' );
                $this->printHtml( '<td>' . 
                   $current_browser->major_version . '.' .
                   $current_browser->minor_version . '.' .
