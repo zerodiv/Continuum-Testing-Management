@@ -107,7 +107,6 @@ class CTM_Site extends Light_MVC {
          $children = array();
          if ( $parents_cnt > 0 ) {
             $children = $folder_cache->getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
-            // $children = $this->_getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
          }
 
          $folder_path = '';
@@ -126,8 +125,9 @@ class CTM_Site extends Light_MVC {
             $this->printHtml( '<td><center>' );
             $this->printHtml( 'Switch to Sub Folder: ' );
             $this->printHtml( '<select name="parent_id">' );
+            $this->printHtml( '<option value="0">Pick a sub-folder</option>' );
             foreach ( $children as $child ) {
-               $this->printHtml( '<option value="' . $child->id . '">' . $child->name . '</option>' );
+               $this->printHtml( '<option value="' . $child->id . '">' . $this->escapeVariable( $child->name ) . '</option>' );
             }
             $this->printHtml( '</select>' );
             $this->printHtml( '<input type="submit" value="Go!">' );
