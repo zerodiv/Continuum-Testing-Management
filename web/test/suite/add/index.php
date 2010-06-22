@@ -44,6 +44,8 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
 
             $new->setDescription( $description );
 
+            $new->saveRevision();
+
             // added our child send us back to our parent
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test_folder_id );
             return false;

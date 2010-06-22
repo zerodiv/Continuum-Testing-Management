@@ -29,6 +29,22 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       $test_suite_id          = $this->getOrPost( 'test_suite_id', '' );
       $test_suite_plan_id     = $this->getOrPost( 'test_suite_plan_id', '' );
 
+      // echo "id: $id action: $action suite_id: $suite_id\n";
+      try {
+         $sel = new CTM_Test_Suite_Selector();
+         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) );
+         $test_suites = $sel->find( $and_params );
+      } catch ( Exception $e ) {
+      }
+
+      $test_suite = null;
+      if ( count( $test_suites ) == 1 ) {
+         $test_suite = $test_suites[0];
+      } else {
+         // did not find the test suite in question.
+         return true;
+      }
+
       if ( $action == 'remove_from_plan' ) {
          $target_test = null;
          try {
@@ -62,22 +78,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
          } catch ( Exception $e ) {
          }
-         return true;
-      }
-
-      // echo "id: $id action: $action suite_id: $suite_id\n";
-      try {
-         $sel = new CTM_Test_Suite_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) );
-         $test_suites = $sel->find( $and_params );
-      } catch ( Exception $e ) {
-      }
-
-      $test_suite = null;
-      if ( count( $test_suites ) == 1 ) {
-         $test_suite = $test_suites[0];
-      } else {
-         // did not find the test suite in question.
+         $test_suite->saveRevision();
          return true;
       }
 
@@ -156,6 +157,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
          }
 
+         $test_suite->saveRevision();
          return true;
       }
 
@@ -185,6 +187,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          $test_plan->test_order = ( $high_id + 1 );
          $test_plan->test_suite_plan_type_id = 1; // this is a suite
          $test_plan->save();
+         $test_suite->saveRevision();
          return true;
       }
 
@@ -195,36 +198,14 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          $test_plan->test_order = ( $high_id + 1 );
          $test_plan->test_suite_plan_type_id = 2; // this is a test
          $test_plan->save();
+         $test_suite->saveRevision();
          return true;
-      }
-
-      return true;
-
-      $rows = null;
-      try {
-         $sel = new CTM_Test_Suite_Selector();
-         
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) );
-
-         $rows = $sel->find( $and_params );
-
-      } catch ( Exception $e ) {
-      }
-
-      if ( isset( $rows[0] ) ) {
-         $suite = $rows[0];
-         $suite->name = $name;
-         $suite->description = $description;
-         $suite->modified_at = time();
-         $suite->modified_by = $_SESSION['user']->id;
-         $suite->save();
       }
 
       return true;
 
    }
                            
-
    public function displayBody() {
       $id               = $this->getOrPost( 'id', '' );
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
@@ -349,108 +330,58 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          $this->printHtml( '</table>' );
          $this->printHtml( '</div>' );
 
+         // --------------------------------------------------------------------------------
+         // Look up the chain as needed.
+         $folder_cache = new CTM_Test_Folder_Cache();
+         $parents = array(); 
+         $folder_cache->getFolderParents( $test_folder_id, $parents );
+         // $this->_getFolderParents( $parent_id, $parents );
+         $parents = array_reverse( $parents );
+         $parents_cnt = count( $parents );
+
+         $children = array();
+         if ( $parents_cnt > 0 ) {
+            $children = $folder_cache->getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
+         }
+
+         $folder_path = '';
+         $current_parent = 0;
+         foreach ( $parents as $parent ) {
+            $current_parent++;
+            $folder_path .= '/';
+            $folder_path .= '<a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $parent->id . '">' . $parent->name . '</a>';
+         }
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
-
+         
          $this->printHtml( '<tr>' );
-         $this->printHtml( '<th colspan="3">Add Items to Plan</th>' );
-         $this->printHtml( '</tr>' );
-
-         $this->printHtml( '<tr class="aiTableTitle">' );
-         $this->printHtml( '<td colspan="3">Current Position in Test Folders' );
+         $this->printHtml( '<th colspan="2">Add Items to Plan</th>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );
-
-         $this->printHtml( '<td colspan="3">' );
-         // Folder browser.
-         $folder_cache = new CTM_Test_Folder_Cache();
-         
-         if ( $test_folder_id > 0 ) {
-            // Look up the chain as needed.
-            $parents = array();
-            $folder_cache->getFolderParents( $test_folder_id, $parents );
-            
-            $parents = array_reverse( $parents );
-            $this->printHtml( '<ul class="basictab">' );
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '">Test Folders</a></li>' );
-            foreach ( $parents as $parent ) {
-               $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a></li>' );
+         $this->printHtml( '<td>Current folder path: ' .  $folder_path . '</td>' );
+         if ( count( $children ) > 0 ) {
+            $this->printHtml( '<form action="' . $this->_baseurl . '/test/suite/plan/" method="POST">' );
+            $this->printHtml( '<input type="hidden" name="id" value="' . $id . '">' );
+            $this->printHtml( '<td><center>' );
+            $this->printHtml( 'Switch to Sub Folder: ' );
+            $this->printHtml( '<select name="test_folder_id">' );
+            $this->printHtml( '<option value="0">Pick a sub-folder</option>' );
+            foreach ( $children as $child ) {
+               $this->printHtml( '<option value="' . $child->id . '">' . $this->escapeVariable( $child->name ) . '</option>' );
             }
-            $this->printHtml( '</ul>' );
-
-
-         } else {
-
-            $this->printHtml( '<ul class="basictab">' );
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '">Test Folders</a></li>' );
-            $this->printHtml( '</ul>' );
-
+            $this->printHtml( '</select>' );
+            $this->printHtml( '<input type="submit" value="Go!">' );
+            $this->printHtml( '</center></td>' );
+            $this->printHtml( '</form>' );
          }
+         $this->printHtml( '</table>' );
 
-         $this->printHtml( '</td>' );
-         $this->printHtml( '</tr>' );
+         // --------------------------------------------------------------------------------
 
-
-         $this->oddEvenReset();
-
-         try {
-            $sel = new CTM_Test_Folder_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'parent_id', '=', $test_folder_id ) ); 
-            $test_folder_rows = $sel->find( $and_params );
-         } catch ( Exception $e ) {
-         } 
-
-         $this->printHtml( '<tr class="aiTableTitle">' );
-         $this->printHtml( '<td colspan="3">Sub Folders</td>' );
-         $this->printHtml( '</tr>' );
-
-         if ( count( $test_folder_rows ) > 0 ) {
-            foreach ( $test_folder_rows as $test_folder_row ) {
-               $class = $this->oddEvenClass();
-               $this->printHtml( '<tr class="' . $class . '">' );
-               $this->printHtml( '<td colspan="3"><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_row->id . '">' . $this->escapeVariable( $test_folder_row->name ) . '</a></td>' );
-               $this->printHtml( '</tr>' );
-            }
-         } else {
-            $this->printHtml( '<tr>' );
-            $this->printHtml( '<td class="row"><center>- No sub folders-</center></td>' );
-            $this->printHtml( '</tr>' );
-         }
-
-         /*
-            $hiearchy = $folder_cache->getHierarchy();
-            $this->oddEvenReset();
-
-            $this->printHtml( '<table class="ctmTable">' );
-
-            if ( count( $hiearchy ) > 0 ) {
-               $class = $this->oddEvenClass();
-               $this->printHtml( '<tr>' );
-               $this->printHtml( '<td class="' . $class . '"><ul>' );
-               foreach ( $hiearchy as $hi_key => $hi ) {
-                  $hi_key = str_replace( '[0]', ' - ', $hi_key );
-                  $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $hi->id . '">' . $this->escapeVariable( $hi_key ) . '</a></li>' );
-               }
-               $this->printHtml( '</ul></td>' );
-               $this->printHtml( '</tr>' );
-            } 
-            */
-
-         $suite_rows = null;
-         try {
-            $sel = new CTM_Test_Suite_Selector();
-            $and_params = array( 
-                  new Light_Database_Selector_Criteria( 'test_folder_id', '=', $test_folder_id ),
-                  // we exclude ourselves from suites.
-                  new Light_Database_Selector_Criteria( 'id', '!=', $id ) 
-            ); 
-            $suite_rows = $sel->find( $and_params );
-         } catch ( Exception $e ) {
-         } 
-         
          $this->oddEvenReset(); 
 
+         $this->printHtml( '<table class="ctmTable aiFullWidth">' );
          $this->printHtml( '<tr>' );
          $this->printHtml( '<th colspan="3">Test Suites</th>' );
          $this->printHtml( '</tr>' );
@@ -460,6 +391,18 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          $this->printHtml( '<td>Name</td>' );
          $this->printHtml( '<td>Action</td>' );
          $this->printHtml( '</tr>' );
+        
+         $suite_rows = null;
+         try {
+            $sel = new CTM_Test_Suite_Selector();
+            $and_params = array(
+                  new Light_Database_Selector_Criteria( 'test_folder_id', '=', $test_folder_id ),
+                  // we exclude ourselves from suites.
+                  new Light_Database_Selector_Criteria( 'id', '!=', $id )
+            );
+            $suite_rows = $sel->find( $and_params );
+         } catch ( Exception $e ) {
+         } 
          
          if ( count( $suite_rows ) > 0 ) {
             foreach ( $suite_rows as $suite_row ) {

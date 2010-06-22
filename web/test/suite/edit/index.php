@@ -43,6 +43,8 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
 
             $suite->setDescription( $description );
 
+            $suite->saveRevision();
+
             header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $suite->test_folder_id );
 
          }
