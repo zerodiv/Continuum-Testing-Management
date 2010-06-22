@@ -71,7 +71,7 @@ class CTM_Revision_Framework {
       // try to create the target directory
       if ( ! is_dir( $fname ) ) {
 
-         mkdir( $fname, true );
+         mkdir( $fname, 0777, true );
 
          if ( ! is_dir( $fname ) ) {
             throw new Exception( 'Failed to make target directory: ' . $fname );

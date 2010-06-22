@@ -26,4 +26,8 @@ class Light_Database_Object_Relationship_Container {
       return null;
    }
 
+   public function getAll() {
+      return $this->_object_relationships;
+   }
+
 }

@@ -1,17 +1,21 @@
 <?php
 
 require_once( 'Light/Database/Factory.php' );
+require_once( 'Light/Database/Object/Relationship.php' );
+require_once( 'Light/Database/Object/Relationship/Container.php' );
 
 abstract class Light_Database_Object {
    private $_sql_id_field;
    private $_sql_table;
    private $_db_name;
+   private $_object_relationships;
 
    public function __construct() {
 
       $this->_sql_id_field = 'id';
       $this->_sql_table = null;
       $this->_db_name = null;
+      $this->_object_relationships = new Light_Database_Object_Relationship_Container();
 
       $this->init();
 
@@ -41,6 +45,30 @@ abstract class Light_Database_Object {
 
    public function getDbName() {
       return $this->_db_name;
+   }
+
+   public function addOneToOneRelationship( $localName, $objectName, $sourceField, $linkingField ) {
+      $this->_object_relationships->add( 
+            new Light_Database_Object_Relationship( 
+               $localName, 
+               $objectName, 
+               $sourceField, 
+               $linkingField, 
+               Light_Database_Object_Relationship::ONE_TO_ONE
+               )
+      );
+   }
+
+   public function addOneToManyRelationship( $localName, $objectName, $sourceField, $linkingField ) {
+      $this->_object_relationships->add( 
+            new Light_Database_Object_Relationship( 
+               $localName, 
+               $objectName, 
+               $sourceField, 
+               $linkingField, 
+               Light_Database_Object_Relationship::ONE_TO_MANY
+               )
+      );
    }
 
    public function init() {
@@ -208,4 +236,108 @@ abstract class Light_Database_Object {
       return true;
    }
 
+   private function _fetchRelatedObjects( Light_Database_Object_Relationship $rel ) {
+      $leftside_field = $rel->sourceField;
+      if ( ! isset( $this->$leftside_field ) ) {
+         return null;
+      } 
+      try {
+         $sel_name = $rel->objectName . '_Selector';
+         $sel = new $sel_name();
+         $and_params = array( new Light_Database_Selector_Criteria( $rel->linkingField, '=', $this->$leftside_field ) );
+         $rows = $sel->find( $and_params );
+         if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_ONE && isset( $rows[0] ) ) {
+            return $rows[0];
+         }
+         if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_MANY && count( $rows ) > 0 ) {
+            return $rows;
+         }
+      } catch ( Exception $e ) {
+         throw $e;
+      }
+      return null;
+   }
+
+   public function __call( $method, $args ) {
+      if ( preg_match( '/^(get|set)(.*)$/', $method, $methodPregs ) ) {
+         $operand = $methodPregs[1];
+         $localName = $methodPregs[2];
+
+         $rel = $this->_object_relationships->findByName( $localName );
+
+         //---
+         // TODO: Need to decide if we are going to support setAttribute() ever. 
+         // My misgivings on it at this point is the method signature issue where we might
+         // need to do some kind of complicated mapping / transformation on the params as they come in.
+         //---
+         if ( is_object( $rel ) ) {
+            if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_ONE ) {
+               if ( $operand == 'get' ) {
+                  return $this->_fetchRelatedObjects( $rel );
+               } 
+            }
+            if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_MANY ) {
+               if ( $operand == 'get' ) {
+                  return $this->_fetchRelatedObjects( $rel );
+               } 
+            }
+         }
+
+      }
+      return;
+   }
+
+   public function toXML( $writer = null ) {
+
+      $writer_provided = false;
+
+      if ( $writer == null ) {
+         $writer = new XMLWriter();
+         $writer->openMemory();
+         $writer->setIndent(true);
+         $writer->startDocument( '1.0', 'UTF-8' );
+      } else {
+         $writer_provided = true;
+      }
+
+      $writer->startElement( get_class( $this ) );
+      
+      $fields = $this->getFieldNames();
+
+      foreach ( $fields as $field ) {
+         $writer->writeElement( $field, $this->$field );
+      }
+
+      // get all related objects.
+      $rels = $this->_object_relationships->getAll();
+
+      foreach ( $rels as $rel ) {
+         $writer->startElement( $rel->localName );
+
+         $getter = 'get' . $rel->localName;
+         $related = $this->$getter();
+
+         if ( is_array( $related ) ) { 
+            foreach ( $related as $rel_obj ) {
+               $rel_obj->toXml( $writer );
+            }
+         } else if ( isset( $related ) ) {
+            // $related->toXml( $writer );
+         }
+
+         $writer->endElement();
+      }
+
+      $writer->endElement();
+
+      if ( $writer_provided == false ) {
+         $writer->endDocument();
+
+         // default return xml please.
+         return $writer->outputMemory( true );
+      }
+
+      return null;
+
+   }
 }

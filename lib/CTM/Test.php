@@ -2,17 +2,6 @@
 
 require_once( 'Light/Database/Object.php' );
 
-require_once( 'CTM/Test/BaseUrl.php' );
-require_once( 'CTM/Test/BaseUrl/Selector.php' );
-require_once( 'CTM/Test/Description.php' );
-require_once( 'CTM/Test/Description/Selector.php' );
-require_once( 'CTM/Test/Html/Source.php' );
-require_once( 'CTM/Test/Html/Source/Selector.php' );
-require_once( 'CTM/Test/Param.php' );
-require_once( 'CTM/Test/Param/Selector.php' );
-require_once( 'CTM/Test/Command.php' );
-require_once( 'CTM/Test/Command/Selector.php' );
-
 class CTM_Test extends Light_Database_Object {
    public $id;
    public $test_folder_id;
@@ -22,10 +11,17 @@ class CTM_Test extends Light_Database_Object {
    public $created_by;
    public $modified_at;
    public $modified_by;
+   public $revision_count;
 
    public function init() {
       $this->setSqlTable( 'test' );
       $this->setDbName( 'test' );
+      $this->addOneToOneRelationship( 'BaseUrl', 'CTM_Test_BaseUrl', 'id', 'test_id' );
+      $this->addOneToOneRelationship( 'HtmlSource', 'CTM_Test_Html_Source', 'id', 'test_id' );
+      $this->addOneToOneRelationship( 'Description', 'CTM_Test_Description', 'id', 'test_id' );
+      $this->addOneToManyRelationship( 'Commands', 'CTM_Test_Command', 'id', 'test_id' );
+      $this->addOneToManyRelationship( 'Params', 'CTM_Test_Param', 'id', 'test_id' );
+      $this->addOneToManyRelationship( 'Revisions', 'CTM_Test_Revision', 'id', 'test_id' );
    }
 
    // overloaded remove to take care of the object cleanup
@@ -51,19 +47,21 @@ class CTM_Test extends Light_Database_Object {
          } 
 
          // test command removal
-         $sel = new CTM_Test_Command_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $this->id ) );
-         $test_commands = $sel->find( $and_params );
+         $test_commands = $this->getCommands();
          foreach ( $test_commands as $test_command ) {
             $test_command->remove();
          }
 
          // test params removal
-         $sel = new CTM_Test_Param_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $this->id ) );
-         $test_params = $sel->find( $and_params );
+         $test_params = $this->getParams();
          foreach ( $test_params as $test_param ) {
             $test_param->remove();
+         }
+
+         // test revisions removal
+         $test_revisions = $this->getRevisions();
+         foreach ( $test_revisions as $test_revision ) {
+            $test_revision->remove();
          }
 
          // now remove ourselves
@@ -96,23 +94,6 @@ class CTM_Test extends Light_Database_Object {
       return false;
    }
 
-   public function getBaseUrl() {
-      if ( ! isset( $this->id ) ) {
-         return null;
-      } 
-      try {
-         $sel = new CTM_Test_BaseUrl_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
-         if ( isset( $rows[0] ) ) {
-            return $rows[0];
-         }
-      } catch ( Exception $e ) {
-         throw $e;
-      }
-      return null;
-   }
-
    public function setDescription( $description ) {
       if ( ! isset( $this->id ) ) {
          return false;
@@ -133,23 +114,6 @@ class CTM_Test extends Light_Database_Object {
          throw $e;
       }
       return false;
-   }
-
-   public function getDescription() {
-      if ( ! isset( $this->id ) ) {
-         return null;
-      } 
-      try {
-         $sel = new CTM_Test_Description_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
-         if ( isset( $rows[0] ) ) {
-            return $rows[0];
-         }
-      } catch ( Exception $e ) {
-         throw $e;
-      }
-      return null;
    }
 
    public function setHtmlSource( CTM_User $user, $html_source ) {
@@ -174,21 +138,22 @@ class CTM_Test extends Light_Database_Object {
       return false;
    }
 
-   public function getHtmlSource() {
-      if ( ! isset( $this->id ) ) {
-         return null;
-      } 
-      try {
-         $sel = new CTM_Test_Html_Source_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
-         if ( isset( $rows[0] ) ) {
-            return $rows[0];
-         }
-      } catch ( Exception $e ) {
-         throw $e;
+   public function saveRevision() {
+
+      // save the revision to the revision store.
+      $ctm_revision_obj = new CTM_Revision_Framework( 'test' );
+      list( $rv, $revision_id ) = $ctm_revision_obj->addRevision( (integer) $this->id, $this->toXML() );
+
+      if ( $rv == true ) {
+         // update the revision database tracker.
+         $rev_obj = new CTM_Test_Revision();
+         $rev_obj->test_id = $this->id;
+         $rev_obj->modified_at = $this->modified_at;
+         $rev_obj->modified_by = $this->modified_by;
+         $rev_obj->revision_id = $revision_id;
+         $rev_obj->save();
       }
-      return null;
+
    }
 
 }

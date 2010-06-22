@@ -50,6 +50,7 @@ class CTM_Site_Test_Add extends CTM_Site {
          $new->created_by = $user_obj->id;
          $new->modified_at = $create_at;
          $new->modified_by = $user_obj->id;
+         $new->revision_count = 1;
          $new->save();
 
          if ( $new->id > 0 ) {
@@ -61,6 +62,9 @@ class CTM_Site_Test_Add extends CTM_Site {
             $new->setDescription( $description );
 
          }
+
+         // save the inital version
+         $new->saveRevision();
       
          header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test_folder_id );
          return false;

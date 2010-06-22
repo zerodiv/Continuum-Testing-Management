@@ -170,7 +170,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
             $test_status = $test_status_cache->getById( $test->test_status_id );
             
             $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td>' . $test->name . '</td>' );
+            $this->printHtml( '<td>' . $this->escapeVariable( $test->name ) . '</td>' );
             if ( isset( $test_status ) ) {
                $this->printHtml( '<td>' . $test_status->name . '</td>' );
             } else {

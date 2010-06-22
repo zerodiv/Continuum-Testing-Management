@@ -15,8 +15,4 @@ class CTM_Test_Revision extends Light_Database_Object {
       $this->setDbName( 'test' );
    }
 
-   public function saveRevision( CTM_Test $test_obj ) {
-      // CTM_Revision_Framework
-   }
-
 }
