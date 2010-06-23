@@ -123,7 +123,7 @@ class CTM_Revision_Framework {
             'cd ' . $this->_git_dir . ' ; ' .
             $this->_git_command . ' ' .
             ' commit ' . 
-            ' -m "' . $id . ' - changed" ' .
+            ' -m "' . $this->_namespace . ' - ' . $id . ' - changed" ' .
             $shortname
          ;
 
