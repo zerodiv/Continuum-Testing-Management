@@ -1,6 +1,9 @@
 <?php
 
 require_once( 'Light/Database/Object.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
+
+require_once( 'CTM/Test/Html/Source/Parser.php' );
 
 require_once( 'CTM/User.php' );
 require_once( 'CTM/Test.php' );
@@ -8,54 +11,10 @@ require_once( 'CTM/Test/Selector.php' );
 require_once( 'CTM/Test/Command.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
 require_once( 'CTM/Test/Selenium/Command.php' );
-require_once( 'CTM/Test/Selenium/Command/Cache.php' );
 require_once( 'CTM/Test/Selenium/Command/Selector.php' );
 require_once( 'CTM/Test/Param.php' );
 require_once( 'CTM/Test/Param/Library.php' );
-require_once( 'CTM/Test/Param/Library/Cache.php' );
 
-class CTM_Test_Html_Source_Parser {
-
-   function __construct() {
-   }
-
-   public function parse( $html_source ) {
-
-      $results = array(); 
-      $results['baseurl'] = '';
-      $results['commands'] = array();
-
-      $dom_document = new DOMDocument();
-      $dom_document->loadHtml( $html_source );
-
-      $head = $dom_document->documentElement->getElementsByTagName( 'head' );
-
-      $links = $head->item(0)->getElementsByTagName( 'link' );
-      foreach ( $links as $link ) {
-         $rel = $link->getAttribute( 'rel' );
-         $href = $link->getAttribute( 'href' );
-         if ( $rel == "selenium.base" ) {
-            // <link rel="selenium.base" href="" />
-            $results[ 'baseurl' ] = $href;
-         }
-      }
-
-      $tbody = $dom_document->documentElement->getElementsByTagName( 'tbody' );
-
-      $test_commands = $tbody->item(0)->getElementsByTagName( 'tr' );
-      foreach ( $test_commands as $test_command ) {
-         $tds = $test_command->getElementsByTagName( 'td' );
-         $t_command = array();
-         foreach ( $tds as $td ) {
-            $t_command[] = $td->nodeValue;
-         }
-         $results['commands'][] = $t_command;
-      }
-
-      return $results;
-
-   }
-}
 
 class CTM_Test_Html_Source extends Light_Database_Object {
    public $id;
@@ -94,8 +53,8 @@ class CTM_Test_Html_Source extends Light_Database_Object {
             }
          }
 
-         $test_command_cache = new CTM_Test_Selenium_Command_Cache();
-         $test_param_lib_cache = new CTM_Test_Param_Library_Cache();
+         $test_command_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Selenium_Command_Cache' );
+         $test_param_lib_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Param_Library_Cache' );
 
          // pull out a store command so we have a id to work with.
          $store_command = $test_command_cache->getByName( 'store' );

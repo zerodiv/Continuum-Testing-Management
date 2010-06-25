@@ -15,26 +15,6 @@ class CTM_Site_Test_Folders extends CTM_Site {
       return true;
    }
 
-   private function _getParents( $parent_id, &$parents ) {
-      try {
-         $sel = new CTM_Test_Folder_Selector();
-         $and_params = array(
-               new Light_Database_Selector_Criteria( 'id', '=', $parent_id )
-         );
-         $rows = $sel->find( $and_params );
-         if ( isset( $rows[0] ) ) {
-            $parents[] = $rows[0];
-
-            if ( $rows[0]->parent_id > 0 ) {
-               $this->_getParents( $rows[0]->parent_id, $parents );
-            }
-
-         }
-      } catch( Exception $e ) {
-         throw $e;
-      }
-   }
-
    public function handleRequest() {
 
       $this->requiresAuth();

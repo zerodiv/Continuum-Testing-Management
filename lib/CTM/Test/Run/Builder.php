@@ -1,21 +1,17 @@
 <?php
 
 require_once( 'Light/Config.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
+
 require_once( 'CTM/Test/Param.php' );
 require_once( 'CTM/Test/Param/Selector.php' );
 require_once( 'CTM/Test/Run.php' );
-require_once( 'CTM/Test/Cache.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
-require_once( 'CTM/Test/Selenium/Command/Cache.php' );
 require_once( 'CTM/Test/Run/BaseUrl.php' );
 require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
-require_once( 'CTM/Test/Run/BaseUrl/Cache.php' );
 require_once( 'CTM/Test/Run/Command.php' );
 require_once( 'CTM/Test/Run/Command/Selector.php' );
-require_once( 'CTM/Test/Suite/Cache.php' );
-require_once( 'CTM/Test/Suite/Plan/Type/Cache.php' );
 require_once( 'CTM/Test/Suite/Plan/Selector.php' );
-require_once( 'CTM/Test/Param/Library/Cache.php' );
 
 class CTM_Test_Run_Builder {
    private $_plan_type_cache;
@@ -33,12 +29,12 @@ class CTM_Test_Run_Builder {
 
    function __construct() {
 
-      $this->_plan_type_cache = new CTM_Test_Suite_Plan_Type_Cache();
-      $this->_test_suite_cache = new CTM_Test_Suite_Cache();
-      $this->_test_cache = new CTM_Test_Cache();
-      $this->_param_lib_cache = new CTM_Test_Param_Library_Cache();
-      $this->_test_run_baseurl_cache = new CTM_Test_Run_BaseUrl_Cache();
-      $this->_selenium_command_cache = new CTM_Test_Selenium_Command_Cache();
+      $this->_plan_type_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Plan_Type_Cache' );
+      $this->_test_suite_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Cache' );
+      $this->_test_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Cache' );
+      $this->_param_lib_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Param_Library_Cache' );
+      $this->_test_run_baseurl_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_BaseUrl_Cache' );
+      $this->_selenium_command_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Selenium_Command_Cache' );
 
       $this->_suite_name = null;
       $this->_suite_dir = null;
