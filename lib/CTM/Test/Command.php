@@ -16,6 +16,8 @@ class CTM_Test_Command extends Light_Database_Object {
    public function init() {
       $this->setSqlTable( 'test_command' );
       $this->setDbName( 'test' );
+      $this->addOneToOneRelationship( 'SeleniumCommand', 'CTM_Test_Selenium_Command', 'test_selenium_command_id', 'id' );
+      $this->addOneToOneRelationship( 'ParamLibrary', 'CTM_Test_Param_Library', 'test_param_library_id', 'id' );
    }
 
    // overloaded remove to take care of the object cleanup

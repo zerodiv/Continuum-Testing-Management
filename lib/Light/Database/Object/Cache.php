@@ -19,15 +19,13 @@ abstract class Light_Database_Object_Cache {
    }
 
    public function setObject( $name ) {
-      $sel_name = $name . '_Selector';
-      if ( ! class_exists( $sel_name ) ) {
-         $filename = $sel_name;
-         $filename = str_replace( '_', '/', $filename );
+      if ( ! class_exists( $name ) ) {
+         $filename = str_replace( '_', '/', $name ) . '.php';
          require_once( $filename );
       }
-      if ( ! class_exists( $name ) ) {
-         $filename = $name;
-         $filename = str_replace( '_', '/', $filename );
+      $sel_name = $name . '_Selector';
+      if ( ! class_exists( $sel_name ) ) {
+         $filename = str_replace( '_', '/', $sel_name ) . '.php';
          require_once( $filename );
       }
 

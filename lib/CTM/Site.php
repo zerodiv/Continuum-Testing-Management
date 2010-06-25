@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'Light/MVC.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 
 // we have to include the user object to thaw it from the session
 require_once( 'CTM/User.php' );
@@ -97,7 +98,7 @@ class CTM_Site extends Light_MVC {
 
    public function _displayFolderBreadCrumb( $parent_id = 0 ) {
          // Look up the chain as needed.
-         $folder_cache = new CTM_Test_Folder_Cache();
+         $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
          $parents = array(); 
          $folder_cache->getFolderParents( $parent_id, $parents );
          // $this->_getFolderParents( $parent_id, $parents );
