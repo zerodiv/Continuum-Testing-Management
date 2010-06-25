@@ -47,27 +47,37 @@ class CTM_ET_Poll extends CTM_Site {
     }
 
     private function _serviceOutput($status, $message, $testRunId = null, $testRunBrowserId = null, $downloadUrl = null, $testBrowser = null, $testBaseurl = null ) {
-        echo "<?xml version=\"1.0\"?>\n";
-        echo "<etResponse>\n";
-        echo "   <version>1.0</version>\n";
-        echo "   <status>$status</status>\n";
-        echo "   <message>$message</message>\n";
-        if (!empty($testRunId)) {
-            echo "   <testRunId>$testRunId</testRunId>\n";
-        }
-        if (!empty($testRunBrowserId)) {
-            echo "   <testRunBrowserId>$testRunBrowserId</testRunBrowserId>\n";
-        }
-        if (!empty($downloadUrl)) {
-            echo "   <downloadUrl>$downloadUrl</downloadUrl>\n";
-        }
-        if (!empty($testBrowser)) {
-            echo "   <testBrowser>$testBrowser</testBrowser>\n";
-        }
-        if (!empty($testBaseurl)) {
-            echo "   <testBaseurl>$testBaseurl</testBaseurl>\n";
-        }
-        echo "</etResponse>\n";
+       
+       $writer = new XMLWriter();
+       $writer->openMemory();
+       $writer->setIndent(true);
+       $writer->startDocument( '1.0', 'UTF-8' );
+
+       $writer->startElement( 'etResponse' );
+
+       $writer->writeElement( 'version', '1.0' );
+       $writer->writeElement( 'status', $status );
+       $writer->writeElement( 'message', $message );
+
+       if (!empty($testRunId)) {
+          $writer->writeElement( 'testRunId', $testRunId );
+       }
+       
+       if (!empty($testRunBrowserId)) {
+          $writer->writeElement( 'testRunBrowserId', $testRunBrowserId );
+       }
+       if (!empty($downloadUrl)) {
+          $writer->writeElement( 'downloadUrl', $downloadUrl );
+       }
+       if (!empty($testBrowser)) {
+          $writer->writeElement( 'testBrowser', $testBrowser );
+       }
+       if (!empty($testBaseurl)) {
+          $writer->writeElement( 'testBaseurl', $testBaseurl );
+       }
+       $writer->endElement();
+       $writer->endDocument();
+       return $writer->outputMemory( true );
     }
 
     /**
@@ -80,7 +90,7 @@ class CTM_ET_Poll extends CTM_Site {
         $guid = $this->getOrPost('guid', '' );
 
         if (empty($guid)) {
-            $this->_serviceOutput( 'FAIL', "guid is required!" );
+            echo $this->_serviceOutput( 'FAIL', "guid is required!" );
             return false;
         }
 
@@ -151,18 +161,22 @@ class CTM_ET_Poll extends CTM_Site {
                        $test_run_baseurl = $test_run_baseurls[0]->baseurl;
                     }
 
-                    $this->_serviceOutput('OK', '', $test_run_browser->test_run_id, $test_run_browser->id, $downloadUrl, $testBrowser, $test_run_baseurl );
+                    echo $this->_serviceOutput('OK', '', $test_run_browser->test_run_id, $test_run_browser->id, $downloadUrl, $testBrowser, $test_run_baseurl );
+                    return false;
 
                 } else {
-                    $this->_serviceOutput('FAIL', "Failed to find test run for this machine");
+                    echo $this->_serviceOutput('FAIL', "Failed to find test run for this machine");
+                    return false;
                 }
 
             } catch ( Exception $e ) {
-                $this->_serviceOutput( 'FAIL', "failed to find test_machine" );
+                echo $this->_serviceOutput( 'FAIL', "Failed to find test_machine" );
+                return false;
             }
 
         } else {
-            $this->_serviceOutput( 'FAIL', "failed to find test_machine" );
+            echo $this->_serviceOutput( 'FAIL', "Failed to find test_machine" );
+            return false;
         }
 
         return false;
