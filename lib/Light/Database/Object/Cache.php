@@ -1,6 +1,6 @@
 <?php
 
-abstract class Light_Database_Cache {
+abstract class Light_Database_Object_Cache {
    private $_cache;
    private $_object;
    private $_sel_object;

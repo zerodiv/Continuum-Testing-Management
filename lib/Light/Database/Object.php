@@ -3,6 +3,7 @@
 require_once( 'Light/Database/Factory.php' );
 require_once( 'Light/Database/Object/Relationship.php' );
 require_once( 'Light/Database/Object/Relationship/Container.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 
 abstract class Light_Database_Object {
    private $_sql_id_field;
@@ -47,14 +48,24 @@ abstract class Light_Database_Object {
       return $this->_db_name;
    }
 
-   public function addOneToOneRelationship( $localName, $objectName, $sourceField, $linkingField ) {
+   public function setIdField( $field_name ) {
+      $this->_sql_id_field = $field_name;
+      return true;
+   }
+
+   public function getIdField() {
+      return $this->_sql_id_field;
+   }
+
+   public function addOneToOneRelationship( $localName, $objectName, $sourceField, $linkingField, $useCache = false ) {
       $this->_object_relationships->add( 
             new Light_Database_Object_Relationship( 
                $localName, 
                $objectName, 
                $sourceField, 
                $linkingField, 
-               Light_Database_Object_Relationship::ONE_TO_ONE
+               Light_Database_Object_Relationship::ONE_TO_ONE,
+               $useCache
                )
       );
    }
@@ -66,7 +77,8 @@ abstract class Light_Database_Object {
                $objectName, 
                $sourceField, 
                $linkingField, 
-               Light_Database_Object_Relationship::ONE_TO_MANY
+               Light_Database_Object_Relationship::ONE_TO_MANY,
+               false
                )
       );
    }
@@ -240,7 +252,15 @@ abstract class Light_Database_Object {
       $leftside_field = $rel->sourceField;
       if ( ! isset( $this->$leftside_field ) ) {
          return null;
-      } 
+      }
+
+      if ( $rel->use_cache == true ) {
+         $getFunction = 'getBy' . ucfirst( $rel->linkingField );
+         $cacheName = $rel->objectName . '_Cache';
+         $cacheObject = Light_Database_Object_Cache_Factory::factory( $cacheName );
+         return $cacheObject->$getFunction( $this->$leftside_field );
+      }
+
       try {
          $sel_name = $rel->objectName . '_Selector';
          $sel = new $sel_name();

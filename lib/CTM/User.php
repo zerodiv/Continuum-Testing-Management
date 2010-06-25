@@ -17,6 +17,7 @@ class CTM_User extends Light_Database_Object {
    public function init() {
       $this->setSqlTable( 'account' );
       $this->setDbName( 'account' );
+      $this->addOneToOneRelationship( 'Role', 'CTM_User_Role', 'account_role_id', 'id', true );
    }
 
    // jeo - swiped from a tutcity artical, because i am lazy today.
