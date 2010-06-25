@@ -1,11 +1,11 @@
 <?php
 
 require_once( '../../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
 require_once( 'CTM/Test/Run.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
-require_once( 'CTM/Test/Folder/Cache.php' );
 
 class CTM_Site_Test_Run_Add extends CTM_Site { 
 
@@ -58,7 +58,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       $test_suite_id += 0;
 
       // folder_cacheing
-      $folder_cache = new CTM_Test_Folder_Cache();
+      $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
 
       // New style folder browser.
       $parents = array(); 

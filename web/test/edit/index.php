@@ -1,17 +1,10 @@
 <?php
 
 require_once( '../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
-require_once( 'CTM/Test.php' );
 require_once( 'CTM/Test/Selector.php' );
-require_once( 'CTM/Test/Command.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
-require_once( 'CTM/Test/Param/Library.php' );
-require_once( 'CTM/Test/Param/Library/Cache.php' );
-require_once( 'CTM/Test/Selenium/Command/Cache.php' );
-
-// temp
-require_once( 'CTM/Revision/Framework.php' );
 
 class CTM_Site_Test_Edit extends CTM_Site { 
    private $_error_message;
@@ -234,7 +227,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
          $this->printHtml( '</tr>' );
          if ( count( $commands ) > 0 ) {
             $n = 0;
-            $sel_comm_cache = new CTM_Test_Selenium_Command_Cache();
+            $sel_comm_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Selenium_Command_Cache' );
             foreach ( $commands as $command ) {
 
                $n++;

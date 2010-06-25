@@ -1,10 +1,10 @@
 <?php
 
 require_once( '../../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Param/Library.php' );
 require_once( 'CTM/Test/Param/Library/Selector.php' );
-require_once( 'CTM/User/Cache.php' );
 
 class CTM_Site_Test_Param_Library extends CTM_Site { 
 
@@ -20,7 +20,7 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
 
    public function displayBody() {
 
-      $user_cache = new CTM_User_Cache();
+      $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
 
       $params = null;
       try {

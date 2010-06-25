@@ -1,11 +1,11 @@
 <?php
 
 require_once( '../../../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
 require_once( 'CTM/Test/Run/Command/Selector.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
-require_once( 'CTM/Test/Selenium/Command/Cache.php' );
 
 class CTM_Site_Test_Run_Add_Step2 extends CTM_Site { 
 
@@ -100,7 +100,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
       if ( isset( $test_run->id ) ) {
 
-         $sel_command_cache = new CTM_Test_Selenium_Command_Cache();
+         $sel_command_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Selenium_Command_Cache' );
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 

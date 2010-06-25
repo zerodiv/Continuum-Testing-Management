@@ -1,12 +1,12 @@
 <?php
 
 require_once( '../../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Machine.php' );
 require_once( 'CTM/Test/Machine/Selector.php' );
 require_once( 'CTM/Test/Machine/Browser.php' );
 require_once( 'CTM/Test/Machine/Browser/Selector.php' );
-require_once( 'CTM/Test/Browser/Cache.php' );
 
 class CTM_Site_Test_Machine_Edit extends CTM_Site { 
 
@@ -153,7 +153,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
       $this->printHtml( '<th>patch version</th>' );
       $this->printHtml( '</tr>' );
       if ( count( $machine_browsers ) > 0 ) {
-         $browser_cache = new CTM_Test_Browser_Cache();
+         $browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Browser_Cache' );
          foreach ( $machine_browsers as $machine_browser ) {
             $test_browser = $browser_cache->getById( $machine_browser->test_browser_id );
             $class = $this->oddEvenClass();

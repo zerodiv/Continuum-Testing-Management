@@ -1,12 +1,11 @@
 <?php
 
 require_once( '../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
-require_once( 'CTM/User/Cache.php' );
 require_once( 'CTM/Test/Folder/Selector.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
 require_once( 'CTM/Test/Selector.php' );
-require_once( 'CTM/Test/Status/Cache.php' );
 
 class CTM_Site_Test_Folders extends CTM_Site { 
 
@@ -31,8 +30,8 @@ class CTM_Site_Test_Folders extends CTM_Site {
       }
 
       // need these caches for this page to hum.
-      $test_status_cache = new CTM_Test_Status_Cache();
-      $user_cache = new CTM_User_Cache();
+      $test_status_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Status_Cache' );
+      $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
 
       $this->printHtml( '<div class="aiTopNav">' );
       $this->_displayFolderBreadCrumb( $parent_id );

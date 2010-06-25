@@ -80,7 +80,7 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Name:</td>' );
-      $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( name ) . '"></td>' );
+      $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( $name ) . '"></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );

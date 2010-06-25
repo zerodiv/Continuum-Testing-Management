@@ -1,20 +1,17 @@
 <?php
 
 require_once( '../../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
 require_once( 'CTM/Test/Selector.php' );
-require_once( 'CTM/Test/Cache.php' );
-require_once( 'CTM/Test/Folder/Cache.php' );
-require_once( 'CTM/Test/Suite/Cache.php' );
 require_once( 'CTM/Test/Suite/Plan.php' );
 require_once( 'CTM/Test/Suite/Plan/Selector.php' );
-require_once( 'CTM/Test/Suite/Plan/Type/Cache.php' );
 
 class CTM_Site_Test_Suite_Plan extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Folders';
+      $this->_pagetitle = 'Edit Test Suite Plan';
       return true;
    }
 
@@ -225,7 +222,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
             $test_suite = $rows[0];
          
             // pull up the plan 
-            $test_suite_plan_type_cache = new CTM_Test_Suite_Plan_Type_Cache();
+            $test_suite_plan_type_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Plan_Type_Cache' );
             
             $sel = new CTM_Test_Suite_Plan_Selector();
             $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $id ) );
@@ -268,9 +265,9 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
          if ( count( $test_suite_plans ) > 0 ) {
 
-            $plan_type_cache = new CTM_Test_Suite_Plan_Type_Cache();
-            $test_suite_cache = new CTM_Test_Suite_Cache();
-            $test_cache = new CTM_Test_Cache();
+            $plan_type_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Plan_Type_Cache' );
+            $test_suite_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Cache' );
+            $test_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Cache' );
 
             $high_id = 0;
 
@@ -332,10 +329,9 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
          // --------------------------------------------------------------------------------
          // Look up the chain as needed.
-         $folder_cache = new CTM_Test_Folder_Cache();
+         $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
          $parents = array(); 
          $folder_cache->getFolderParents( $test_folder_id, $parents );
-         // $this->_getFolderParents( $parent_id, $parents );
          $parents = array_reverse( $parents );
          $parents_cnt = count( $parents );
 

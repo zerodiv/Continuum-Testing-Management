@@ -1,12 +1,10 @@
 <?php 
 require_once( '../../../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
 require_once( 'CTM/Test/Browser/Selector.php' );
-require_once( 'CTM/Test/Browser/Cache.php' );
 require_once( 'CTM/Test/Machine/Browser/Selector.php' );
-require_once( 'CTM/Test/Machine/Browser/Cache.php' );
-require_once( 'CTM/Test/Machine/Cache.php' );
 require_once( 'CTM/Test/Run/Browser.php' );
 
 class CTM_Site_Test_Run_Add_Step2 extends CTM_Site { 
@@ -14,9 +12,9 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
    private $_test_browser_cache;
 
    public function setupPage() {
-      $this->_test_machine_cache = new CTM_Test_Machine_Cache();
-      $this->_test_browser_cache = new CTM_Test_Browser_Cache();
-      $this->_test_machine_browser_cache = new CTM_Test_Machine_Browser_Cache();
+      $this->_test_machine_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Machine_Cache' );
+      $this->_test_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Browser_Cache' );
+      $this->_test_machine_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Machine_Browser_Cache' );
 
       $this->_pagetitle = 'Test Run - Add - Step 4 of 4';
       return true;

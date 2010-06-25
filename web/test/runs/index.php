@@ -1,13 +1,10 @@
 <?php
 
 require_once( '../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
-require_once( 'CTM/User/Cache.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
-require_once( 'CTM/Test/Run/State/Cache.php' );
-require_once( 'CTM/Test/Machine/Cache.php' );
-require_once( 'CTM/Test/Browser/Cache.php' );
 
 class CTM_Site_Test_Runs extends CTM_Site { 
 
@@ -42,10 +39,10 @@ class CTM_Site_Test_Runs extends CTM_Site {
    }
 
    public function displayBody() {
-      $run_state_cache = new CTM_Test_Run_State_Cache();
-      $user_cache = new CTM_User_Cache();
-      $test_machine_cache = new CTM_Test_Machine_Cache();
-      $test_browser_cache = new CTM_Test_Browser_Cache();
+      $run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
+      $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
+      $test_machine_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Machine_Cache' );
+      $test_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Browser_Cache' );
 
       $queued_state = $run_state_cache->getById( 1 );
       $executing_state = $run_state_cache->getById( 2 );

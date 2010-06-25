@@ -1,10 +1,9 @@
 <?php 
 require_once( '../../../../../bootstrap.php' );
+require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
 require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
-require_once( 'CTM/Test/Suite/Cache.php' );
-require_once( 'CTM/Test/Cache.php' );
 
 class CTM_Site_Test_Run_Add_Step3 extends CTM_Site { 
 
@@ -116,8 +115,8 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
          $this->printHtml( '<td>Url:</td>' );
          $this->printHtml( '</tr>' );
 
-         $suite_cache = new CTM_Test_Suite_Cache();
-         $test_cache = new CTM_Test_Cache();
+         $suite_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Cache' );
+         $test_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Cache' );
 
          foreach ( $base_urls as $base_url ) {
             $class = $this->oddEvenClass();

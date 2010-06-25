@@ -4,6 +4,6 @@ require_once( 'Light/Database/Object/Cache.php' );
 
 class CTM_Test_Suite_Cache extends Light_Database_Object_Cache {
    public function init() {
-      $this->setObject( 'CTM_Test_Suite_Cache' );
+      $this->setObject( 'CTM_Test_Suite' );
    }
 }

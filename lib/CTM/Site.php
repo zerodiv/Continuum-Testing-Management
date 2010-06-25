@@ -115,7 +115,7 @@ class CTM_Site extends Light_MVC {
          foreach ( $parents as $parent ) {
             $current_parent++;
             $folder_path .= '/';
-            $folder_path .= '<a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $parent->id . '">' . $parent->name . '</a>';
+            $folder_path .= '<a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
          }
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
