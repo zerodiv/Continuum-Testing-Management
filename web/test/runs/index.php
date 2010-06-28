@@ -70,6 +70,9 @@ class CTM_Site_Test_Runs extends CTM_Site {
       $this->printHtml( '<th colspan="7">Test Runs</th>' );
       $this->printHtml( '</tr>' );
 
+      $this->printHtml( '<tr class="aiButtonRow">' );
+      $this->printHtml( '<td colspan="7"><center><a href="' . $this->_baseurl . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
+      $this->printHtml( '</tr>' );
 
       if ( count( $test_runs ) == 0 ) {
          $this->printHtml( '<tr class="odd">' );
