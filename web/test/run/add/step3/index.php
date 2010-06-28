@@ -3,6 +3,7 @@ require_once( '../../../../../bootstrap.php' );
 require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Run/Selector.php' );
+require_once( 'CTM/Test/Suite/Selector.php' );
 require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
 
 class CTM_Site_Test_Run_Add_Step3 extends CTM_Site { 

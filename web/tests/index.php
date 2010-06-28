@@ -17,16 +17,25 @@ class CTM_Site_Test_Folders extends CTM_Site {
    public function handleRequest() {
 
       $this->requiresAuth();
-
+      $this->requiresRole( array( 'user', 'qa', 'admin' ) );
       return true;
 
    }
 
    public function displayBody() {
+
       $parent_id = $this->getOrPost( 'parent_id', '' );
+
+      $user_obj = $this->getUser();
+      $role_obj = $user_obj->getRole();
 
       if ( $parent_id == '' ) {
          $parent_id = 1;
+      }
+
+      if ( $role_obj->name == 'user' ) {
+         $user_folder = $this->getUserFolder();
+         $parent_id = $user_folder->id;
       }
 
       // need these caches for this page to hum.
@@ -37,10 +46,20 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
       $test_rows = array();
       try {
+
          $sel = new CTM_Test_Selector();
+
          $and_params = array(
                new Light_Database_Selector_Criteria( 'test_folder_id', '=', $parent_id )
          );
+
+         // add in a created_by inclusion
+         if ( $role_obj->name == 'user' ) {
+            $and_params[] = 
+               new Light_Database_Selector_Criteria( 'created_by', '=', $user_obj->id )
+            ;
+         }
+
          $test_rows = $sel->find( $and_params );
       } catch ( Exception $e ) {
       }

@@ -14,6 +14,8 @@ class CTM_Site_Test_Add extends CTM_Site {
    public function handleRequest() {
 
       $this->requiresAuth();
+      $this->requiresRole( array( 'user', 'qa', 'admin' ) );
+      
 
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
       $name             = $this->getOrPost( 'name', '' );
@@ -39,6 +41,12 @@ class CTM_Site_Test_Add extends CTM_Site {
       try {
 
          $user_obj = $this->getUser();
+         $role_obj = $user_obj->getRole();
+
+         if ( $role_obj == 'user' ) {
+            // The user is only allowed to modify things they own within their
+            // folder.
+         }
 
          // create the test.
          $new = new CTM_Test();

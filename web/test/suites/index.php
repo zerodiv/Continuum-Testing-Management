@@ -16,15 +16,24 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
    public function handleRequest() {
       $this->requiresAuth();
-      $this->requiresRole( array( 'qa', 'admin' ) );
+      $this->requiresRole( array( 'user', 'qa', 'admin' ) );
       return true;
    }
 
    public function displayBody() {
+
       $parent_id = $this->getOrPost( 'parent_id', '' );
+
+      $user_obj = $this->getUser();
+      $role_obj = $user_obj->getRole();
 
       if ( $parent_id == '' ) {
          $parent_id = 1;
+      }
+
+      if ( $role_obj->name == 'user' ) {
+         $user_folder = $this->getUserFolder();
+         $parent_id = $user_folder->id;
       }
 
       // need these caches for this page to hum.
