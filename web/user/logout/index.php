@@ -11,7 +11,7 @@ class CTM_Site_User_Logout extends CTM_Site {
    } 
    
    public function handleRequest() {
-      if ( isset( $_SESSION['user'] ) ) {
+      if ( isset( $_SESSION['user_id'] ) ) {
          $_SESSION = null;
          session_destroy();
          header( 'Location: ' . $this->_baseurl );

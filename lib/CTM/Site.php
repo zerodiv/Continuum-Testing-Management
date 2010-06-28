@@ -15,6 +15,8 @@ class CTM_Site extends Light_MVC {
       // display the normal header.
       parent::displayHeader();
 
+      $user_obj = $this->getUser();
+
       $this->printHtml( '<div class="aiMainContent clearfix">' );
 
       $this->printHtml( '<div class="aiTopNav">' );
@@ -25,7 +27,7 @@ class CTM_Site extends Light_MVC {
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/param/library/">Test Parameter Library</a></li>' );
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/">Test Runs</a></li>' );
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/machines/">Test Machines</a></li>' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/logout/">Logout : ' . $this->escapeVariable( $_SESSION['user']->username ) . '</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/logout/">Logout : ' . $this->escapeVariable( $user_obj->username ) . '</a></li>' );
       } else {
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/login/">Login</a></li>' );
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/create/">Create Account</a></li>' );
@@ -76,15 +78,26 @@ class CTM_Site extends Light_MVC {
    }
    
    public function isLoggedIn() {
-      if ( isset( $_SESSION['user'] ) && $_SESSION['user']->id > 0 ) {
+      if ( isset( $_SESSION['user_id'] ) && $_SESSION['user_id'] > 0 ) {
+         $user_obj = $this->getUser();
+         // a user cannot be logged in if they are disabled.
+         if ( $user_obj->is_disabled == true ) {
+            return false;
+         }
+         // a user cannot be logged in if they are not verified.
+         if ( $user_obj->is_verified != true ) {
+            return false;
+         }
          return true;
       }
       return false;
    } 
 
    public function getUser() {
-      if ( isset( $_SESSION['user'] ) && $_SESSION['user']->id > 0 ) {
-         return $_SESSION['user'];
+      if ( isset( $_SESSION['user_id'] ) && $_SESSION['user_id'] > 0 ) {
+         $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
+         $user_obj = $user_cache->getById( $_SESSION['user_id'] );
+         return $user_obj;
       }
       return null;
    }

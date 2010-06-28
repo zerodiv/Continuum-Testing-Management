@@ -44,7 +44,7 @@ class CTM_Site_User_Login extends CTM_Site {
                return false;
             }
             // found the user auth them in
-            $_SESSION['user'] = $user;
+            $_SESSION['user_id'] = $user->id;
             // they are logged in return them back to the main site.
             header( 'Location: ' . $this->_baseurl );
             return false;

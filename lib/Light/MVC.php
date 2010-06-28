@@ -156,7 +156,7 @@ abstract class Light_MVC {
    } 
    
    public function isLoggedIn() {
-      if ( isset( $_SESSION['user'] ) && $_SESSION['user']->id > 0 ) {
+      if ( isset( $_SESSION['user_id'] ) && $_SESSION['user_id'] > 0 ) {
          return true;
       }
       return false;

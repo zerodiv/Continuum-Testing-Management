@@ -38,7 +38,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
             $suite = $rows[0];
             $suite->name = $name;
             $suite->modified_at = time();
-            $suite->modified_by = $_SESSION['user']->id;
+            $suite->modified_by = $user_obj->id;
             $suite->save();
 
             $suite->setDescription( $description );
