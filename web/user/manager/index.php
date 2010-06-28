@@ -14,6 +14,8 @@ class CTM_Site_User_Manager extends CTM_Site {
    public function handleRequest() {
 
       $this->requiresAuth();
+      $this->requiresRole( array( 'admin' ) );
+
       return true;
 
    }

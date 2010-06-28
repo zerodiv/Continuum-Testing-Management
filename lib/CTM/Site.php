@@ -53,12 +53,27 @@ class CTM_Site extends Light_MVC {
    }
 
    public function requiresAuth() {
-      if ( $this->isLoggedIn() != true ) {
-         header( 'Location: ' . $this->_baseurl . '/user/login' );
-         exit();
+      if ( $this->isLoggedIn() == true ) {
+         return true; 
       } 
-      return true; 
+      header( 'Location: ' . $this->_baseurl . '/user/login' );
+      exit();
    } 
+
+   public function requiresRole( $acceptable_roles ) {
+      if ( is_array( $acceptable_roles ) && count( $acceptable_roles ) > 0 ) {
+         $user = $this->getUser();
+         if ( isset( $user ) ) {
+            $current_role = $user->getRole();
+            // if their role is in a acceptable role list then we are good for this page.
+            if ( isset( $current_role ) && in_array( $current_role->name, $acceptable_roles ) ) {
+               return true;
+            }
+         }
+      }
+      header( 'Location: ' . $this->_baseurl . '/user/permission/denied/' );
+      exit();
+   }
    
    public function isLoggedIn() {
       if ( isset( $_SESSION['user'] ) && $_SESSION['user']->id > 0 ) {

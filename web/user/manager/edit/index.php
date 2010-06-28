@@ -1,7 +1,8 @@
 <?php
 
-require_once( '../../../bootstrap.php' );
+require_once( '../../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
+
 require_once( 'CTM/User/Selector.php' );
 
 class CTM_Site_User_Manager_Edit extends CTM_Site { 
@@ -13,6 +14,7 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
 
    public function handleRequest() {
       $this->requiresAuth();
+      $this->requiresRole( array( 'admin' ) );
       return true;
    }
 
