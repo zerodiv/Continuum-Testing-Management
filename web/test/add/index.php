@@ -16,13 +16,23 @@ class CTM_Site_Test_Add extends CTM_Site {
       $this->requiresAuth();
       $this->requiresRole( array( 'user', 'qa', 'admin' ) );
       
-
       $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
 
       if ( $name == '' ) {
          return true;
+      }
+
+      $user_obj = $this->getUser();
+      $role_obj = $user_obj->getRole();
+
+      if ( $role_obj->name == 'user' ) {
+         $user_folder = $this->getUserFolder();
+         if ( $test_folder_id != $user_folder->id ) {
+            header( 'Location: ' . $this->_baseurl . '/user/permission/denied/' );
+            return false;
+         }
       }
 
       $html_source = null;

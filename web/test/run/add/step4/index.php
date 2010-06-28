@@ -6,6 +6,7 @@ require_once( 'CTM/Test/Run/Selector.php' );
 require_once( 'CTM/Test/Browser/Selector.php' );
 require_once( 'CTM/Test/Machine/Browser/Selector.php' );
 require_once( 'CTM/Test/Run/Browser.php' );
+require_once( 'CTM/Test/Suite/Selector.php' );
 
 class CTM_Site_Test_Run_Add_Step2 extends CTM_Site { 
    private $_test_machine_cache;

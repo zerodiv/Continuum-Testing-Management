@@ -3,7 +3,6 @@
 require_once( '../../../bootstrap.php' );
 require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
-require_once( 'CTM/Test/Selector.php' );
 require_once( 'CTM/Test/Command/Selector.php' );
 
 class CTM_Site_Test_Edit extends CTM_Site { 
@@ -17,16 +16,13 @@ class CTM_Site_Test_Edit extends CTM_Site {
    public function handleRequest() {
 
       $this->requiresAuth();
+      $this->requiresRole( array( 'user', 'qa', 'admin' ) );
 
       $action           = $this->getOrPost( 'action', '' );
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
       $baseurl          = $this->getOrPost( 'baseurl', '' );
       $description      = $this->getOrPost( 'description', '' );
-
-      if ( $action != 'save' ) {
-         return true;
-      }
 
       if ( $name == '' ) {
          $this->_error_message = 'Test Name is a required field';
@@ -38,26 +34,33 @@ class CTM_Site_Test_Edit extends CTM_Site {
          return true;
       }
 
+      $user_obj = $this->getUser();
+      $role_obj = $user_obj->getRole();
+
+      $test_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Cache' );
+      $test = $test_cache->getById( $id );
+
+      if ( isset( $test ) && $role_obj->name == 'user' ) {
+         $user_folder = $this->getUserFolder();
+         if ( $test->test_folder_id != $user_folder->id ) {
+            header( 'Location: ' . $this->_baseurl . '/user/permission/denied/' );
+            return false;
+         }
+      }
+
+      // -- save the cheerleader, save the world --
+      if ( $action != 'save' ) {
+         return true;
+      }
+
       $had_file = false;
 
       $html_source = '';
-
       $html_source_file = $_FILES['html_source_file']['tmp_name'];
 
       if ( isset( $html_source_file ) && filesize( $html_source_file) > 0 ) {
          $html_source = file_get_contents( $html_source_file );
          $had_file = true;
-      }
-
-      $test                = null;
-      try {
-         $sel = new CTM_Test_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) ); 
-         $rows = $sel->find( $and_params ); 
-         if ( isset( $rows[0] ) ) {
-            $test = $rows[0];
-         }
-      } catch ( Exception $e ) {
       }
 
       if ( isset( $test ) ) {
@@ -110,16 +113,10 @@ class CTM_Site_Test_Edit extends CTM_Site {
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
 
-      $rows = null;
-      try {
-         $sel = new CTM_Test_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) ); 
-         $rows = $sel->find( $and_params ); 
-      } catch ( Exception $e ) {
-      }
+      $test_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Cache' );
+      $test = $test_cache->getById( $id );
 
-
-      if ( ! isset( $rows[0] ) ) {
+      if ( ! isset( $test ) ) {
          $this->printHtml( '<div class="aiTableContainer">' );
          $this->printHtml( '<table class="ctmTable">' );
          $this->printHtml( '<tr>' );
@@ -128,7 +125,6 @@ class CTM_Site_Test_Edit extends CTM_Site {
          $this->printHtml( '</table>' );
          $this->printHtml( '</div>' );
       } else {
-         $test = $rows[0];
      
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/edit/">' );

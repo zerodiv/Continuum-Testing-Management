@@ -200,9 +200,18 @@ class CTM_Site extends Light_MVC {
       $parents_cnt = count( $parents );
      
       $folder_path = '';
+      $previous_parent = null;
       foreach ( $parents as $parent ) {
          $folder_path .= '/';
-         $folder_path .= '<a href="' . $current_baseurl . '?parent_id=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
+         if ( is_object( $previous_parent) && $previous_parent->name == 'CTM-Users' ) {
+            $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
+            // this is a user id in disguise.
+            $user_obj = $user_cache->getById( $parent->name );
+            $folder_path .= '<a href="' . $current_baseurl . '?parent_id=' . $parent->id . '">' . $this->escapeVariable( $user_obj->username ) . '</a>';
+         } else {
+            $folder_path .= '<a href="' . $current_baseurl . '?parent_id=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
+         }
+         $previous_parent = $parent;
       }
 
       return $folder_path;
