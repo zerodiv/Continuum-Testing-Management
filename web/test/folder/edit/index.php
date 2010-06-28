@@ -69,19 +69,21 @@ class CTM_Site_Test_Folder_Edit extends CTM_Site {
       $name = $this->getOrPost( 'name', '' );
 
       if ( isset( $folder ) ) {
-         $this->printHtml( '<div class="aiTopNav">' );
-         $this->_displayFolderBreadCrumb( $rows[0]->parent_id );
-         $this->printHtml( '</div>' );
 
-         $this->printHtml( '<div class="aiTableContainer">' );
+         $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/edit/">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' );
-         $this->printHtml( '<table class="ctmTable">' );
+         $this->printHtml( '<table class="ctmTable aiFullWidth">' );
          
          $this->printHtml( '<tr>' );
          $this->printHtml( '<th colspan="4">Edit Folder</th>' );
          $this->printHtml( '</tr>' ); 
-         
+
+         $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td>Folder:</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $folder->parent_id ) . '</td>' );
+         $this->printHtml( '</tr>' );
+
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Name:</td>' );
          $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $folder->name . '"></td>' );

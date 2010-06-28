@@ -66,10 +66,6 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
 
-      $this->printHtml( '<div class="aiTopNav">' );
-      $this->_displayFolderBreadCrumb( $test_folder_id );
-      $this->printHtml( '</div>' );
-
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/suite/add/">' );
       $this->printHtml( '<input type="hidden" value="' . $test_folder_id . '" name="test_folder_id">' );
@@ -81,6 +77,11 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Name:</td>' );
       $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( $name ) . '"></td>' );
+      $this->printHtml( '</tr>' );
+
+      $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Folder:</td>' );
+      $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test_folder_id ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );

@@ -11,18 +11,21 @@ class CTM_Site_Main extends CTM_Site {
    } 
    
    public function handleRequest() {
-      // temp login / registration form.
-      if ( $this->isLoggedIn() == true ) {
-         // bounce them to test suites.
-         header( 'Location: ' . $this->_baseurl . '/test/folders/' );
-         return false;
-      }
-      header( 'Location: ' . $this->_baseurl . '/user/login/' );
-      return false;
+      $this->requiresAuth();
+      return true;
    } 
    
    public function displayBody() {
-      return true;
+      $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
+      $this->printHtml( '<table class="ctmTable aiFullWidth">' );
+      $this->printHtml( '<tr>' );
+      $this->printHtml( '<th>Welcome to CTM</th>' );
+      $this->printHtml( '</tr>' );
+      $this->printHtml( '<tr>' );
+      $this->printHtml( '<td>Some blurb about how to use the app</td>' );
+      $this->printHtml( '</tr>' );
+      $this->printHtml( '</table>' );
+      $this->printHtml( '</div>' );
    }
 
 }

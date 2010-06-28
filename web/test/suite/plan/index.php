@@ -235,9 +235,6 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       }
 
       if ( isset( $test_suite ) ) {
-         $this->printHtml( '<div class="aiTopNav">' );
-         $this->_displayFolderBreadCrumb( $rows[0]->test_folder_id );
-         $this->printHtml( '</div>' );
       
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );

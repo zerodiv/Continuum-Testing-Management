@@ -92,12 +92,6 @@ class CTM_Site_Test_Add extends CTM_Site {
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td valign="top">' );
-      $this->_displayFolderBreadCrumb( $test_folder_id );
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' ); 
-      
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td valign="top">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/add/">' );
       $this->printHtml( '<input type="hidden" value="' . $test_folder_id . '" name="test_folder_id">' );
@@ -110,6 +104,11 @@ class CTM_Site_Test_Add extends CTM_Site {
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td class="odd">Name:</td>' );
       $this->printHtml( '<td class="odd"><input type="text" name="name" size="30" value="' . $this->escapeVariable( $name ) . '"></td>' );
+      $this->printHtml( '</tr>' );
+
+      $this->printHtml( '<tr>' );
+      $this->printHtml( '<td class="odd">Folder:</td>' );
+      $this->printHtml( '<td class="odd">' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test_folder_id ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr>' );

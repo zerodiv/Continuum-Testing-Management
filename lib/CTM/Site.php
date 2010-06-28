@@ -16,6 +16,7 @@ class CTM_Site extends Light_MVC {
       parent::displayHeader();
 
       $user_obj = $this->getUser();
+      $role_obj = $user_obj->getRole();
 
       $this->printHtml( '<div class="aiMainContent clearfix">' );
 
@@ -23,10 +24,32 @@ class CTM_Site extends Light_MVC {
       $this->printHtml( '<ul class="basictab">' );
       $this->printHtml( '<li><a href="' . $this->_baseurl . '">' . $this->_sitetitle . '</a></li>' );
       if ( $this->isLoggedIn() ) {
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/folders/">Test Folders</a></li>' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/param/library/">Test Parameter Library</a></li>' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/">Test Runs</a></li>' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/machines/">Test Machines</a></li>' );
+
+         $allowed_roles = array( 'qa', 'admin' );
+         if ( in_array( $role_obj->name, $allowed_roles ) ) {
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/suites/">Suites</a></li>' );
+         }
+
+         $allowed_roles = array( 'user', 'qa', 'admin' );
+         if ( in_array( $role_obj->name, $allowed_roles ) ) {
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/tests/">Tests</a></li>' );
+         }
+
+         $allowed_roles = array( 'qa', 'admin' );
+         if ( in_array( $role_obj->name, $allowed_roles ) ) {
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/param/library/">Parameter Library</a></li>' );
+         }
+
+         $allowed_roles = array( 'qa', 'admin' );
+         if ( in_array( $role_obj->name, $allowed_roles ) ) {
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/">Test Runs</a></li>' );
+         }
+
+         $allowed_roles = array( 'qa', 'admin' );
+         if ( in_array( $role_obj->name, $allowed_roles ) ) {
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/machines/">Test Machines</a></li>' );
+         }
+
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/logout/">Logout : ' . $this->escapeVariable( $user_obj->username ) . '</a></li>' );
       } else {
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/login/">Login</a></li>' );
@@ -34,7 +57,7 @@ class CTM_Site extends Light_MVC {
       }
       $this->printHtml( '</ul>' );
 
-      if ( $this->isLoggedIn() ) {
+      if ( $this->isLoggedIn() && $role_obj->name == 'admin' ) {
          $this->printHtml( '<ul class="basictab">' );
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/manager/">Manage Users</a></li>' );
          $this->printHtml( '</ul>' );
@@ -124,33 +147,42 @@ class CTM_Site extends Light_MVC {
       return $username;
    }
 
-   public function _displayFolderBreadCrumb( $parent_id = 0 ) {
-         // Look up the chain as needed.
+   public function _fetchFolderPath( $current_baseurl, $parent_id ) {
+      $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
+      $parents = array(); 
+      $folder_cache->getFolderParents( $parent_id, $parents );
+      $parents = array_reverse( $parents );
+      $parents_cnt = count( $parents );
+     
+      $folder_path = '';
+      foreach ( $parents as $parent ) {
+         $folder_path .= '/';
+         $folder_path .= '<a href="' . $current_baseurl . '?parent_id=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
+      }
+
+      return $folder_path;
+   }
+
+   public function _displayFolderBreadCrumb( $current_baseurl, $parent_id = 0 ) {
+         $folder_path = $this->_fetchFolderPath( $current_baseurl, $parent_id );
+
          $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
          $parents = array(); 
          $folder_cache->getFolderParents( $parent_id, $parents );
-         // $this->_getFolderParents( $parent_id, $parents );
-         $parents = array_reverse( $parents );
          $parents_cnt = count( $parents );
 
+         // Look up the chain as needed.
          $children = array();
          if ( $parents_cnt > 0 ) {
             $children = $folder_cache->getFolderChildren( $parents[ ($parents_cnt-1) ]->id );
          }
 
-         $folder_path = '';
-         $current_parent = 0;
-         foreach ( $parents as $parent ) {
-            $current_parent++;
-            $folder_path .= '/';
-            $folder_path .= '<a href="' . $this->_baseurl . '/test/folders/?parent_id=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
-         }
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Current folder path: ' .  $folder_path . '</td>' );
          if ( count( $children ) > 0 ) {
-            $this->printHtml( '<form action="' . $this->_baseurl . '/test/folders/" method="POST">' );
+            $this->printHtml( '<form action="' . $current_baseurl . '" method="POST">' );
             $this->printHtml( '<td><center>' );
             $this->printHtml( 'Switch to Sub Folder: ' );
             $this->printHtml( '<select name="parent_id">' );

@@ -43,19 +43,20 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
       $parent_id = $this->getOrPost( 'parent_id', '' );
       $name = $this->getOrPost( 'name', '' );
 
-      $this->printHtml( '<div class="aiTopNav">' );
-      $this->_displayFolderBreadCrumb( $parent_id );
-      $this->printHtml( '</div>' );
-
-      $this->printHtml( '<div class="aiTableContainer">' );
+      $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/add/">' );
       $this->printHtml( '<input type="hidden" value="' . $parent_id . '" name="parent_id">' );
 
-      $this->printHtml( '<table class="ctmTable">' );
+      $this->printHtml( '<table class="ctmTable aiFullWidth">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">Add Folder</th>' );
       $this->printHtml( '</td>' );
+      $this->printHtml( '</tr>' );
+
+      $this->printHtml( '<tr class="odd">' );
+      $this->printHtml( '<td>Folder:</td>' );
+      $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $parent_id ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );

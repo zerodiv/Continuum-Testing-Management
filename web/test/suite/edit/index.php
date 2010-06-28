@@ -82,9 +82,6 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
       }
 
       if ( $test_suite ) {
-         $this->printHtml( '<div class="aiTopNav">' );
-         $this->_displayFolderBreadCrumb( $test_suite->test_folder_id );
-         $this->printHtml( '</div>' );
          
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' ); 
          
@@ -101,6 +98,11 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          $this->printHtml( '<td>Name:</td>' );
          $this->printHtml( '<td><input type="text" name="name" size="30" value="' . $this->escapeVariable( $test_suite->name ) . '"></td>' );
          $this->printHtml( '</tr>' ); 
+         
+         $this->printHtml( '<tr class="odd">' );
+         $this->printHtml( '<td>Folder:</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test_suite->test_folder_id ) . '</td>' );
+         $this->printHtml( '</tr>' );
          
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td colspan="2">Description:</td>' );
