@@ -8,6 +8,7 @@ class CTM_Site_User_Login extends CTM_Site {
 
    public function setupPage() {
       $this->_pagetitle = 'Login';
+      $this->_error = '';
       return true;
    }
 
@@ -15,11 +16,11 @@ class CTM_Site_User_Login extends CTM_Site {
       $username = $this->getOrPost( 'username', '' );
       $password = $this->getOrPost( 'password', '' );
       
-      if ( ! isset( $username ) ) {
+      if ( ! isset( $username ) || $username == '' ) {
          return true;
       }
       
-      if ( ! isset( $password ) ) {
+      if ( ! isset( $password ) || $password == '' ) {
          return true;
       } 
 
@@ -35,8 +36,6 @@ class CTM_Site_User_Login extends CTM_Site {
          
          $rows = $sel->find( $and_params );
 
-         // print_r( $rows );
-
          if ( isset( $rows[0] ) ) {
             $user = $rows[0];
 
@@ -51,7 +50,9 @@ class CTM_Site_User_Login extends CTM_Site {
                header( 'Location: ' . $this->_baseurl . '/user/forgot_password/temp_password/' . $this->Url_Checksum->create( array( 'id' => $user->id ) ) );
             }
 
-            if ( md5($password) == $user->password ) {
+            $md5_password = md5( $password );
+
+            if ( $md5_password == $user->password ) {
                // found the user auth them in
                $_SESSION['user_id'] = $user->id;
                // they are logged in return them back to the main site.
@@ -60,6 +61,8 @@ class CTM_Site_User_Login extends CTM_Site {
             }
 
          }
+
+         $this->_error = 'Invalid username or password.';
 
       } catch ( Exception $e ) {
       }
@@ -76,6 +79,11 @@ class CTM_Site_User_Login extends CTM_Site {
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
       $this->printHtml( '</tr>' );
+      if ( $this->_error != '' ) {
+         $this->printHtml( '<tr class="even">' );
+         $this->printHtml( '<td colspan="2">' . $this->_error . '</td>' );
+         $this->printHtml( '</tr>' );
+      }
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Email address:</td>' );
       $this->printHtml( '<td><input type="text" size="40" name="username" value="' . $username . '"></td>' );
