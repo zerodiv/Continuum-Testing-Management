@@ -15,15 +15,18 @@ class CTM_Site extends Light_MVC {
       // display the normal header.
       parent::displayHeader();
 
-      $user_obj = $this->getUser();
-      $role_obj = $user_obj->getRole();
-
       $this->printHtml( '<div class="aiMainContent clearfix">' );
 
       $this->printHtml( '<div class="aiTopNav">' );
-      $this->printHtml( '<ul class="basictab">' );
-      $this->printHtml( '<li><a href="' . $this->_baseurl . '">' . $this->_sitetitle . '</a></li>' );
+
       if ( $this->isLoggedIn() ) {
+
+         $user_obj = $this->getUser();
+         $role_obj = $user_obj->getRole();
+
+         $this->printHtml( '<ul class="basictab">' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '">' . $this->_sitetitle . '</a></li>' );
+
 
          $allowed_roles = array( 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {
@@ -51,17 +54,21 @@ class CTM_Site extends Light_MVC {
          }
 
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/logout/">Logout : ' . $this->escapeVariable( $user_obj->username ) . '</a></li>' );
+      
+         $this->printHtml( '</ul>' );
+
+         if ( $this->isLoggedIn() && $role_obj->name == 'admin' ) {
+            $this->printHtml( '<ul class="basictab">' );
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/manager/">Manage Users</a></li>' );
+            $this->printHtml( '</ul>' );
+         }
       } else {
+         $this->printHtml( '<ul class="basictab">' );
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/login/">Login</a></li>' );
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/create/">Create Account</a></li>' );
-      }
-      $this->printHtml( '</ul>' );
-
-      if ( $this->isLoggedIn() && $role_obj->name == 'admin' ) {
-         $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/manager/">Manage Users</a></li>' );
          $this->printHtml( '</ul>' );
       }
+
 
       $this->printHtml( '</div>' );
 
