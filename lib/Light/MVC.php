@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'Light/Config.php' );
+require_once( 'Light/MVC/Url/Checksum.php' );
 
 abstract class Light_MVC {
    public $_basedir;
@@ -10,6 +11,7 @@ abstract class Light_MVC {
    public $_sessionname;
    public $_css_files;
    public $_js_files;
+   public $Url_Checksum;
    
    function __construct() {
       // load the default configuration into the vars
@@ -30,6 +32,8 @@ abstract class Light_MVC {
       if ( is_array( Light_Config::get( 'Light_MVC_Config', 'JS_FILES' ) ) ) {
          $this->_js_files = Light_Config::get( 'Light_MVC_Config', 'JS_FILES' );
       }
+
+      $this->Url_Checksum = new Light_MVC_Url_Checksum();
 
       // init this to nothing.
       $this->_pagetitle = '';
@@ -58,7 +62,7 @@ abstract class Light_MVC {
 
       return $default_value;
    } 
-   
+
    public function displayPage() {
 
       $action_stack = array( 
