@@ -42,13 +42,9 @@ class CTM_Site extends Light_MVC {
 
          $allowed_roles = array( 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/">Test Runs</a></li>' );
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/">Runs</a></li>' );
          }
 
-         $allowed_roles = array( 'qa', 'admin' );
-         if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/machines/">Test Machines</a></li>' );
-         }
 
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/logout/">Logout : ' . $this->escapeVariable( $user_obj->username ) . '</a></li>' );
       } else {
@@ -60,6 +56,7 @@ class CTM_Site extends Light_MVC {
       if ( $this->isLoggedIn() && $role_obj->name == 'admin' ) {
          $this->printHtml( '<ul class="basictab">' );
          $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/manager/">Manage Users</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/machines/">Machines</a></li>' );
          $this->printHtml( '</ul>' );
       }
 
