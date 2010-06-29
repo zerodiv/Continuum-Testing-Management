@@ -1,31 +1,46 @@
-Bugs:
-- comments for tests are being lost currently - DomDocument is losing them / it's choosing to not let me see them.
+--------------------------------------------------------------------------------
+Known bugs:
+- Test comments for tests are being lost currently - DomDocument is losing them / it's choosing to not let me see them.
+  Need to think of a way to get around this without reinventing the wheel. XmlReader seems like the right solution, but
+  will need a fair amount of work for us to actually use it and it also has 'issues' with malformed xml.
 
+--------------------------------------------------------------------------------
 Build plan:
 
-General Features:
-  - pagnation object need a pagnaitor that works with the selectors to move back and forth through
-    a given set.
+Revision history:
+ - view test history
+ - diff test history
+ - view suite history
+ - diff suite history
 
-Accounts Admin:
-  - manage accounts
-  - update / change password 
-  - delete (disable)
+Folders:
+ - add 
+ - edit
+ - user folder: Make this available to the admin and qa folks
+ - remove: Make this move the tests and suites into the users folder.
 
 Moderation:
-- approve / denial queue
+ - approve / denial queue: This might be covered via the suites/tests pages.
+
+Deletion:
+ - soft delete tests
+ - soft delete suites
 
 Installer:
-- needs to determine php requirements
-- needs to determine mysql requirements
-- write config to etc/config.ini
-- self destruct upon writing to config
+ - needs to determine php requirements
+ - needs to determine mysql requirements
+ - write config to etc/config.ini
+ - self destruct upon writing to config
+
+Test runner:
+ - There is no iteration support right now.
 
 Test runner pre-req:
-  - Document the concepts around single session variable tracking for testing suites.
+ - Document the concepts around single session variable tracking for testing suites.
 
 Runtime Operation:
-- .mac job on host to maintain browsers: kill running away ones, etc
+ - .mac job on host to maintain browsers: kill running away ones, etc
+ - Need to add a password / security to phone home system.
 
 --
 1.0 - Release to world? 
@@ -38,43 +53,8 @@ Notes/plans for the future:
 Schema refactor: 
   - need to review this again with perf in mind, we think it will scale to very
     large test numbers, but we need to run in a bigger dataset to prove this.
-
-    Need table locking...
-    Need transactions...
-    Need foreign key restrictions...
-
-Revision history - future feature: Revision history handled via a external tool such as svn?, git, etc? 
-
-No-db: Storing the entire dataset in xml on disk? At this point I want to skip this, but perhaps I will
-revisit it as part of the revision history concept.
-<suite>
-  <id></id>
-  <account_id></account_id>
-  <name></name>
-  <description></description>
-  <suites>
-      <suite id="n"></suite>
-      <suite id="n"></suite>
-  </suites>
-</suite>
-
-Test suites: - Deletion: We would need to write a dependency removal system. Would rather have this as disable at best.
-Tests: - Deletion: Same issue as Test Suites.
-
-There is no iteration support right now.
-
--- Need to add a password / security to phone home system.
-
--- Tests require a base url to root themselves to. If we context seneitive the suites we will be locking ourselves
-into a suite cannot span multiple sites. Ideally we would like to be able to test edge cases where we have single
-sign on or other functionality based in logging into multiple sites via single auth credentials. 
+  - indexes
 
 Integrations with:
 - QTP, SilkTest, Selenium, Junit, Webload, TestComplete
 - We can accomplish this via different builders, and possibly re-thinking our creation scheme here
-
-
-
-
-
-

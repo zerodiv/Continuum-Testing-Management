@@ -14,4 +14,15 @@ class CTM_Test_Run_BaseUrl extends Light_Database_Object {
       $this->setDbName( 'test' );
    }
 
+   public function cleanBaseUrl() {
+      $parsed_url = parse_url( $this->baseurl );
+      $baseurl = $parsed_url[ 'scheme' ] . ':' . $parsed_url['host'];
+      if ( isset( $parsed_url['port'] ) && $parsed_url['port'] > 0 ) {
+         $baseurl .= ':' . $parsed_url['port'];
+      }
+      $baseurl .= '/';
+      return $baseurl;
+   }
+
+
 }

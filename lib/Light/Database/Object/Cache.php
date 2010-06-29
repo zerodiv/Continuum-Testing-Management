@@ -14,6 +14,10 @@ abstract class Light_Database_Object_Cache {
 
    }
 
+   public function &getCache() {
+      return $this->_cache;
+   }
+
    public function init() {
       throw new Exception( 'init should be overwritten with a client side impl' );
    }

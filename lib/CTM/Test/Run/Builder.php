@@ -169,7 +169,7 @@ class CTM_Test_Run_Builder {
          fwrite($fh, '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . "\n" );
          fwrite($fh, '<head profile="http://selenium-ide.openqa.org/profiles/test-case">' . "\n" );
          fwrite($fh, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' . "\n" );
-         fwrite($fh, '<link rel="selenium.base" href="' . $baseurl_obj->baseurl . '" />' . "\n" ); 
+         fwrite($fh, '<link rel="selenium.base" href="' . $baseurl_obj->cleanBaseUrl() . '" />' . "\n" ); 
          fwrite($fh, '<title>' . $this->_escapeVariable( $test_obj->name ) . '</title>' . "\n" );
          fwrite($fh, '</head>' . "\n" );
          fwrite($fh, '<body>' . "\n" );
@@ -178,13 +178,11 @@ class CTM_Test_Run_Builder {
          fwrite($fh, '<tr><td rowspan="1" colspan="3">' . $this->_escapeVariable( $test_obj->name ) . '</td></tr>' . "\n" );
          fwrite($fh, '</thead><tbody>' . "\n" );
 
-         /*
          fwrite($fh, '<tr>' . "\n" );
          fwrite($fh, '         <td>open</td>' . "\n" );
          fwrite($fh, '         <td>' . $baseurl_obj->baseurl . '</td>' . "\n" );
          fwrite($fh, '         <td></td>' . "\n" );
          fwrite($fh, '</tr>' . "\n" );
-         */
 
          // pull in all the test_param_library_id values
          $sel = new CTM_Test_Run_Command_Selector();

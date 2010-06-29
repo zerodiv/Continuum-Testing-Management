@@ -10,7 +10,8 @@ class CTM_Test_Run_BaseUrl_Cache extends Light_Database_Object_Cache {
 
    public function getByCompoundKey( $test_run_id, $test_suite_id, $test_id ) {
       // iterate across the cache
-      foreach ( $this->_cache as $cached ) {
+      $_cache = $this->getCache();
+      foreach ( $_cache as $cached ) {
          if ( $cached->test_run_id == $test_run_id && $cached->test_suite_id == $test_suite_id && $cached->test_id == $test_id ) {
             return $cached;
          }
@@ -25,7 +26,7 @@ class CTM_Test_Run_BaseUrl_Cache extends Light_Database_Object_Cache {
          $rows = $sel->find( $and_params );
 
          if ( isset( $rows[0] ) ) {
-            $this->_cache[] = $rows[0];
+            $_cache[] = $rows[0];
             return $rows[0];
          }
 

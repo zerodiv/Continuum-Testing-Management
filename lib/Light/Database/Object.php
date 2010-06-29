@@ -304,6 +304,7 @@ abstract class Light_Database_Object {
          }
 
       }
+      throw new Exception( 'Failed to find method: ' . $method );
       return;
    }
 

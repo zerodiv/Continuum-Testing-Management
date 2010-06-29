@@ -89,6 +89,8 @@ class CTM_ET_Poll extends CTM_Site {
         
         $guid = $this->getOrPost('guid', '' );
 
+        header( 'Content-Type: text/xml' );
+
         if (empty($guid)) {
             echo $this->_serviceOutput( 'FAIL', "guid is required!" );
             return false;
@@ -158,7 +160,8 @@ class CTM_ET_Poll extends CTM_Site {
 
                     $test_run_baseurl = 'http://www.google.com';
                     if ( isset( $test_run_baseurls[0] ) ) {
-                       $test_run_baseurl = $test_run_baseurls[0]->baseurl;
+                       $first_url = $test_run_baseurls[0];
+                       $test_run_baseurl = $first_url->cleanBaseUrl();
                     }
 
                     echo $this->_serviceOutput('OK', '', $test_run_browser->test_run_id, $test_run_browser->id, $downloadUrl, $testBrowser, $test_run_baseurl );

@@ -41,6 +41,11 @@ class CTM_Site extends Light_MVC {
 
          $allowed_roles = array( 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {
+            $this->printHtml( '<li><a href="' . $this->_baseurl . '/folders/">Folders</a></li>' );
+         }
+
+         $allowed_roles = array( 'qa', 'admin' );
+         if ( in_array( $role_obj->name, $allowed_roles ) ) {
             $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/param/library/">Parameter Library</a></li>' );
          }
 
