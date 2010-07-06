@@ -26,11 +26,10 @@ Deletion:
  - soft delete tests
  - soft delete suites
 
-Installer:
- - needs to determine php requirements
- - needs to determine mysql requirements
- - write config to etc/config.ini
- - self destruct upon writing to config
+Test Runs:
+ - Scheduling a test run against a machine / browser needs to be forked such that there is either
+   a automated cycle.
+ - "Run Again" button. To reschedule a suite with the same settings, etc.
 
 Test runner:
  - There is no iteration support right now.
@@ -39,13 +38,19 @@ Test runner pre-req:
  - Document the concepts around single session variable tracking for testing suites.
 
 Runtime Operation:
- - .mac job on host to maintain browsers: kill running away ones, etc
  - Need to add a password / security to phone home system.
 
---
-1.0 - Release to world? 
-* Need to discuss license
---
+--------------------------------------------------------------------------------
+TODO Before Public Release:
+
+License: 
+ - GPL/MPL?
+
+Installer:
+ - needs to determine php requirements
+ - needs to determine mysql requirements
+ - write config to etc/config.ini
+ - self destruct upon writing to config
 
 --------------------------------------------------------------------------------
 Notes/plans for the future:

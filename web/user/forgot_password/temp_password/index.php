@@ -13,6 +13,7 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
    public function handleRequest() {
       $action = $this->getOrPost( 'action', null );
       $id = $this->getOrPost( 'id', null );
+      $password = $this->getOrPost( 'password', null );
 
       if ( $this->Url_Checksum->verify( $this, array( 'id' ) ) ) {
 

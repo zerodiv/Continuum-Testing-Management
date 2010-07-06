@@ -13,6 +13,7 @@ class CTM_Test_Revision extends Light_Database_Object {
    public function init() {
       $this->setSqlTable( 'test_revision' );
       $this->setDbName( 'test' );
+      $this->addOneToOneRelationship( 'ModifiedBy', 'CTM_User', 'modified_by', 'id' );
    }
 
 }

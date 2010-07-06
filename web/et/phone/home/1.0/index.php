@@ -91,6 +91,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       $guid             = $this->getOrPost('guid', '');
       $ip               = $_SERVER['REMOTE_ADDR'];
       $os               = $this->getOrPost('os', '');
+      $machine_name     = $this->getOrPost('machine_name', '' );
       $ie               = $this->getOrPost('ie', '');
       $ie_version       = $this->getOrPost('ie_version', '');
       $googlechrome           = $this->getOrPost('googlechrome', '');
@@ -126,6 +127,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             $new->guid           = $guid;
             $new->ip             = $ip;
             $new->os             = $os;
+            $new->machine_name   = $machine_name;
             $new->created_at     = time();
             $new->last_modified  = time();
             $new->is_disabled    = 0;
@@ -140,6 +142,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
 
          } else {
             $test_machine->ip = $ip;
+            $test_machine->machine_name = $machine_name;
             $test_machine->last_modified = time();
             $test_machine->save();
          }

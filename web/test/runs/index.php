@@ -162,13 +162,25 @@ class CTM_Site_Test_Runs extends CTM_Site {
                         $testRunBrowserColor = '#00FF00';
                     }
 
+                    $test_machine = $test_machine_cache->getById( $test_run_browser->test_machine_id );
+                    $t_machine = $test_machine->ip;
+                    if ( $test_machine->machine_name != '' ) {
+                        $t_machine = $test_machine->machine_name;
+                    }
+
+                    $test_browser = $test_browser_cache->getById( $test_run_browser->test_browser_id );
+
                     $this->printHtml('<tr class="' . $this->oddEvenClass() . '">');
                     $this->printHtml('<td>' . $test_run_browser->id . '</td>');
-                    $this->printHtml('<td>' . $test_machine_cache->getById($test_run_browser->test_machine_id)->os . ' @ ' . $test_machine_cache->getById($test_run_browser->test_machine_id)->ip . '</td>');
-                    $this->printHtml('<td>' . $test_browser_cache->getById($test_run_browser->test_browser_id)->getPrettyName() . '</td>');
+                    $this->printHtml('<td>' . $test_machine->os . ' @ ' . $t_machine . '</td>');
+                    $this->printHtml('<td>' . $test_browser->getPrettyName() . '</td>');
                     $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';"><center>' . $run_state_cache->getById($test_run_browser->test_run_state_id)->name . '</center></td>');
                     if ( $test_run_browser->has_log == true ) {
-                        $this->printHtml('<td><center><a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '" class="ctmButton" target="_blank">View Log</a></center></td>');
+                        $this->printHtml('<td><center>' .
+                              '<a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '&type=run" class="ctmButton" target="_blank">Run Log</a>' .
+                              '<a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '&type=selenium" class="ctmButton" target="_blank">Selenium Log</a>' .
+
+                              '</center></td>');
                     } else {
                        $this->printHtml( '<td>&nbsp;</td>' );
                     }

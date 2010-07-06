@@ -6,7 +6,8 @@ class CTM_Test_Run_Log extends Light_Database_Object {
     
    public $id;
    public $test_run_browser_id;
-   public $data;
+   public $selenium_log;
+   public $run_log;
    public $duration;
    public $created_at;
 

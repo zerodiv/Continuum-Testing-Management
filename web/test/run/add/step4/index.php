@@ -1,4 +1,5 @@
 <?php 
+
 require_once( '../../../../../bootstrap.php' );
 require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
@@ -166,8 +167,14 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                if ( $current_machine_id != $avail_machine_browser->test_machine_id ) {
                   $this->oddEvenReset();
 
+                  $t_machine = $test_machine->ip;
+                  if ( $test_machine->machine_name != '' ) {
+                     $t_machine = $test_machine->machine_name;
+                  }
+
                   $this->printHtml( '<tr class="aiTableTitle">' );
-                  $this->printHtml( '<th colspan="3">' . $test_machine->os . ' @ ' .  $test_machine->ip  . '</th>' );
+                  $this->printHtml( '<th colspan="3">' . $this->escapeVariable( $test_machine->os ) . 
+                        ' @ ' .  $this->escapeVariable( $t_machine  ) . '</th>' );
                   $this->printHtml( '</tr>' );
                   $this->printHtml( '<tr class="aiTableTitle">' );
                   $this->printHtml( '<td>Test:</td>' );

@@ -7,6 +7,7 @@ class CTM_Test_Machine extends Light_Database_Object {
    public $guid;
    public $ip;
    public $os;
+   public $machine_name;
    public $created_at;
    public $last_modified;
    public $is_disabled;

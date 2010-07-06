@@ -40,7 +40,8 @@ class CTM_ET_Log extends CTM_Site
         $testRunBrowserId = $this->getOrPost('testRunBrowserId', '');
         $testStatus = $this->getOrPost('testStatus', '');
         $testDuration = $this->getOrPost('testDuration', '');
-        $logData = $this->getOrPost('logData', '', false);
+        $runLog = $this->getOrPost('runLog', '', false);
+        $seleniumLog = $this->getOrPost('seleniumLog', '', false);
 
         // let's get the first test available browser run for this machine
         $test_run_browser_sel = new CTM_Test_Run_Browser_Selector();
@@ -118,7 +119,8 @@ class CTM_ET_Log extends CTM_Site
 
             $test_run_log = new CTM_Test_Run_Log();
             $test_run_log->test_run_browser_id = $test_run_browser->id;
-            $test_run_log->data = $logData;
+            $test_run_log->run_log = $runLog;
+            $test_run_log->selenium_log = $seleniumLog;
             $test_run_log->duration = $testDuration;
             $test_run_log->created_at = time();
             $test_run_log->save();
