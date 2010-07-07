@@ -33,7 +33,7 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
       }
 
       // added our child send us back to our parent
-      header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $parent_id );
+      header( 'Location: ' . $this->_baseurl . '/tests/?parent_id=' . $parent_id );
       return false;
 
    }

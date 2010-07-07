@@ -94,7 +94,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
             // save the revision information.
             $test->saveRevision();
 
-            header( 'Location: ' . $this->_baseurl . '/test/folders/?parent_id=' . $test->test_folder_id );
+            header( 'Location: ' . $this->_baseurl . '/tests/?parent_id=' . $test->test_folder_id );
             return false;
 
          } catch ( Exception $e ) {

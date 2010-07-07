@@ -235,7 +235,12 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       }
 
       if ( isset( $test_suite ) ) {
-      
+     
+         if ( $test_folder_id > 0 ) {
+         } else {
+            $test_folder_id = $test_suite->test_folder_id;
+         }
+
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 

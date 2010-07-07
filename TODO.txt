@@ -3,7 +3,6 @@ Known bugs:
 - Test comments for tests are being lost currently - DomDocument is losing them / it's choosing to not let me see them.
   Need to think of a way to get around this without reinventing the wheel. XmlReader seems like the right solution, but
   will need a fair amount of work for us to actually use it and it also has 'issues' with malformed xml.
-
 --------------------------------------------------------------------------------
 Build plan:
 
