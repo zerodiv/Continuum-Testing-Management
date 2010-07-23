@@ -86,6 +86,10 @@ class CTM_Revision_Framework {
 
    }
 
+   public function createShortNameFromFileName( $filename ) {
+      return './' . str_replace( $this->_git_dir . '/', '', $filename );
+   }
+
    public function addRevision( $id, $data ) {
 
       try {
@@ -104,7 +108,7 @@ class CTM_Revision_Framework {
 
          fclose( $fh );
 
-         $shortname = './' . str_replace( $this->_git_dir . '/', '', $fname );
+         $shortname = $this->createShortNameFromFileName( $fname );
 
          // okay the file is written now we need to commit it into the repo.
          $add_cmd = 
@@ -145,6 +149,48 @@ class CTM_Revision_Framework {
          throw $e;
       }
 
+   }
+
+   public function diffRevision( $id, $cur, $prev ) {
+      try {
+
+         $this->checkId( $id );
+
+         $fname = $this->getFileNameFromId( $id );
+
+         $shortname = $this->createShortNameFromFileName( $fname );
+
+         // /opt/local/bin/git diff 5d7ca17..644489d ./test/2/2.test
+         $diff_cmd = 
+            'cd ' . $this->_git_dir . ' ; ' . 
+            $this->_git_command . ' ' .
+            ' diff ' .
+            ' -U25000 ' . // unify the diff so we don't have to do anything fancy ;P
+            $cur . '..' . $prev . ' ' . $shortname;
+
+         // echo "diff_cmd: $diff_cmd<br>\n";
+
+         $pipe_spec = array( 
+               0 => array( 'pipe', 'r' ),
+               1 => array( 'pipe', 'w' ),
+               2 => array( 'pipe', 'w' )
+         );
+
+         $pipes = array();
+
+         $diff_cmd_h = proc_open( $diff_cmd, $pipe_spec, $pipes );
+
+         if ( is_resource( $diff_cmd_h ) ) {
+            $stdout = stream_get_contents( $pipes[1] );
+            $stderr = stream_get_contents( $pipes[2] );
+            return array( true, $stdout, $stderr );
+         }
+
+         return array( false );
+
+      } catch ( Exception $e ) {
+         throw $e;
+      }
    }
 
 }

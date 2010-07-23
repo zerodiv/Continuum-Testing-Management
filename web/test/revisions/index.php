@@ -10,7 +10,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
    private $_error_message;
 
    public function setupPage() {
-      $this->_pagetitle = 'Edit Test';
+      $this->_pagetitle = 'View Test Revisions';
       return true;
    }
 
@@ -70,6 +70,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
          $this->printHtml( '<td>By:</td>' );
          $this->printHtml( '<td>Action:</td>' );
          $this->printHtml( '</tr>' );
+
          if ( count( $revisions ) > 0 ) {
             $n = count( $revisions );
             foreach ( $revisions as $revision ) {
@@ -98,7 +99,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
             }
          } else {
             $this->printHtml( '<tr class="odd">' );
-            $this->printHtml( '<td colspan="4"><center>- There are no test commands currently -</center></td>' );
+            $this->printHtml( '<td colspan="4"><center>- There are no test revisions currently -</center></td>' );
             $this->printHtml( '</tr>' );
          }
          $this->printHtml( '</table>' );
