@@ -15,6 +15,7 @@ Folders:
  - edit
  - user folder: Make this available to the admin and qa folks
  - remove: Make this move the tests and suites into the users folder.
+ - move: Allow admin / qa users to move a test or test suite.
 
 Moderation:
  - approve / denial queue: This might be covered via the suites/tests pages.
@@ -51,6 +52,9 @@ Installer:
 
 --------------------------------------------------------------------------------
 Notes/plans for the future:
+
+Phar files:
+  - Need to look at possibly using a phar build system as a post 5.3 release item.
 
 Schema refactor: 
   - need to review this again with perf in mind, we think it will scale to very
