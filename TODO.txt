@@ -7,8 +7,6 @@ Known bugs:
 Build plan:
 
 Revision history:
- - view test history
- - diff test history
  - view suite history
  - diff suite history
 
