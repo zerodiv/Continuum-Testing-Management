@@ -19,10 +19,13 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       $this->_test_machine_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Machine_Browser_Cache' );
 
       $this->_pagetitle = 'Test Run - Add - Step 4 of 4';
+      $this->_errorMessage = '';
+
       return true;
    }
 
    public function handleRequest() {
+
       $id = $this->getOrPost( 'id', '' );
       $action = $this->getOrPost( 'action', '' );
       $test_browsers = $this->getOrPost( 'test_browsers', '' );
@@ -59,6 +62,9 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                   }
                }
             }
+         } else {
+            $this->_errorMessage = 'You need to pick at least one machine / browser combination.';
+            return true;
          } // end test_browsers.
 
          // fin!
@@ -139,6 +145,12 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          $this->printHtml( '<tr>' );
          $this->printHtml( '<th colspan="3">Add Test Run (Step 4 of 4)</th>' );
          $this->printHtml( '</tr>' );
+
+         if ( $this->_errorMessage != '' ) {
+            $this->printHtml( '<tr>' );
+            $this->printHtml( '<th colspan="3">' . $this->_errorMessage . '</th>' );
+            $this->printHtml( '</tr>' );
+         }
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Test Suite:</td>' );
