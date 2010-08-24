@@ -168,7 +168,10 @@ class CTM_Test_Run_Builder {
          fwrite($fh, '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\n" );
          fwrite($fh, '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . "\n" );
          fwrite($fh, '<head profile="http://selenium-ide.openqa.org/profiles/test-case">' . "\n" );
-         fwrite($fh, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' . "\n" );
+        
+         // jeo - temporarily removing this piece.
+         // fwrite($fh, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' . "\n" );
+
          fwrite($fh, '<link rel="selenium.base" href="' . $baseurl_obj->cleanBaseUrl() . '" />' . "\n" ); 
          fwrite($fh, '<title>' . $this->_escapeVariable( $test_obj->name ) . '</title>' . "\n" );
          fwrite($fh, '</head>' . "\n" );
