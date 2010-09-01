@@ -31,7 +31,7 @@ class CTM_Site_Test_Run_Browser_Log extends CTM_Site {
             if (!empty($test_run_logs)) { 
                foreach ($test_run_logs as $test_run_log) { 
                   if ( $type == 'selenium' ) {
-                     echo $test_run_log->selenium_log;
+                     echo stripslashes($test_run_log->selenium_log);
                   } else {
                      echo $test_run_log->run_log;
                   }

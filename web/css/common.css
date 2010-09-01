@@ -151,5 +151,11 @@ a.ctmButton:hover {
     background:url(../images/grayButtonBgOn.gif) repeat-x left bottom;
     color:#000;
 }
-
-
+.successful {
+    background-color: #00ff00;
+   color: #000000;
+}
+.failure {
+   background-color: #ff0000;
+color: #000000;
+}
