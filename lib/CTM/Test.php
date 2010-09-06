@@ -48,20 +48,26 @@ class CTM_Test extends Light_Database_Object {
 
          // test command removal
          $test_commands = $this->getCommands();
-         foreach ( $test_commands as $test_command ) {
-            $test_command->remove();
+         if ( count( $test_commands ) > 0 ) {
+            foreach ( $test_commands as $test_command ) {
+               $test_command->remove();
+            }
          }
 
          // test params removal
          $test_params = $this->getParams();
-         foreach ( $test_params as $test_param ) {
-            $test_param->remove();
+         if ( count( $test_params ) > 0 ) {
+            foreach ( $test_params as $test_param ) {
+               $test_param->remove();
+            }
          }
 
          // test revisions removal
          $test_revisions = $this->getRevisions();
-         foreach ( $test_revisions as $test_revision ) {
-            $test_revision->remove();
+         if ( count( $test_revisions ) > 0 ) {
+            foreach ( $test_revisions as $test_revision ) {
+               $test_revision->remove();
+            }
          }
 
          // now remove ourselves

@@ -4,6 +4,7 @@ require_once( 'Light/Database/Object.php' );
 
 require_once( 'CTM/Test/Suite/Description.php' );
 require_once( 'CTM/Test/Suite/Revision.php' );
+require_once( 'CTM/Test/Suite/Plan/Selector.php' );
 
 require_once( 'CTM/Revision/Framework.php' );
 
@@ -80,6 +81,27 @@ class CTM_Test_Suite extends Light_Database_Object {
          $rev_obj->save();
       }
 
+   }
+
+   public function removePlan() {
+      try {
+         $testPlanSel = new CTM_Test_Suite_Plan_Selector(); 
+         
+         $planParams = array(
+               new Light_Database_Selector_Criteria( 'test_suite_id', '=', $this->id )
+         );
+
+         $testPlans = $testPlanSel->find($planParams); 
+         
+         if (count($testPlans) > 0 ) {
+            foreach ( $testPlans as $testPlan ) {
+               $testPlan->remove();
+            }
+         }
+
+      } catch ( Exception $e ) {
+         throw $e;
+      }
    }
 
 }
