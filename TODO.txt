@@ -28,10 +28,6 @@ CTM Agent Testing:
  - store + javascript
  - store variable carry over between tests
 
-Revision history:
- - view suite history
- - diff suite history
-
 Folders:
  - add 
  - edit
@@ -52,6 +48,8 @@ Test Runs:
  - "Run Again" button. To reschedule a suite with the same settings, etc.
 
 Test runner:
+ - Move the register / ask for work cycle into a single service call. Clean up the 
+   in and out xml processing while there.
  - There is no iteration support right now.
 
 Test runner pre-req:
