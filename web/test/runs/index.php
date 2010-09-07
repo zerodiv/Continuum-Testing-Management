@@ -50,6 +50,8 @@ class CTM_Site_Test_Runs extends CTM_Site {
       $archived_state = $run_state_cache->getById( 4 );
       $failed_state = $run_state_cache->getById(5);
 
+      $role_obj = $this->getUser()->getRole();
+
       if ( ! isset( $run_state->id ) ) {
          // load up the queued page if we cannot find the current run state.
          $run_state = $run_state_cache->getById( 1 );
@@ -123,10 +125,17 @@ class CTM_Site_Test_Runs extends CTM_Site {
             $this->printHtml( '<td><center>' );
             $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
             // while a test is executing we cannot do any admin actions to it.
+            $displayRemove = false;
             if ( $test_run->test_run_state_id == $queued_state->id || 
                  $test_run->test_run_state_id == $completed_state->id ||
                  $test_run->test_run_state_id == $failed_state->id ||
                  $test_run->test_run_state_id == $archived_state->id ) {
+               $displayRemove = true;
+            } 
+            if ( $role_obj->name == 'admin' ) {
+               $displayRemove = true;
+            }
+            if ( $displayRemove == true ) {
                $this->printHtml( '<a href="' . $this->_baseurl . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
             }
             $this->printHtml( '</center></td>' );
