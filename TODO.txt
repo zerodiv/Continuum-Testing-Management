@@ -6,6 +6,28 @@ Known bugs:
 --------------------------------------------------------------------------------
 Build plan:
 
+CTM Agent Testing:
+ - addSelection
+ - clickAndWait
+ - click
+ - doubleClick
+ - controlKeyDown
+ - controlKeyUp
+ - focus
+ - open
+ - select
+ - selectWindow
+ - store
+ - type
+ - typeAndWait
+ - waitForPageToLoad
+ - verifyTextPresent
+*test the new features that we added in*
+ - session carry over between tests
+ - store
+ - store + javascript
+ - store variable carry over between tests
+
 Revision history:
  - view suite history
  - diff suite history
