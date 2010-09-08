@@ -186,9 +186,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
                     $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';"><center>' . $run_state_cache->getById($test_run_browser->test_run_state_id)->name . '</center></td>');
                     if ( $test_run_browser->has_log == true ) {
                         $this->printHtml('<td><center>' .
-                              '<a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '&type=run" class="ctmButton" target="_blank">Run Log</a>' .
                               '<a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '&type=selenium" class="ctmButton" target="_blank">Selenium Log</a>' .
-
                               '</center></td>');
                     } else {
                        $this->printHtml( '<td>&nbsp;</td>' );
