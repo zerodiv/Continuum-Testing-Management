@@ -17,6 +17,7 @@ class CTM_Test_Run extends Light_Database_Object {
    public function init() {
       $this->setSqlTable( 'test_run' );
       $this->setDbName( 'test' );
+      $this->addOneToOneRelationship( 'Suite', 'CTM_Test_Suite', 'test_suite_id', 'id' );
    }
 
    public function remove() {

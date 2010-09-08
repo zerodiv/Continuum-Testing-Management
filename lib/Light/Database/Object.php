@@ -264,6 +264,7 @@ abstract class Light_Database_Object {
       try {
          $sel_name = $rel->objectName . '_Selector';
          $sel = new $sel_name();
+         // echo "sel_name: $sel_name linking_field: " . $rel->linkingField . " leftside($leftside_field): " . $this->$leftside_field . "\n";
          $and_params = array( new Light_Database_Selector_Criteria( $rel->linkingField, '=', $this->$leftside_field ) );
          $rows = $sel->find( $and_params );
          if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_ONE && isset( $rows[0] ) ) {
@@ -333,20 +334,21 @@ abstract class Light_Database_Object {
       $rels = $this->_object_relationships->getAll();
 
       foreach ( $rels as $rel ) {
-         $writer->startElement( $rel->localName );
 
          $getter = 'get' . $rel->localName;
          $related = $this->$getter();
 
          if ( is_array( $related ) ) { 
+            // Open up a plural relationship entry in the xml.
+            $writer->startElement( $rel->localName . 's' );
             foreach ( $related as $rel_obj ) {
                $rel_obj->toXml( $writer );
             }
+            $writer->endElement();
          } else if ( isset( $related ) ) {
-            // $related->toXml( $writer );
+            $related->toXml( $writer );
          }
 
-         $writer->endElement();
       }
 
       $writer->endElement();
