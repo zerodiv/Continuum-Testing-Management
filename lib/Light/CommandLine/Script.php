@@ -1,8 +1,18 @@
 <?php
 
-require_once('Light/CommandLine/Script/Config.php' );
+require_once('Light/Config.php');
 require_once('Light/CommandLine/Script/Argument/Container.php');
 
+/**
+ * Light_CommandLine_Script 
+ * 
+ * @abstract
+ * @package Platform
+ * @version $Id: $
+ * @copyright  Adicio 
+ * @author $Author: $ 
+ * @license 
+ */
 abstract class Light_CommandLine_Script {
    private $_scriptName; 
    private $_arguments;
@@ -11,7 +21,7 @@ abstract class Light_CommandLine_Script {
       $this->_scriptName = null;
 
       // setup the default timezone.
-      date_default_timezone_set( Light_CommandLine_Script_Config::DEFAULT_TIMEZONE() );
+      date_default_timezone_set( Light_Config::get( 'Light_MVC_Config', 'DEFAULT_TIMEZONE' )  );
 
       $this->_arguments = new Light_CommandLine_Script_Argument_Container();
 
@@ -129,7 +139,7 @@ abstract class Light_CommandLine_Script {
     }
 
     public function formatDate( $timestamp ) {
-       return date( Light_CommandLine_Script_Config::TIME_FORMAT(), $timestamp );
+       return date( Light_Config::get( 'Light_MVC_Config', 'TIME_FORMAT' ), $timestamp );
     }
 
 }

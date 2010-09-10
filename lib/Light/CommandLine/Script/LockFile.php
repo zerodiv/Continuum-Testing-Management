@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Light_CommandLine_Script_LockFile 
+ * 
+ * @package Platform
+ * @version $Id: $
+ * @copyright  Adicio 
+ * @author $Author: $ 
+ * @license 
+ */
 class Light_CommandLine_Script_LockFile {
    /**
     * The base lock directory to work off of defaults to /tmp
