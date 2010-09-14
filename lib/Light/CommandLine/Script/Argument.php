@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * Light_CommandLine_Script_Argument 
+ * 
+ * @package Platform
+ * @version $Id: $
+ * @copyright  Adicio 
+ * @author $Author: $ 
+ * @license 
+ */
 class Light_CommandLine_Script_Argument {
    /**
     * The name for the commandline argument.

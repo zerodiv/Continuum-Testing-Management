@@ -15,6 +15,17 @@ require_once( 'CTM/Test/Suite/Plan/Selector.php' );
 
 require_once( 'CTM/Test/Selector.php' );
 
+/**
+ * CTM_Regression_ImportAgent 
+ * 
+ * @uses Light
+ * @uses _Commandline_Script
+ * @package Platform
+ * @version $Id: $
+ * @copyright  Adicio 
+ * @author $Author: $ 
+ * @license 
+ */
 class CTM_Regression_ImportAgent extends Light_Commandline_Script
 {
    const CTM_ADMIN_USER_ID = 1;

@@ -2,6 +2,15 @@
 
 require_once( 'Light/CommandLine/Script/Argument.php' );
 
+/**
+ * Light_CommandLine_Script_Argument_Container 
+ * 
+ * @package Platform
+ * @version $Id: $
+ * @copyright  Adicio 
+ * @author $Author: $ 
+ * @license 
+ */
 class Light_CommandLine_Script_Argument_Container {
    /**
     * Array of arguments 
