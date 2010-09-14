@@ -209,38 +209,66 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
          if ( is_file( $testFile ) && preg_match( '/.html$/', $testItem ) ) {
             $this->message( 'testFile: ' . $testFile );
 
-            $testObj = new CTM_Test();
-            $testObj->test_folder_id = $folderObj->id;
-            $testObj->name = $testItem;
-            $testObj->test_status_id = 1;
-            $testObj->created_at = time();
-            $testObj->created_by = $this->_adminUserObj->id;
-            $testObj->modified_at = time();
-            $testObj->modified_by = $this->_adminUserObj->id;
-            $testObj->revision_count = 1;
-            $testObj->save(); 
+            $isDisabled = $testFile . '.disabled';
+            if ( is_file( $isDisabled ) ) {
+               $this->message( '   !WARNING! - Test is disabled' );
+            } else {
+               $testObj = new CTM_Test();
+               $testObj->test_folder_id = $folderObj->id;
+               $testObj->name = $testItem;
+               $testObj->test_status_id = 1;
+               $testObj->created_at = time();
+               $testObj->created_by = $this->_adminUserObj->id;
+               $testObj->modified_at = time();
+               $testObj->modified_by = $this->_adminUserObj->id;
+               $testObj->revision_count = 1;
+               $testObj->save(); 
             
-            if ( $testObj->id > 0 ) { // push the html in.
-               $this->message("   test: " . $testItem . " test_id: " . $testObj->id);
-               $testObj->setHtmlSource( $this->_adminUserObj, file_get_contents( $testFile ) );
+               if ( $testObj->id > 0 ) { // push the html in.
+                  $this->message("   test: " . $testItem . " test_id: " . $testObj->id);
+                  $testObj->setHtmlSource( $this->_adminUserObj, file_get_contents( $testFile ) );
          
-               $testPlan = new CTM_Test_Suite_Plan();
-               $testPlan->test_suite_id = $suiteObj->id;
-               $testPlan->linked_id = $testObj->id;
-               $testPlan->test_order = $testCounter;
-               $testPlan->test_suite_plan_type_id = 2; // this is a test
-               $testPlan->save();
-               $testCounter++;
+                  $testPlan = new CTM_Test_Suite_Plan();
+                  $testPlan->test_suite_id = $suiteObj->id;
+                  $testPlan->linked_id = $testObj->id;
+                  $testPlan->test_order = $testCounter;
+                  $testPlan->test_suite_plan_type_id = 2; // this is a test
+                  $testPlan->save();
+                  $testCounter++;
 
-               if ( isset( $testPlan->id ) && $testPlan->id > 0 ) {
-               }
+                  if ( isset( $testPlan->id ) && $testPlan->id > 0 ) {
+                     $this->message( '   test added' );
+                  }
                
+               }
+
             }
 
          }
 
       }
+     
+      // fix up the test urls.
+      $testSel = new CTM_Test_Selector();
       
+      $testAndParams = array(
+            new Light_Database_Selector_Criteria( 'test_folder_id', '=', $folderObj->id )
+      );
+
+      $tests = $testSel->find($testAndParams); 
+
+      // snag the config setting
+      $ctmBaseUrl = Light_Config::get('CTM_Site_Config', 'base_url');
+
+      foreach ( $tests as $test ) {
+         // $this->message( 'base url: ' . $test->getBaseUrl()->baseurl );
+
+         $testBaseUrl = str_replace('http://jorcutt-laptop', $ctmBaseUrl, $test->getBaseUrl()->baseurl );
+         // $this->message( 'test url: ' . $testBaseUrl );
+
+         $test->setBaseUrl( $testBaseUrl );
+      }
+
       $testPlan = new CTM_Test_Suite_Plan();
       $testPlan->test_suite_id = $this->_regressionSuiteObj->id;
       $testPlan->linked_id = $suiteObj->id;
