@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://jorcutt-laptop/regression/09-Store/01-Store.php" />
+<title>01-Store</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">01-Store</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/regression/09-Store/01-Store.php</td>
+	<td></td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>myval</td>
+	<td>myvar</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{'collings-employer'+ Math.round(10000*Math.random())+'@adicio.com'}</td>
+	<td>myJsvar</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>javascriptStore</td>
+	<td>${myJsvar}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>staticStore</td>
+	<td>${myvar}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>go</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>staticStore: myval</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>javascriptStore: collings-employer*@adicio.com</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

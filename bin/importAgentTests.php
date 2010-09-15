@@ -36,10 +36,12 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
    private $_regressionFolderObj;
    private $_regressionSuiteObj;
    private $_planCounter;
+   private $_testCounter;
 
    public function init()
    {
       $this->_planCounter = 1;
+      $this->_testCounter = 0;
       $this->initAdminUser();
       $this->initRegressionFolder();
       $this->initRegressionSuite();
@@ -131,6 +133,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
    public function run()
    {
       $this->findTestDirs();
+      $this->message( 'Added ' . $this->_testCounter . ' tests' );
    }
 
    private function findTestDirs()
@@ -249,6 +252,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
 
                   if ( isset( $testPlan->id ) && $testPlan->id > 0 ) {
                      $this->message( '   test added' );
+                     $this->_testCounter++;
                   }
                
                }
