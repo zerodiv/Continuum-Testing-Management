@@ -42,6 +42,8 @@ class CTM_Site_Test_Folders extends CTM_Site {
       $test_status_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Status_Cache' );
       $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
 
+      $deleted_status = $test_status_cache->getByName( 'deleted' );
+
       $this->oddEvenReset();
 
       $test_rows = array();
@@ -50,7 +52,8 @@ class CTM_Site_Test_Folders extends CTM_Site {
          $sel = new CTM_Test_Selector();
 
          $and_params = array(
-               new Light_Database_Selector_Criteria( 'test_folder_id', '=', $parent_id )
+               new Light_Database_Selector_Criteria( 'test_folder_id', '=', $parent_id ),
+               new Light_Database_Selector_Criteria( 'test_status_id', '!=', $deleted_status->id )
          );
 
          // add in a created_by inclusion
@@ -116,6 +119,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
                $this->printHtml( '<a href="' . $this->_baseurl . '/test/revisions/?id=' . $test->id . '" class="ctmButton">Revisions</a>' );
             }
             $this->printHtml( '<a href="' . $this->_baseurl . '/test/download/?id=' . $test->id . '" class="ctmButton" target="_new">Download</a>' );
+            $this->printHtml( '<a href="' . $this->_baseurl . '/test/remove/?id=' . $test->id . '" class="ctmButton">Remove</a>' );
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
 

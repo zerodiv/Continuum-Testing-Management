@@ -15,6 +15,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
    public function handleRequest() {
 
       $this->requiresAuth();
+      $this->requiresRole( array( 'user', 'qa', 'admin' ) );
 
       $id               = $this->getOrPost( 'id', '' );
       $name             = $this->getOrPost( 'name', '' );
