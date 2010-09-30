@@ -85,6 +85,13 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
 
       if ( isset( $test_run->id ) ) {
 
+         
+         $test_run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
+         $step3 = $test_run_state_cache->getByName('step3');
+
+         $test_run->test_run_state_id = $step3->id;
+         $test_run->save();
+
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 
          $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/run/add/step3/">' );

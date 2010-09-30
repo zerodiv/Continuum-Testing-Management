@@ -44,11 +44,15 @@ class CTM_Site_Test_Runs extends CTM_Site {
       $test_machine_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Machine_Cache' );
       $test_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Browser_Cache' );
 
-      $queued_state = $run_state_cache->getById( 1 );
-      $executing_state = $run_state_cache->getById( 2 );
-      $completed_state = $run_state_cache->getById( 3 );
-      $archived_state = $run_state_cache->getById( 4 );
-      $failed_state = $run_state_cache->getById(5);
+      $queued_state = $run_state_cache->getByName('queued');
+      $executing_state = $run_state_cache->getByName('exeecuting');
+      $completed_state = $run_state_cache->getByName('completed');
+      $archived_state = $run_state_cache->getByName('archived');
+      $failed_state = $run_state_cache->getByName('failed');
+      $step1_state = $run_state_cache->getByName('step1');
+      $step2_state = $run_state_cache->getByName('step2');
+      $step3_state = $run_state_cache->getByName('step3');
+      $step4_state = $run_state_cache->getByName('step4');
 
       $role_obj = $this->getUser()->getRole();
 
@@ -115,15 +119,35 @@ class CTM_Site_Test_Runs extends CTM_Site {
             }
 
 
+            $run_state = $run_state_cache->getById($test_run->test_run_state_id);
+
             $this->printHtml( '<tr class="' . $class . '">' );
             $this->printHtml( '<td class="aiColumnOne">' . $test_run->id . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $test_suite->name ) . '</td>' );
-            $this->printHtml('<td style="background-color:' . $testRunColor . ';"><center>' . $run_state_cache->getById($test_run->test_run_state_id)->name . '</center></td>');
+            $this->printHtml('<td style="background-color:' . $testRunColor . ';"><center>' . $run_state->description . '</center></td>');
             $this->printHtml( '<td>' . $test_run->iterations . '</td>' );
             $this->printHtml( '<td>' . $this->formatDate( $test_run->created_at ) . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $created_by->username ) . '</td>' );
             $this->printHtml( '<td><center>' );
-            $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
+            if ( $test_run->test_run_state_id != $step1_state->id &&
+                 $test_run->test_run_state_id != $step2_state->id &&
+                 $test_run->test_run_state_id != $step3_state->id &&
+                 $test_run->test_run_state_id != $step4_state->id 
+            ) {
+               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
+            }
+            if ($test_run->test_run_state_id == $step1_state->id ) {
+               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/add/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step1_state->description ) . '</a>' );
+            }
+            if ($test_run->test_run_state_id == $step2_state->id ) {
+               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/add/step2/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step2_state->description ) . '</a>' );
+            }
+            if ($test_run->test_run_state_id == $step3_state->id ) {
+               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/add/step3/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step3_state->description ) . '</a>' );
+            }
+            if ($test_run->test_run_state_id == $step4_state->id ) {
+               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/add/step4/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step4_state->description ) . '</a>' );
+            }
             // while a test is executing we cannot do any admin actions to it.
             $displayRemove = false;
             if ( $test_run->test_run_state_id == $queued_state->id || 

@@ -100,6 +100,12 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
       if ( isset( $test_run->id ) ) {
 
+         $test_run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
+         $step2 = $test_run_state_cache->getByName('step2');
+
+         $test_run->test_run_state_id = $step2->id;
+         $test_run->save();
+
          $sel_command_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Selenium_Command_Cache' );
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );

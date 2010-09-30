@@ -25,10 +25,13 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
          if ( $test_suite_id > 0 ) {
             $user = $this->getUser();
 
+            $test_run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
+            $step1 = $test_run_state_cache->getByName('step1');
+
             // create the provisional test.
             $test_run = new CTM_Test_Run();
             $test_run->test_suite_id = $test_suite_id;
-            $test_run->test_run_state_id = 1;
+            $test_run->test_run_state_id = $step1->id;
             $test_run->iterations = 1; 
             $test_run->created_at = time();
             $test_run->created_by = $user->id;
