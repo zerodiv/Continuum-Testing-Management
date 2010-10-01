@@ -214,18 +214,18 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
       }
 
       // read all the tests from the directory and shove them into the folder.
-      $testFiles = scandir( $testDir );
+      $testFiles = scandir($testDir);
       $testCounter = 1;
 
       foreach ( $testFiles as $testItem ) {
          $testFile = $testDir . '/' . $testItem;
          
-         if ( is_file( $testFile ) && preg_match( '/.html$/', $testItem ) ) {
-            $this->message( 'testFile: ' . $testFile );
+         if ( is_file($testFile) && preg_match('/.html$/', $testItem) ) {
+            $this->message('testFile: ' . $testFile);
 
             $isDisabled = $testFile . '.disabled';
-            if ( is_file( $isDisabled ) ) {
-               $this->message( '   !WARNING! - Test is disabled' );
+            if ( is_file($isDisabled) ) {
+               $this->message('   !WARNING! - Test is disabled');
             } else {
                $testObj = new CTM_Test();
                $testObj->testFolderId = $folderObj->id;
@@ -240,7 +240,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
             
                if ( $testObj->id > 0 ) { // push the html in.
                   $this->message("   test: " . $testItem . " test_id: " . $testObj->id);
-                  $testObj->setHtmlSource( $this->_adminUserObj, file_get_contents( $testFile ) );
+                  $testObj->setHtmlSource($this->_adminUserObj, file_get_contents( $testFile ));
          
                   $testPlan = new CTM_Test_Suite_Plan();
                   $testPlan->test_suite_id = $suiteObj->id;
