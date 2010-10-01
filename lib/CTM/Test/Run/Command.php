@@ -11,7 +11,7 @@ class CTM_Test_Run_Command extends Light_Database_Object {
    public $id;
    public $test_run_id;
    public $test_suite_id;
-   public $test_id;
+   public $testId;
    public $test_selenium_command_id;
    public $test_param_library_id;
 

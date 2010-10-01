@@ -98,7 +98,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
             $this->printHtml( '</tr>' );
 
             $class = $this->oddEvenClass();
-            $created_by = $user_cache->getById( $test_run->created_by );
+            $createdBy = $user_cache->getById( $test_run->createdBy );
 
             // lookup the test suite that is associated to this test run.
             $test_suite = null;
@@ -127,7 +127,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
             $this->printHtml('<td style="background-color:' . $testRunColor . ';"><center>' . $run_state->description . '</center></td>');
             $this->printHtml( '<td>' . $test_run->iterations . '</td>' );
             $this->printHtml( '<td>' . $this->formatDate( $test_run->createdAt ) . '</td>' );
-            $this->printHtml( '<td>' . $this->escapeVariable( $created_by->username ) . '</td>' );
+            $this->printHtml( '<td>' . $this->escapeVariable( $createdBy->username ) . '</td>' );
             $this->printHtml( '<td><center>' );
             if ( $test_run->test_run_state_id != $step1_state->id &&
                  $test_run->test_run_state_id != $step2_state->id &&

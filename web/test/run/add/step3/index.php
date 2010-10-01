@@ -136,8 +136,8 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
                $suite_obj = $suite_cache->getById( $base_url->test_suite_id );
                $component_type = 'suite';
                $component_text = $suite_obj->name;
-            } else if ( $base_url->test_id > 0 ) {
-               $test_obj = $test_cache->getById( $base_url->test_id );
+            } else if ( $base_url->testId > 0 ) {
+               $test_obj = $test_cache->getById( $base_url->testId );
                $component_type = 'test';
                $component_text = $test_obj->name;
             }

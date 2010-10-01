@@ -6,7 +6,7 @@ class CTM_Test_Run_BaseUrl extends Light_Database_Object {
    public $id;
    public $test_run_id;
    public $test_suite_id;
-   public $test_id;
+   public $testId;
    public $baseurl;
 
    public function init() {

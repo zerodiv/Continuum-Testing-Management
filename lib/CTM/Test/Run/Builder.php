@@ -131,15 +131,15 @@ class CTM_Test_Run_Builder {
 
    }
 
-   private function _addTestToSuiteDir( CTM_Test_Run $test_run, $test_id ) {
+   private function _addTestToSuiteDir( CTM_Test_Run $test_run, $testId ) {
 
       try {
          // fetch the test_obj
-         $test_obj = $this->_test_cache->getById( $test_id );
+         $test_obj = $this->_test_cache->getById( $testId );
 
          // fetch all the test commands
          $sel = new CTM_Test_Command_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ) );
          $or_params = array();
          $order = array( 'id' );
          $test_commands = $sel->find( $and_params, $or_params, $order );
@@ -161,7 +161,7 @@ class CTM_Test_Run_Builder {
          }
 
          // determine the baseurl for this test.
-         $baseurl_obj = $this->_test_run_baseurl_cache->getByCompoundKey( $test_run->id, 0, $test_id );
+         $baseurl_obj = $this->_test_run_baseurl_cache->getByCompoundKey( $test_run->id, 0, $testId );
 
          // eject the headers.
          fwrite($fh, '<?xml version="1.0" encoding="UTF-8"?>' . "\n" );
@@ -333,7 +333,7 @@ class CTM_Test_Run_Builder {
          $baseurl_and_params = array( 
                new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ),
                new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ),
-               new Light_Database_Selector_Criteria( 'test_id', '=', 0 )
+               new Light_Database_Selector_Criteria( 'testId', '=', 0 )
          );
          $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
 
@@ -365,13 +365,13 @@ class CTM_Test_Run_Builder {
       return true;
    }
 
-   private function _addTestToPlan( CTM_Test_Run $test_run, $test_suite_id, $test_id ) {
+   private function _addTestToPlan( CTM_Test_Run $test_run, $test_suite_id, $testId ) {
       try {
 
          // increment the _suite_test_id
          $this->_suite_test_id++;
 
-         $test_obj = $this->_test_cache->getById( $test_id );
+         $test_obj = $this->_test_cache->getById( $testId );
 
          $this->_suite_tests[] = array(
                'suite_test_id' => $this->_suite_test_id,
@@ -385,7 +385,7 @@ class CTM_Test_Run_Builder {
             $baseurl_and_params = array( 
                new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ),
                new Light_Database_Selector_Criteria( 'test_suite_id', '=', 0 ),
-               new Light_Database_Selector_Criteria( 'test_id', '=', $test_id )
+               new Light_Database_Selector_Criteria( 'testId', '=', $testId )
             );
             $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
             if ( count( $run_baseurls ) == 0 ) {
@@ -394,7 +394,7 @@ class CTM_Test_Run_Builder {
                   $base_suite_obj = new CTM_Test_Run_BaseUrl();
                   $base_suite_obj->test_run_id = $test_run->id;
                   $base_suite_obj->test_suite_id = 0;
-                  $base_suite_obj->test_id = $test_id;
+                  $base_suite_obj->testId = $testId;
                   $base_suite_obj->baseurl = $test_baseurl_obj->baseurl;
                   $base_suite_obj->save();
                }
@@ -403,7 +403,7 @@ class CTM_Test_Run_Builder {
 
          // pull in all the ctm test parameters that this test needs first.
          $sel = new CTM_Test_Param_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ) );
          $test_params = $sel->find( $and_params );
 
          if ( count( $test_params ) > 0 ) {
@@ -413,7 +413,7 @@ class CTM_Test_Run_Builder {
                $test_run_command = new CTM_Test_Run_Command();
                $test_run_command->test_run_id = $test_run->id;
                $test_run_command->test_suite_id = $test_suite_id;
-               $test_run_command->test_id = $test_id;
+               $test_run_command->testId = $testId;
                $test_run_command->test_selenium_command_id = 1; // store.
                $test_run_command->test_param_library_id = $test_param->test_param_library_id;
                $test_run_command->save();
@@ -427,7 +427,7 @@ class CTM_Test_Run_Builder {
 
          // now loop across the normal commands for the 
          $sel = new CTM_Test_Command_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $test_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ) );
          $or_params = array();
          $order = array( 'id' );
          $test_commands = $sel->find( $and_params, $or_params, $order );
@@ -459,7 +459,7 @@ class CTM_Test_Run_Builder {
                      $test_run_command = new CTM_Test_Run_Command();
                      $test_run_command->test_run_id = $test_run->id;
                      $test_run_command->test_suite_id = $test_suite_id;
-                     $test_run_command->test_id = $test_id;
+                     $test_run_command->testId = $testId;
                      $test_run_command->test_selenium_command_id = $test_command->test_selenium_command_id;
                      $test_run_command->test_param_library_id = $test_command->test_param_library_id;
                      $test_run_command->save();

@@ -22,7 +22,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       $id                     = $this->getOrPost( 'id', '' );
       $action                 = $this->getOrPost( 'action', '' );
       $suite_id               = $this->getOrPost( 'suite_id', '' );
-      $test_id                = $this->getOrPost( 'test_id', '' );
+      $testId                = $this->getOrPost( 'testId', '' );
       $test_suite_id          = $this->getOrPost( 'test_suite_id', '' );
       $test_suite_plan_id     = $this->getOrPost( 'test_suite_plan_id', '' );
 
@@ -188,10 +188,10 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          return true;
       }
 
-      if ( $action == 'add_test_to_plan' && isset( $test_id ) && $test_id > 0 ) {
+      if ( $action == 'add_test_to_plan' && isset( $testId ) && $testId > 0 ) {
          $test_plan = new CTM_Test_Suite_Plan();
          $test_plan->test_suite_id = $id;
-         $test_plan->linked_id = $test_id;
+         $test_plan->linked_id = $testId;
          $test_plan->test_order = ( $high_id + 1 );
          $test_plan->test_suite_plan_type_id = 2; // this is a test
          $test_plan->save();
@@ -446,7 +446,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                $this->printHtml( '<tr class="' . $class . '">' );
                $this->printHtml( '<td class="aiColumnOne">' . $test_row->id . '</td>' );
                $this->printHtml( '<td>' . $this->escapeVariable( $test_row->name ) . '</td>' );
-               $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $testFolderId . '&action=add_test_to_plan&test_id=' . $test_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
+               $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $testFolderId . '&action=add_test_to_plan&testId=' . $test_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
                $this->printHtml( '</tr>' );
             }
          } else {

@@ -34,7 +34,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
             $test_run->test_run_state_id = $step1->id;
             $test_run->iterations = 1; 
             $test_run->createdAt = time();
-            $test_run->created_by = $user->id;
+            $test_run->createdBy = $user->id;
             $test_run->save();
 
             $test_run->createTestRunCommands();

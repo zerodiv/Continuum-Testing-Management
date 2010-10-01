@@ -57,13 +57,13 @@ class CTM_Site_Test_Add extends CTM_Site
          $new = new CTM_Test();
          $new->testFolderId = $testFolderId;
          $new->name = $name;
-         $new->test_status_id = 1; // all tests are created in a pending state.
+         $new->testStatusId = 1; // all tests are created in a pending state.
          $createAt = time(); // yes i know this is paranoia
          $new->createdAt = $createAt;
-         $new->created_by = $userObj->id;
-         $new->modified_at = $createAt;
-         $new->modified_by = $userObj->id;
-         $new->revision_count = 1;
+         $new->createdBy = $userObj->id;
+         $new->modifiedAt = $createAt;
+         $new->modifiedBy = $userObj->id;
+         $new->revisionCount = 1;
          $new->save();
 
          if ( $new->id > 0 ) {

@@ -18,7 +18,7 @@ require_once( 'CTM/Test/Param/Library.php' );
 
 class CTM_Test_Html_Source extends Light_Database_Object {
    public $id;
-   public $test_id;
+   public $testId;
    public $html_source;
 
    public function init() {
@@ -42,7 +42,7 @@ class CTM_Test_Html_Source extends Light_Database_Object {
          // if there are commands associated to this test purge them.
          $sel = new CTM_Test_Command_Selector();
          $and_params = array(
-               new Light_Database_Selector_Criteria( 'test_id', '=', $this->test_id ),
+               new Light_Database_Selector_Criteria( 'testId', '=', $this->testId ),
          );
 
          $command_rows = $sel->find( $and_params );
@@ -65,7 +65,7 @@ class CTM_Test_Html_Source extends Light_Database_Object {
          $parsed_data = $html_source_parser_obj->parse( $html_source );
 
          $test_sel = new CTM_Test_Selector();
-         $test_params = array( new Light_Database_Selector_Criteria( 'id', '=', $this->test_id ) );
+         $test_params = array( new Light_Database_Selector_Criteria( 'id', '=', $this->testId ) );
          $tests = $test_sel->find( $test_params );
          if ( isset( $tests[0] ) ) {
             $test = $tests[0];
@@ -101,9 +101,9 @@ class CTM_Test_Html_Source extends Light_Database_Object {
                      $test_param_lib_obj = new CTM_Test_Param_Library();
                      $test_param_lib_obj->name = (string) $value;
                      $test_param_lib_obj->createdAt = $createdAt;
-                     $test_param_lib_obj->created_by = $user->id;
-                     $test_param_lib_obj->modified_at = $createdAt;
-                     $test_param_lib_obj->modified_by = $user->id;
+                     $test_param_lib_obj->createdBy = $user->id;
+                     $test_param_lib_obj->modifiedAt = $createdAt;
+                     $test_param_lib_obj->modifiedBy = $user->id;
                      $test_param_lib_obj->save();
 
                      if ( isset( $test_param_lib_obj->id ) ) {
@@ -116,7 +116,7 @@ class CTM_Test_Html_Source extends Light_Database_Object {
 
                // create the test command
                $c = new CTM_Test_Command();
-               $c->test_id = $this->test_id;
+               $c->testId = $this->testId;
                $c->test_selenium_command_id = $command_obj->id;
                $c->test_param_library_id = 0;
                
@@ -161,7 +161,7 @@ class CTM_Test_Html_Source extends Light_Database_Object {
             if ( isset( $test_param_lib_obj->id ) ) {
                // test_param_obj found... save the shit to the table.
                $test_param = new CTM_Test_Param();
-               $test_param->test_id = $this->test_id;
+               $test_param->testId = $this->testId;
                $test_param->test_param_library_id = $test_param_lib_obj->id;
                $test_param->save();
             }

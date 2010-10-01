@@ -27,7 +27,7 @@ class CTM_Site_Test_Download extends CTM_Site {
 
       try {
          $sel = new CTM_Test_Html_Source_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $id ) );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
             $test_html = $rows[0];

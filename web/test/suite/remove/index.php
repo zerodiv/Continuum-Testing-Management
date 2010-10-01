@@ -37,7 +37,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
 
             $user_obj = $this->getUser();
 
-            $suite->test_status_id = $remove_status->id;
+            $suite->testStatusId = $remove_status->id;
             $suite->save();
 
             header( 'Location: ' . $this->_baseurl . '/test/suites/?parentId=' . $suite->testFolderId );

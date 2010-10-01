@@ -49,7 +49,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
          $sel = new CTM_Test_Suite_Selector();
          $and_params = array(
                new Light_Database_Selector_Criteria( 'testFolderId', '=', $parentId ),
-               new Light_Database_Selector_Criteria( 'test_status_id', '!=', $deleted_status->id )
+               new Light_Database_Selector_Criteria( 'testStatusId', '!=', $deleted_status->id )
          );
          $suite_rows = $sel->find( $and_params );
       } catch ( Exception $e ) {
@@ -88,17 +88,17 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
             $class = $this->oddEvenClass();
 
-            $user = $user_cache->getById( $suite->modified_by );
-            $suite_status = $test_status_cache->getById( $suite->test_status_id );
+            $user = $user_cache->getById( $suite->modifiedBy );
+            $suite_status = $test_status_cache->getById( $suite->testStatusId );
 
             $this->printHtml( '<tr class="' . $class . '">' );
             $this->printHtml( '<td>' . $this->escapeVariable( $suite->name ) . '</td>' );
             if ( isset( $suite_status ) ) {
                $this->printHtml( '<td>' . $suite_status->name . '</td>' );
             } else {
-               $this->printHtml( '<td>' . $suite->test_status_id . '</td>' );
+               $this->printHtml( '<td>' . $suite->testStatusId . '</td>' );
             }
-            $this->printHtml( '<td>' . $this->formatDate( $suite->modified_at ) . '</td>' );
+            $this->printHtml( '<td>' . $this->formatDate( $suite->modifiedAt ) . '</td>' );
             if ( isset( $user ) ) {
                $this->printHtml(
                      '<td><a href="mailto:' . $this->escapeVariable( $user->emailAddress ) . '">' .
@@ -112,7 +112,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
             $this->printHtml( '<a href="' . $this->_baseurl . '/test/suite/edit/?id=' . $suite->id . '" class="ctmButton">Edit</a>' );
             $this->printHtml( '<a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $suite->id . '" class="ctmButton">Edit Plan</a>' );
             /*
-            if ( $suite->revision_count > 1 ) {
+            if ( $suite->revisionCount > 1 ) {
                $this->printHtml( '<a href="' . $this->_baseurl . '/test/suite/revisions/?id=' . $test->id . '" class="ctmButton">Revisions</a>' );
             }
             */

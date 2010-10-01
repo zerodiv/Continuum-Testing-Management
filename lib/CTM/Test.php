@@ -2,97 +2,53 @@
 
 require_once( 'Light/Database/Object.php' );
 
-class CTM_Test extends Light_Database_Object {
+class CTM_Test extends Light_Database_Object
+{
    public $id;
    public $testFolderId;
    public $name;
-   public $test_status_id;
+   public $testStatusId;
    public $createdAt;
-   public $created_by;
-   public $modified_at;
-   public $modified_by;
-   public $revision_count;
+   public $createdBy;
+   public $modifiedAt;
+   public $modifiedBy;
+   public $revisionCount;
 
-   public function init() {
-      $this->setSqlTable( 'test' );
-      $this->setDbName( 'test' );
-      $this->addOneToOneRelationship( 'BaseUrl', 'CTM_Test_BaseUrl', 'id', 'test_id' );
-      $this->addOneToOneRelationship( 'HtmlSource', 'CTM_Test_Html_Source', 'id', 'test_id' );
-      $this->addOneToOneRelationship( 'Description', 'CTM_Test_Description', 'id', 'test_id' );
-      $this->addOneToManyRelationship( 'Commands', 'CTM_Test_Command', 'id', 'test_id' );
-      $this->addOneToManyRelationship( 'Params', 'CTM_Test_Param', 'id', 'test_id' );
-      $this->addOneToManyRelationship( 'Revisions', 'CTM_Test_Revision', 'id', 'test_id' );
+   public function init()
+   {
+      $this->setSqlTable('ctm_test');
+      $this->setDbName('test');
+      $this->addOneToOneRelationship('BaseUrl', 'CTM_Test_BaseUrl', 'id', 'testId');
+      $this->addOneToOneRelationship('HtmlSource', 'CTM_Test_Html_Source', 'id', 'testId');
+      $this->addOneToOneRelationship('Description', 'CTM_Test_Description', 'id', 'testId');
+      $this->addOneToManyRelationship('Commands', 'CTM_Test_Command', 'id', 'testId');
+      $this->addOneToManyRelationship('Params', 'CTM_Test_Param', 'id', 'testId');
+      $this->addOneToManyRelationship('Revisions', 'CTM_Test_Revision', 'id', 'testId');
    }
 
    // overloaded remove to take care of the object cleanup
-   public function remove() {
-      try {
-
-         $base_url_obj = $this->getBaseUrl();
-         
-         if ( isset( $base_url_obj ) ) {
-            $base_url_obj->remove();
-         }
-
-         $desc_obj = $this->getDescription(); 
-         
-         if ( isset( $desc_obj ) ) {
-            $desc_obj->remove();
-         } 
-         
-         $html_source_obj = $this->getHtmlSource(); 
-         
-         if ( isset( $html_source_obj ) ) {
-            $html_source_obj->remove();
-         } 
-
-         // test command removal
-         $test_commands = $this->getCommands();
-         if ( count( $test_commands ) > 0 ) {
-            foreach ( $test_commands as $test_command ) {
-               $test_command->remove();
-            }
-         }
-
-         // test params removal
-         $test_params = $this->getParams();
-         if ( count( $test_params ) > 0 ) {
-            foreach ( $test_params as $test_param ) {
-               $test_param->remove();
-            }
-         }
-
-         // test revisions removal
-         $test_revisions = $this->getRevisions();
-         if ( count( $test_revisions ) > 0 ) {
-            foreach ( $test_revisions as $test_revision ) {
-               $test_revision->remove();
-            }
-         }
-
-         // now remove ourselves
-         parent::remove(); 
-
-      } catch ( Exception $e ) {
-         throw $e;
-      } 
+   public function remove()
+   {
+      // we never really allow people to remove tests.
+      return;
    }
 
-   public function setBaseUrl( $baseurl ) {
-      if ( ! isset( $this->id ) ) {
+   public function setBaseUrl( $baseurl )
+   {
+      if ( ! isset($this->id) ) {
          return false;
       }
       try {
-         $a_obj = $this->getBaseUrl();
-         if ( isset( $a_obj ) ) {
-            $a_obj->baseurl = $baseurl;
-            $a_obj->save();
+         $aObj = $this->getBaseUrl();
+         if ( isset( $aObj ) ) {
+            $aObj->baseurl = $baseurl;
+            $aObj->save();
          } else {
-            $a_obj = null;
-            $a_obj = new CTM_Test_BaseUrl();
-            $a_obj->test_id = $this->id;
-            $a_obj->baseurl = $baseurl;
-            $a_obj->save();
+            $aObj = null;
+            $aObj = new CTM_Test_BaseUrl();
+            $aObj->testId = $this->id;
+            $aObj->baseurl = $baseurl;
+            $aObj->save();
          }
       } catch ( Exception $e ) {
          throw $e;
@@ -100,21 +56,22 @@ class CTM_Test extends Light_Database_Object {
       return false;
    }
 
-   public function setDescription( $description ) {
+   public function setDescription( $description )
+   {
       if ( ! isset( $this->id ) ) {
          return false;
       }
       try {
-         $a_obj = $this->getDescription();
-         if ( isset( $a_obj ) ) {
-            $a_obj->description = $description;
-            $a_obj->save();
+         $aObj = $this->getDescription();
+         if ( isset( $aObj ) ) {
+            $aObj->description = $description;
+            $aObj->save();
          } else {
-            $a_obj = null;
-            $a_obj = new CTM_Test_Description();
-            $a_obj->test_id = $this->id;
-            $a_obj->description = $description;
-            $a_obj->save();
+            $aObj = null;
+            $aObj = new CTM_Test_Description();
+            $aObj->testId = $this->id;
+            $aObj->description = $description;
+            $aObj->save();
          }
       } catch ( Exception $e ) {
          throw $e;
@@ -122,21 +79,22 @@ class CTM_Test extends Light_Database_Object {
       return false;
    }
 
-   public function setHtmlSource( CTM_User $user, $html_source ) {
+   public function setHtmlSource( CTM_User $user, $htmlSource )
+   {
       if ( ! isset( $this->id ) ) {
          return false;
       }
       try {
-         $a_obj = $this->getHtmlSource();
-         if ( isset( $a_obj ) ) {
-            $a_obj->html_source = $html_source;
-            $a_obj->save( $user );
+         $aObj = $this->getHtmlSource();
+         if ( isset( $aObj ) ) {
+            $aObj->htmlSource = $htmlSource;
+            $aObj->save($user);
          } else {
-            $a_obj = null;
-            $a_obj = new CTM_Test_Html_Source();
-            $a_obj->test_id = $this->id;
-            $a_obj->html_source = $html_source;
-            $a_obj->save( $user );
+            $aObj = null;
+            $aObj = new CTM_Test_Html_Source();
+            $aObj->testId = $this->id;
+            $aObj->htmlSource = $htmlSource;
+            $aObj->save($user);
          }
       } catch ( Exception $e ) {
          throw $e;
@@ -144,20 +102,21 @@ class CTM_Test extends Light_Database_Object {
       return false;
    }
 
-   public function saveRevision() {
+   public function saveRevision()
+   {
 
       // save the revision to the revision store.
-      $ctm_revision_obj = new CTM_Revision_Framework( 'test' );
-      list( $rv, $revision_id ) = $ctm_revision_obj->addRevision( (integer) $this->id, $this->toXML() );
+      $ctmRevisionObj = new CTM_Revision_Framework('test');
+      list( $rv, $revisionId ) = $ctmRevisionObj->addRevision((integer) $this->id, $this->toXML());
 
       if ( $rv == true ) {
          // update the revision database tracker.
-         $rev_obj = new CTM_Test_Revision();
-         $rev_obj->test_id = $this->id;
-         $rev_obj->modified_at = $this->modified_at;
-         $rev_obj->modified_by = $this->modified_by;
-         $rev_obj->revision_id = $revision_id;
-         $rev_obj->save();
+         $revObj = new CTM_Test_Revision();
+         $revObj->testId = $this->id;
+         $revObj->modifiedAt = $this->modifiedAt;
+         $revObj->modifiedBy = $this->modifiedBy;
+         $revObj->revisionId = $revisionId;
+         $revObj->save();
       }
 
    }

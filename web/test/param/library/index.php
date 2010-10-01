@@ -57,16 +57,16 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
       } else {
          foreach ( $params as $param ) {
             $class = $this->oddEvenClass();
-            $created_by = $user_cache->getById( $param->created_by );
-            $modified_by = $user_cache->getById( $param->modified_by );
+            $createdBy = $user_cache->getById( $param->createdBy );
+            $modifiedBy = $user_cache->getById( $param->modifiedBy );
 
             $this->printHtml( '<tr class="' . $class . '">' );
             $this->printHtml( '<td class="aiColumnOne">' . $param->id . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $param->name ) . '</td>' );
             $this->printHtml( '<td>' . $this->formatDate( $param->createdAt ) . '</td>' );
-            $this->printHtml( '<td>' . $this->escapeVariable( $created_by->username ) . '</td>' );
-            $this->printHtml( '<td>' . $this->formatDate( $param->modified_at ) . '</td>' );
-            $this->printHtml( '<td>' . $this->escapeVariable( $modified_by->username ) . '</td>' );
+            $this->printHtml( '<td>' . $this->escapeVariable( $createdBy->username ) . '</td>' );
+            $this->printHtml( '<td>' . $this->formatDate( $param->modifiedAt ) . '</td>' );
+            $this->printHtml( '<td>' . $this->escapeVariable( $modifiedBy->username ) . '</td>' );
             $this->printHtml( '<td><a href="' . $this->_baseurl . '/test/param/library/edit/?id=' . $param->id . '" class="ctmButton">Edit</a></td>' );
             $this->printHtml( '</tr>' );
          }

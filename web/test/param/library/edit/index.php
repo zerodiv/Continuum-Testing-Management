@@ -65,8 +65,8 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
       } catch ( Exception $e ) {
       }
 
-      $created_by = $user_cache->getById( $param->created_by );
-      $modified_by = $user_cache->getById( $param->modified_by );
+      $createdBy = $user_cache->getById( $param->createdBy );
+      $modifiedBy = $user_cache->getById( $param->modifiedBy );
       $desc_obj = $param->getDescription();
       $def_obj = $param->getDefault();
 
@@ -94,17 +94,17 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Created by:</td>' );
-      $this->printHtml( '<td>' . $this->escapeVariable( $created_by->username ) . '</td>' );
+      $this->printHtml( '<td>' . $this->escapeVariable( $createdBy->username ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Modified at:</td>' );
-      $this->printHtml( '<td>' . $this->formatDate( $param->modified_at ) . '</td>' );
+      $this->printHtml( '<td>' . $this->formatDate( $param->modifiedAt ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Modified by:</td>' );
-      $this->printHtml( '<td>' . $this->escapeVariable( $modified_by->username ) . '</td>' );
+      $this->printHtml( '<td>' . $this->escapeVariable( $modifiedBy->username ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );

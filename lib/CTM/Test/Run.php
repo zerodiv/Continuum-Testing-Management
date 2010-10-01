@@ -12,7 +12,7 @@ class CTM_Test_Run extends Light_Database_Object {
    public $test_run_state_id;
    public $iterations;
    public $createdAt;
-   public $created_by;
+   public $createdBy;
 
    public function init() {
       $this->setSqlTable( 'test_run' );

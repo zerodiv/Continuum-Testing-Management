@@ -2,14 +2,15 @@
 
 require_once( 'Light/Database/Object.php' );
 
-class CTM_Test_Description extends Light_Database_Object {
+class CTM_Test_Description extends Light_Database_Object
+{
    public $id;
-   public $test_id;
+   public $testId;
    public $description;
 
    public function init() {
-      $this->setSqlTable( 'test_description' );
-      $this->setDbName( 'test' );
+      $this->setSqlTable('test_description');
+      $this->setDbName('test');
    }
 
 }

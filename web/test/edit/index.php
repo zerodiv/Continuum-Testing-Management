@@ -69,11 +69,11 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
             $user_obj = $this->getUser();
             $test->name = $name;
-            $test->modified_at = time();
-            $test->modified_by = $user_obj->id;
-            $test->revision_count = $test->revision_count + 1;
+            $test->modifiedAt = time();
+            $test->modifiedBy = $user_obj->id;
+            $test->revisionCount = $test->revisionCount + 1;
             // jeo: TODO: We will need to set this via a drop down eventually.
-            // $test->test_status_id = 1; // all tests are created in a pending state.
+            // $test->testStatusId = 1; // all tests are created in a pending state.
             $test->save();
 
             $test->setDescription( $description );
@@ -204,7 +204,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
          try {
             $sel = new CTM_Test_Command_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $id ) );
             $or_params = array();
             $order = array( 'id' );
             $commands = $sel->find( $and_params, $or_params, $order );

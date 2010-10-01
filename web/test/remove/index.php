@@ -36,7 +36,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
          $remove_status = $test_status_cache->getByName('deleted');
         
          if ( isset($remove_status->id) ) {
-            $test->test_status_id = $remove_status->id;
+            $test->testStatusId = $remove_status->id;
             $test->save();
          }
 

@@ -53,13 +53,13 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
          $and_params = array(
                new Light_Database_Selector_Criteria( 'testFolderId', '=', $parentId ),
-               new Light_Database_Selector_Criteria( 'test_status_id', '!=', $deleted_status->id )
+               new Light_Database_Selector_Criteria( 'testStatusId', '!=', $deleted_status->id )
          );
 
-         // add in a created_by inclusion
+         // add in a createdBy inclusion
          if ( $role_obj->name == 'user' ) {
             $and_params[] = 
-               new Light_Database_Selector_Criteria( 'created_by', '=', $user_obj->id )
+               new Light_Database_Selector_Criteria( 'createdBy', '=', $user_obj->id )
             ;
          }
 
@@ -97,17 +97,17 @@ class CTM_Site_Test_Folders extends CTM_Site {
          foreach ( $test_rows as $test ) {
             $class = $this->oddEvenClass();
 
-            $user = $user_cache->getById( $test->modified_by );
-            $test_status = $test_status_cache->getById( $test->test_status_id );
+            $user = $user_cache->getById( $test->modifiedBy );
+            $test_status = $test_status_cache->getById( $test->testStatusId );
             
             $this->printHtml( '<tr class="' . $class . '">' );
             $this->printHtml( '<td>' . $this->escapeVariable( $test->name ) . '</td>' );
             if ( isset( $test_status ) ) {
                $this->printHtml( '<td>' . $test_status->name . '</td>' );
             } else {
-               $this->printHtml( '<td>' . $test->test_status_id . '</td>' );
+               $this->printHtml( '<td>' . $test->testStatusId . '</td>' );
             }
-            $this->printHtml( '<td>' . $this->formatDate( $test->modified_at ) . '</td>' );
+            $this->printHtml( '<td>' . $this->formatDate( $test->modifiedAt ) . '</td>' );
             if ( isset( $user ) ) {
                $this->printHtml(
                      '<td><a href="mailto:' . $this->escapeVariable($user->emailAddress) . '">' .
@@ -119,7 +119,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
             }
             $this->printHtml( '<td><center>' );
             $this->printHtml( '<a href="' . $this->_baseurl . '/test/edit/?id=' . $test->id . '" class="ctmButton">Edit</a>' );
-            if ( $test->revision_count > 1 ) {
+            if ( $test->revisionCount > 1 ) {
                $this->printHtml( '<a href="' . $this->_baseurl . '/test/revisions/?id=' . $test->id . '" class="ctmButton">Revisions</a>' );
             }
             $this->printHtml( '<a href="' . $this->_baseurl . '/test/download/?id=' . $test->id . '" class="ctmButton" target="_new">Download</a>' );

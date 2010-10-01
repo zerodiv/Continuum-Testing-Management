@@ -10,9 +10,9 @@ class CTM_Test_Param_Library extends Light_Database_Object {
    public $id;
    public $name;
    public $createdAt;
-   public $created_by;
-   public $modified_at;
-   public $modified_by;
+   public $createdBy;
+   public $modifiedAt;
+   public $modifiedBy;
 
    public function init() {
       $this->setSqlTable( 'test_param_library' );

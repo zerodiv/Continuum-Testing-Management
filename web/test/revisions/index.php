@@ -57,7 +57,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
          $revisions = array();
          try {
             $sel = new CTM_Test_Revision_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_id', '=', $id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $id ) );
             $or_params = array();
             $order = array( 'id' );
             $revisions = $sel->find( $and_params, $or_params, $order );
@@ -77,14 +77,14 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
                $n--;
 
-               $modified_by = $revision->getModifiedBy();
+               $modifiedBy = $revision->getModifiedBy();
 
                $class = $this->oddEvenClass();
 
                $this->printHtml( '<tr class="' . $class . '">' );
                $this->printHtml( '<td>' . $n . '</td>' );
-               $this->printHtml( '<td>' . $this->formatDate( $revision->modified_at ) . '</td>' );
-               $this->printHtml( '<td>' . $this->escapeVariable( $modified_by->username ) . '</td>' );
+               $this->printHtml( '<td>' . $this->formatDate( $revision->modifiedAt ) . '</td>' );
+               $this->printHtml( '<td>' . $this->escapeVariable( $modifiedBy->username ) . '</td>' );
                $this->printHtml( '<td><center>' );
                if ( $n == 0 ) {
                } else {

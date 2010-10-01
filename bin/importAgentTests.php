@@ -103,10 +103,10 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
             $this->_regressionSuiteObj->testFolderId = $this->_regressionFolderObj->id;
             $this->_regressionSuiteObj->name = self::CTM_REGRESSION_SUITE_NAME;
             $this->_regressionSuiteObj->createdAt = time();
-            $this->_regressionSuiteObj->created_by = $this->_adminUserObj->id;
-            $this->_regressionSuiteObj->modified_at = time();
-            $this->_regressionSuiteObj->modified_by = $this->_adminUserObj->id;
-            $this->_regressionSuiteObj->test_status_id = 1;
+            $this->_regressionSuiteObj->createdBy = $this->_adminUserObj->id;
+            $this->_regressionSuiteObj->modifiedAt = time();
+            $this->_regressionSuiteObj->modifiedBy = $this->_adminUserObj->id;
+            $this->_regressionSuiteObj->testStatusId = 1;
             $this->_regressionSuiteObj->save();
          }
 
@@ -206,10 +206,10 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
          $suiteObj->testFolderId = $folderObj->id;
          $suiteObj->name = $folderObj->name;
          $suiteObj->createdAt = time();
-         $suiteObj->created_by = $this->_adminUserObj->id;
-         $suiteObj->modified_at = time();
-         $suiteObj->modified_by = $this->_adminUserObj->id;
-         $suiteObj->test_status_id = 1;
+         $suiteObj->createdBy = $this->_adminUserObj->id;
+         $suiteObj->modifiedAt = time();
+         $suiteObj->modifiedBy = $this->_adminUserObj->id;
+         $suiteObj->testStatusId = 1;
          $suiteObj->save();
       }
 
@@ -230,28 +230,28 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
                $testObj = new CTM_Test();
                $testObj->testFolderId = $folderObj->id;
                $testObj->name = $testItem;
-               $testObj->test_status_id = 1;
+               $testObj->testStatusId = 1;
                $testObj->createdAt = time();
-               $testObj->created_by = $this->_adminUserObj->id;
-               $testObj->modified_at = time();
-               $testObj->modified_by = $this->_adminUserObj->id;
-               $testObj->revision_count = 1;
+               $testObj->createdBy = $this->_adminUserObj->id;
+               $testObj->modifiedAt = time();
+               $testObj->modifiedBy = $this->_adminUserObj->id;
+               $testObj->revisionCount = 1;
                $testObj->save(); 
             
                if ( $testObj->id > 0 ) { // push the html in.
-                  $this->message("   test: " . $testItem . " test_id: " . $testObj->id);
-                  $testObj->setHtmlSource($this->_adminUserObj, file_get_contents( $testFile ));
+                  $this->message("   test: " . $testItem . " testId: " . $testObj->id);
+                  $testObj->setHtmlSource($this->_adminUserObj, file_get_contents($testFile));
          
                   $testPlan = new CTM_Test_Suite_Plan();
-                  $testPlan->test_suite_id = $suiteObj->id;
-                  $testPlan->linked_id = $testObj->id;
-                  $testPlan->test_order = $testCounter;
-                  $testPlan->test_suite_plan_type_id = 2; // this is a test
+                  $testPlan->testSuiteId = $suiteObj->id;
+                  $testPlan->linkedId = $testObj->id;
+                  $testPlan->testOrder = $testCounter;
+                  $testPlan->testSuitePlanTypeId = 2; // this is a test
                   $testPlan->save();
                   $testCounter++;
 
                   if ( isset( $testPlan->id ) && $testPlan->id > 0 ) {
-                     $this->message( '   test added' );
+                     $this->message('   test added');
                      $this->_testCounter++;
                   }
                
@@ -278,17 +278,17 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
       foreach ( $tests as $test ) {
          // $this->message( 'base url: ' . $test->getBaseUrl()->baseurl );
 
-         $testBaseUrl = str_replace('http://jorcutt-laptop', $ctmBaseUrl, $test->getBaseUrl()->baseurl );
+         $testBaseUrl = str_replace('http://jorcutt-laptop', $ctmBaseUrl, $test->getBaseUrl()->baseurl);
          // $this->message( 'test url: ' . $testBaseUrl );
 
-         $test->setBaseUrl( $testBaseUrl );
+         $test->setBaseUrl($testBaseUrl);
       }
 
       $testPlan = new CTM_Test_Suite_Plan();
-      $testPlan->test_suite_id = $this->_regressionSuiteObj->id;
-      $testPlan->linked_id = $suiteObj->id;
-      $testPlan->test_order = ( $this->_planCounter );
-      $testPlan->test_suite_plan_type_id = 1; // this is a suite
+      $testPlan->testSuiteId = $this->_regressionSuiteObj->id;
+      $testPlan->linkedId = $suiteObj->id;
+      $testPlan->testOrder = ( $this->_planCounter );
+      $testPlan->testSuitePlanTypeId = 1; // this is a suite
       $testPlan->save();
       $this->_planCounter++;
 

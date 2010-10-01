@@ -35,10 +35,10 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
          $new->name = $name;
          $create_at = time(); // yes i know this is paranoia
          $new->createdAt = $create_at;
-         $new->created_by = $user_obj->id;
-         $new->modified_at = $create_at;
-         $new->modified_by = $user_obj->id;
-         $new->test_status_id = 1; // all test_suites start life as pending
+         $new->createdBy = $user_obj->id;
+         $new->modifiedAt = $create_at;
+         $new->modifiedBy = $user_obj->id;
+         $new->testStatusId = 1; // all test_suites start life as pending
          $new->save();
 
          if ( $new->id > 0 ) {

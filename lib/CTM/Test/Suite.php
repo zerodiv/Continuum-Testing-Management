@@ -13,11 +13,11 @@ class CTM_Test_Suite extends Light_Database_Object
    public $id;
    public $testFolderId;
    public $name;
-   public $created_at;
-   public $created_by;
-   public $modified_at;
-   public $modified_by;
-   public $test_status_id;
+   public $createdAt;
+   public $createdBy;
+   public $modifiedAt;
+   public $modifiedBy;
+   public $testStatusId;
 
    public function init()
    {
@@ -80,8 +80,8 @@ class CTM_Test_Suite extends Light_Database_Object
          // update the revision database tracker.
          $revObj = new CTM_Test_Suite_Revision();
          $revObj->test_suite_id = $this->id;
-         $revObj->modified_at = $this->modified_at;
-         $revObj->modified_by = $this->modified_by;
+         $revObj->modifiedAt = $this->modifiedAt;
+         $revObj->modifiedBy = $this->modifiedBy;
          $revObj->revision_id = $revisionId;
          $revObj->save();
       }
