@@ -51,7 +51,7 @@ class CTM_Site_User_Create extends CTM_Site {
 
          // create the new user.
          $user = new CTM_User();
-         $user->account_role_id = 1; // Default login role. 
+         $user->ctmUserRoleId = 1; // Default login role. 
          $user->username = $username;
          $user->password = md5( $password );
          $user->email_address = $email_address;

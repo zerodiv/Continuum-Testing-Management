@@ -24,7 +24,7 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
       }
 
       $id                  = $this->getOrPost( 'id', null );
-      $user_role_id        = $this->getOrPost( 'user_role_id', null );
+      $ctmUserRoleId       = $this->getOrPost( 'ctmUserRoleId', null );
       $user_is_disabled    = $this->getOrPost( 'user_is_disabled', null );
 
       try {
@@ -37,7 +37,7 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
          if ( isset( $users[0] ) ) {
             $user = $users[0];
 
-            $user->account_role_id = (int) $user_role_id;
+            $user->ctmUserRoleId = (int) $ctmUserRoleId;
             $user->is_disabled = (int) $user_is_disabled;
             $user->save();
 
@@ -92,9 +92,9 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
       
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Account Role:</td>' );
-      $this->printHtml( '<td><select name="user_role_id">' );
+      $this->printHtml( '<td><select name="ctmUserRoleId">' );
       foreach ( $roles as $role ) {
-         if ( $role->id == $user->account_role_id ) {
+         if ( $role->id == $user->ctmUserRoleId ) {
             $this->printHtml( '<option value="' . $role->id . '" selected>' . $this->escapeVariable( $role->name ) . '</option>' );
          } else {
             $this->printHtml( '<option value="' . $role->id . '">' . $this->escapeVariable( $role->name ) . '</option>' );

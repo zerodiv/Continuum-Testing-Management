@@ -4,7 +4,7 @@ require_once( 'Light/Database/Object.php' );
 
 class CTM_User extends Light_Database_Object {
    public $id;
-   public $account_role_id;
+   public $ctmUserRoleId;
    public $username;
    public $password;
    public $email_address;
@@ -16,8 +16,8 @@ class CTM_User extends Light_Database_Object {
 
    public function init() {
       $this->setSqlTable( 'account' );
-      $this->setDbName( 'account' );
-      $this->addOneToOneRelationship( 'Role', 'CTM_User_Role', 'account_role_id', 'id', true );
+      $this->setDbName( 'user' );
+      $this->addOneToOneRelationship( 'Role', 'CTM_User_Role', 'ctmUserRoleId', 'id', true );
    }
 
    // jeo - swiped from a tutcity artical, because i am lazy today.
