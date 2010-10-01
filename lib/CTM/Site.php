@@ -145,7 +145,7 @@ class CTM_Site extends Light_MVC {
          // create the CTM-User folder.
          if ( ! isset( $user_folder ) ) {
             $user_folder = new CTM_Test_Folder();
-            $user_folder->parent_id = 1;
+            $user_folder->parentId = 1;
             $user_folder->name = 'CTM-Users';
             $user_folder->save();
 
@@ -161,7 +161,7 @@ class CTM_Site extends Light_MVC {
          }
 
          $child_folder = new CTM_Test_Folder();
-         $child_folder->parent_id = $user_folder->id;
+         $child_folder->parentId = $user_folder->id;
          $child_folder->name = $user_obj->id;
          $child_folder->save();
 
@@ -197,10 +197,10 @@ class CTM_Site extends Light_MVC {
       return $username;
    }
 
-   public function _fetchFolderPath( $current_baseurl, $parent_id ) {
+   public function _fetchFolderPath( $current_baseurl, $parentId ) {
       $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
       $parents = array(); 
-      $folder_cache->getFolderParents( $parent_id, $parents );
+      $folder_cache->getFolderParents( $parentId, $parents );
       $parents = array_reverse( $parents );
       $parents_cnt = count( $parents );
      
@@ -212,9 +212,9 @@ class CTM_Site extends Light_MVC {
             $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
             // this is a user id in disguise.
             $user_obj = $user_cache->getById( $parent->name );
-            $folder_path .= '<a href="' . $current_baseurl . '?parent_id=' . $parent->id . '">' . $this->escapeVariable( $user_obj->username ) . '</a>';
+            $folder_path .= '<a href="' . $current_baseurl . '?parentId=' . $parent->id . '">' . $this->escapeVariable( $user_obj->username ) . '</a>';
          } else {
-            $folder_path .= '<a href="' . $current_baseurl . '?parent_id=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
+            $folder_path .= '<a href="' . $current_baseurl . '?parentId=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
          }
          $previous_parent = $parent;
       }
@@ -222,16 +222,16 @@ class CTM_Site extends Light_MVC {
       return $folder_path;
    }
 
-   public function _displayFolderBreadCrumb( $current_baseurl, $parent_id = 0 ) {
+   public function _displayFolderBreadCrumb( $current_baseurl, $parentId = 0 ) {
 
       $user_obj = $this->getUser();
       $role_obj = $user_obj->getRole();
 
-      $folder_path = $this->_fetchFolderPath( $current_baseurl, $parent_id ); 
+      $folder_path = $this->_fetchFolderPath( $current_baseurl, $parentId ); 
       $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
 
       $children = array();
-      $children = $folder_cache->getFolderChildren( $parent_id ); 
+      $children = $folder_cache->getFolderChildren( $parentId ); 
       
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
@@ -243,20 +243,20 @@ class CTM_Site extends Light_MVC {
             $this->printHtml( '<form action="' . $current_baseurl . '" method="POST">' );
             $this->printHtml( '<td><center>' );
             $this->printHtml( 'Switch to Sub Folder: ' );
-            $this->printHtml( '<select name="parent_id">' );
+            $this->printHtml( '<select name="parentId">' );
             $this->printHtml( '<option value="0">Pick a sub-folder</option>' );
             foreach ( $children as $child ) {
                $this->printHtml( '<option value="' . $child->id . '">' . $this->escapeVariable( $child->name ) . '</option>' );
             }
             $this->printHtml( '</select>' );
             $this->printHtml( '<input type="submit" value="Go!">' );
-            $this->printHtml( '&nbsp;<a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a>' );
+            $this->printHtml( '&nbsp;<a href="' . $this->_baseurl . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">New Sub Folder</a>' );
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</form>' );
 
          } else {
             $this->printHtml( '<td><center>' );
-            $this->printHtml( '<a href="' . $this->_baseurl . '/test/folder/add/?parent_id=' . $parent_id . '" class="ctmButton">New Sub Folder</a>' );
+            $this->printHtml( '<a href="' . $this->_baseurl . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">New Sub Folder</a>' );
             $this->printHtml( '</center></td>' );
          }
       }

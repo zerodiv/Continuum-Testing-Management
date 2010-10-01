@@ -81,7 +81,7 @@ class CTM_Site_Test_Folder_Edit extends CTM_Site {
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Folder:</td>' );
-         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $folder->parent_id ) . '</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $folder->parentId ) . '</td>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );

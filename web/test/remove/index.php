@@ -40,7 +40,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
             $test->save();
          }
 
-         header( 'Location: ' . $this->_baseurl . '/tests/?parent_id=' . $test->test_folder_id );
+         header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $test->test_folder_id );
          return false;
 
       }

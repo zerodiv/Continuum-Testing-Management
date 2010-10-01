@@ -15,7 +15,7 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
       
       $this->requiresAuth();
 
-      $parent_id = $this->getOrPost( 'parent_id', '' );
+      $parentId = $this->getOrPost( 'parentId', '' );
       $name = $this->getOrPost( 'name', '' );
 
       if ( $name == '' ) {
@@ -24,7 +24,7 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
 
       try {
          $new_folder = new CTM_Test_Folder();
-         $new_folder->parent_id = $parent_id;
+         $new_folder->parentId = $parentId;
          $new_folder->name = $name;
          $new_folder->save();
       } catch ( Exception $e ) {
@@ -33,20 +33,20 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
       }
 
       // added our child send us back to our parent
-      header( 'Location: ' . $this->_baseurl . '/tests/?parent_id=' . $parent_id );
+      header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $parentId );
       return false;
 
    }
                            
 
    public function displayBody() {
-      $parent_id = $this->getOrPost( 'parent_id', '' );
+      $parentId = $this->getOrPost( 'parentId', '' );
       $name = $this->getOrPost( 'name', '' );
 
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 
       $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/add/">' );
-      $this->printHtml( '<input type="hidden" value="' . $parent_id . '" name="parent_id">' );
+      $this->printHtml( '<input type="hidden" value="' . $parentId . '" name="parentId">' );
 
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
       $this->printHtml( '<tr>' );
@@ -56,7 +56,7 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Folder:</td>' );
-      $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $parent_id ) . '</td>' );
+      $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $parentId ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );

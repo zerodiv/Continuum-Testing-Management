@@ -11,13 +11,13 @@ class CTM_Test_Folder_Cache extends Light_Database_Object_Cache {
       $this->setObject( 'CTM_Test_Folder' );
    }
 
-   public function getFolderParents( $parent_id, &$parents ) {
+   public function getFolderParents( $parentId, &$parents ) {
       try {
-         $parent = $this->getById( $parent_id );
+         $parent = $this->getById( $parentId );
          if ( isset( $parent ) ) {
             $parents[] = $parent;
-            if ( $parent->parent_id > 0 ) {
-               $this->getFolderParents( $parent->parent_id, $parents );
+            if ( $parent->parentId > 0 ) {
+               $this->getFolderParents( $parent->parentId, $parents );
             }
          }
       } catch( Exception $e ) {
@@ -25,10 +25,10 @@ class CTM_Test_Folder_Cache extends Light_Database_Object_Cache {
       }
    }
 
-   public function getFolderChildren( $parent_id ) {
+   public function getFolderChildren( $parentId ) {
       try {
          $sel = new CTM_Test_Folder_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'parent_id', '=', $parent_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'parentId', '=', $parentId ) );
          $rows = $sel->find( $and_params );
          return $rows;
       } catch ( Exception $e ) {
@@ -36,11 +36,11 @@ class CTM_Test_Folder_Cache extends Light_Database_Object_Cache {
       }
    }
 
-   public function getChildByName( $parent_id, $name ) {
+   public function getChildByName( $parentId, $name ) {
       try {
          $sel = new CTM_Test_Folder_Selector();
          $and_params = array( 
-               new Light_Database_Selector_Criteria( 'parent_id', '=', $parent_id ),
+               new Light_Database_Selector_Criteria( 'parentId', '=', $parentId ),
                new Light_Database_Selector_Criteria( 'name', '=', $name )
          );
          $rows = $sel->find( $and_params );

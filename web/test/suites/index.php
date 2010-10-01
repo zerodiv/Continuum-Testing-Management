@@ -22,18 +22,18 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
    public function displayBody() {
 
-      $parent_id = $this->getOrPost( 'parent_id', '' );
+      $parentId = $this->getOrPost( 'parentId', '' );
 
       $user_obj = $this->getUser();
       $role_obj = $user_obj->getRole();
 
-      if ( $parent_id == '' ) {
-         $parent_id = 1;
+      if ( $parentId == '' ) {
+         $parentId = 1;
       }
 
       if ( $role_obj->name == 'user' ) {
          $user_folder = $this->getUserFolder();
-         $parent_id = $user_folder->id;
+         $parentId = $user_folder->id;
       }
 
       // need these caches for this page to hum.
@@ -48,7 +48,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       try {
          $sel = new CTM_Test_Suite_Selector();
          $and_params = array(
-               new Light_Database_Selector_Criteria( 'test_folder_id', '=', $parent_id ),
+               new Light_Database_Selector_Criteria( 'test_folder_id', '=', $parentId ),
                new Light_Database_Selector_Criteria( 'test_status_id', '!=', $deleted_status->id )
          );
          $suite_rows = $sel->find( $and_params );
@@ -64,7 +64,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td colspan="5">' );
-      $this->_displayFolderBreadCrumb( $this->_baseurl . '/test/suites/', $parent_id );
+      $this->_displayFolderBreadCrumb( $this->_baseurl . '/test/suites/', $parentId );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 
@@ -120,7 +120,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       }
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->_baseurl . '/test/suite/add/?test_folder_id=' . $parent_id . '" class="ctmButton">New Test Suite</a></center></td>' );
+      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->_baseurl . '/test/suite/add/?test_folder_id=' . $parentId . '" class="ctmButton">New Test Suite</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );

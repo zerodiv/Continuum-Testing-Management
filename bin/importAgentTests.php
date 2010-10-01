@@ -70,7 +70,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
       
          if ( ! isset( $this->_regressionFolderObj ) ) {
             $this->_regressionFolderObj = new CTM_Test_Folder();
-            $this->_regressionFolderObj->parent_id = 1;
+            $this->_regressionFolderObj->parentId = 1;
             $this->_regressionFolderObj->name = self::CTM_REGRESSION_FOLDER_NAME;
             $this->_regressionFolderObj->save();
          }
@@ -133,7 +133,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
    public function run()
    {
       $this->findTestDirs();
-      $this->message( 'Added ' . $this->_testCounter . ' tests' );
+      $this->message('Added ' . $this->_testCounter . ' tests');
    }
 
    private function findTestDirs()
@@ -153,7 +153,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
 
             $folderSel = new CTM_Test_Folder_Selector();
             $folderAndParams = array(
-                  new Light_Database_Selector_Criteria( 'parent_id', '=', $this->_regressionFolderObj->id ),
+                  new Light_Database_Selector_Criteria( 'parentId', '=', $this->_regressionFolderObj->id ),
                   new Light_Database_Selector_Criteria( 'name', '=', $fileOrDirectory )
             );
 
@@ -166,7 +166,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
                $folderObj = $folderObjs[0];
             } else {
                $folderObj = new CTM_Test_Folder();
-               $folderObj->parent_id = $this->_regressionFolderObj->id;
+               $folderObj->parentId = $this->_regressionFolderObj->id;
                $folderObj->name = $fileOrDirectory;
                $folderObj->save();
             }

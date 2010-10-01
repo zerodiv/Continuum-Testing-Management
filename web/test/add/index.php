@@ -84,7 +84,7 @@ class CTM_Site_Test_Add extends CTM_Site {
          // save the inital version
          $new->saveRevision();
       
-         header( 'Location: ' . $this->_baseurl . '/tests/?parent_id=' . $test_folder_id );
+         header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $test_folder_id );
          return false;
 
       } catch ( Exception $e ) {
@@ -93,7 +93,7 @@ class CTM_Site_Test_Add extends CTM_Site {
       }
 
       // added our child send us back to our parent
-      header( 'Location: ' . $this->_baseurl . '/test/tests/?parent_id=' . $test_folder_id );
+      header( 'Location: ' . $this->_baseurl . '/test/tests/?parentId=' . $test_folder_id );
       return false;
 
    }

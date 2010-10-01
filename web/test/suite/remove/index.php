@@ -40,7 +40,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
             $suite->test_status_id = $remove_status->id;
             $suite->save();
 
-            header( 'Location: ' . $this->_baseurl . '/test/suites/?parent_id=' . $suite->test_folder_id );
+            header( 'Location: ' . $this->_baseurl . '/test/suites/?parentId=' . $suite->test_folder_id );
 
          }
 
