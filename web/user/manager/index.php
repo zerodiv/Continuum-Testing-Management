@@ -7,7 +7,7 @@ require_once( 'CTM/User/Selector.php' );
 class CTM_Site_User_Manager extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'User Manager';
+      $this->setPageTitle('User Manager');
       return true;
    }
 
@@ -30,7 +30,7 @@ class CTM_Site_User_Manager extends CTM_Site {
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="6">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th colspan="6">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiTableTitle">' );
@@ -59,7 +59,7 @@ class CTM_Site_User_Manager extends CTM_Site {
             $this->printHtml( '<td><center>No</center></td>' );
          }
          $this->printHtml( '<td><center>' );
-         $this->printHtml( '<a href="' . $this->_baseurl . '/user/manager/edit/?id=' . $user->id . '" class="ctmButton">Edit</a>' );
+         $this->printHtml( '<a href="' . $this->getBaseUrl() . '/user/manager/edit/?id=' . $user->id . '" class="ctmButton">Edit</a>' );
          $this->printHtml( '</center></td>' );
          $this->printHtml( '</tr>' );
       }

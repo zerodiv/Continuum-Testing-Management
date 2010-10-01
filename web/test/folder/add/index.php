@@ -7,7 +7,7 @@ require_once( 'CTM/Test/Folder.php' );
 class CTM_Site_Test_Folder_Add extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Folders';
+      $this->setPageTitle('Test Folders');
       return true;
    }
 
@@ -33,7 +33,7 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
       }
 
       // added our child send us back to our parent
-      header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $parentId );
+      header( 'Location: ' . $this->getBaseUrl() . '/tests/?parentId=' . $parentId );
       return false;
 
    }
@@ -45,7 +45,7 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
 
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 
-      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/add/">' );
+      $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/folder/add/">' );
       $this->printHtml( '<input type="hidden" value="' . $parentId . '" name="parentId">' );
 
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
@@ -56,7 +56,7 @@ class CTM_Site_Test_Folder_Add extends CTM_Site {
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Folder:</td>' );
-      $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $parentId ) . '</td>' );
+      $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $parentId ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );

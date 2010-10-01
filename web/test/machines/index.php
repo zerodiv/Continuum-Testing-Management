@@ -7,7 +7,7 @@ require_once( 'CTM/Test/Machine/Selector.php' );
 class CTM_Site_Test_Suites extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Machine';
+      $this->setPageTitle('Test Machine');
       return true;
    }
 
@@ -34,7 +34,7 @@ class CTM_Site_Test_Suites extends CTM_Site {
       $this->printHtml( '<table class="ctmTable">' );
       
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="7">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th colspan="7">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr>' );
@@ -62,7 +62,7 @@ class CTM_Site_Test_Suites extends CTM_Site {
             $this->printHtml( '<td>' . $this->formatDate( $row->createdAt ) . '</td>' );
             $this->printHtml( '<td>' . $this->formatDate( $row->last_modified ) . '</td>' );
             $this->printHtml( '<td>' );
-            $this->printHtml( '<center><a href="' . $this->_baseurl . '/test/machine/edit/?id=' . $row->id . '" class="ctmButton">Edit</a>' );
+            $this->printHtml( '<center><a href="' . $this->getBaseUrl() . '/test/machine/edit/?id=' . $row->id . '" class="ctmButton">Edit</a>' );
             $this->printHtml( '</td>' );
             $this->printHtml( '</tr>' );
          }

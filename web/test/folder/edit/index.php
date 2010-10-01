@@ -8,7 +8,7 @@ require_once( 'CTM/Test/Folder/Selector.php' );
 class CTM_Site_Test_Folder_Edit extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Folders';
+      $this->setPageTitle('Test Folder - Edit');
       return true;
    }
 
@@ -71,7 +71,7 @@ class CTM_Site_Test_Folder_Edit extends CTM_Site {
       if ( isset( $folder ) ) {
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
-         $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/folder/edit/">' );
+         $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/folder/edit/">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' );
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
          
@@ -81,7 +81,7 @@ class CTM_Site_Test_Folder_Edit extends CTM_Site {
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Folder:</td>' );
-         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $folder->parentId ) . '</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $folder->parentId ) . '</td>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );

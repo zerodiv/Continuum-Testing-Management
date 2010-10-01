@@ -6,7 +6,7 @@ require_once( 'CTM/Site.php' );
 
 class CTM_Site_Main extends CTM_Site {
    public function setupPage() {
-      $this->_pagetitle = 'Main';
+      $this->setPageTitle('Main');
       return true;
    } 
    

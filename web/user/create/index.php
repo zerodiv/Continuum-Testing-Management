@@ -10,7 +10,7 @@ class CTM_Site_User_Create extends CTM_Site {
    private $_displayError;
 
    public function setupPage() {
-      $this->_pagetitle = 'Create User';
+      $this->setPageTitle('Create User');
       $this->_displayError = '';
       return true;
    }
@@ -67,7 +67,7 @@ class CTM_Site_User_Create extends CTM_Site {
 
             $verify_sign = md5( $user->id . 'jeorem' );
 
-            $verify_url = $this->_baseurl . '/user/verify/?id=' . $user->id . '&checksum=' . $verify_sign;
+            $verify_url = $this->getBaseUrl() . '/user/verify/?id=' . $user->id . '&checksum=' . $verify_sign;
 
             $message = '';
             $message .= 'Welcome to ' . $this->_sitetitle . "\n";
@@ -85,7 +85,7 @@ class CTM_Site_User_Create extends CTM_Site {
 
             mail( '<' . $username . '>', "Welcome to " . $this->_sitetitle, $message );
 
-            header( 'Location: ' . $this->_baseurl . '/user/verification/' );
+            header( 'Location: ' . $this->getBaseUrl() . '/user/verification/' );
             return true;
          }
 
@@ -105,10 +105,10 @@ class CTM_Site_User_Create extends CTM_Site {
       $username = $this->getOrPost( 'username', '' );
       $password = $this->getOrPost( 'password', '' );
       $this->printHtml( '<div class="aiTableContainer">' );
-      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/create/">' );
+      $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/create/">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       if ( isset( $this->_displayError ) ) {
          $this->printHtml( '<tr class="even">' );

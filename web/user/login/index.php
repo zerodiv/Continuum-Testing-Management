@@ -7,7 +7,7 @@ require_once( 'CTM/User/Selector.php' );
 class CTM_Site_User_Login extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Login';
+      $this->setPageTitle('Login');
       $this->_error = '';
       return true;
    }
@@ -40,14 +40,14 @@ class CTM_Site_User_Login extends CTM_Site {
             $user = $rows[0];
 
             if ( $user->isVerified != 1 ) {
-               header( 'Location: ' . $this->_baseurl . '/user/verification/' );
+               header( 'Location: ' . $this->getBaseUrl() . '/user/verification/' );
                return false;
             }
 
             if ( $user->tempPassword != '' && $user->tempPassword == $password ) {
                // $user->tempPassword = '';
                // $user->save();
-               header( 'Location: ' . $this->_baseurl . '/user/forgot_password/temp_password/' . $this->Url_Checksum->create( array( 'id' => $user->id ) ) );
+               header( 'Location: ' . $this->getBaseUrl() . '/user/forgot_password/temp_password/' . $this->Url_Checksum->create( array( 'id' => $user->id ) ) );
             }
 
             $md5_password = md5( $password );
@@ -56,7 +56,7 @@ class CTM_Site_User_Login extends CTM_Site {
                // found the user auth them in
                $_SESSION['user_id'] = $user->id;
                // they are logged in return them back to the main site.
-               header( 'Location: ' . $this->_baseurl );
+               header( 'Location: ' . $this->getBaseUrl() );
                return false;
             }
 
@@ -74,10 +74,10 @@ class CTM_Site_User_Login extends CTM_Site {
       $password = $this->getOrPost( 'password', '' );
      
       $this->printHtml( '<div class="aiTableContainer">' );
-      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/login/">' );
+      $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/login/">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       if ( $this->_error != '' ) {
          $this->printHtml( '<tr class="even">' );

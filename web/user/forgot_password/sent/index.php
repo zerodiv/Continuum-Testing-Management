@@ -5,7 +5,7 @@ require_once( 'CTM/Site.php' );
 class CTM_Site_User_ForgotPassword_Sent extends CTM_Site {
 
    public function setupPage() {
-      $this->_pagetitle = 'Forgot Password - Email sent';
+      $this->setPageTitle('Forgot Password - Email sent');
       return true;
    }
 
@@ -14,7 +14,7 @@ class CTM_Site_User_ForgotPassword_Sent extends CTM_Site {
       $this->printHtml( '<center>' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td class="odd" colspan="2">Forgot your password email sent to your email address. Please follow the instructions provided.</td>' );

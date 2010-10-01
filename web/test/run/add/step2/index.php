@@ -10,7 +10,7 @@ require_once( 'CTM/Test/Suite/Selector.php' );
 class CTM_Site_Test_Run_Add_Step2 extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Run - Add - Step 2 of 4';
+      $this->setPageTitle('Test Run - Add - Step 2 of 4');
       return true;
    }
 
@@ -26,7 +26,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       }
       
       if ( count( $test_params ) == 0 ) {
-         header( 'Location: ' . $this->_baseurl . '/test/run/add/step3/?id=' . $id );
+         header( 'Location: ' . $this->getBaseUrl() . '/test/run/add/step3/?id=' . $id );
          return false;
       }
 
@@ -50,7 +50,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                   $t_parm->setTarget( $test_param_value );
                }
             }
-            header( 'Location: ' . $this->_baseurl . '/test/run/add/step3/?id=' . $id );
+            header( 'Location: ' . $this->getBaseUrl() . '/test/run/add/step3/?id=' . $id );
             return false;
          }
       } catch ( Exception $e ) {
@@ -110,7 +110,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 
-         $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/run/add/step2/">' );
+         $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/run/add/step2/">' );
          $this->printHtml( '<input type="hidden" name="action" value="step2">' );
          $this->printHtml( '<input type="hidden" name="id" value="' . $test_run->id .'">' );
 

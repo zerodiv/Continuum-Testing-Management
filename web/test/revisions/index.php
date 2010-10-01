@@ -10,7 +10,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
    private $_error_message;
 
    public function setupPage() {
-      $this->_pagetitle = 'View Test Revisions';
+      $this->setPageTitle('View Test Revisions');
       return true;
    }
 
@@ -39,7 +39,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
       } else {
      
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
-         $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/edit/">' );
+         $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->getBaseUrl() . '/test/edit/">' );
          $this->printHtml( '<input type="hidden" value="save" name="action">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' ); 
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
@@ -88,7 +88,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
                $this->printHtml( '<td><center>' );
                if ( $n == 0 ) {
                } else {
-                  $this->printHtml( '<a href="' . $this->_baseurl . '/test/revision/diff/?id=' . $id . 
+                  $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/revision/diff/?id=' . $id . 
                         '&cur=' . $revision->id .
                         '&prev=' . $revisions[($n-1)]->id . '" class="ctmButton">Diff</a>' );
                }

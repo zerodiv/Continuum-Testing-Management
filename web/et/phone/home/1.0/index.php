@@ -13,7 +13,6 @@ require_once( 'CTM/Test/Machine/Browser/Selector.php' );
 class CTM_ET_Phone_Home_Main extends CTM_Site {
 
    public function setupPage() {
-      $this->_pagetitle = 'Main';
       return true;
    } 
   

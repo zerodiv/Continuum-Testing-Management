@@ -11,7 +11,7 @@ require_once( 'CTM/Test/Suite/Plan/Selector.php' );
 class CTM_Site_Test_Suite_Plan extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Edit Test Suite Plan';
+      $this->setPageTitle('Edit Test Suite Plan');
       return true;
    }
 
@@ -298,13 +298,13 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                $this->printHtml('<tr class="' . $class . '">');
                $this->printHtml('<td><center>' );
                if ( $test_suite_plan->test_order != 0 && $test_suite_plan->test_order != $high_id ) {
-                  $this->printHtml( '<a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&action=move_item_down&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '">&darr;</a>' );
+                  $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&action=move_item_down&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '">&darr;</a>' );
                } else {
                   $this->printHtml( '&nbsp;' );
                }
                $this->printHtml( $test_suite_plan->test_order );
                if ( $test_suite_plan->test_order != 0 && $test_suite_plan->test_order > 1 ) {
-                  $this->printHtml( '<a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&action=move_item_up&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '">&uarr;</a>' );
+                  $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&action=move_item_up&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '">&uarr;</a>' );
                } else {
                   $this->printHtml( '&nbsp;' );
                }
@@ -317,7 +317,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                } else {
                   $this->printHtml('<td>Could not find suite or test associated.</td>' );
                }
-               $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '&action=remove_from_plan" class="ctmButton">Remove from plan</a></center></td>' );
+               $this->printHtml( '<td><center><a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '&action=remove_from_plan" class="ctmButton">Remove from plan</a></center></td>' );
                $this->printHtml('</tr>');
             }
          } else {
@@ -347,7 +347,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          foreach ( $parents as $parent ) {
             $current_parent++;
             $folder_path .= '/';
-            $folder_path .= '<a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $parent->id . '">' . $parent->name . '</a>';
+            $folder_path .= '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $parent->id . '">' . $parent->name . '</a>';
          }
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
@@ -359,7 +359,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Current folder path: ' .  $folder_path . '</td>' );
          if ( count( $children ) > 0 ) {
-            $this->printHtml( '<form action="' . $this->_baseurl . '/test/suite/plan/" method="POST">' );
+            $this->printHtml( '<form action="' . $this->getBaseUrl() . '/test/suite/plan/" method="POST">' );
             $this->printHtml( '<input type="hidden" name="id" value="' . $id . '">' );
             $this->printHtml( '<td><center>' );
             $this->printHtml( 'Switch to Sub Folder: ' );
@@ -409,7 +409,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                   $this->printHtml( '<tr class="' . $class . '">' );
                   $this->printHtml( '<td>' . $suite_row->id . '</td>' );
                   $this->printHtml( '<td>' . $this->escapeVariable( $suite_row->name ) . '</td>' );
-                  $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $testFolderId . '&action=add_suite_to_plan&suite_id=' . $suite_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
+                  $this->printHtml( '<td><center><a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $testFolderId . '&action=add_suite_to_plan&suite_id=' . $suite_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
                   $this->printHtml( '</tr>' );
 
                }
@@ -446,7 +446,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                $this->printHtml( '<tr class="' . $class . '">' );
                $this->printHtml( '<td class="aiColumnOne">' . $test_row->id . '</td>' );
                $this->printHtml( '<td>' . $this->escapeVariable( $test_row->name ) . '</td>' );
-               $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $testFolderId . '&action=add_test_to_plan&testId=' . $test_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
+               $this->printHtml( '<td><center><a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $testFolderId . '&action=add_test_to_plan&testId=' . $test_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
                $this->printHtml( '</tr>' );
             }
          } else {

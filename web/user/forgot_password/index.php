@@ -7,7 +7,7 @@ require_once( 'CTM/User/Selector.php' );
 class CTM_Site_User_ForgotPassword extends CTM_Site {
 
    public function setupPage() {
-      $this->_pagetitle = 'Forgot Password';
+      $this->setPageTitle('Forgot Password');
       return true;
    } 
    
@@ -49,7 +49,7 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
             $message .= " Your username: " . $user->username . "\n";
             $message .= " Your password: " . $user->tempPassword . "\n";
             $message .= "\n";
-            $message .= "To login: " . $this->_baseurl . "/user/login/\n";
+            $message .= "To login: " . $this->getBaseUrl() . "/user/login/\n";
             $message .= "\n";
             $message .= "Thank you.\n";
             
@@ -80,7 +80,7 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
       $this->printHtml( '<form action="/user/forgot_password/" method="POST">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       
       if ( isset( $this->_errorMessage ) ) {

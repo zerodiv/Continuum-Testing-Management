@@ -11,7 +11,7 @@ require_once( 'CTM/Test/Machine/Browser/Selector.php' );
 class CTM_Site_Test_Machine_Edit extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Machine';
+      $this->setPageTitle('Test Machine');
       return true;
    }
 
@@ -72,7 +72,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
       if ( count( $rows ) == 1 ) {
          $machine = $rows[0];
 
-         $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/machine/edit/">' );
+         $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/machine/edit/">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' );
          
          $this->printHtml( '<tr>' );

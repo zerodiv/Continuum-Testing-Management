@@ -9,7 +9,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
    private $_error_message;
 
    public function setupPage() {
-      $this->_pagetitle = 'Edit Test';
+      $this->setPageTitle('Edit Test');
       return true;
    }
 
@@ -43,7 +43,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
       if ( isset( $test ) && $role_obj->name == 'user' ) {
          $user_folder = $this->getUserFolder();
          if ( $test->testFolderId != $user_folder->id ) {
-            header( 'Location: ' . $this->_baseurl . '/user/permission/denied/' );
+            header( 'Location: ' . $this->getBaseUrl() . '/user/permission/denied/' );
             return false;
          }
       }
@@ -94,7 +94,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
             // save the revision information.
             $test->saveRevision();
 
-            header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $test->testFolderId );
+            header( 'Location: ' . $this->getBaseUrl() . '/tests/?parentId=' . $test->testFolderId );
             return false;
 
          } catch ( Exception $e ) {
@@ -127,7 +127,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
       } else {
      
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
-         $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/edit/">' );
+         $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->getBaseUrl() . '/test/edit/">' );
          $this->printHtml( '<input type="hidden" value="save" name="action">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' ); 
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
@@ -150,7 +150,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Folder:</td>' );
-         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test->testFolderId ) . '</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $test->testFolderId ) . '</td>' );
          $this->printHtml( '</tr>' );
 
          $baseurl_obj = $test->getBaseUrl();

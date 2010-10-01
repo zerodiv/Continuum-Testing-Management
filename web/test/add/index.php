@@ -9,7 +9,7 @@ class CTM_Site_Test_Add extends CTM_Site
 
    public function setupPage()
    {
-      $this->_pagetitle = 'Add Test';
+      $this->setPageTitle('Add Test');
       return true;
    }
 
@@ -33,7 +33,7 @@ class CTM_Site_Test_Add extends CTM_Site
       if ( $roleObj->name == 'user' ) {
          $userFolder = $this->getUserFolder();
          if ( $testFolderId != $userFolder->id ) {
-            header('Location: ' . $this->_baseurl . '/user/permission/denied/');
+            header('Location: ' . $this->getBaseUrl() . '/user/permission/denied/');
             return false;
          }
       }
@@ -79,7 +79,7 @@ class CTM_Site_Test_Add extends CTM_Site
          // save the inital version
          $new->saveRevision();
       
-         header('Location: ' . $this->_baseurl . '/tests/?parentId=' . $testFolderId);
+         header('Location: ' . $this->getBaseUrl() . '/tests/?parentId=' . $testFolderId);
          return false;
 
       } catch ( Exception $e ) {
@@ -88,7 +88,7 @@ class CTM_Site_Test_Add extends CTM_Site
       }
 
       // added our child send us back to our parent
-      header('Location: ' . $this->_baseurl . '/test/tests/?parentId=' . $testFolderId);
+      header('Location: ' . $this->getBaseUrl() . '/test/tests/?parentId=' . $testFolderId);
       return false;
 
    }
@@ -108,7 +108,7 @@ class CTM_Site_Test_Add extends CTM_Site
       $this->printHtml('<td valign="top">');
       $this->printHtml('<table class="ctmTable">');
       $this->printHtml(
-          '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/add/">'
+          '<form enctype="multipart/form-data" method="POST" action="' . $this->getBaseUrl() . '/test/add/">'
       );
       $this->printHtml('<input type="hidden" value="' . $testFolderId . '" name="testFolderId">');
 
@@ -127,7 +127,7 @@ class CTM_Site_Test_Add extends CTM_Site
       $this->printHtml('<tr>');
       $this->printHtml('<td class="odd">Folder:</td>');
       $this->printHtml(
-          '<td class="odd">' . $this->_fetchFolderPath($this->_baseurl . '/tests/', $testFolderId) . '</td>'
+          '<td class="odd">' . $this->_fetchFolderPath($this->getBaseUrl() . '/tests/', $testFolderId) . '</td>'
       );
       $this->printHtml('</tr>');
 

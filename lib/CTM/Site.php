@@ -27,48 +27,48 @@ class CTM_Site extends Light_MVC {
          $this->printHtml( '<!-- role: ' . $role_obj->name . ' -->' );
 
          $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '">' . $this->_sitetitle . '</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '">' . $this->_sitetitle . '</a></li>' );
 
          $allowed_roles = array( 'user', 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/suites/">Suites</a></li>' );
+            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/test/suites/">Suites</a></li>' );
          }
 
          $allowed_roles = array( 'user', 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/tests/">Tests</a></li>' );
+            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/tests/">Tests</a></li>' );
          }
 
          $allowed_roles = array( 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            // $this->printHtml( '<li><a href="' . $this->_baseurl . '/folders/">Folders</a></li>' );
+            // $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/folders/">Folders</a></li>' );
          }
 
          $allowed_roles = array( 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/param/library/">Parameter Library</a></li>' );
+            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/test/param/library/">Parameter Library</a></li>' );
          }
 
          $allowed_roles = array( 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/runs/">Runs</a></li>' );
+            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/test/runs/">Runs</a></li>' );
          }
 
 
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/logout/">Logout : ' . $this->escapeVariable( $user_obj->username ) . '</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/user/logout/">Logout : ' . $this->escapeVariable( $user_obj->username ) . '</a></li>' );
       
          $this->printHtml( '</ul>' );
 
          if ( $this->isLoggedIn() && $role_obj->name == 'admin' ) {
             $this->printHtml( '<ul class="basictab">' );
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/manager/">Manage Users</a></li>' );
-            $this->printHtml( '<li><a href="' . $this->_baseurl . '/test/machines/">Machines</a></li>' );
+            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/user/manager/">Manage Users</a></li>' );
+            $this->printHtml( '<li><a href="' . $this->getBaseUrl(). '/test/machines/">Machines</a></li>' );
             $this->printHtml( '</ul>' );
          }
       } else {
          $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/login/">Login</a></li>' );
-         $this->printHtml( '<li><a href="' . $this->_baseurl . '/user/create/">Create Account</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/user/login/">Login</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/user/create/">Create Account</a></li>' );
          $this->printHtml( '</ul>' );
       }
 
@@ -91,7 +91,7 @@ class CTM_Site extends Light_MVC {
       if ( $this->isLoggedIn() == true ) {
          return true; 
       } 
-      header( 'Location: ' . $this->_baseurl . '/user/login' );
+      header( 'Location: ' . $this->getBaseUrl() . '/user/login' );
       exit();
    } 
 
@@ -106,7 +106,7 @@ class CTM_Site extends Light_MVC {
             }
          }
       }
-      header( 'Location: ' . $this->_baseurl . '/user/permission/denied/' );
+      header( 'Location: ' . $this->getBaseUrl() . '/user/permission/denied/' );
       exit();
    }
    
@@ -197,7 +197,7 @@ class CTM_Site extends Light_MVC {
       return $username;
    }
 
-   public function _fetchFolderPath( $current_baseurl, $parentId ) {
+   public function _fetchFolderPath( $currentBaseurl, $parentId ) {
       $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
       $parents = array(); 
       $folder_cache->getFolderParents( $parentId, $parents );
@@ -212,9 +212,9 @@ class CTM_Site extends Light_MVC {
             $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
             // this is a user id in disguise.
             $user_obj = $user_cache->getById( $parent->name );
-            $folder_path .= '<a href="' . $current_baseurl . '?parentId=' . $parent->id . '">' . $this->escapeVariable( $user_obj->username ) . '</a>';
+            $folder_path .= '<a href="' . $currentBaseurl . '?parentId=' . $parent->id . '">' . $this->escapeVariable( $user_obj->username ) . '</a>';
          } else {
-            $folder_path .= '<a href="' . $current_baseurl . '?parentId=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
+            $folder_path .= '<a href="' . $currentBaseurl . '?parentId=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
          }
          $previous_parent = $parent;
       }
@@ -222,12 +222,12 @@ class CTM_Site extends Light_MVC {
       return $folder_path;
    }
 
-   public function _displayFolderBreadCrumb( $current_baseurl, $parentId = 0 ) {
+   public function _displayFolderBreadCrumb( $currentBaseurl, $parentId = 0 ) {
 
       $user_obj = $this->getUser();
       $role_obj = $user_obj->getRole();
 
-      $folder_path = $this->_fetchFolderPath( $current_baseurl, $parentId ); 
+      $folder_path = $this->_fetchFolderPath( $currentBaseurl, $parentId ); 
       $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
 
       $children = array();
@@ -240,7 +240,7 @@ class CTM_Site extends Light_MVC {
       
       if ( $role_obj->name != 'user' ) {
          if ( count( $children ) > 0 ) {
-            $this->printHtml( '<form action="' . $current_baseurl . '" method="POST">' );
+            $this->printHtml( '<form action="' . $currentBaseurl . '" method="POST">' );
             $this->printHtml( '<td><center>' );
             $this->printHtml( 'Switch to Sub Folder: ' );
             $this->printHtml( '<select name="parentId">' );
@@ -250,13 +250,13 @@ class CTM_Site extends Light_MVC {
             }
             $this->printHtml( '</select>' );
             $this->printHtml( '<input type="submit" value="Go!">' );
-            $this->printHtml( '&nbsp;<a href="' . $this->_baseurl . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">New Sub Folder</a>' );
+            $this->printHtml( '&nbsp;<a href="' . $this->getBaseUrl() . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">New Sub Folder</a>' );
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</form>' );
 
          } else {
             $this->printHtml( '<td><center>' );
-            $this->printHtml( '<a href="' . $this->_baseurl . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">New Sub Folder</a>' );
+            $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">New Sub Folder</a>' );
             $this->printHtml( '</center></td>' );
          }
       }

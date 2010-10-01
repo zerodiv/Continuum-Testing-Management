@@ -9,7 +9,7 @@ require_once( 'CTM/User/Role/Selector.php' );
 class CTM_Site_User_Manager_Edit extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'User Manager - Edit User';
+      $this->setPageTitle('User Manager - Edit User');
       return true;
    }
 
@@ -41,7 +41,7 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
             $user->isDisabled = (int) $userIsDisabled;
             $user->save();
 
-            header( 'Location: ' . $this->_baseurl . '/user/manager/' );
+            header( 'Location: ' . $this->getBaseUrl() . '/user/manager/' );
             return false;
 
          }
@@ -78,10 +78,10 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
 
-      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/manager/edit/">' );
+      $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/manager/edit/">' );
       $this->printHtml( '<input type="hidden" name="id" value="' . $this->escapeVariable( $id ) . '">' );
       $this->printHtml( '<input type="hidden" name="action" value="save">' );
 

@@ -6,7 +6,7 @@ require_once( 'CTM/Site.php' );
 class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
 
    public function setupPage() {
-      $this->_pagetitle = 'Forgot Password - Change Password';
+      $this->setPageTitle('Forgot Password - Change Password');
       return true;
    }
 
@@ -30,7 +30,7 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
 
                $_SESSION['user_id'] = $user_obj->id;
 
-               header( 'Location: ' . $this->_baseurl );
+               header( 'Location: ' . $this->getBaseUrl() );
                return false;
 
             }
@@ -42,7 +42,7 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
       print_r( $_POST );
       exit();
 
-      header( 'Location: ' . $this->_baseurl . '/user/login/' );
+      header( 'Location: ' . $this->getBaseUrl() . '/user/login/' );
       return false;
    }
 
@@ -57,14 +57,14 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
       $this->printHtml( '<center>' );
       $this->printHtml( '<table class="ctmTable">' );
 
-      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/forgot_password/tempPassword/">' );
+      $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/forgot_password/tempPassword/">' );
       foreach ( $secure_params as $n => $v ) {
          $this->printHtml( '<input type="hidden" name="' . $n . '" value="' . $v . '">' );
       }
       $this->printHtml( '<input type="hidden" name="action" value="save">' );
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );

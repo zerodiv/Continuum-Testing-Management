@@ -18,7 +18,6 @@ require_once 'CTM/Test/Run/BaseUrl/Selector.php';
 class CTM_ET_Poll extends CTM_Site {
 
     public function setupPage() {
-        $this->_pagetitle = 'Main';
         return true;
     }
 

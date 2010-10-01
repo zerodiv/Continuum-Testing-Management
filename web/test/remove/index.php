@@ -9,7 +9,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
    private $_error_message;
 
    public function setupPage() {
-      $this->_pagetitle = 'Remove Test';
+      $this->setPageTitle('Remove Test');
       return true;
    }
 
@@ -40,7 +40,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
             $test->save();
          }
 
-         header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $test->testFolderId );
+         header( 'Location: ' . $this->getBaseUrl() . '/tests/?parentId=' . $test->testFolderId );
          return false;
 
       }
@@ -67,7 +67,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
       } else {
      
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
-         $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/remove/">' );
+         $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->getBaseUrl() . '/test/remove/">' );
          $this->printHtml( '<input type="hidden" value="remove" name="action">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' ); 
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
@@ -90,7 +90,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Folder:</td>' );
-         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test->testFolderId ) . '</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $test->testFolderId ) . '</td>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );

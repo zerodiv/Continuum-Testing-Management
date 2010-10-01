@@ -16,7 +16,6 @@ class CTM_ET_Log extends CTM_Site
 
     public function setupPage()
     {
-        $this->_pagetitle = 'Main';
         return true;
     }
 

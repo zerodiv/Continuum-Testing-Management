@@ -5,7 +5,7 @@ require_once( 'CTM/Site.php' );
 
 class CTM_Site_User_Verification extends CTM_Site {
    public function setupPage() {
-      $this->_pagetitle = 'Email verification sent!';
+      $this->setPageTitle('Email verification sent!');
       return true;
    } 
    
@@ -17,7 +17,7 @@ class CTM_Site_User_Verification extends CTM_Site {
       $this->printHtml( '<div class="aiTableContainer">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th>' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th>' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>' );

@@ -3,10 +3,10 @@
 require_once( 'Light/Config.php' );
 require_once( 'Light/MVC/Url/Checksum.php' );
 
-abstract class Light_MVC {
-   public $_basedir;
-   public $_baseurl;
-   public $_pagetitle;
+abstract class Light_MVC
+{
+   private $_baseurl;
+   private $_pagetitle;
    public $_sitetitle;
    public $_sessionname;
    public $_css_files;
@@ -15,8 +15,8 @@ abstract class Light_MVC {
    
    function __construct() {
       // load the default configuration into the vars
-      $this->_basedir = Light_Config::get( 'Light_MVC_Config', 'BASE_DIR' );
-      $this->_baseurl = Light_Config::get( 'Light_MVC_Config', 'BASE_URL' );
+      $this->setBaseUrl();
+
       $this->_sitetitle = Light_Config::get( 'Light_MVC_Config', 'SITE_TITLE' );
       $this->_sessionname = Light_Config::get( 'Light_MVC_Config', 'SESSION_NAME' );
 
@@ -35,11 +35,31 @@ abstract class Light_MVC {
 
       $this->Url_Checksum = new Light_MVC_Url_Checksum();
 
-      // init this to nothing.
-      $this->_pagetitle = '';
+      $this->setPageTitle('' );
 
    } 
    
+   public function getBaseUrl()
+   {
+      return $this->_baseurl;
+   }
+
+   public function setBaseUrl() {
+      if ( isset($this->_baseurl) ) {
+         return;
+      }
+      $this->_baseurl = Light_Config::get( 'Light_MVC_Config', 'BASE_URL' );
+   }
+
+   public function getPageTitle() {
+      return $this->_pagetitle;
+   }
+
+   public function setPageTitle($title)
+   {
+      $this->_pagetitle = $title;
+   }
+
    public function getOrPost( $var_name, $default_value = '', $strip_tags = true ) {
       $value = null;
 
@@ -108,8 +128,8 @@ abstract class Light_MVC {
       $this->printHtml('<head>');
 
       $title_string = $this->_sitetitle;
-      if ( isset( $this->_pagetitle) ) {
-         $title_string .= ' - ' . $this->_pagetitle;
+      if ( $this->getPageTitle() != '' ) {
+         $title_string .= ' - ' . $this->getPageTitle();
       }
 
       $this->printHtml( '<title>' . $title_string .  '</title>' );
@@ -127,7 +147,7 @@ abstract class Light_MVC {
          if ( preg_match( '/^http/', $css_file ) ) {
             $this->printHtml('<link href="' . $css_file . '" type="text/css" rel="stylesheet"/>' );
          } else {
-            $this->printHtml('<link href="' . $this->_baseurl . '/css/' . $css_file . '" type="text/css" rel="stylesheet"/>' );
+            $this->printHtml('<link href="' . $this->getBaseUrl() . '/css/' . $css_file . '" type="text/css" rel="stylesheet"/>' );
          }
       }
       return true;
@@ -135,7 +155,7 @@ abstract class Light_MVC {
 
    public function displayHeader_JavaScript() {
       foreach ( $this->_js_files as $js_file ) {
-         $this->printHtml('<script type="text/javascript" src="' . $this->_baseurl . '/js/' . $js_file . '"></script>' );
+         $this->printHtml('<script type="text/javascript" src="' . $this->getBaseUrl() . '/js/' . $js_file . '"></script>' );
       }
       return true;
    }
@@ -153,7 +173,7 @@ abstract class Light_MVC {
    
    public function requiresAuth() {
       if ( $this->isLoggedIn() != true ) {
-         header( 'Location: ' . $this->_baseurl . '/user/login' );
+         header( 'Location: ' . $this->getBaseUrl() . '/user/login' );
          exit();
       } 
       return true; 

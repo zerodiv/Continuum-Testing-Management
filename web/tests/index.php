@@ -10,7 +10,7 @@ require_once( 'CTM/Test/Selector.php' );
 class CTM_Site_Test_Folders extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Tests';
+      $this->setPageTitle('Tests');
       return true;
    }
 
@@ -75,7 +75,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td colspan="5">' );
-      $this->_displayFolderBreadCrumb( $this->_baseurl . '/tests/', $parentId );
+      $this->_displayFolderBreadCrumb( $this->getBaseUrl() . '/tests/', $parentId );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 
@@ -118,12 +118,12 @@ class CTM_Site_Test_Folders extends CTM_Site {
                $this->printHtml( '<td>Unknown</td>' );
             }
             $this->printHtml( '<td><center>' );
-            $this->printHtml( '<a href="' . $this->_baseurl . '/test/edit/?id=' . $test->id . '" class="ctmButton">Edit</a>' );
+            $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/edit/?id=' . $test->id . '" class="ctmButton">Edit</a>' );
             if ( $test->revisionCount > 1 ) {
-               $this->printHtml( '<a href="' . $this->_baseurl . '/test/revisions/?id=' . $test->id . '" class="ctmButton">Revisions</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/revisions/?id=' . $test->id . '" class="ctmButton">Revisions</a>' );
             }
-            $this->printHtml( '<a href="' . $this->_baseurl . '/test/download/?id=' . $test->id . '" class="ctmButton" target="_new">Download</a>' );
-            $this->printHtml( '<a href="' . $this->_baseurl . '/test/remove/?id=' . $test->id . '" class="ctmButton">Remove</a>' );
+            $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/download/?id=' . $test->id . '" class="ctmButton" target="_new">Download</a>' );
+            $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/remove/?id=' . $test->id . '" class="ctmButton">Remove</a>' );
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
 
@@ -131,7 +131,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       }
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->_baseurl . '/test/add/?testFolderId=' . $parentId . '" class="ctmButton">New Test</a></center></td>' );
+      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->getBaseUrl() . '/test/add/?testFolderId=' . $parentId . '" class="ctmButton">New Test</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );

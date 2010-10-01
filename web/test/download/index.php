@@ -8,7 +8,7 @@ require_once( 'CTM/Test/Html/Source/Selector.php' );
 class CTM_Site_Test_Download extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Download';
+      $this->setPageTitle('Test Download');
       return true;
    }
 

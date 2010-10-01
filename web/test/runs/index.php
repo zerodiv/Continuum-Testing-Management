@@ -9,7 +9,7 @@ require_once( 'CTM/Test/Run/Selector.php' );
 class CTM_Site_Test_Runs extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Runs';
+      $this->setPageTitle('Test Runs');
       return true;
    }
 
@@ -77,7 +77,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiButtonRow">' );
-      $this->printHtml( '<td colspan="7"><center><a href="' . $this->_baseurl . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
+      $this->printHtml( '<td colspan="7"><center><a href="' . $this->getBaseUrl() . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       if ( count( $test_runs ) == 0 ) {
@@ -134,19 +134,19 @@ class CTM_Site_Test_Runs extends CTM_Site {
                  $test_run->test_run_state_id != $step3_state->id &&
                  $test_run->test_run_state_id != $step4_state->id 
             ) {
-               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
             }
             if ($test_run->test_run_state_id == $step1_state->id ) {
-               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/add/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step1_state->description ) . '</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step1_state->description ) . '</a>' );
             }
             if ($test_run->test_run_state_id == $step2_state->id ) {
-               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/add/step2/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step2_state->description ) . '</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step2/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step2_state->description ) . '</a>' );
             }
             if ($test_run->test_run_state_id == $step3_state->id ) {
-               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/add/step3/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step3_state->description ) . '</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step3/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step3_state->description ) . '</a>' );
             }
             if ($test_run->test_run_state_id == $step4_state->id ) {
-               $this->printHtml( '<a href="' . $this->_baseurl . '/test/run/add/step4/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step4_state->description ) . '</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step4/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step4_state->description ) . '</a>' );
             }
             // while a test is executing we cannot do any admin actions to it.
             $displayRemove = false;
@@ -160,7 +160,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
                $displayRemove = true;
             }
             if ( $displayRemove == true ) {
-               $this->printHtml( '<a href="' . $this->_baseurl . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
             }
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
@@ -210,7 +210,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
                     $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';"><center>' . $run_state_cache->getById($test_run_browser->test_run_state_id)->name . '</center></td>');
                     if ( $test_run_browser->has_log == true ) {
                         $this->printHtml('<td><center>' .
-                              '<a href="' . $this->_baseurl . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '&type=selenium" class="ctmButton" target="_blank">Selenium Log</a>' .
+                              '<a href="' . $this->getBaseUrl() . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '&type=selenium" class="ctmButton" target="_blank">Selenium Log</a>' .
                               '</center></td>');
                     } else {
                        $this->printHtml( '<td>&nbsp;</td>' );
@@ -228,7 +228,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
       }
 
       $this->printHtml( '<tr class="aiButtonRow">' );
-      $this->printHtml( '<td colspan="7"><center><a href="' . $this->_baseurl . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
+      $this->printHtml( '<td colspan="7"><center><a href="' . $this->getBaseUrl() . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );

@@ -9,7 +9,7 @@ class CTM_Site_Test_Revision_Diff extends CTM_Site {
    private $_error_message;
 
    public function setupPage() {
-      $this->_pagetitle = 'View Test Revisions';
+      $this->setPageTitle('View Test Revisions');
       return true;
    }
 

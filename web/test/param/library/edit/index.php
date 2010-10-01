@@ -9,7 +9,7 @@ require_once( 'CTM/Test/Param/Library/Selector.php' );
 class CTM_Site_Test_Param_Library extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Param Library - Edit';
+      $this->setPageTitle('Test Param Library - Edit');
       return true;
    }
 
@@ -72,7 +72,7 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
 
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       
-      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/param/library/edit/">' );
+      $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/param/library/edit/">' );
       $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' );
       $this->printHtml( '<input type="hidden" value="save" name="action">' );
 

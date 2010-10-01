@@ -6,7 +6,7 @@ require_once( 'CTM/Site.php' );
 class CTM_Site_User_Logout extends CTM_Site { 
    
    public function setupPage() {
-      $this->_pagetitle = 'Logout';
+      $this->setPageTitle('Logout');
       return true;
    } 
    
@@ -14,11 +14,11 @@ class CTM_Site_User_Logout extends CTM_Site {
       if ( isset( $_SESSION['user_id'] ) ) {
          $_SESSION = null;
          session_destroy();
-         header( 'Location: ' . $this->_baseurl );
+         header( 'Location: ' . $this->getBaseUrl() );
          return false;
       }
       
-      header( 'Location: ' . $this->_baseurl . '/user/login/' );
+      header( 'Location: ' . $this->getBaseUrl() . '/user/login/' );
       return false;
    }
 

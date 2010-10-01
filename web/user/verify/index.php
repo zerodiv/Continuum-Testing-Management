@@ -7,7 +7,7 @@ require_once( 'CTM/User/Selector.php' );
 class CTM_Site_User_Verify extends CTM_Site {
 
    public function setupPage() {
-      $this->_pagetitle = 'Verified!';
+      $this->setPageTitle('Verified!');
       return true;
    }
    
@@ -17,7 +17,7 @@ class CTM_Site_User_Verify extends CTM_Site {
       $verify_checksum = md5( $id . 'jeorem' ); 
       
       if ( $checksum != $verify_checksum ) {
-         $this->_pagetitle = 'Failed to verify, invalid checksum';
+         $this->setPageTitle('Failed to verify, invalid checksum');
          return true;
       } 
       
@@ -39,16 +39,16 @@ class CTM_Site_User_Verify extends CTM_Site {
                $user->save();
             }
             // verified
-            header( 'Location: ' . $this->_baseurl . '/user/login/' );
+            header( 'Location: ' . $this->getBaseUrl() . '/user/login/' );
             return false;
          }
 
       } catch ( Exception $e ) {
-         $this->_pagetitle = 'Failed to setup user session, try again later';
+         $this->setPageTitle('Failed to setup user session, try again later');
          return true;
       }
 
-      $this->_pagetitle = 'Failed to setup user session, try again later';
+      $this->setPageTitle('Failed to setup user session, try again later');
       return true;
 
    } 
@@ -57,7 +57,7 @@ class CTM_Site_User_Verify extends CTM_Site {
       $this->printHtml( '<div class="aiTableContainer">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th>' . $this->_pagetitle . '</th>' );
+      $this->printHtml( '<th>' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '</table>' );
       $this->printHtml( '</div>' );

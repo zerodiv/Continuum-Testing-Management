@@ -18,7 +18,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       $this->_test_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Browser_Cache' );
       $this->_test_machine_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Machine_Browser_Cache' );
 
-      $this->_pagetitle = 'Test Run - Add - Step 4 of 4';
+      $this->setPageTitle('Test Run - Add - Step 4 of 4');
       $this->_errorMessage = '';
 
       return true;
@@ -85,7 +85,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
             $test_run->save();
          }
 
-         header( 'Location: ' . $this->_baseurl . '/test/runs/' );
+         header( 'Location: ' . $this->getBaseUrl() . '/test/runs/' );
 
       }
 
@@ -144,7 +144,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 
-         $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/run/add/step4/">' );
+         $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/run/add/step4/">' );
          $this->printHtml( '<input type="hidden" name="action" value="step4">' );
          $this->printHtml( '<input type="hidden" name="id" value="' . $test_run->id .'">' );
 

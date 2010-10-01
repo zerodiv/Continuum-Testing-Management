@@ -9,7 +9,7 @@ require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
 class CTM_Site_Test_Run_Add_Step3 extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Run - Add - Step 3 of 4';
+      $this->setPageTitle('Test Run - Add - Step 3 of 4');
       return true;
    }
 
@@ -21,13 +21,13 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
 
       if ( $action == 'step3' ) {
 
-         $test_run_baseurls = $this->getOrPost( 'test_run_baseurl', '' );
+         $testRunBaseurls = $this->getOrPost( 'testRunBaseurl', '' );
 
-         if ( count( array_keys($test_run_baseurls) ) > 0 ) {
+         if ( count( array_keys($testRunBaseurls) ) > 0 ) {
             try {
                $sel = new CTM_Test_Run_BaseUrl_Selector();
 
-               foreach ( $test_run_baseurls as $b_id => $b_url ) {
+               foreach ( $testRunBaseurls as $b_id => $b_url ) {
                   $base_obj = null;
                   $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $b_id ) );
                   $base_objs = $sel->find( $and_params );
@@ -38,7 +38,7 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
                   }
                }
 
-               header( 'Location: ' . $this->_baseurl . '/test/run/add/step4/?id=' . $id);
+               header( 'Location: ' . $this->getBaseUrl() . '/test/run/add/step4/?id=' . $id);
                return false;
 
             } catch ( Exception $e ) {
@@ -94,7 +94,7 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
 
-         $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/run/add/step3/">' );
+         $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/run/add/step3/">' );
          $this->printHtml( '<input type="hidden" name="action" value="step3">' );
          $this->printHtml( '<input type="hidden" name="id" value="' . $test_run->id .'">' );
 
@@ -145,7 +145,7 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
             $this->printHtml( '<tr class="' . $class . '">' );
             $this->printHtml( '<td>' . $component_type . '</td>' );
             $this->printHtml( '<td>' . $component_text . '</td>' );
-            $this->printHtml( '<td><input type="text" size="80" value="' . $this->escapeVariable( $base_url->baseurl ) . '" name="test_run_baseurl[' . $base_url->id .']"></td>' );
+            $this->printHtml( '<td><input type="text" size="80" value="' . $this->escapeVariable( $base_url->baseurl ) . '" name="testRunBaseurl[' . $base_url->id .']"></td>' );
             $this->printHtml( '</tr>' );
          }
 

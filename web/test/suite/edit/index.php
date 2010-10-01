@@ -8,7 +8,7 @@ require_once( 'CTM/Test/Suite/Selector.php' );
 class CTM_Site_Test_Suite_Edit extends CTM_Site { 
 
    public function setupPage() {
-      $this->_pagetitle = 'Test Folders';
+      $this->setPageTitle('Test Folders');
       return true;
    }
 
@@ -46,7 +46,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
 
             $suite->saveRevision();
 
-            header( 'Location: ' . $this->_baseurl . '/test/suites/?parentId=' . $suite->testFolderId );
+            header( 'Location: ' . $this->getBaseUrl() . '/test/suites/?parentId=' . $suite->testFolderId );
 
          }
 
@@ -86,7 +86,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' ); 
          
-         $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/test/suite/edit/">' );
+         $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/suite/edit/">' );
          $this->printHtml( '<input type="hidden" value="' . $id . '" name="id">' ); 
          
          $this->printHtml( '<table class="ctmTable aiFullWidth">' ); 
@@ -102,7 +102,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Folder:</td>' );
-         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test_suite->testFolderId ) . '</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $test_suite->testFolderId ) . '</td>' );
          $this->printHtml( '</tr>' );
          
          $this->printHtml( '<tr class="odd">' );
