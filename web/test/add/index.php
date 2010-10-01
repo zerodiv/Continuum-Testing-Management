@@ -4,87 +4,82 @@ require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test.php' );
 
-class CTM_Site_Test_Add extends CTM_Site { 
+class CTM_Site_Test_Add extends CTM_Site
+{
 
-   public function setupPage() {
+   public function setupPage()
+   {
       $this->_pagetitle = 'Add Test';
       return true;
    }
 
-   public function handleRequest() {
+   public function handleRequest()
+   {
 
       $this->requiresAuth();
-      $this->requiresRole( array( 'user', 'qa', 'admin' ) );
+      $this->requiresRole(array( 'user', 'qa', 'admin' ));
       
-      $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
-      $name             = $this->getOrPost( 'name', '' );
-      $description      = $this->getOrPost( 'description', '' );
+      $testFolderId   = $this->getOrPost('testFolderId', '');
+      $name             = $this->getOrPost('name', '');
+      $description      = $this->getOrPost('description', '');
 
       if ( $name == '' ) {
          return true;
       }
 
-      $user_obj = $this->getUser();
-      $role_obj = $user_obj->getRole();
+      $userObj = $this->getUser();
+      $roleObj = $userObj->getRole();
 
-      if ( $role_obj->name == 'user' ) {
-         $user_folder = $this->getUserFolder();
-         if ( $test_folder_id != $user_folder->id ) {
-            header( 'Location: ' . $this->_baseurl . '/user/permission/denied/' );
+      if ( $roleObj->name == 'user' ) {
+         $userFolder = $this->getUserFolder();
+         if ( $testFolderId != $userFolder->id ) {
+            header('Location: ' . $this->_baseurl . '/user/permission/denied/');
             return false;
          }
       }
 
-      $html_source = null;
+      $htmlSource = null;
 
-      $html_source_file = $_FILES['html_source_file']['tmp_name'];
+      $htmlSourceFile = $_FILES['htmlSourceFile']['tmp_name'];
 
-      if ( isset( $html_source_file ) && filesize( $html_source_file ) > 0 ) {
-         $html_source = file_get_contents( $html_source_file );
+      if ( isset($htmlSourceFile) && filesize($htmlSourceFile) > 0 ) {
+         $htmlSource = file_get_contents($htmlSourceFile);
       }
 
       // no html file - skip me!
-      if ( ! isset( $html_source ) ) {
+      if ( ! isset( $htmlSource ) ) {
          return true;
       }
 
       try {
 
-         $user_obj = $this->getUser();
-         $role_obj = $user_obj->getRole();
-
-         if ( $role_obj == 'user' ) {
-            // The user is only allowed to modify things they own within their
-            // folder.
-         }
-
          // create the test.
          $new = new CTM_Test();
-         $new->test_folder_id = $test_folder_id;
+         $new->testFolderId = $testFolderId;
          $new->name = $name;
          $new->test_status_id = 1; // all tests are created in a pending state.
-         $create_at = time(); // yes i know this is paranoia
-         $new->created_at = $create_at;
-         $new->created_by = $user_obj->id;
-         $new->modified_at = $create_at;
-         $new->modified_by = $user_obj->id;
+         $createAt = time(); // yes i know this is paranoia
+         $new->created_at = $createAt;
+         $new->created_by = $userObj->id;
+         $new->modified_at = $createAt;
+         $new->modified_by = $userObj->id;
          $new->revision_count = 1;
          $new->save();
 
          if ( $new->id > 0 ) {
 
             // add the html source.
-            $new->setHtmlSource( $user_obj, $html_source );
+            $new->setHtmlSource($userObj, $htmlSource);
 
             // add the description.
-            $new->setDescription( $description );
+            $new->setDescription($description);
 
          }
 
          // save the inital version
          $new->saveRevision();
       
-         header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $test_folder_id );
+         header('Location: ' . $this->_baseurl . '/tests/?parentId=' . $testFolderId);
          return false;
 
       } catch ( Exception $e ) {
@@ -93,77 +88,88 @@ class CTM_Site_Test_Add extends CTM_Site {
       }
 
       // added our child send us back to our parent
-      header( 'Location: ' . $this->_baseurl . '/test/tests/?parentId=' . $test_folder_id );
+      header('Location: ' . $this->_baseurl . '/test/tests/?parentId=' . $testFolderId);
       return false;
 
    }
                            
 
-   public function displayBody() {
-      $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
-      $name             = $this->getOrPost( 'name', '' );
-      $description      = $this->getOrPost( 'description', '' );
+   public function displayBody()
+   {
+      $testFolderId   = $this->getOrPost('testFolderId', '');
+      $name             = $this->getOrPost('name', '');
+      $description      = $this->getOrPost('description', '');
 
-      $this->printHtml( '<center>' );
+      $this->printHtml('<center>');
 
-      $this->printHtml( '<table>' );
+      $this->printHtml('<table>');
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td valign="top">' );
-      $this->printHtml( '<table class="ctmTable">' );
-      $this->printHtml( '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/add/">' );
-      $this->printHtml( '<input type="hidden" value="' . $test_folder_id . '" name="test_folder_id">' );
+      $this->printHtml('<tr>');
+      $this->printHtml('<td valign="top">');
+      $this->printHtml('<table class="ctmTable">');
+      $this->printHtml(
+          '<form enctype="multipart/form-data" method="POST" action="' . $this->_baseurl . '/test/add/">'
+      );
+      $this->printHtml('<input type="hidden" value="' . $testFolderId . '" name="testFolderId">');
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="4">Add Test</th>' );
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' );
+      $this->printHtml('<tr>');
+      $this->printHtml('<th colspan="4">Add Test</th>');
+      $this->printHtml('</td>');
+      $this->printHtml('</tr>');
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd">Name:</td>' );
-      $this->printHtml( '<td class="odd"><input type="text" name="name" size="30" value="' . $this->escapeVariable( $name ) . '"></td>' );
-      $this->printHtml( '</tr>' );
+      $this->printHtml('<tr>');
+      $this->printHtml('<td class="odd">Name:</td>');
+      $this->printHtml(
+          '<td class="odd"><input type="text" name="name" size="30" value="' . $this->escapeVariable($name) . '"></td>'
+      );
+      $this->printHtml('</tr>');
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd">Folder:</td>' );
-      $this->printHtml( '<td class="odd">' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test_folder_id ) . '</td>' );
-      $this->printHtml( '</tr>' );
+      $this->printHtml('<tr>');
+      $this->printHtml('<td class="odd">Folder:</td>');
+      $this->printHtml(
+          '<td class="odd">' . $this->_fetchFolderPath($this->_baseurl . '/tests/', $testFolderId) . '</td>'
+      );
+      $this->printHtml('</tr>');
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd" colspan="2">Description:</td>' );
-      $this->printHtml( '</tr>' );
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="odd" colspan="2"><textarea name="description" rows="25" cols="60">' . $this->escapeVariable( $description ) . '</textarea></td>' );
-      $this->printHtml( '</tr>' );
+      $this->printHtml('<tr>');
+      $this->printHtml('<td class="odd" colspan="2">Description:</td>');
+      $this->printHtml('</tr>');
+      $this->printHtml('<tr>');
+      $this->printHtml(
+          '<td class="odd" colspan="2"><textarea name="description" rows="25" cols="60">' . 
+          $this->escapeVariable($description) . 
+          '</textarea></td>'
+      );
+      $this->printHtml('</tr>');
 
       if ( $this->isFileUploadAvailable() ) {
 
-         $this->printHtml( '<input type="hidden" name="MAX_FILE_SIZE" value="' . $this->maxFileUploadSize() . '">' );
+         $this->printHtml('<input type="hidden" name="MAX_FILE_SIZE" value="' . $this->maxFileUploadSize() . '">');
       
-         $this->printHtml( '<tr>' );
-         $this->printHtml( '<td class="odd">File:</td>' );
-         $this->printHtml( '<td class="odd"><input type="file" name="html_source_file"></td>' );
-         $this->printHtml( '</tr>' );
+         $this->printHtml('<tr>');
+         $this->printHtml('<td class="odd">File:</td>');
+         $this->printHtml('<td class="odd"><input type="file" name="htmlSourceFile"></td>');
+         $this->printHtml('</tr>');
 
       }
 
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<td colspan="2" class="even"><center><input type="submit" value="Add"></center></td>' );
-      $this->printHtml( '</tr>' );
+      $this->printHtml('<tr>');
+      $this->printHtml('<td colspan="2" class="even"><center><input type="submit" value="Add"></center></td>');
+      $this->printHtml('</tr>');
 
-      $this->printHtml( '</form>' );
+      $this->printHtml('</form>');
 
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</td>' );
-      $this->printHtml( '</tr>' );
+      $this->printHtml('</table>');
+      $this->printHtml('</td>');
+      $this->printHtml('</tr>');
 
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</center>' );
+      $this->printHtml('</table>');
+      $this->printHtml('</center>');
 
       return true;
    }
 
 }
 
-$test_add_obj = new CTM_Site_Test_Add();
-$test_add_obj->displayPage();
+$testAddObj = new CTM_Site_Test_Add();
+$testAddObj->displayPage();

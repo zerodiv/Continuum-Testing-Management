@@ -54,10 +54,10 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
                            
 
    public function displayBody() {
-      $test_folder_id = $this->getOrPost( 'test_folder_id', 1 );
+      $testFolderId = $this->getOrPost( 'testFolderId', 1 );
       $test_suite_id = $this->getOrPost( 'test_suite_id', '' );
 
-      $test_folder_id += 0;
+      $testFolderId += 0;
       $test_suite_id += 0;
 
       // folder_cacheing
@@ -65,7 +65,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
 
       // New style folder browser.
       $parents = array(); 
-      $folder_cache->getFolderParents( $test_folder_id, $parents );
+      $folder_cache->getFolderParents( $testFolderId, $parents );
       $parents = array_reverse( $parents );
       $parents_cnt = count( $parents );
 
@@ -79,7 +79,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       foreach ( $parents as $parent ) {
          $current_parent++;
          $folder_path .= '/';
-         $folder_path .= '<a href="' . $this->_baseurl . '/test/run/add/?test_folder_id=' . $parent->id . '">' . $parent->name . '</a>';
+         $folder_path .= '<a href="' . $this->_baseurl . '/test/run/add/?testFolderId=' . $parent->id . '">' . $parent->name . '</a>';
       }
 
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
@@ -97,7 +97,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       $this->printHtml( '<td>Current folder path: ' . $folder_path . '</td>' );
       if ( count( $children ) > 0 ) {
          $this->printHtml( '<form action="' . $this->_baseurl . '/test/run/add/" method="POST">' );
-         $this->printHtml( '<td>Sub Folders: <select name="test_folder_id">' );
+         $this->printHtml( '<td>Sub Folders: <select name="testFolderId">' );
          foreach ( $children as $child ) {
             $this->printHtml( '<option value="' . $child->id . '">' . $child->name . '</option>' );
          }
@@ -116,7 +116,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       try {
          $sel = new CTM_Test_Suite_Selector();
          $and_params = array();
-         $or_params = array( new Light_Database_Selector_Criteria( 'test_folder_id', '=', $test_folder_id ) );
+         $or_params = array( new Light_Database_Selector_Criteria( 'testFolderId', '=', $testFolderId ) );
          $order = array( 'name' );
          $test_suites = $sel->find( $and_params, $or_params, $order );
       } catch ( Exception $e ) {

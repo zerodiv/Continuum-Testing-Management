@@ -40,7 +40,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
             $test->save();
          }
 
-         header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $test->test_folder_id );
+         header( 'Location: ' . $this->_baseurl . '/tests/?parentId=' . $test->testFolderId );
          return false;
 
       }
@@ -90,7 +90,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Folder:</td>' );
-         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test->test_folder_id ) . '</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test->testFolderId ) . '</td>' );
          $this->printHtml( '</tr>' );
 
          $this->printHtml( '<tr class="odd">' );

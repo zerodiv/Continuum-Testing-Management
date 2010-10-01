@@ -100,7 +100,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
 
          if ( ! isset( $this->_regressionSuiteObj ) ) {
             $this->_regressionSuiteObj = new CTM_Test_Suite();
-            $this->_regressionSuiteObj->test_folder_id = $this->_regressionFolderObj->id;
+            $this->_regressionSuiteObj->testFolderId = $this->_regressionFolderObj->id;
             $this->_regressionSuiteObj->name = self::CTM_REGRESSION_SUITE_NAME;
             $this->_regressionSuiteObj->created_at = time();
             $this->_regressionSuiteObj->created_by = $this->_adminUserObj->id;
@@ -186,7 +186,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
       $testSel = new CTM_Test_Selector();
       
       $testAndParams = array(
-            new Light_Database_Selector_Criteria( 'test_folder_id', '=', $folderObj->id )
+            new Light_Database_Selector_Criteria( 'testFolderId', '=', $folderObj->id )
       );
 
       $tests = $testSel->find($testAndParams); 
@@ -203,7 +203,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
          $suiteObj->removePlan();
       } else {
          $suiteObj = new CTM_Test_Suite();
-         $suiteObj->test_folder_id = $folderObj->id;
+         $suiteObj->testFolderId = $folderObj->id;
          $suiteObj->name = $folderObj->name;
          $suiteObj->created_at = time();
          $suiteObj->created_by = $this->_adminUserObj->id;
@@ -228,7 +228,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
                $this->message( '   !WARNING! - Test is disabled' );
             } else {
                $testObj = new CTM_Test();
-               $testObj->test_folder_id = $folderObj->id;
+               $testObj->testFolderId = $folderObj->id;
                $testObj->name = $testItem;
                $testObj->test_status_id = 1;
                $testObj->created_at = time();
@@ -267,7 +267,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
       $testSel = new CTM_Test_Selector();
       
       $testAndParams = array(
-            new Light_Database_Selector_Criteria( 'test_folder_id', '=', $folderObj->id )
+            new Light_Database_Selector_Criteria( 'testFolderId', '=', $folderObj->id )
       );
 
       $tests = $testSel->find($testAndParams); 

@@ -40,7 +40,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
             $suite->test_status_id = $remove_status->id;
             $suite->save();
 
-            header( 'Location: ' . $this->_baseurl . '/test/suites/?parentId=' . $suite->test_folder_id );
+            header( 'Location: ' . $this->_baseurl . '/test/suites/?parentId=' . $suite->testFolderId );
 
          }
 
@@ -79,7 +79,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Folder:</td>' );
-         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test_suite->test_folder_id ) . '</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->_baseurl . '/tests/', $test_suite->testFolderId ) . '</td>' );
          $this->printHtml( '</tr>' );
         
          $this->printHtml( '<tr class="odd">' );

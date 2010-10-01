@@ -4,7 +4,7 @@ require_once( 'Light/Database/Object.php' );
 
 class CTM_Test extends Light_Database_Object {
    public $id;
-   public $test_folder_id;
+   public $testFolderId;
    public $name;
    public $test_status_id;
    public $created_at;

@@ -205,7 +205,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                            
    public function displayBody() {
       $id               = $this->getOrPost( 'id', '' );
-      $test_folder_id   = $this->getOrPost( 'test_folder_id', '' );
+      $testFolderId   = $this->getOrPost( 'testFolderId', '' );
 
       $rows = null;
       $test_suite = null;
@@ -236,9 +236,9 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
       if ( isset( $test_suite ) ) {
      
-         if ( $test_folder_id > 0 ) {
+         if ( $testFolderId > 0 ) {
          } else {
-            $test_folder_id = $test_suite->test_folder_id;
+            $testFolderId = $test_suite->testFolderId;
          }
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
@@ -333,7 +333,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          // Look up the chain as needed.
          $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
          $parents = array(); 
-         $folder_cache->getFolderParents( $test_folder_id, $parents );
+         $folder_cache->getFolderParents( $testFolderId, $parents );
          $parents = array_reverse( $parents );
          $parents_cnt = count( $parents );
 
@@ -347,7 +347,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          foreach ( $parents as $parent ) {
             $current_parent++;
             $folder_path .= '/';
-            $folder_path .= '<a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $parent->id . '">' . $parent->name . '</a>';
+            $folder_path .= '<a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $parent->id . '">' . $parent->name . '</a>';
          }
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
          $this->printHtml( '<table class="ctmTable aiFullWidth">' );
@@ -363,7 +363,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
             $this->printHtml( '<input type="hidden" name="id" value="' . $id . '">' );
             $this->printHtml( '<td><center>' );
             $this->printHtml( 'Switch to Sub Folder: ' );
-            $this->printHtml( '<select name="test_folder_id">' );
+            $this->printHtml( '<select name="testFolderId">' );
             $this->printHtml( '<option value="0">Pick a sub-folder</option>' );
             foreach ( $children as $child ) {
                $this->printHtml( '<option value="' . $child->id . '">' . $this->escapeVariable( $child->name ) . '</option>' );
@@ -394,7 +394,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          try {
             $sel = new CTM_Test_Suite_Selector();
             $and_params = array(
-                  new Light_Database_Selector_Criteria( 'test_folder_id', '=', $test_folder_id ),
+                  new Light_Database_Selector_Criteria( 'testFolderId', '=', $testFolderId ),
                   // we exclude ourselves from suites.
                   new Light_Database_Selector_Criteria( 'id', '!=', $id )
             );
@@ -409,7 +409,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                   $this->printHtml( '<tr class="' . $class . '">' );
                   $this->printHtml( '<td>' . $suite_row->id . '</td>' );
                   $this->printHtml( '<td>' . $this->escapeVariable( $suite_row->name ) . '</td>' );
-                  $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_id . '&action=add_suite_to_plan&suite_id=' . $suite_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
+                  $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $testFolderId . '&action=add_suite_to_plan&suite_id=' . $suite_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
                   $this->printHtml( '</tr>' );
 
                }
@@ -423,7 +423,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          $test_rows = null;
          try {
             $sel = new CTM_Test_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_folder_id', '=', $test_folder_id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'testFolderId', '=', $testFolderId ) );
             $test_rows = $sel->find( $and_params );
          } catch ( Exception $e ) {
          }
@@ -446,7 +446,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                $this->printHtml( '<tr class="' . $class . '">' );
                $this->printHtml( '<td class="aiColumnOne">' . $test_row->id . '</td>' );
                $this->printHtml( '<td>' . $this->escapeVariable( $test_row->name ) . '</td>' );
-               $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&test_folder_id=' . $test_folder_id . '&action=add_test_to_plan&test_id=' . $test_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
+               $this->printHtml( '<td><center><a href="' . $this->_baseurl . '/test/suite/plan/?id=' . $id . '&testFolderId=' . $testFolderId . '&action=add_test_to_plan&test_id=' . $test_row->id . '" class="ctmButton">Add to plan</a></center></td>' );
                $this->printHtml( '</tr>' );
             }
          } else {

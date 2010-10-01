@@ -48,7 +48,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       try {
          $sel = new CTM_Test_Suite_Selector();
          $and_params = array(
-               new Light_Database_Selector_Criteria( 'test_folder_id', '=', $parentId ),
+               new Light_Database_Selector_Criteria( 'testFolderId', '=', $parentId ),
                new Light_Database_Selector_Criteria( 'test_status_id', '!=', $deleted_status->id )
          );
          $suite_rows = $sel->find( $and_params );
@@ -120,7 +120,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       }
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->_baseurl . '/test/suite/add/?test_folder_id=' . $parentId . '" class="ctmButton">New Test Suite</a></center></td>' );
+      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->_baseurl . '/test/suite/add/?testFolderId=' . $parentId . '" class="ctmButton">New Test Suite</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );

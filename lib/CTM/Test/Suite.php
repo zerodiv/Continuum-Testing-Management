@@ -8,9 +8,10 @@ require_once( 'CTM/Test/Suite/Plan/Selector.php' );
 
 require_once( 'CTM/Revision/Framework.php' );
 
-class CTM_Test_Suite extends Light_Database_Object {
+class CTM_Test_Suite extends Light_Database_Object
+{
    public $id;
-   public $test_folder_id;
+   public $testFolderId;
    public $name;
    public $created_at;
    public $created_by;
@@ -18,21 +19,23 @@ class CTM_Test_Suite extends Light_Database_Object {
    public $modified_by;
    public $test_status_id;
 
-   public function init() {
-      $this->setSqlTable( 'test_suite' );
-      $this->setDbName( 'suite' );
-      $this->addOneToOneRelationship( 'Description', 'CTM_Test_Suite_Description', 'id', 'test_suite_id' );
-      $this->addOneToManyRelationship( 'Plan', 'CTM_Test_Suite_Plan', 'id', 'test_suite_id' );
+   public function init()
+   {
+      $this->setSqlTable('test_suite');
+      $this->setDbName('suite');
+      $this->addOneToOneRelationship('Description', 'CTM_Test_Suite_Description', 'id', 'test_suite_id');
+      $this->addOneToManyRelationship('Plan', 'CTM_Test_Suite_Plan', 'id', 'test_suite_id');
    }
 
    // overloaded remove to take care of the object cleanup
-   public function remove() {
+   public function remove()
+   {
       try {
          
-         $desc_obj = $this->getDescription(); 
+         $descObj = $this->getDescription(); 
          
-         if ( isset( $desc_obj ) ) {
-            $desc_obj->remove();
+         if ( isset( $descObj ) ) {
+            $descObj->remove();
          } 
          
          // now remove ourselves
@@ -42,21 +45,22 @@ class CTM_Test_Suite extends Light_Database_Object {
       } 
    }
 
-   public function setDescription( $description ) {
+   public function setDescription( $description )
+   {
       if ( ! isset( $this->id ) ) {
          return false;
       }
       try {
-         $a_obj = $this->getDescription();
-         if ( isset( $a_obj ) ) {
-            $a_obj->description = $description;
-            $a_obj->save();
+         $aObj = $this->getDescription();
+         if ( isset( $aObj ) ) {
+            $aObj->description = $description;
+            $aObj->save();
          } else {
-            $a_obj = null;
-            $a_obj = new CTM_Test_Suite_Description();
-            $a_obj->test_suite_id = $this->id;
-            $a_obj->description = $description;
-            $a_obj->save();
+            $aObj = null;
+            $aObj = new CTM_Test_Suite_Description();
+            $aObj->test_suite_id = $this->id;
+            $aObj->description = $description;
+            $aObj->save();
          }
       } catch ( Exception $e ) {
          throw $e;
@@ -65,20 +69,21 @@ class CTM_Test_Suite extends Light_Database_Object {
    }
 
    
-   public function saveRevision() {
+   public function saveRevision()
+   {
 
       // save the revision to the revision store.
-      $ctm_revision_obj = new CTM_Revision_Framework( 'suite' );
-      list( $rv, $revision_id ) = $ctm_revision_obj->addRevision( (integer) $this->id, $this->toXML() );
+      $ctmRevisionObj = new CTM_Revision_Framework( 'suite' );
+      list( $rv, $revisionId ) = $ctmRevisionObj->addRevision((integer) $this->id, $this->toXML());
 
       if ( $rv == true ) {
          // update the revision database tracker.
-         $rev_obj = new CTM_Test_Suite_Revision();
-         $rev_obj->test_suite_id = $this->id;
-         $rev_obj->modified_at = $this->modified_at;
-         $rev_obj->modified_by = $this->modified_by;
-         $rev_obj->revision_id = $revision_id;
-         $rev_obj->save();
+         $revObj = new CTM_Test_Suite_Revision();
+         $revObj->test_suite_id = $this->id;
+         $revObj->modified_at = $this->modified_at;
+         $revObj->modified_by = $this->modified_by;
+         $revObj->revision_id = $revisionId;
+         $revObj->save();
       }
 
    }
