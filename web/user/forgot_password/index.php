@@ -47,7 +47,7 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
             $message .= 'Forgot password -  ' . $this->_sitetitle . "\n";
             $message .= "\n";
             $message .= " Your username: " . $user->username . "\n";
-            $message .= " Your password: " . $user->temp_password . "\n";
+            $message .= " Your password: " . $user->tempPassword . "\n";
             $message .= "\n";
             $message .= "To login: " . $this->_baseurl . "/user/login/\n";
             $message .= "\n";

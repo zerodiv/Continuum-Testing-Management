@@ -100,7 +100,11 @@ class CTM_Site_Test_Folders extends CTM_Site {
             }
             $this->printHtml( '<td>' . $this->formatDate( $suite->modified_at ) . '</td>' );
             if ( isset( $user ) ) {
-               $this->printHtml( '<td>' . $this->escapeVariable( $user->email_address ) . '</td>' );
+               $this->printHtml(
+                     '<td><a href="mailto:' . $this->escapeVariable( $user->emailAddress ) . '">' .
+                     $this->escapeVariable($user->emailAddress) . 
+                     '</a></td>'
+               );
             } else {
                $this->printHtml( '<td>Unknown</td>' );
             }

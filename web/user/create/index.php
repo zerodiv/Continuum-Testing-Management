@@ -32,7 +32,7 @@ class CTM_Site_User_Create extends CTM_Site {
 
       try {
 
-         $email_address = $username;
+         $emailAddress = $username;
 
          $username = $this->cleanupUsername( $username );
 
@@ -54,12 +54,12 @@ class CTM_Site_User_Create extends CTM_Site {
          $user->ctmUserRoleId = 1; // Default login role. 
          $user->username = $username;
          $user->password = md5( $password );
-         $user->email_address = $email_address;
-         $user->is_disabled = 0;
-         $user->is_verified = 0;
-         $user->verified_when = 0;
-         $user->created_on = time();
-         $user->temp_password = '';
+         $user->emailAddress = $emailAddress;
+         $user->isDisabled = 0;
+         $user->isVerified = 0;
+         $user->verifiedWhen = 0;
+         $user->createdOn = time();
+         $user->tempPassword = '';
          $user->save();
 
          if ( $user->id > 0 ) {

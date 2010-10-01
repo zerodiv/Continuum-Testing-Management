@@ -48,9 +48,12 @@ class CTM_Site_User_Manager extends CTM_Site {
          $this->printHtml( '<tr class="' . $class . '">' );
          $this->printHtml( '<td>' . $this->escapeVariable( $user->id ) . '</td>' );
          $this->printHtml( '<td>' . $this->escapeVariable( $user->username ) . '</td>' );
-         $this->printHtml( '<td>' . $this->escapeVariable( $user->email_address ) . '</td>' );
+         $this->printHtml(
+               '<td><a href="mailto:' . $this->escapeVariable($user->emailAddress) . '">' .
+               $this->escapeVariable($user->emailAddress) .
+               '</td>' );
          $this->printHtml( '<td><center>' . $this->escapeVariable( $role->name ) . '</center></td>' );
-         if ( $user->is_disabled == true ) {
+         if ( $user->isDisabled == true ) {
             $this->printHtml( '<td><center>Yes</center></td>' );
          } else {
             $this->printHtml( '<td><center>No</center></td>' );

@@ -24,7 +24,7 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
 
             if ( isset( $user_obj->id ) && $user_obj->id > 0 ) {
 
-               $user_obj->temp_password = '';
+               $user_obj->tempPassword = '';
                $user_obj->password = md5( $password );
                $user_obj->save();
 
@@ -57,7 +57,7 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
       $this->printHtml( '<center>' );
       $this->printHtml( '<table class="ctmTable">' );
 
-      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/forgot_password/temp_password/">' );
+      $this->printHtml( '<form method="POST" action="' . $this->_baseurl . '/user/forgot_password/tempPassword/">' );
       foreach ( $secure_params as $n => $v ) {
          $this->printHtml( '<input type="hidden" name="' . $n . '" value="' . $v . '">' );
       }

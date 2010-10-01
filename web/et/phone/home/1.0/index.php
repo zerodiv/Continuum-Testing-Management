@@ -75,7 +75,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          echo '   <id>' . $test_machine->id . '</id>' . "\n";
          echo '   <createdAt>' . $test_machine->createdAt . '</createdAt>' . "\n";
          echo '   <last_modified>' . $test_machine->last_modified . '</last_modified>' . "\n";
-         echo '   <is_disabled>' . $test_machine->is_disabled . '</is_disabled>' . "\n";
+         echo '   <isDisabled>' . $test_machine->isDisabled . '</isDisabled>' . "\n";
       }
       echo "</etResponse>\n";
 
@@ -130,7 +130,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             $new->machine_name   = $machine_name;
             $new->createdAt     = time();
             $new->last_modified  = time();
-            $new->is_disabled    = 0;
+            $new->isDisabled    = 0;
             $new->save();
 
             $test_machine = $this->_findMachineByGuid( $guid );

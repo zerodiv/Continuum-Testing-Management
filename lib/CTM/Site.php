@@ -114,11 +114,11 @@ class CTM_Site extends Light_MVC {
       if ( isset( $_SESSION['user_id'] ) && $_SESSION['user_id'] > 0 ) {
          $user_obj = $this->getUser();
          // a user cannot be logged in if they are disabled.
-         if ( $user_obj->is_disabled == true ) {
+         if ( $user_obj->isDisabled == true ) {
             return false;
          }
          // a user cannot be logged in if they are not verified.
-         if ( $user_obj->is_verified != true ) {
+         if ( $user_obj->isVerified != true ) {
             return false;
          }
          return true;

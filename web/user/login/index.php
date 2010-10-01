@@ -39,13 +39,13 @@ class CTM_Site_User_Login extends CTM_Site {
          if ( isset( $rows[0] ) ) {
             $user = $rows[0];
 
-            if ( $user->is_verified != 1 ) {
+            if ( $user->isVerified != 1 ) {
                header( 'Location: ' . $this->_baseurl . '/user/verification/' );
                return false;
             }
 
-            if ( $user->temp_password != '' && $user->temp_password == $password ) {
-               // $user->temp_password = '';
+            if ( $user->tempPassword != '' && $user->tempPassword == $password ) {
+               // $user->tempPassword = '';
                // $user->save();
                header( 'Location: ' . $this->_baseurl . '/user/forgot_password/temp_password/' . $this->Url_Checksum->create( array( 'id' => $user->id ) ) );
             }

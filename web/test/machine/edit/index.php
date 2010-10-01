@@ -20,7 +20,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
       $this->requiresAuth();
 
       $id = $this->getOrPost( 'id', '' );
-      $is_disabled = $this->getOrPost( 'is_disabled', '' );
+      $isDisabled = $this->getOrPost( 'isDisabled', '' );
 
       try {
          $sel = new CTM_Test_Machine_Selector();
@@ -33,7 +33,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
             // print_r( $rows );
 
             $machine = $rows[0];
-            $machine->is_disabled = (int) $is_disabled;
+            $machine->isDisabled = (int) $isDisabled;
             $machine->save();
 
             // print_r( $machine );
@@ -103,8 +103,8 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
          $this->printHtml( '<tr>' );
          $this->printHtml( '<td class="odd">Is Disabled:</td>' );
          $this->printHtml( '<td class="odd">' );
-         $this->printHtml( '<select name="is_disabled">' );
-         if ( $machine->is_disabled == true ) {
+         $this->printHtml( '<select name="isDisabled">' );
+         if ( $machine->isDisabled == true ) {
             $this->printHtml( '<option value="1" selected>Yes</option>' );
             $this->printHtml( '<option value="0">No</option>' );
          } else {

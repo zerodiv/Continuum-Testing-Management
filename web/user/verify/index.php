@@ -32,10 +32,10 @@ class CTM_Site_User_Verify extends CTM_Site {
 
          if ( isset( $rows[0] ) ) {
             $user = $rows[0];
-            if ( $user->is_verified == 0 ) {
+            if ( $user->isVerified == 0 ) {
                // save the verification
-               $user->is_verified = 1;
-               $user->verified_when = time();
+               $user->isVerified = 1;
+               $user->verifiedWhen = time();
                $user->save();
             }
             // verified

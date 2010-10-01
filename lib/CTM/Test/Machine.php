@@ -10,7 +10,7 @@ class CTM_Test_Machine extends Light_Database_Object {
    public $machine_name;
    public $createdAt;
    public $last_modified;
-   public $is_disabled;
+   public $isDisabled;
 
    public function init() {
       $this->setSqlTable( 'test_machine' );

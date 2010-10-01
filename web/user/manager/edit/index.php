@@ -25,7 +25,7 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
 
       $id                  = $this->getOrPost( 'id', null );
       $ctmUserRoleId       = $this->getOrPost( 'ctmUserRoleId', null );
-      $user_is_disabled    = $this->getOrPost( 'user_is_disabled', null );
+      $userIsDisabled    = $this->getOrPost( 'userIsDisabled', null );
 
       try {
          $sel = new CTM_User_Selector();
@@ -38,7 +38,7 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
             $user = $users[0];
 
             $user->ctmUserRoleId = (int) $ctmUserRoleId;
-            $user->is_disabled = (int) $user_is_disabled;
+            $user->isDisabled = (int) $userIsDisabled;
             $user->save();
 
             header( 'Location: ' . $this->_baseurl . '/user/manager/' );
@@ -105,13 +105,17 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Email Address:</td>' );
-      $this->printHtml( '<td>' . $this->escapeVariable( $user->email_address ) . '</td>' );
+      $this->printHtml(
+            '<td><a href="mailto:' . $this->escapeVariable($user->emailAddress) . '">' .
+            $this->escapeVariable($user->emailAddress) .
+            '</td>'
+      );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Is Disabled:</td>' );
-      $this->printHtml( '<td><select name="user_is_disabled">' );
-      if ( $user->is_disabled == true ) {
+      $this->printHtml( '<td><select name="userIsDisabled">' );
+      if ( $user->isDisabled == true ) {
          $this->printHtml( '<option value="1" selected>Yes</option>' );
          $this->printHtml( '<option value="0">No</option>' );
       } else {
@@ -123,7 +127,7 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Is Verified:</td>' );
-      if ( $user->is_verified == true ) {
+      if ( $user->isVerified == true ) {
          $this->printHtml( '<td>Yes</td>' );
       } else {
          $this->printHtml( '<td>No</td>' );
@@ -132,12 +136,12 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
       
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Verified at:</td>' );
-      $this->printHtml( '<td>' . $this->escapeVariable( date( 'r', $user->verified_when ) ) . '</td>' );
+      $this->printHtml( '<td>' . $this->escapeVariable( date( 'r', $user->verifiedWhen ) ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Created at:</td>' );
-      $this->printHtml( '<td>' . $this->escapeVariable( date( 'r', $user->created_on ) ) . '</td>' );
+      $this->printHtml( '<td>' . $this->escapeVariable( date( 'r', $user->createdOn ) ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
