@@ -63,7 +63,7 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
             $this->printHtml( '<tr class="' . $class . '">' );
             $this->printHtml( '<td class="aiColumnOne">' . $param->id . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $param->name ) . '</td>' );
-            $this->printHtml( '<td>' . $this->formatDate( $param->created_at ) . '</td>' );
+            $this->printHtml( '<td>' . $this->formatDate( $param->createdAt ) . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $created_by->username ) . '</td>' );
             $this->printHtml( '<td>' . $this->formatDate( $param->modified_at ) . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $modified_by->username ) . '</td>' );

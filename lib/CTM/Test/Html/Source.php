@@ -97,12 +97,12 @@ class CTM_Test_Html_Source extends Light_Database_Object {
                if ( $command_obj->id == $store_command->id && preg_match( '/^ctm_var_(.*)/', (string) $value ) ) { 
                   $test_param_lib_obj = $test_param_lib_cache->getByName( (string) $value ); 
                   if ( ! isset( $test_param_lib_obj ) ) { 
-                     $created_at = time();
+                     $createdAt = time();
                      $test_param_lib_obj = new CTM_Test_Param_Library();
                      $test_param_lib_obj->name = (string) $value;
-                     $test_param_lib_obj->created_at = $created_at;
+                     $test_param_lib_obj->createdAt = $createdAt;
                      $test_param_lib_obj->created_by = $user->id;
-                     $test_param_lib_obj->modified_at = $created_at;
+                     $test_param_lib_obj->modified_at = $createdAt;
                      $test_param_lib_obj->modified_by = $user->id;
                      $test_param_lib_obj->save();
 

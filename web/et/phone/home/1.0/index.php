@@ -73,7 +73,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       echo "   <message>$message</message>\n";
       if ( is_object( $test_machine ) ) {
          echo '   <id>' . $test_machine->id . '</id>' . "\n";
-         echo '   <created_at>' . $test_machine->created_at . '</created_at>' . "\n";
+         echo '   <createdAt>' . $test_machine->createdAt . '</createdAt>' . "\n";
          echo '   <last_modified>' . $test_machine->last_modified . '</last_modified>' . "\n";
          echo '   <is_disabled>' . $test_machine->is_disabled . '</is_disabled>' . "\n";
       }
@@ -128,7 +128,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             $new->ip             = $ip;
             $new->os             = $os;
             $new->machine_name   = $machine_name;
-            $new->created_at     = time();
+            $new->createdAt     = time();
             $new->last_modified  = time();
             $new->is_disabled    = 0;
             $new->save();

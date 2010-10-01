@@ -9,7 +9,7 @@ require_once( 'CTM/Test/Param/Library/Description/Selector.php' );
 class CTM_Test_Param_Library extends Light_Database_Object {
    public $id;
    public $name;
-   public $created_at;
+   public $createdAt;
    public $created_by;
    public $modified_at;
    public $modified_by;

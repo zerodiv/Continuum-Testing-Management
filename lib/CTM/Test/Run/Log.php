@@ -9,7 +9,7 @@ class CTM_Test_Run_Log extends Light_Database_Object {
    public $selenium_log;
    public $run_log;
    public $duration;
-   public $created_at;
+   public $createdAt;
 
    public function init() {
       $this->setSqlTable( 'test_run_log' );

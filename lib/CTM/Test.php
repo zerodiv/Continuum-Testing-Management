@@ -7,7 +7,7 @@ class CTM_Test extends Light_Database_Object {
    public $testFolderId;
    public $name;
    public $test_status_id;
-   public $created_at;
+   public $createdAt;
    public $created_by;
    public $modified_at;
    public $modified_by;

@@ -102,7 +102,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
             $this->_regressionSuiteObj = new CTM_Test_Suite();
             $this->_regressionSuiteObj->testFolderId = $this->_regressionFolderObj->id;
             $this->_regressionSuiteObj->name = self::CTM_REGRESSION_SUITE_NAME;
-            $this->_regressionSuiteObj->created_at = time();
+            $this->_regressionSuiteObj->createdAt = time();
             $this->_regressionSuiteObj->created_by = $this->_adminUserObj->id;
             $this->_regressionSuiteObj->modified_at = time();
             $this->_regressionSuiteObj->modified_by = $this->_adminUserObj->id;
@@ -205,7 +205,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
          $suiteObj = new CTM_Test_Suite();
          $suiteObj->testFolderId = $folderObj->id;
          $suiteObj->name = $folderObj->name;
-         $suiteObj->created_at = time();
+         $suiteObj->createdAt = time();
          $suiteObj->created_by = $this->_adminUserObj->id;
          $suiteObj->modified_at = time();
          $suiteObj->modified_by = $this->_adminUserObj->id;
@@ -231,7 +231,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
                $testObj->testFolderId = $folderObj->id;
                $testObj->name = $testItem;
                $testObj->test_status_id = 1;
-               $testObj->created_at = time();
+               $testObj->createdAt = time();
                $testObj->created_by = $this->_adminUserObj->id;
                $testObj->modified_at = time();
                $testObj->modified_by = $this->_adminUserObj->id;

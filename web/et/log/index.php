@@ -122,7 +122,7 @@ class CTM_ET_Log extends CTM_Site
             $test_run_log->run_log = $runLog;
             $test_run_log->selenium_log = $seleniumLog;
             $test_run_log->duration = $testDuration;
-            $test_run_log->created_at = time();
+            $test_run_log->createdAt = time();
             $test_run_log->save();
 
             $this->_serviceOutput('OK', '');

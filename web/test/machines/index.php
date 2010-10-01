@@ -59,7 +59,7 @@ class CTM_Site_Test_Suites extends CTM_Site {
             $this->printHtml( '<td>' . $row->machine_name . '</td>' );
             $this->printHtml( '<td>' . $row->os . '</td>' );
             $this->printHtml( '<td>' . $row->guid . '</td>' );
-            $this->printHtml( '<td>' . $this->formatDate( $row->created_at ) . '</td>' );
+            $this->printHtml( '<td>' . $this->formatDate( $row->createdAt ) . '</td>' );
             $this->printHtml( '<td>' . $this->formatDate( $row->last_modified ) . '</td>' );
             $this->printHtml( '<td>' );
             $this->printHtml( '<center><a href="' . $this->_baseurl . '/test/machine/edit/?id=' . $row->id . '" class="ctmButton">Edit</a>' );

@@ -152,7 +152,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             $new->ip             = $ip;
             $new->os             = $os;
             $new->machine_name   = $machine_name;
-            $new->created_at     = time();
+            $new->createdAt     = time();
             $new->last_modified  = time();
             $new->is_disabled    = 0;
             $new->save();

@@ -92,7 +92,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
          
          $this->printHtml( '<tr>' );
          $this->printHtml( '<td class="odd">Created At:</td>' );
-         $this->printHtml( '<td class="odd">' . $this->formatDate( $machine->created_at ) . '</td>' );
+         $this->printHtml( '<td class="odd">' . $this->formatDate( $machine->createdAt ) . '</td>' );
          $this->printHtml( '</tr>' ); 
          
          $this->printHtml( '<tr>' );
