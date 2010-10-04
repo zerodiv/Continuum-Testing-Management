@@ -9,7 +9,8 @@
  * @author $Author: $ 
  * @license 
  */
-class Light_CommandLine_Script_Argument {
+class Light_CommandLine_Script_Argument
+{
    /**
     * The name for the commandline argument.
     * 
@@ -91,10 +92,10 @@ class Light_CommandLine_Script_Argument {
     */
    private $_castToType;
 
-   function __construct( $name, $description ) {
-      $this->setName( $name );
-      $this->setDescription( $description );
-      $this->_description     = $description;
+   function __construct( $name, $description )
+   {
+      $this->setName($name);
+      $this->setDescription($description);
       $this->_isRequired      = false;
       $this->_pattern         = false;
       $this->_value           = null;
@@ -112,11 +113,12 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &setName( $name ) {
+   public function &setName( $name )
+   {
       if ( $name == '' ) {
          throw new Exception( 'argument name must not be empty' );
       }
-      if ( ! preg_match( '/^[a-z|A-Z|0-9|\_]*$/', $name ) ) {
+      if ( ! preg_match('/^[a-z|A-Z|0-9|\_]*$/', $name) ) {
          throw new Exception( 'argument name must be [a-z|A-Z|0-9]: ' . $name . ' does not follow that standard.' );
       }
       $this->_name = $name;
@@ -129,7 +131,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return string
     */
-   public function getName() {
+   public function getName()
+   {
       return $this->_name;
    }
 
@@ -140,7 +143,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &setDescription( $description ) {
+   public function &setDescription( $description )
+   {
       if ( $description == '' ) {
          throw new Exception( 'description must not be empty.' );
       }
@@ -154,7 +158,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return string
     */
-   public function getDescription() {
+   public function getDescription()
+   {
       return $this->_description;
    }
 
@@ -165,7 +170,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &setIsRequired( $required ) {
+   public function &setIsRequired( $required )
+   {
       if ( $required == true || $required == false ) {
          $this->_isRequired = $required;
          return $this;
@@ -179,7 +185,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return void
     */
-   public function getIsRequired() {
+   public function getIsRequired()
+   {
       return $this->_isRequired;
    }
 
@@ -190,8 +197,9 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &setPattern( $pattern ) {
-      @preg_match( $pattern, 'sometestvalue' );
+   public function &setPattern( $pattern )
+   {
+      @preg_match($pattern, 'sometestvalue');
       if ( preg_last_error() == PREG_NO_ERROR ) {
          // verified that the regexp is valid
          $this->_pattern = $pattern;
@@ -206,7 +214,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return string
     */
-   public function getPattern() {
+   public function getPattern()
+   {
       return $this->_pattern;
    }
 
@@ -218,7 +227,8 @@ class Light_CommandLine_Script_Argument {
     * @access private
     * @return void
     */
-   private function _castValueToType( $type, $value ) {
+   private function _castValueToType( $type, $value )
+   {
       if ( $type == 'string' ) {
          return (string) $value;
       }
@@ -246,21 +256,26 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &setValue( $value ) {
-      if (!empty($this->_pattern) && is_string($value) && !preg_match($this->_pattern, $value))  {
-         throw new Exception( 'value: ' . $value . ' does not match pattern: ' . $this->_pattern . ' for parameter: ' . $this->_name );
+   public function &setValue( $value )
+   {
+      if (!empty($this->_pattern) && is_string($value) && !preg_match($this->_pattern, $value)) {
+         throw new Exception(
+               'value: ' . $value . ' does not match ' .
+               'pattern: ' . $this->_pattern . 
+               ' for parameter: ' . $this->_name
+         );
       }
       if ( $this->_isMultiValue == true ) {
          if ( $this->_value == null ) {
             $this->_value = array();
          }
-         $this->_value[] = $this->_castValueToType( $this->_castToType, $value );
+         $this->_value[] = $this->_castValueToType($this->_castToType, $value);
          $this->_hasValue = true;
       } else {
          if ( ! empty( $this->_value ) ) {
             throw new Exception( $this->getName() . ' does not accept multiple values for the parameter' );
          }
-         $this->_value = $this->_castValueToType( $this->_castToType, $value );
+         $this->_value = $this->_castValueToType($this->_castToType, $value);
          $this->_hasValue = true;
       }
       return $this;
@@ -272,7 +287,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return mixed
     */
-   public function getValue() {
+   public function getValue()
+   {
       return $this->_value;
    }
 
@@ -282,7 +298,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return boolean
     */
-   public function hasValue() {
+   public function hasValue()
+   {
       return $this->_hasValue;
    }
 
@@ -293,9 +310,14 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &setDefaultValue( $value ) {
-      if (!empty($this->_pattern) && is_string($value) && !preg_match($this->_pattern, $value))  {
-         throw new Exception( 'value: ' . $value . ' does not match pattern: ' . $this->_pattern . ' for parameter: ' . $this->_name );
+   public function &setDefaultValue( $value )
+   {
+      if (!empty($this->_pattern) && is_string($value) && !preg_match($this->_pattern, $value)) {
+         throw new Exception(
+               'value: ' . $value . ' does not match ' .
+               'pattern: ' . $this->_pattern . 
+               ' for parameter: ' . $this->_name
+         );
       }
       if ( $this->_isMultiValue == true ) {
          if ( $this->_defaultValue == null ) {
@@ -317,7 +339,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return mixed
     */
-   public function getDefaultValue() {
+   public function getDefaultValue()
+   {
       return $this->_defaultValue;
    }
 
@@ -327,7 +350,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return boolean
     */
-   public function hasDefaultValue() {
+   public function hasDefaultValue()
+   {
       return $this->_hasDefaultValue;
    }
 
@@ -338,7 +362,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &setIsMultiValue( $ismultivalue ) {
+   public function &setIsMultiValue( $ismultivalue )
+   {
       if ( $ismultivalue == true || $ismultivalue == false ) {
          $this->_isMultiValue = $ismultivalue;
          return $this;
@@ -352,7 +377,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return boolean
     */
-   public function getIsMultiValue() {
+   public function getIsMultiValue()
+   {
       return $this->_isMultiValue;
    }
 
@@ -363,9 +389,10 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &setCastToType( $type ) {
-      $acceptable_types = array( 'string', 'int', 'boolean' );
-      if ( ! in_array( $type, $acceptable_types ) ) {
+   public function &setCastToType( $type )
+   {
+      $acceptableTypes = array( 'string', 'int', 'boolean' );
+      if ( ! in_array($type, $acceptableTypes) ) {
          throw new Exception( 'setCatToType: we support (string|int|boolean) types you provided: ' . $type );
       }
       $this->_castToType = $type;
@@ -378,7 +405,8 @@ class Light_CommandLine_Script_Argument {
     * @access public
     * @return void
     */
-   public function getCastToType() {
+   public function getCastToType()
+   {
       return $this->_castToType;
    }
 

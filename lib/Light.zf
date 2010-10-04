@@ -1,7 +1,3 @@
-Light/CommandLine/Script/Argument/Container.php
-Light/CommandLine/Script/Argument.php
-Light/CommandLine/Script/LockFile.php
-Light/CommandLine/Script.php
 Light/Config.php
 Light/Database/Factory.php
 Light/Database/Object/Cache/Factory.php
@@ -10,4 +6,3 @@ Light/Database/Object/Relationship/Container.php
 Light/Database/Object/Relationship.php
 Light/Database/Object.php
 Light/Database/Selector.php
-Light/MVC/Url/Checksum.php

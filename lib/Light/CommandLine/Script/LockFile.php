@@ -9,7 +9,8 @@
  * @author $Author: $ 
  * @license 
  */
-class Light_CommandLine_Script_LockFile {
+class Light_CommandLine_Script_LockFile
+{
    /**
     * The base lock directory to work off of defaults to /tmp
     * 
@@ -26,10 +27,11 @@ class Light_CommandLine_Script_LockFile {
     */
    private $_lockFileName;
 
-   function __construct( $lockName, $implicitLock = true ) {
+   function __construct( $lockName, $implicitLock = true )
+   {
       $this->_lockDir = '/tmp'; 
       // setup the lock
-      $this->_lockFileName = $this->createLockFileName( $lockName );
+      $this->_lockFileName = $this->createLockFileName($lockName);
       // if they would like us to establish a lock now then do so
       if ( $implicitLock == true ) {
          try {
@@ -47,8 +49,9 @@ class Light_CommandLine_Script_LockFile {
     * @access public
     * @return string
     */
-   public function createLockFileName( $lockName ) {
-      return $this->_lockDir . '/light_' . md5( $lockName ) . '.lock';
+   public function createLockFileName( $lockName )
+   {
+      return $this->_lockDir . '/light_' . md5($lockName) . '.lock';
    }
 
    /**
@@ -57,7 +60,8 @@ class Light_CommandLine_Script_LockFile {
     * @access public
     * @return void
     */
-   public function getLockFileName() {
+   public function getLockFileName()
+   {
       return $this->_lockFileName;
    }
 
@@ -68,25 +72,26 @@ class Light_CommandLine_Script_LockFile {
     * @throws Exception
     * @return void
     */
-   public function lock() {
+   public function lock()
+   {
       
-      if ( is_file( $this->_lockFileName ) ) {
-         if ( ! is_readable( $this->_lockFileName ) ) {
+      if ( is_file($this->_lockFileName) ) {
+         if ( ! is_readable($this->_lockFileName) ) {
             throw new Exception( 'Unable to read from lock file: ' . $this->_lockFileName );
          }
-         if ( ! is_writeable( $this->_lockFileName ) ) {
+         if ( ! is_writeable($this->_lockFileName) ) {
             throw new Exception( 'Unable to write to lock file: ' . $this->_lockFileName );
          }
          
          // file already exists.. see if the process is still alive.
-         $running_pid = file_get_contents( $this->_lockFileName );
-         $running_pid = trim( $running_pid );
+         $runningPid = file_get_contents($this->_lockFileName);
+         $runningPid = trim($runningPid);
 
-         $kill_value = posix_kill( $running_pid, 0 );
-         $err_value = posix_get_last_error();
-         if ( $kill_value === true ) {
+         $killValue = posix_kill($runningPid, 0);
+         $errValue = posix_get_last_error();
+         if ( $killValue === true ) {
             // this is up and running already.
-            throw new Exception( 'This process is already runnning with a pid of: ' . $running_pid );
+            throw new Exception( 'This process is already runnning with a pid of: ' . $runningPid );
          }
 
          // we should establish a lock at this point
@@ -112,17 +117,18 @@ class Light_CommandLine_Script_LockFile {
     * @access private
     * @return void
     */
-   private function _establishLock() {
+   private function _establishLock()
+   {
 
-      $fh = fopen( $this->_lockFileName, 'w' );
+      $fh = fopen($this->_lockFileName, 'w');
 
-      if ( ! is_resource( $fh ) ) {
+      if ( ! is_resource($fh) ) {
          throw new Exception( 'Failed to establish a lock via lock file: ' . $this->_lockFileName );
       }
 
-      fwrite( $fh, posix_getpid() );
+      fwrite($fh, posix_getpid());
 
-      fclose( $fh );
+      fclose($fh);
 
       return true;
 
@@ -134,8 +140,9 @@ class Light_CommandLine_Script_LockFile {
     * @access public
     * @return void
     */
-   public function unlock() {
-      @unlink( $this->_lockFilename );
+   public function unlock()
+   {
+      @unlink($this->_lockFilename);
    }
 
    /**
@@ -144,7 +151,8 @@ class Light_CommandLine_Script_LockFile {
     * @access protected
     * @return void
     */
-   function __destruct() {
+   function __destruct()
+   {
       $this->unlock();
    }
 

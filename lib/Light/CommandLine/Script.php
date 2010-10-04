@@ -13,30 +13,32 @@ require_once('Light/CommandLine/Script/Argument/Container.php');
  * @author $Author: $ 
  * @license 
  */
-abstract class Light_CommandLine_Script {
+abstract class Light_CommandLine_Script
+{
    private $_scriptName; 
    private $_arguments;
 
-   function __construct(array $argumentOverrides = array(), $callExecute = true ) {
+   function __construct(array $argumentOverrides = array(), $callExecute = true )
+   {
       $this->_scriptName = null;
 
       // setup the default timezone.
-      date_default_timezone_set( Light_Config::get( 'Light_MVC_Config', 'DEFAULT_TIMEZONE' )  );
+      date_default_timezone_set(Light_Config::get('Light_MVC_Config', 'DEFAULT_TIMEZONE'));
 
       $this->_arguments = new Light_CommandLine_Script_Argument_Container();
 
       // pull the script name via the argv array.
-      if (! empty($_SERVER['argv'][0]))  {
+      if (! empty($_SERVER['argv'][0])) {
          $this->_scriptName = basename($_SERVER['argv'][0]);
       } else {
-         $this->_scriptName = get_class( $this );
+         $this->_scriptName = get_class($this);
       }
 
       if ( $callExecute == true ) {
-         $this->execute( $argumentOverrides ); 
+         $this->execute($argumentOverrides); 
       }
 
-    }
+   }
 
     /**
      * Begins execution of this script: it runs the init, run and done functions.
@@ -44,18 +46,19 @@ abstract class Light_CommandLine_Script {
      * @access public
      * @return void
      */
-    public function execute( $argumentOverrides = array() ) {
+    public function execute( $argumentOverrides = array() )
+    {
        try {
           $this->init();
           
           // parse out all the arguments, and handle the argument overrides if neeeded
-          $this->_arguments->parseArguments( $this, $argumentOverrides );
+          $this->_arguments->parseArguments($this, $argumentOverrides);
 
           $this->run();
           $this->done(0);
        } catch ( Exception $e ) {
-          $this->message( 'Error caught:' . print_r( $e, true ) );
-          $this->done( 255 );
+          $this->message('Error caught:' . print_r($e, true));
+          $this->done(255);
        }
     }
 
@@ -65,7 +68,8 @@ abstract class Light_CommandLine_Script {
      * @access public
      * @return string
      */
-    public function getScriptName() {
+    public function getScriptName()
+    {
        return $this->_scriptName;
     }
 
@@ -75,7 +79,8 @@ abstract class Light_CommandLine_Script {
      * @access public
      * @return Light_CommandLine_Script_Argument_Container
      */
-    public function &arguments() {
+    public function &arguments()
+    {
        return $this->_arguments;
     }
 
@@ -85,7 +90,8 @@ abstract class Light_CommandLine_Script {
      * @access public
      * @return void
      */
-    public function init() {
+    public function init()
+    {
        // jeo - DO NOT ADD THINGS HERE: You should be overriding them in your implementation. 
     }
 
@@ -98,19 +104,20 @@ abstract class Light_CommandLine_Script {
     /**
      * This is called at the completion of a script.
      * 
-     * @param int $return_value 
+     * @param int $returnValue 
      * @param string $message 
-     * @param boolean $do_exit 
+     * @param boolean $doExit 
      * @access public
      * @return void
      */
-    public function done( $return_value = 0, $message = null, $do_exit = true ) {
-       if (!empty($errorMessage))  {
+    public function done( $returnValue = 0, $message = null, $doExit = true )
+    {
+       if (!empty($errorMessage)) {
           $this->error($errorMessage);
        }
-       $this->message( 'Done - returnValue: ' . $return_value );
-       if ( $do_exit == true ) {
-          exit( $return_value );
+       $this->message('Done - returnValue: ' . $returnValue);
+       if ( $doExit == true ) {
+          exit($returnValue);
        }
        return;
     }
@@ -121,9 +128,10 @@ abstract class Light_CommandLine_Script {
      * @param integer $message The message to output.
      * @param boolean $streamState The stream state constant determines whether to show a label and newline or not.
      */
-    public function message($message) {
+    public function message($message)
+    {
        // TODO: jeo - we need to use stdout for these.
-       echo $this->formatDate( time() ) . ' - ' . $message . "\n";
+       echo $this->formatDate(time()) . ' - ' . $message . "\n";
     }
 
 
@@ -133,13 +141,15 @@ abstract class Light_CommandLine_Script {
      * @param integer $message The message to output.
      * @param boolean $streamState The stream state constant determines whether to show a label and newline or not.
      */
-    public function error($message) {
+    public function error($message)
+    {
        // TODO: jeo - we need to use stderr for these.
-       echo $this->formatDate( time() ) . ' - ' . $message . "\n";
+       echo $this->formatDate(time()) . ' - ' . $message . "\n";
     }
 
-    public function formatDate( $timestamp ) {
-       return date( Light_Config::get( 'Light_MVC_Config', 'TIME_FORMAT' ), $timestamp );
+    public function formatDate( $timestamp )
+    {
+       return date(Light_Config::get('Light_MVC_Config', 'TIME_FORMAT'), $timestamp);
     }
 
 }

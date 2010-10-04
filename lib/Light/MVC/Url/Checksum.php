@@ -1,25 +1,29 @@
 <?php
 
-class Light_MVC_Url_Checksum {
+class Light_MVC_Url_Checksum
+{
    private $_magicKey;
 
-   function __construct() {
+   function __construct()
+   {
       $this->_magicKey = 'MuFFinSauce';
    }
 
-   private function _createChecksum( $params ) {
-      ksort( $params );
-      $joined_data = '';
+   private function _createChecksum( $params )
+   {
+      ksort($params);
+      $joinedData = '';
       foreach ( $params as $k => $v ) {
-         if ( $joined_data != '' ) {
-            $joined_data .= '&';
+         if ( $joinedData != '' ) {
+            $joinedData .= '&';
          }
-         $joined_data .= $k . '=' . $v;
+         $joinedData .= $k . '=' . $v;
       }
-      return md5( $joined_data . $this->_magicKey );
+      return md5($joinedData . $this->_magicKey);
    }
 
-   public function create( $params, $ttl = 60, $uri_output = true ) {
+   public function create( $params, $ttl = 60, $uriOutput = true )
+   {
 
       if ( isset( $params['ts'] ) ) {
          throw new Exception( 'Failed to create checksum for uri, ts was provided as a param' );
@@ -37,22 +41,22 @@ class Light_MVC_Url_Checksum {
       $params['ttl'] = $ttl; 
     
       // calculate checksum
-      $checksum = $this->_createChecksum( $params );
+      $checksum = $this->_createChecksum($params);
 
       $params['checksum'] = $checksum;
 
-      if ( $uri_output == true ) {
+      if ( $uriOutput == true ) {
 
-         $uri_string = '?';
+         $uriString = '?';
 
          foreach ( $params as $k => $v ) {
-            if ( $uri_string != '?' ) {
-               $uri_string .= '&';
+            if ( $uriString != '?' ) {
+               $uriString .= '&';
             }
-            $uri_string .= urlencode( $k ) . '=' . urlencode( $v );
+            $uriString .= urlencode($k) . '=' . urlencode($v);
          }
 
-         return $uri_string;
+         return $uriString;
 
       }
 
@@ -60,25 +64,26 @@ class Light_MVC_Url_Checksum {
 
    }
 
-   public function verify( Light_MVC $mvc, $fields ) {
+   public function verify( Light_MVC $mvc, $fields )
+   {
       
-      $url_checksum = $mvc->getOrPost( 'checksum', null );
+      $urlChecksum = $mvc->getOrPost('checksum', null);
 
-      $t_params = array();
-      $t_params[ 'ts' ]       = $mvc->getOrPost( 'ts', null );
-      $t_params[ 'ttl' ]      = $mvc->getOrPost( 'ttl', null );
+      $tParams = array();
+      $tParams[ 'ts' ]       = $mvc->getOrPost('ts', null);
+      $tParams[ 'ttl' ]      = $mvc->getOrPost('ttl', null);
 
       foreach ( $fields as $field ) {
-         $t_params[ $field ] = $mvc->getOrPost( $field, null );
+         $tParams[ $field ] = $mvc->getOrPost($field, null);
       }
 
-      $expected_checksum = $this->_createChecksum( $t_params );
+      $expectedChecksum = $this->_createChecksum($tParams);
 
-      if ( $url_checksum == $expected_checksum ) {
+      if ( $urlChecksum == $expectedChecksum ) {
          // okay now verify the time stamp is within the value set
-         $max_time = $t_params['ts'] + $t_params['ttl'];
+         $maxTime = $tParams['ts'] + $tParams['ttl'];
 
-         if ( time() < $max_time ) {
+         if ( time() < $maxTime ) {
             return true;
          }
 

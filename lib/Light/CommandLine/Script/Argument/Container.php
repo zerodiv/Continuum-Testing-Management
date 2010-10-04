@@ -11,7 +11,8 @@ require_once( 'Light/CommandLine/Script/Argument.php' );
  * @author $Author: $ 
  * @license 
  */
-class Light_CommandLine_Script_Argument_Container {
+class Light_CommandLine_Script_Argument_Container
+{
    /**
     * Array of arguments 
     * 
@@ -26,7 +27,8 @@ class Light_CommandLine_Script_Argument_Container {
     * @access protected
     * @return void
     */
-   function __construct() {
+   function __construct()
+   {
       $this->_arguments = array();
    }
 
@@ -39,9 +41,10 @@ class Light_CommandLine_Script_Argument_Container {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &addStringArgument( $name, $description, $required = false ) {
+   public function &addStringArgument( $name, $description, $required = false )
+   {
       $arg = new Light_CommandLine_Script_Argument( $name, $description );
-      $this->addArgument( $arg );
+      $this->addArgument($arg);
       $arg->setIsRequired($required);
       return $arg;
    }
@@ -55,13 +58,14 @@ class Light_CommandLine_Script_Argument_Container {
     * @access public
     * @return Light_CommandLine_Script_Argument
     */
-   public function &addBooleanArgument( $name, $description, $required = false ) {
+   public function &addBooleanArgument( $name, $description, $required = false )
+   {
       $arg = new Light_CommandLine_Script_Argument( $name, $description );
       $arg->setPattern('/^TRUE|true|1|FALSE|false|0$/');
       $arg->setDefaultValue(false);
       $arg->setCastToType('boolean');
       $arg->setIsRequired($required);
-      $this->addArgument( $arg );
+      $this->addArgument($arg);
       return $arg;
    }
 
@@ -73,13 +77,14 @@ class Light_CommandLine_Script_Argument_Container {
     * @param boolean $required
     * @return <type> 
     */
-   public function &addIntegerArgument( $name, $description, $required = false ) {
+   public function &addIntegerArgument( $name, $description, $required = false )
+   {
       $arg = new Light_CommandLine_Script_Argument( $name, $description );
       $arg->setPattern('/^\d+$/');
       $arg->setDefaultValue(null);
       $arg->setCastToType('int');
       $arg->setIsRequired($required);
-      $this->addArgument( $arg );
+      $this->addArgument($arg);
       return $arg;
    }
 
@@ -90,7 +95,8 @@ class Light_CommandLine_Script_Argument_Container {
     * @access public
     * @return Light_CommandLine_Script_Argument_Container
     */
-   public function &addArgument(Light_CommandLine_Script_Argument &$arg) {
+   public function &addArgument(Light_CommandLine_Script_Argument &$arg)
+   {
       $this->_arguments[] = $arg;
       return $this;
    }
@@ -98,17 +104,18 @@ class Light_CommandLine_Script_Argument_Container {
    /**
     * Returns an Light_CommandLine_Script_Argument object off the script's stack by name.
     *
-    * @param string $arg_name
+    * @param string $argName
     * @throws Exception
     * @return Light_CommandLine_Script_Argument
     */
-   public function &getArgument( $arg_name ) {
+   public function &getArgument( $argName )
+   {
       foreach ( $this->_arguments as &$arg ) {
-         if ( $arg->getName() == $arg_name ) {
+         if ( $arg->getName() == $argName ) {
             return $arg;
          }
       }
-      throw new Exception('Unknown argument `' . $arg_name . '` specified.');
+      throw new Exception('Unknown argument `' . $argName . '` specified.');
    }
 
    /**
@@ -118,10 +125,11 @@ class Light_CommandLine_Script_Argument_Container {
     * @access protected
     * @return Light_CommandLine_Script_Argument_Container
     */
-   public function &setArgument(Light_CommandLine_Script_Argument $new_arg ) {
+   public function &setArgument(Light_CommandLine_Script_Argument $newArg )
+   {
       foreach ( $this->_arguments as &$arg ) {
-         if ( $arg->getName() == $new_arg->getName() ) {
-            $arg = $new_arg;
+         if ( $arg->getName() == $newArg->getName() ) {
+            $arg = $newArg;
             return $this;
          }
       }
@@ -134,9 +142,10 @@ class Light_CommandLine_Script_Argument_Container {
     * @access public
     * @return array( rv, errorTextArray )
     */
-   public function parseArguments( $script, $args = null ) {
+   public function parseArguments( $script, $args = null )
+   {
 
-      if ( $args == null || count( $args ) == 0 ) {
+      if ( $args == null || count($args) == 0 ) {
          $args = $_SERVER['argv'];
       }
       
@@ -149,21 +158,21 @@ class Light_CommandLine_Script_Argument_Container {
          $isNotStr = '--no-' . $arg->getName();
          $regex = '/^--' . $arg->getName() . '="?(.+)?"?$/';
 
-         foreach ($args as $t_arg) {
+         foreach ($args as $tArg) {
             $matches = null; 
             try {
-               if ( $isStr == $t_arg ) {
-                  $arg->setValue( true ); 
-               } else if ( $isNotStr == $t_arg ) {
-                  $arg->setValue( false );
-               } else if (preg_match($regex, $t_arg, $matches)) {
+               if ( $isStr == $tArg ) {
+                  $arg->setValue(true); 
+               } else if ( $isNotStr == $tArg ) {
+                  $arg->setValue(false);
+               } else if (preg_match($regex, $tArg, $matches)) {
                   if ( isset( $matches[1] ) ) {
-                     $t_arg_values = explode( ',', $matches[1]);
-                     foreach ( $t_arg_values as $t_arg_value ) {
-                        $arg->setValue($t_arg_value);
+                     $tArgValues = explode(',', $matches[1]);
+                     foreach ( $tArgValues as $tArgValue ) {
+                        $arg->setValue($tArgValue);
                      }
                   } else {
-                     $arg->setValue( null );
+                     $arg->setValue(null);
                   }
                }
             } catch (Exception $ex)  {
@@ -173,7 +182,7 @@ class Light_CommandLine_Script_Argument_Container {
          }
 
          if ( ! $arg->hasValue() && $arg->hasDefaultValue() ) {
-            $arg->setValue( $arg->getDefaultValue() );
+            $arg->setValue($arg->getDefaultValue());
          }
 
          if ( $arg->getIsRequired() && ! $arg->hasValue() ) {
@@ -184,10 +193,10 @@ class Light_CommandLine_Script_Argument_Container {
       }
 
       if ( $hadErrors == true ) {
-         $this->usage( $script, $errorText );
+         $this->usage($script, $errorText);
       }
 
-    }
+   }
 
    /**
     * Cleans up regexp patterns for display in the usage()
@@ -196,64 +205,66 @@ class Light_CommandLine_Script_Argument_Container {
     * @access private
     * @return void
     */
-   private function prettyPrintPattern( $patt ) {
-      $patt = preg_replace( '/^\//', '', $patt );
-      $patt = preg_replace( '/^\^/', '', $patt );
-      $patt = preg_replace( '/\/$/', '', $patt );
-      $patt = preg_replace( '/\$$/', '', $patt );
+   private function prettyPrintPattern( $patt )
+   {
+      $patt = preg_replace('/^\//', '', $patt);
+      $patt = preg_replace('/^\^/', '', $patt);
+      $patt = preg_replace('/\/$/', '', $patt);
+      $patt = preg_replace('/\$$/', '', $patt);
       return $patt;
    }
 
    /**
     * Prints out parameter usage for a given argument stack
     *
-    * @param array $error_message
+    * @param array $errorMessage
     */
-   public function usage(Light_CommandLine_Script $script, $error_message = array() ) {
+   public function usage(Light_CommandLine_Script $script, $errorMessage = array() )
+   {
 
-      if ($error_message != '') {
-         $script->message('Error: ' );
-         foreach ( $error_message as $error_line ) {
-            $script->message($error_line);
+      if ($errorMessage != '') {
+         $script->message('Error: ');
+         foreach ( $errorMessage as $errorLine ) {
+            $script->message($errorLine);
          }
       }
 
       $script->message('');
       $script->message('Usage: ');
       
-      $cmd_line = $script->getScriptName();
+      $cmdLine = $script->getScriptName();
       
       foreach ($this->_arguments as $arg) { 
-         $cmd_line .= ' '; 
+         $cmdLine .= ' '; 
          
          if ($arg->getIsRequired() != true) {
-            $cmd_line .= '[';
+            $cmdLine .= '[';
          } 
         
-         $cmd_line .= '--' . $arg->getName() . '=' . $this->prettyPrintPattern( $arg->getPattern() );
+         $cmdLine .= '--' . $arg->getName() . '=' . $this->prettyPrintPattern($arg->getPattern());
          
          if ($arg->getIsRequired() != true) {
-            $cmd_line .= ']';
+            $cmdLine .= ']';
          } 
          
          if ($arg->getDefaultValue() !== NULL) {
-            $cmd_line .= '(' . $arg->getDefaultValue() . ')';
+            $cmdLine .= '(' . $arg->getDefaultValue() . ')';
          } 
       
       } 
       
-      $script->message($cmd_line); 
+      $script->message($cmdLine); 
       $script->message('');
-      $script->message('Parameters: ' );
+      $script->message('Parameters: ');
       
       foreach ( $this->_arguments as $arg ) {
-         $script->message( '   --' . $arg->getName() . '=' . $this->prettyPrintPattern( $arg->getPattern() ) );
-         $script->message( '     Description: ' . $arg->getDescription() );
+         $script->message('   --' . $arg->getName() . '=' . $this->prettyPrintPattern($arg->getPattern()));
+         $script->message('     Description: ' . $arg->getDescription());
       }
 
-      $script->message( '' );
+      $script->message('');
 
-      if ( count( $error_message ) > 0 ) {
+      if ( count($errorMessage) > 0 ) {
          $script->done(255);
       } else {
          $script->done(0);
