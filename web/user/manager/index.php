@@ -30,7 +30,7 @@ class CTM_Site_User_Manager extends CTM_Site {
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="6">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
+      $this->printHtml( '<th colspan="6">' . $this->getSiteTitle() . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiTableTitle">' );

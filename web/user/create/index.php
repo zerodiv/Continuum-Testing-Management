@@ -70,7 +70,7 @@ class CTM_Site_User_Create extends CTM_Site {
             $verify_url = $this->getBaseUrl() . '/user/verify/?id=' . $user->id . '&checksum=' . $verify_sign;
 
             $message = '';
-            $message .= 'Welcome to ' . $this->_sitetitle . "\n";
+            $message .= 'Welcome to ' . $this->getSiteTitle() . "\n";
             $message .= "\n";
             $message .= " Your username is: " . $username . "\n";
             $message .= "\n";
@@ -83,7 +83,7 @@ class CTM_Site_User_Create extends CTM_Site {
             $more_headers .= "From: " . Light_Config::get( 'CTM_Site_Config', 'CREATE_EMAIL_FROM' ) . "\r\n";
             $more_headers .= "Reply-To: " . Light_Config::get( 'CTM_Site_Config', 'CREATE_EMAIL_FROM' ) . "\r\n";
 
-            mail( '<' . $username . '>', "Welcome to " . $this->_sitetitle, $message );
+            mail( '<' . $username . '>', "Welcome to " . $this->getSiteTitle(), $message );
 
             header( 'Location: ' . $this->getBaseUrl() . '/user/verification/' );
             return true;
@@ -108,7 +108,7 @@ class CTM_Site_User_Create extends CTM_Site {
       $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/create/">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->getSiteTitle() . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       if ( isset( $this->_displayError ) ) {
          $this->printHtml( '<tr class="even">' );

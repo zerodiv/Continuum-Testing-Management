@@ -11,4 +11,3 @@ Light/Database/Object/Relationship.php
 Light/Database/Object.php
 Light/Database/Selector.php
 Light/MVC/Url/Checksum.php
-Light/MVC.php

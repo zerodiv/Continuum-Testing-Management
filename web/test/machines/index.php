@@ -34,7 +34,7 @@ class CTM_Site_Test_Suites extends CTM_Site {
       $this->printHtml( '<table class="ctmTable">' );
       
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="7">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
+      $this->printHtml( '<th colspan="7">' . $this->getSsiteTitle() . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr>' );

@@ -2,11 +2,17 @@
 require_once( '../../../../bootstrap.php' );
 require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
+require_once( 'Light/MVC/Url/Checksum.php' );
 
 class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
+   private $_urlChecksumObj;
 
    public function setupPage() {
+
       $this->setPageTitle('Forgot Password - Change Password');
+
+      $this->_urlChecksumObj = new Light_MVC_Url_Checksum();
+
       return true;
    }
 
@@ -15,7 +21,7 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
       $id = $this->getOrPost( 'id', null );
       $password = $this->getOrPost( 'password', null );
 
-      if ( $this->Url_Checksum->verify( $this, array( 'id' ) ) ) {
+      if ( $this->_urlChecksumObj->verify( $this, array( 'id' ) ) ) {
 
          if ( $action == 'save' ) {
 
@@ -50,7 +56,7 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
 
       $id = $this->getOrPost( 'id', null );
 
-      $secure_params = $this->Url_Checksum->create( array( 
+      $secure_params = $this->_urlChecksumObj->create( array( 
                'id' => $id
       ), 60, false );
 

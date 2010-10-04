@@ -44,7 +44,7 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
             $user->save();
             $message = '';
             
-            $message .= 'Forgot password -  ' . $this->_sitetitle . "\n";
+            $message .= 'Forgot password -  ' . $this->getSiteTitle() . "\n";
             $message .= "\n";
             $message .= " Your username: " . $user->username . "\n";
             $message .= " Your password: " . $user->tempPassword . "\n";
@@ -56,7 +56,7 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
             $more_headers = '';
             $more_headers .= "From: zerodiv@zerodivide.net\r\n";
             $more_headers .= "Reply-To: zerodiv@zerodivide.net\r\n";
-            mail( '<' . $user->username . '>', "Forgot password - " . $this->_sitetitle, $message ); 
+            mail( '<' . $user->username . '>', "Forgot password - " . $this->getSiteTitle(), $message ); 
             
             header( 'Location: /user/forgot_password/sent/' );
             return false;

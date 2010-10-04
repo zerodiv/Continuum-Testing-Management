@@ -78,7 +78,7 @@ class CTM_Site_User_Manager_Edit extends CTM_Site {
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->getSiteTitle() . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/manager/edit/">' );

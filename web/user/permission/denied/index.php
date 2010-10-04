@@ -22,7 +22,7 @@ class CTM_Site_User_Permission_Denied extends CTM_Site {
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th>' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
+      $this->printHtml( '<th>' . $this->getSiteTitle() . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>The page you ( ' . $user_obj->username . ' ) have requested is beyond your permissions level ( ' . $role_obj->name . ' ).</td>' );

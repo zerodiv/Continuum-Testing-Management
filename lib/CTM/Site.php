@@ -27,7 +27,7 @@ class CTM_Site extends Light_MVC {
          $this->printHtml( '<!-- role: ' . $role_obj->name . ' -->' );
 
          $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '">' . $this->_sitetitle . '</a></li>' );
+         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '">' . $this->getSiteTitle() . '</a></li>' );
 
          $allowed_roles = array( 'user', 'qa', 'admin' );
          if ( in_array( $role_obj->name, $allowed_roles ) ) {

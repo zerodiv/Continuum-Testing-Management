@@ -3,12 +3,15 @@
 require_once( '../../../bootstrap.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/User/Selector.php' );
+require_once( 'Light/MVC/Url/Checksum.php' );
 
 class CTM_Site_User_Login extends CTM_Site { 
+   private $_urlChecksumObj;
 
    public function setupPage() {
       $this->setPageTitle('Login');
       $this->_error = '';
+      $this->_urlChecksumObj = new Light_MVC_Url_Checksum();
       return true;
    }
 
@@ -47,7 +50,7 @@ class CTM_Site_User_Login extends CTM_Site {
             if ( $user->tempPassword != '' && $user->tempPassword == $password ) {
                // $user->tempPassword = '';
                // $user->save();
-               header( 'Location: ' . $this->getBaseUrl() . '/user/forgot_password/temp_password/' . $this->Url_Checksum->create( array( 'id' => $user->id ) ) );
+               header( 'Location: ' . $this->getBaseUrl() . '/user/forgot_password/temp_password/' . $this->_urlChecksumObj->create( array( 'id' => $user->id ) ) );
             }
 
             $md5_password = md5( $password );
@@ -77,7 +80,7 @@ class CTM_Site_User_Login extends CTM_Site {
       $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/login/">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="2">' . $this->_sitetitle . ': ' . $this->getPageTitle() . '</th>' );
+      $this->printHtml( '<th colspan="2">' . $this->getSiteTitle() . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
       if ( $this->_error != '' ) {
          $this->printHtml( '<tr class="even">' );

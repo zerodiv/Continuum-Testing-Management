@@ -1,91 +1,150 @@
 <?php
 
 require_once( 'Light/Config.php' );
-require_once( 'Light/MVC/Url/Checksum.php' );
 
 abstract class Light_MVC
 {
-   private $_baseurl;
-   private $_pagetitle;
-   public $_sitetitle;
-   public $_sessionname;
-   public $_css_files;
-   public $_js_files;
-   public $Url_Checksum;
-   
-   function __construct() {
-      // load the default configuration into the vars
-      $this->setBaseUrl();
+   private $_baseURL;
+   private $_pageTitle;
+   private $_siteTitle;
+   private $_sessionName;
+   private $_cssFiles;
+   private $_jsFiles;
 
-      $this->_sitetitle = Light_Config::get( 'Light_MVC_Config', 'SITE_TITLE' );
-      $this->_sessionname = Light_Config::get( 'Light_MVC_Config', 'SESSION_NAME' );
+   function __construct()
+   {
 
       // setup the default timezone.
-      date_default_timezone_set( Light_Config::get( 'Light_MVC_Config', 'DEFAULT_TIMEZONE' ) );
+      date_default_timezone_set(Light_Config::get('Light_MVC_Config', 'DEFAULT_TIMEZONE'));
 
-      $this->_css_files = array();
-      $this->_js_files = array();
-
-      if ( is_array( Light_Config::get( 'Light_MVC_Config', 'CSS_FILES' ) ) ) {
-         $this->_css_files = Light_Config::get( 'Light_MVC_Config', 'CSS_FILES' );
-      }
-      if ( is_array( Light_Config::get( 'Light_MVC_Config', 'JS_FILES' ) ) ) {
-         $this->_js_files = Light_Config::get( 'Light_MVC_Config', 'JS_FILES' );
-      }
-
-      $this->Url_Checksum = new Light_MVC_Url_Checksum();
-
-      $this->setPageTitle('' );
+      // load the default configuration into the vars
+      $this->setBaseUrl();
+      $this->setPageTitle('');
+      $this->setSiteTitle(null);
+      $this->setSessionName();
+      $this->setCssFiles();
+      $this->setJsFiles();
 
    } 
    
    public function getBaseUrl()
    {
-      return $this->_baseurl;
+      return $this->_baseURL;
    }
 
-   public function setBaseUrl() {
-      if ( isset($this->_baseurl) ) {
+   public function setBaseUrl()
+   {
+      if ( isset($this->_baseURL) ) {
          return;
       }
-      $this->_baseurl = Light_Config::get( 'Light_MVC_Config', 'BASE_URL' );
+      $this->_baseURL = Light_Config::get('Light_MVC_Config', 'BASE_URL');
    }
 
-   public function getPageTitle() {
-      return $this->_pagetitle;
+   public function getPageTitle()
+   {
+      return $this->_pageTitle;
    }
 
    public function setPageTitle($title)
    {
-      $this->_pagetitle = $title;
+      $this->_pageTitle = $title;
    }
 
-   public function getOrPost( $var_name, $default_value = '', $strip_tags = true ) {
-      $value = null;
+   public function getSiteTitle()
+   {
+      return $this->_siteTitle;
+   }
 
-      if ( isset( $_POST[ $var_name ] ) ) {
-         $value = $_POST[$var_name];
-      } else if ( isset( $_GET[ $var_name ] ) ) {
-         $value = $_GET[ $var_name ];
+   public function setSiteTitle($title)
+   {
+      if (isset($this->_siteTitle)) {
+         $this->_siteTitle = $title;
+         return;
+      }
+      $this->_siteTitle = Light_Config::get('Light_MVC_Config', 'SITE_TITLE');
+   }
+
+   public function getSessionName()
+   {
+      return $this->_sessionName;
+   }
+
+   public function setSessionName()
+   {
+      if (isset($this->_sessionName)) {
+         return;
+      }
+      $this->_sessionName = Light_Config::get('Light_MVC_Config', 'SESSION_NAME');
+   }
+
+   public function getCssFiles() 
+   {
+      return $this->_cssFiles;
+   }
+
+   public function setCssFiles()
+   {
+
+      if (isset($this->_cssFiles)) {
+         return;
       }
 
-      if ( is_array( $value ) ) {
+      $this->_cssFiles = array();
+
+      if (is_array(Light_Config::get('Light_MVC_Config', 'CSS_FILES'))) {
+         $this->_cssFiles = Light_Config::get('Light_MVC_Config', 'CSS_FILES');
+      }
+
+   }
+
+   public function getJsFiles()
+   {
+      return $this->_jsFiles;
+   }
+
+   public function setJsFiles()
+   {
+
+      if (isset($this->_jsFiles)) {
+         return;
+      }
+
+      $this->_jsFiles = array();
+
+      if (is_array(Light_Config::get('Light_MVC_Config', 'JS_FILES'))) {
+         $this->_jsFiles = Light_Config::get('Light_MVC_Config', 'JS_FILES');
+      }
+
+   }
+
+   public function getOrPost($varName, $defaultValue = '', $stripTags = true)
+   {
+      $value = null;
+
+      if ( isset( $_POST[ $varName ] ) ) {
+         $value = $_POST[$varName];
+      } else if ( isset( $_GET[ $varName ] ) ) {
+         $value = $_GET[ $varName ];
+      }
+
+      if (is_array($value)) {
          return $value;
       }
 
       if ( isset( $value ) ) {
-         if ( $strip_tags == false ) {
+         if ( $stripTags == false ) {
             return $value;
          }
-         return strip_tags( $value );
+         return strip_tags($value);
       }
 
-      return $default_value;
+      return $defaultValue;
    } 
 
-   public function displayPage() {
+   public function displayPage()
+   {
 
-      $action_stack = array( 
+      $actionStack = array( 
             'setupPage',
             'setupSession',
             'handleRequest',
@@ -94,92 +153,107 @@ abstract class Light_MVC
             'displayFooter',
             ); 
       
-      foreach ( $action_stack as $action ) {
+      foreach ( $actionStack as $action ) {
          if ( $this->$action() == false ) {
             return; 
          }
       } 
    }
 
-   public function debugPage() {
+   public function debugPage()
+   {
       echo "<pre>";
-      print_r( $GLOBALS );
+      print_r($GLOBALS);
       echo "</pre>";
    }
 
-   public function setupPage() {
+   public function setupPage()
+   {
       return true;
    } 
    
-   public function setupSession() {
+   public function setupSession()
+   {
       // this function really should not be overridden
-      session_name( $this->_sessionname );
+      session_name($this->getSessionName());
       session_start();
       return true;
    } 
    
-   public function handleRequest() {
+   public function handleRequest()
+   {
       return true;
    } 
    
-   public function displayHeader() {
-      $this->printHtml('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">' );
+   public function displayHeader()
+   {
+      $this->printHtml('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
       $this->printHtml('<html>');
       $this->printHtml('<head>');
 
-      $title_string = $this->_sitetitle;
+      $titleString = $this->getSiteTitle();
       if ( $this->getPageTitle() != '' ) {
-         $title_string .= ' - ' . $this->getPageTitle();
+         $titleString .= ' - ' . $this->getPageTitle();
       }
 
-      $this->printHtml( '<title>' . $title_string .  '</title>' );
+      $this->printHtml('<title>' . $titleString .  '</title>');
 
       $this->displayHeader_CSS();
       $this->displayHeader_JavaScript();
 
-      $this->printHtml( '</head>' );
-      $this->printHtml( '<body>' );
+      $this->printHtml('</head>');
+      $this->printHtml('<body>');
       return true;
    }
 
-   public function displayHeader_CSS() {
-      foreach ( $this->_css_files as $css_file ) {
-         if ( preg_match( '/^http/', $css_file ) ) {
-            $this->printHtml('<link href="' . $css_file . '" type="text/css" rel="stylesheet"/>' );
+   public function displayHeader_CSS()
+   {
+      foreach ( $this->getCssFiles() as $cssFile ) {
+         if ( preg_match('/^http/', $cssFile) ) {
+            $this->printHtml('<link href="' . $cssFile . '" type="text/css" rel="stylesheet"/>');
          } else {
-            $this->printHtml('<link href="' . $this->getBaseUrl() . '/css/' . $css_file . '" type="text/css" rel="stylesheet"/>' );
+            $this->printHtml(
+                '<link href="' . $this->getBaseUrl() . '/css/' . $cssFile . '" type="text/css" rel="stylesheet"/>'
+            );
          }
       }
       return true;
    }
 
-   public function displayHeader_JavaScript() {
-      foreach ( $this->_js_files as $js_file ) {
-         $this->printHtml('<script type="text/javascript" src="' . $this->getBaseUrl() . '/js/' . $js_file . '"></script>' );
+   public function displayHeader_JavaScript()
+   {
+      foreach ( $this->getJsFiles() as $jsFile ) {
+         $this->printHtml(
+             '<script type="text/javascript" src="' . $this->getBaseUrl() . '/js/' . $jsFile . '"></script>'
+         );
       }
       return true;
    }
    
-   public function displayBody() {
+   public function displayBody()
+   {
       echo "<!-- this should be overridden -->\n";
       return true;
    } 
    
-   public function displayFooter() {
-      $this->printHtml( '</body>' );
-      $this->printHtml( '</html>' );
+   public function displayFooter()
+   {
+      $this->printHtml('</body>');
+      $this->printHtml('</html>');
       return true;
    } 
    
-   public function requiresAuth() {
+   public function requiresAuth()
+   {
       if ( $this->isLoggedIn() != true ) {
-         header( 'Location: ' . $this->getBaseUrl() . '/user/login' );
+         header('Location: ' . $this->getBaseUrl() . '/user/login');
          exit();
       } 
       return true; 
    } 
    
-   public function isLoggedIn() {
+   public function isLoggedIn()
+   {
       if ( isset( $_SESSION['user_id'] ) && $_SESSION['user_id'] > 0 ) {
          return true;
       }
@@ -187,39 +261,45 @@ abstract class Light_MVC
    } 
   
    // yes you need to use this dammit.
-   public function escapeVariable( $var ) {
-      $var = stripslashes( $var );
-      return htmlentities( $var, ENT_QUOTES, 'UTF-8' );
+   public function escapeVariable( $var )
+   {
+      $var = stripslashes($var);
+      return htmlentities($var, ENT_QUOTES, 'UTF-8');
    }
 
-   public function printHtml( $html ) {
+   public function printHtml( $html )
+   {
       echo $html . "\n";
    }
 
-   public function printJs( $js ) {
+   public function printJs( $js )
+   {
       echo '<script language="JavaScript">' . "\n";
       echo $js;
       echo '</script>' . "\n";
    }
 
-   public function formatDate( $timestamp ) {
-      return date( Light_Config::get( 'Light_MVC_Config', 'TIME_FORMAT' ), $timestamp );
+   public function formatDate( $timestamp )
+   {
+      return date(Light_Config::get('Light_MVC_Config', 'TIME_FORMAT'), $timestamp);
    }
 
-   public function isFileUploadAvailable() {
-      $uploads_status = ini_get( 'file_uploads' );
-      $uploads_status = trim( $uploads_status );
-      if ( $uploads_status == 'On' ) {
+   public function isFileUploadAvailable()
+   {
+      $uploadsStatus = ini_get('file_uploads');
+      $uploadsStatus = trim($uploadsStatus);
+      if ( $uploadsStatus == 'On' ) {
          return true;
       }
-      if ( $uploads_status == 1 ) {
+      if ( $uploadsStatus == 1 ) {
          return true;
       }
       // by default we assume it's not on.
       return false;
    }
 
-   public function maxFileUploadSize() {
+   public function maxFileUploadSize()
+   {
 
       // For whatever reason the php developers allow you to pull in upload_max_filesize whenever
       // the variable for uploading is off I don't know. So instead of giving misleading results
@@ -229,21 +309,21 @@ abstract class Light_MVC
       }
 
       // upload_max_filesize
-      $upload_max_filesize = ini_get( 'upload_max_filesize' );
-      $upload_max_filesize = trim( $upload_max_filesize );
-      if ( preg_match( '/^(\d+)G$/i', $upload_max_filesize, $pregs ) ) {
-         $upload_max_filesize = (1024*1024*1024)*($pregs[1]);
-      } else if ( preg_match( '/^(\d+)M$/i', $upload_max_filesize, $pregs ) ) {
-         $upload_max_filesize = (1024*1024)*($pregs[1]);
-      } else if ( preg_match( '/^(\d+)K$/i', $upload_max_filesize, $pregs ) ) {
-         $upload_max_filesize = (1024)*($pregs[1]);
-      } else if ( preg_match( '/^(\d+)$/i', $upload_max_filesize, $pregs ) ) {
+      $uploadMaxFilesize = ini_get('upload_max_filesize');
+      $uploadMaxFilesize = trim($uploadMaxFilesize);
+      if ( preg_match('/^(\d+)G$/i', $uploadMaxFilesize, $pregs) ) {
+         $uploadMaxFilesize = (1024*1024*1024)*($pregs[1]);
+      } else if ( preg_match('/^(\d+)M$/i', $uploadMaxFilesize, $pregs) ) {
+         $uploadMaxFilesize = (1024*1024)*($pregs[1]);
+      } else if ( preg_match('/^(\d+)K$/i', $uploadMaxFilesize, $pregs) ) {
+         $uploadMaxFilesize = (1024)*($pregs[1]);
+      } else if ( preg_match('/^(\d+)$/i', $uploadMaxFilesize, $pregs) ) {
          // size in bytes.
-         $upload_max_filesize = $pregs[1];
+         $uploadMaxFilesize = $pregs[1];
       } else {
-         throw new Exception( 'Failed to figure out upload max filesize from: ' . ini_get( 'upload_max_filesize' ) );
+         throw new Exception( 'Failed to figure out upload max filesize from: ' . ini_get('upload_max_filesize') );
       }
-      return $upload_max_filesize;
+      return $uploadMaxFilesize;
    }
 
 }
