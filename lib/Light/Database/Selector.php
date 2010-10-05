@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'Light/Database/Factory.php' );
+require_once( 'Light/Database/Connection/Factory.php' );
 require_once( 'Light/Database/Object.php' );
 
 class Light_Database_Selector_Criteria {
