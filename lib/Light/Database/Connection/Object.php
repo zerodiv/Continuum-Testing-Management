@@ -8,7 +8,13 @@ class Light_Database_Connection_Object
    function __construct()
    {
       // load our database configs.
-      $this->_config = parse_ini_file(Light_Config::get('Light_Database_Connection_Factory_Config', 'CONFIG_FILE'), true);
+      $this->_config = parse_ini_file(
+          Light_Config::get(
+              'Light_Database_Connection_Factory_Config', 
+              'CONFIG_FILE'
+          ),
+          true
+      );
       $this->_connectionPool = array();
    } 
 

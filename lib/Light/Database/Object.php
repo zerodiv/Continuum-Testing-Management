@@ -32,9 +32,9 @@ abstract class Light_Database_Object
 
    }
 
-   public function setSqlTable( $table_name )
+   public function setSqlTable( $tableName )
    {
-      $this->_sqlTable = $table_name;
+      $this->_sqlTable = $tableName;
       return true;
    }
 
@@ -54,60 +54,66 @@ abstract class Light_Database_Object
       return $this->_dbName;
    }
 
-   public function setIdField( $field_name )
+   public function setIdField( $fieldName )
    {
-      $this->_sqlIdField = $field_name;
+      $this->_sqlIdField = $fieldName;
       return true;
    }
 
-   public function getIdField() {
+   public function getIdField()
+   {
       return $this->_sqlIdField;
    }
 
-   public function addOneToOneRelationship( $localName, $objectName, $sourceField, $linkingField, $useCache = false ) {
-      $this->_objectRelationships->add( 
-            new Light_Database_Object_Relationship( 
+   public function addOneToOneRelationship( $localName, $objectName, $sourceField, $linkingField, $useCache = false )
+   {
+      $this->_objectRelationships->add(
+          new Light_Database_Object_Relationship( 
                $localName, 
                $objectName, 
                $sourceField, 
                $linkingField, 
                Light_Database_Object_Relationship::ONE_TO_ONE,
                $useCache
-               )
+          )
       );
    }
 
-   public function addOneToManyRelationship( $localName, $objectName, $sourceField, $linkingField ) {
-      $this->_objectRelationships->add( 
-            new Light_Database_Object_Relationship( 
+   public function addOneToManyRelationship( $localName, $objectName, $sourceField, $linkingField )
+   {
+      $this->_objectRelationships->add(
+          new Light_Database_Object_Relationship( 
                $localName, 
                $objectName, 
                $sourceField, 
                $linkingField, 
                Light_Database_Object_Relationship::ONE_TO_MANY,
                false
-               )
+          )
       );
    }
 
-   public function init() {
+   public function init()
+   {
       throw new Exception( 'init should be overwritten with a client side impl' );
    }
 
-   public function getFieldNames() {
+   public function getFieldNames()
+   {
       $fields = array();
-      $this_obj = new ReflectionClass( get_class( $this ) );
-      $props = $this_obj->getProperties();
+      $thisObj = new ReflectionClass(get_class($this));
+      $props = $thisObj->getProperties();
       foreach ( $props as $prop ) {
-         $prop_name = $prop->getName();
+         $propName = $prop->getName();
          if ( $prop->isPublic() ) {
-            $fields[] = $prop_name;
+            $fields[] = $propName;
          }
       }
       return $fields;
    }
 
-   public function consumeHash( $hash ) {
+   public function consumeHash( $hash )
+   {
       $fields = $this->getFieldNames();
       foreach ( $fields as $field ) {
          $this->$field = $hash[ $field ];
@@ -115,64 +121,67 @@ abstract class Light_Database_Object
       return true;
    }
 
-   private function _createInsertStatement() {
+   private function _createInsertStatement()
+   {
       $fields = $this->getFieldNames();
-      $ins_sql = 'INSERT INTO ' . $this->_sqlTable . ' ( ';
-      $is_first = true;
+      $insSql = 'INSERT INTO ' . $this->_sqlTable . ' ( ';
+      $isFirst = true;
       foreach ( $fields as $field ) {
          if ( $field != $this->_sqlIdField ) {
-            if ( $is_first != true ) {
-               $ins_sql .= ', ';
+            if ( $isFirst != true ) {
+               $insSql .= ', ';
             }
-            $ins_sql .= $field;
-            $is_first = false;
-            }
-      }
-      $ins_sql .= ') VALUES ( ';
-      $is_first = true;
-      foreach ( $fields as $field ) {
-         if ( $field != $this->_sqlIdField ) {
-            if ( $is_first != true ) {
-               $ins_sql .= ', ';
-            }
-            $ins_sql .= '?';
-            $is_first = false;
-            }
-      }
-      $ins_sql .= ')';
-      return $ins_sql;
-   }
-
-   private function _createUpdateStatement() {
-      $fields = $this->getFieldNames();
-      $upd_sql = 'UPDATE ' . $this->_sqlTable . ' SET ';
-      $is_first = true;
-      foreach ( $fields as $field ) {
-         if ( $this->_sqlIdField != $field ) {
-            if ( $is_first == false ) {
-               $upd_sql .= ', ';
-            }
-            $upd_sql .= $field . ' = ?';
-            $is_first = false;
+            $insSql .= $field;
+            $isFirst = false;
          }
       }
-      $upd_sql .= ' WHERE ' . $this->_sqlIdField . ' = ?';
-      return $upd_sql;
+      $insSql .= ') VALUES ( ';
+      $isFirst = true;
+      foreach ( $fields as $field ) {
+         if ( $field != $this->_sqlIdField ) {
+            if ( $isFirst != true ) {
+               $insSql .= ', ';
+            }
+            $insSql .= '?';
+            $isFirst = false;
+         }
+      }
+      $insSql .= ')';
+      return $insSql;
    }
 
-   public function remove() {
+   private function _createUpdateStatement()
+   {
+      $fields = $this->getFieldNames();
+      $updSql = 'UPDATE ' . $this->_sqlTable . ' SET ';
+      $isFirst = true;
+      foreach ( $fields as $field ) {
+         if ( $this->_sqlIdField != $field ) {
+            if ( $isFirst == false ) {
+               $updSql .= ', ';
+            }
+            $updSql .= $field . ' = ?';
+            $isFirst = false;
+         }
+      }
+      $updSql .= ' WHERE ' . $this->_sqlIdField . ' = ?';
+      return $updSql;
+   }
+
+   public function remove()
+   {
 
       $sql = 'DELETE FROM ' . $this->_sqlTable . ' WHERE ' . $this->_sqlIdField . ' = ?';
 
       try {
 
-         $dbh = Light_Database_Connection_Factory::getDBH( $this->_dbName );
+         $dbh = Light_Database_Connection_Factory::getDBH($this->_dbName);
 
-         $sth = $dbh->prepare( $sql );
+         $sth = $dbh->prepare($sql);
          
-         $id_field = $this->_sqlIdField;
+         $idField = $this->_sqlIdField;
 
-         $sth->bindParam( 1, $this->$id_field );
+         $sth->bindParam(1, $this->$idField);
 
          $sth->execute();
 
@@ -184,14 +193,15 @@ abstract class Light_Database_Object
 
    }
 
-   public function save() {
+   public function save()
+   {
       $fields = $this->getFieldNames();
 
       // is this a insert ? 
       $sql = null;
-      $is_insert = false;
+      $isInsert = false;
       if ( $this->{ $this->_sqlIdField } == null ) {
-         $is_insert = true;
+         $isInsert = true;
          $sql = $this->_createInsertStatement();
       } else {
          $sql = $this->_createUpdateStatement();
@@ -201,49 +211,49 @@ abstract class Light_Database_Object
 
       try {
         
-         $dbh = Light_Database_Connection_Factory::getDBH( $this->_dbName );
+         $dbh = Light_Database_Connection_Factory::getDBH($this->_dbName);
 
          // prepare the sql statement
-         $sth = $dbh->prepare( $sql );
+         $sth = $dbh->prepare($sql);
 
          // bind the parameters to the statement
-         $field_id = 0;
+         $fieldId = 0;
          foreach ( $fields as $field ) {
             // both a insert and update skip their id fields
             if ( $this->_sqlIdField != $field ) {
-               $field_id++;
-               // echo 'f- ' . $field . '[' . $field_id . '] - ' . $this->$field . "\n";
-               $sth->bindParam( $field_id, $this->$field );
+               $fieldId++;
+               // echo 'f- ' . $field . '[' . $fieldId . '] - ' . $this->$field . "\n";
+               $sth->bindParam($fieldId, $this->$field);
             }
          }
 
          // if we are doing a update we need to add the id
-         if ( $is_insert != true ) {
-            $field_id++;
-            $id_field = $this->_sqlIdField;
-            $sth->bindParam( $field_id, $this->$id_field );
+         if ( $isInsert != true ) {
+            $fieldId++;
+            $idField = $this->_sqlIdField;
+            $sth->bindParam($fieldId, $this->$idField);
          }
 
          // run the query
          $sth->execute();
 
          // if it was a insert grab the id of the inserted item back from the db.
-         if ( $is_insert == true ) { 
+         if ( $isInsert == true ) { 
            
-            $last_id_sth = $dbh->prepare( 'SELECT LAST_INSERT_ID() as last_id' );
-            $last_id_sth->execute();
+            $lastIdSth = $dbh->prepare('SELECT LAST_INSERT_ID() as last_id');
+            $lastIdSth->execute();
 
-            $last_id = $last_id_sth->fetchAll( PDO::FETCH_BOTH );
+            $lastId = $lastIdSth->fetchAll(PDO::FETCH_BOTH);
             
-            if ( isset( $last_id[0]['last_id'] ) ) {
-               $last_id = intval( $last_id[0]['last_id'] );
+            if ( isset( $lastId[0]['last_id'] ) ) {
+               $lastId = intval($lastId[0]['last_id']);
             } else {
-               $last_id = null;
+               $lastId = null;
             } 
             
-            if ( $last_id != null ) {
-               $id_field = $this->_sqlIdField;
-               $this->$id_field = $last_id;
+            if ( $lastId != null ) {
+               $idField = $this->_sqlIdField;
+               $this->$idField = $lastId;
             }
 
          } // end if this was a insert
@@ -255,29 +265,42 @@ abstract class Light_Database_Object
       return true;
    }
 
-   private function _fetchRelatedObjects( Light_Database_Object_Relationship $rel ) {
-      $leftside_field = $rel->sourceField;
-      if ( ! isset( $this->$leftside_field ) ) {
+   private function _fetchRelatedObjects( Light_Database_Object_Relationship $rel )
+   {
+      $leftsideField = $rel->getSourceField();
+      if ( ! isset( $this->$leftsideField ) ) {
          return null;
       }
 
-      if ( $rel->use_cache == true ) {
-         $getFunction = 'getBy' . ucfirst( $rel->linkingField );
-         $cacheName = $rel->objectName . '_Cache';
-         $cacheObject = Light_Database_Object_Cache_Factory::factory( $cacheName );
-         return $cacheObject->$getFunction( $this->$leftside_field );
+      if ( $rel->getUseCache() == true ) {
+         $getFunction = 'getBy' . ucfirst($rel->getLinkingField());
+         $cacheName = $rel->getObjectName() . '_Cache';
+         $cacheObject = Light_Database_Object_Cache_Factory::factory($cacheName);
+         return $cacheObject->$getFunction( $this->$leftsideField );
       }
 
       try {
-         $sel_name = $rel->objectName . '_Selector';
-         $sel = new $sel_name();
-         // echo "sel_name: $sel_name linking_field: " . $rel->linkingField . " leftside($leftside_field): " . $this->$leftside_field . "\n";
-         $and_params = array( new Light_Database_Selector_Criteria( $rel->linkingField, '=', $this->$leftside_field ) );
-         $rows = $sel->find( $and_params );
-         if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_ONE && isset( $rows[0] ) ) {
+         $selName = $rel->getObjectName() . '_Selector';
+         $sel = new $selName();
+         /*
+            echo 
+               "selName: $selName " .
+               " linking_field: " .  $rel->getLinkingField() . 
+               " leftside($leftsideField): " . $this->$leftsideField . 
+            "\n";
+         */
+         $andParams = array(
+               new Light_Database_Selector_Criteria(
+                  $rel->getLinkingField(),
+                  '=',
+                  $this->$leftsideField
+               )
+         );
+         $rows = $sel->find($andParams);
+         if ( $rel->getType() == Light_Database_Object_Relationship::ONE_TO_ONE && isset($rows[0]) ) {
             return $rows[0];
          }
-         if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_MANY && count( $rows ) > 0 ) {
+         if ( $rel->getType() == Light_Database_Object_Relationship::ONE_TO_MANY && count($rows) > 0 ) {
             return $rows;
          }
       } catch ( Exception $e ) {
@@ -286,27 +309,28 @@ abstract class Light_Database_Object
       return null;
    }
 
-   public function __call( $method, $args ) {
-      if ( preg_match( '/^(get|set)(.*)$/', $method, $methodPregs ) ) {
+   public function __call( $method, $args )
+   {
+      if ( preg_match('/^(get|set)(.*)$/', $method, $methodPregs) ) {
          $operand = $methodPregs[1];
          $localName = $methodPregs[2];
 
-         $rel = $this->_objectRelationships->findByName( $localName );
+         $rel = $this->_objectRelationships->findByName($localName);
 
          //---
          // TODO: Need to decide if we are going to support setAttribute() ever. 
          // My misgivings on it at this point is the method signature issue where we might
          // need to do some kind of complicated mapping / transformation on the params as they come in.
          //---
-         if ( is_object( $rel ) ) {
-            if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_ONE ) {
+         if ( is_object($rel) ) {
+            if ( $rel->getType() == Light_Database_Object_Relationship::ONE_TO_ONE ) {
                if ( $operand == 'get' ) {
-                  return $this->_fetchRelatedObjects( $rel );
+                  return $this->_fetchRelatedObjects($rel);
                } 
             }
-            if ( $rel->type == Light_Database_Object_Relationship::ONE_TO_MANY ) {
+            if ( $rel->getType() == Light_Database_Object_Relationship::ONE_TO_MANY ) {
                if ( $operand == 'get' ) {
-                  return $this->_fetchRelatedObjects( $rel );
+                  return $this->_fetchRelatedObjects($rel);
                } 
             }
          }
@@ -316,25 +340,26 @@ abstract class Light_Database_Object
       return;
    }
 
-   public function toXML( $writer = null ) {
+   public function toXML( $writer = null )
+   {
 
-      $writer_provided = false;
+      $writerProvided = false;
 
       if ( $writer == null ) {
          $writer = new XMLWriter();
          $writer->openMemory();
          $writer->setIndent(true);
-         $writer->startDocument( '1.0', 'UTF-8' );
+         $writer->startDocument('1.0', 'UTF-8');
       } else {
-         $writer_provided = true;
+         $writerProvided = true;
       }
 
-      $writer->startElement( get_class( $this ) );
+      $writer->startElement(get_class($this));
       
       $fields = $this->getFieldNames();
 
       foreach ( $fields as $field ) {
-         $writer->writeElement( $field, $this->$field );
+         $writer->writeElement($field, $this->$field);
       }
 
       // get all related objects.
@@ -342,29 +367,29 @@ abstract class Light_Database_Object
 
       foreach ( $rels as $rel ) {
 
-         $getter = 'get' . $rel->localName;
+         $getter = 'get' . $rel->getLocalName();
          $related = $this->$getter();
 
-         if ( is_array( $related ) ) { 
+         if ( is_array($related) ) { 
             // Open up a plural relationship entry in the xml.
-            $writer->startElement( $rel->localName . 's' );
-            foreach ( $related as $rel_obj ) {
-               $rel_obj->toXml( $writer );
+            $writer->startElement($rel->getLocalName() . 's');
+            foreach ( $related as $relObj ) {
+               $relObj->toXml($writer);
             }
             $writer->endElement();
-         } else if ( isset( $related ) ) {
-            $related->toXml( $writer );
+         } else if ( isset($related) ) {
+            $related->toXml($writer);
          }
 
       }
 
       $writer->endElement();
 
-      if ( $writer_provided == false ) {
+      if ( $writerProvided == false ) {
          $writer->endDocument();
 
          // default return xml please.
-         return $writer->outputMemory( true );
+         return $writer->outputMemory(true);
       }
 
       return null;

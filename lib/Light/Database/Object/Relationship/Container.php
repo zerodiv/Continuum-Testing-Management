@@ -2,32 +2,41 @@
 
 require_once( 'Light/Database/Object/Relationship.php' );
 
-class Light_Database_Object_Relationship_Container {
-   private $_object_relationships;
+class Light_Database_Object_Relationship_Container
+{
+   private $_objectRelationships;
 
-   function __construct() {
-      $this->_object_relationships = array();
+   function __construct()
+   {
+      $this->_objectRelationships = array();
    }
 
-   public function add( Light_Database_Object_Relationship $rel ) {
-      $obj = $this->findByName( $rel->localName );
-      if ( is_object( $obj ) ) {
-         throw new Exception( 'Your model class has a duplicated localName please pick another name for: ' . $rel->localName );
+   public function add( Light_Database_Object_Relationship $rel )
+   {
+      $obj = $this->findByName($rel->getLocalName());
+      if ( is_object($obj) ) {
+         throw new Exception(
+            'Your model class has a duplicated localName please ' .
+            ' pick another name for: ' . 
+            $rel->getLocalName()
+         );
       }
-      $this->_object_relationships[] = $rel;
+      $this->_objectRelationships[] = $rel;
    }
 
-   public function findByName( $name ) {
-      foreach ( $this->_object_relationships as $obj ) {
-         if ( $obj->localName == $name ) {
+   public function findByName( $name )
+   {
+      foreach ( $this->_objectRelationships as $obj ) {
+         if ( $obj->getLocalName() == $name ) {
             return $obj;
          }
       }
       return null;
    }
 
-   public function getAll() {
-      return $this->_object_relationships;
+   public function getAll()
+   {
+      return $this->_objectRelationships;
    }
 
 }
