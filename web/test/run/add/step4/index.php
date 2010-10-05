@@ -124,8 +124,8 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
             $sel = new CTM_Test_Machine_Browser_Selector();
 
             $and_params = array( 
-                  new Light_Database_Selector_Criteria( 'is_available', '=', 1 ),
-                  new Light_Database_Selector_Criteria( 'last_seen', '>', $floor_time )
+                  new Light_Database_Selector_Criteria( 'isAvailable', '=', 1 ),
+                  new Light_Database_Selector_Criteria( 'lastSeen', '>', $floor_time )
             );
 
             $avail_machines_and_browsers = $sel->find( $and_params, array(), array( 'test_machine_id' ) );
@@ -212,9 +212,9 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                $this->printHtml( '<td><center><input type="checkbox" name="test_browsers[' . $avail_machine_browser->id . ']"></center></td>' );
                $this->printHtml( '<td>' . $current_browser->getPrettyName() . '</td>' );
                $this->printHtml( '<td>' . 
-                  $current_browser->major_version . '.' .
-                  $current_browser->minor_version . '.' .
-                  $current_browser->patch_version .
+                  $current_browser->majorVersion . '.' .
+                  $current_browser->minorVersion . '.' .
+                  $current_browser->patchVersion .
                '</td>' );
                $this->printHtml( '</tr>' );
             }

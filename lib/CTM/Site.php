@@ -7,118 +7,132 @@ require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/User.php' );
 require_once( 'CTM/Test/Folder/Cache.php' );
 
-class CTM_Site extends Light_MVC {
-   private $_odd_even_class;
+class CTM_Site extends Light_MVC
+{
+   private $_oddEvenClass;
 
-   public function displayHeader() {
+   public function displayHeader()
+   {
 
       // display the normal header.
       parent::displayHeader();
 
-      $this->printHtml( '<div class="aiMainContent clearfix">' );
+      $this->printHtml('<div class="aiMainContent clearfix">');
 
-      $this->printHtml( '<div class="aiTopNav">' );
+      $this->printHtml('<div class="aiTopNav">');
 
       if ( $this->isLoggedIn() ) {
 
-         $user_obj = $this->getUser();
-         $role_obj = $user_obj->getRole();
+         $userObj = $this->getUser();
+         $roleObj = $userObj->getRole();
 
-         $this->printHtml( '<!-- role: ' . $role_obj->name . ' -->' );
+         $this->printHtml('<!-- role: ' . $roleObj->name . ' -->');
 
-         $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '">' . $this->getSiteTitle() . '</a></li>' );
+         $this->printHtml('<ul class="basictab">');
+         $this->printHtml('<li><a href="' . $this->getBaseUrl() . '">' . $this->getSiteTitle() . '</a></li>');
 
-         $allowed_roles = array( 'user', 'qa', 'admin' );
-         if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/test/suites/">Suites</a></li>' );
+         $allowedRoles = array( 'user', 'qa', 'admin' );
+         if ( in_array($roleObj->name, $allowedRoles) ) {
+            $this->printHtml('<li><a href="' . $this->getBaseUrl() . '/test/suites/">Suites</a></li>');
          }
 
-         $allowed_roles = array( 'user', 'qa', 'admin' );
-         if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/tests/">Tests</a></li>' );
+         $allowedRoles = array( 'user', 'qa', 'admin' );
+         if ( in_array($roleObj->name, $allowedRoles) ) {
+            $this->printHtml('<li><a href="' . $this->getBaseUrl() . '/tests/">Tests</a></li>');
          }
 
-         $allowed_roles = array( 'qa', 'admin' );
-         if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            // $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/folders/">Folders</a></li>' );
+         $allowedRoles = array( 'qa', 'admin' );
+         if ( in_array($roleObj->name, $allowedRoles) ) {
+            // $this->printHtml('<li><a href="' . $this->getBaseUrl() . '/folders/">Folders</a></li>');
          }
 
-         $allowed_roles = array( 'qa', 'admin' );
-         if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/test/param/library/">Parameter Library</a></li>' );
+         $allowedRoles = array( 'qa', 'admin' );
+         if ( in_array($roleObj->name, $allowedRoles) ) {
+            $this->printHtml(
+                '<li><a href="' . $this->getBaseUrl() . '/test/param/library/">' .
+                'Parameter Library' .
+                '</a></li>'
+            );
          }
 
-         $allowed_roles = array( 'qa', 'admin' );
-         if ( in_array( $role_obj->name, $allowed_roles ) ) {
-            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/test/runs/">Runs</a></li>' );
+         $allowedRoles = array( 'qa', 'admin' );
+         if ( in_array($roleObj->name, $allowedRoles) ) {
+            $this->printHtml('<li><a href="' . $this->getBaseUrl() . '/test/runs/">Runs</a></li>');
          }
 
 
-         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/user/logout/">Logout : ' . $this->escapeVariable( $user_obj->username ) . '</a></li>' );
+         $this->printHtml(
+             '<li><a href="' . $this->getBaseUrl() . '/user/logout/">' .
+             'Logout : ' . $this->escapeVariable($userObj->username) . 
+             '</a></li>'
+         );
       
-         $this->printHtml( '</ul>' );
+         $this->printHtml('</ul>');
 
-         if ( $this->isLoggedIn() && $role_obj->name == 'admin' ) {
-            $this->printHtml( '<ul class="basictab">' );
-            $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/user/manager/">Manage Users</a></li>' );
-            $this->printHtml( '<li><a href="' . $this->getBaseUrl(). '/test/machines/">Machines</a></li>' );
-            $this->printHtml( '</ul>' );
+         if ( $this->isLoggedIn() && $roleObj->name == 'admin' ) {
+            $this->printHtml('<ul class="basictab">');
+            $this->printHtml('<li><a href="' . $this->getBaseUrl() . '/user/manager/">Manage Users</a></li>');
+            $this->printHtml('<li><a href="' . $this->getBaseUrl(). '/test/machines/">Machines</a></li>');
+            $this->printHtml('</ul>');
          }
       } else {
-         $this->printHtml( '<ul class="basictab">' );
-         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/user/login/">Login</a></li>' );
-         $this->printHtml( '<li><a href="' . $this->getBaseUrl() . '/user/create/">Create Account</a></li>' );
-         $this->printHtml( '</ul>' );
+         $this->printHtml('<ul class="basictab">');
+         $this->printHtml('<li><a href="' . $this->getBaseUrl() . '/user/login/">Login</a></li>');
+         $this->printHtml('<li><a href="' . $this->getBaseUrl() . '/user/create/">Create Account</a></li>');
+         $this->printHtml('</ul>');
       }
 
 
-      $this->printHtml( '</div>' );
+      $this->printHtml('</div>');
 
       return true;
    }
 
-   public function displayFooter() {
+   public function displayFooter()
+   {
 
-      $this->printHtml( '</div>' );
+      $this->printHtml('</div>');
 
       parent::displayFooter();
 
       return true;
    }
 
-   public function requiresAuth() {
+   public function requiresAuth()
+   {
       if ( $this->isLoggedIn() == true ) {
          return true; 
       } 
-      header( 'Location: ' . $this->getBaseUrl() . '/user/login' );
+      header('Location: ' . $this->getBaseUrl() . '/user/login');
       exit();
    } 
 
-   public function requiresRole( $acceptable_roles ) {
-      if ( is_array( $acceptable_roles ) && count( $acceptable_roles ) > 0 ) {
+   public function requiresRole( $acceptableRoles )
+   {
+      if ( is_array($acceptableRoles) && count($acceptableRoles) > 0 ) {
          $user = $this->getUser();
          if ( isset( $user ) ) {
-            $current_role = $user->getRole();
+            $currentRole = $user->getRole();
             // if their role is in a acceptable role list then we are good for this page.
-            if ( isset( $current_role ) && in_array( $current_role->name, $acceptable_roles ) ) {
+            if ( isset($currentRole) && in_array($currentRole->name, $acceptableRoles) ) {
                return true;
             }
          }
       }
-      header( 'Location: ' . $this->getBaseUrl() . '/user/permission/denied/' );
+      header('Location: ' . $this->getBaseUrl() . '/user/permission/denied/');
       exit();
    }
    
-   public function isLoggedIn() {
+   public function isLoggedIn()
+   {
       if ( isset( $_SESSION['user_id'] ) && $_SESSION['user_id'] > 0 ) {
-         $user_obj = $this->getUser();
+         $userObj = $this->getUser();
          // a user cannot be logged in if they are disabled.
-         if ( $user_obj->isDisabled == true ) {
+         if ( $userObj->isDisabled == true ) {
             return false;
          }
          // a user cannot be logged in if they are not verified.
-         if ( $user_obj->isVerified != true ) {
+         if ( $userObj->isVerified != true ) {
             return false;
          }
          return true;
@@ -126,47 +140,49 @@ class CTM_Site extends Light_MVC {
       return false;
    } 
 
-   public function getUser() {
+   public function getUser()
+   {
       if ( isset( $_SESSION['user_id'] ) && $_SESSION['user_id'] > 0 ) {
-         $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
-         $user_obj = $user_cache->getById( $_SESSION['user_id'] );
-         return $user_obj;
+         $userCache = Light_Database_Object_Cache_Factory::factory('CTM_User_Cache');
+         $userObj = $userCache->getById($_SESSION['user_id']);
+         return $userObj;
       }
       return null;
    }
 
-   public function getUserFolder() {
-      $user_obj = $this->getUser();
-      if ( isset( $user_obj ) ) {
+   public function getUserFolder()
+   {
+      $userObj = $this->getUser();
+      if ( isset($userObj) ) {
          // okay we have a user object, try to lookup folders by name
-         $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
-         $user_folder = $folder_cache->getByName( 'CTM-Users' );
+         $folderCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Folder_Cache');
+         $userFolder = $folderCache->getByName('CTM-Users');
 
          // create the CTM-User folder.
-         if ( ! isset( $user_folder ) ) {
-            $user_folder = new CTM_Test_Folder();
-            $user_folder->parentId = 1;
-            $user_folder->name = 'CTM-Users';
-            $user_folder->save();
+         if ( ! isset( $userFolder ) ) {
+            $userFolder = new CTM_Test_Folder();
+            $userFolder->parentId = 1;
+            $userFolder->name = 'CTM-Users';
+            $userFolder->save();
 
-            if ( ! isset( $user_folder->id ) || empty( $user_folder->id ) ) {
+            if ( ! isset( $userFolder->id ) || empty( $userFolder->id ) ) {
                return null;
             }
          }
 
-         $child_folder = $folder_cache->getChildByName( $user_folder->id, $user_obj->id );
+         $childFolder = $folderCache->getChildByName($userFolder->id, $userObj->id);
          
-         if ( isset( $child_folder ) ) {
-            return $child_folder;
+         if ( isset($childFolder) ) {
+            return $childFolder;
          }
 
-         $child_folder = new CTM_Test_Folder();
-         $child_folder->parentId = $user_folder->id;
-         $child_folder->name = $user_obj->id;
-         $child_folder->save();
+         $childFolder = new CTM_Test_Folder();
+         $childFolder->parentId = $userFolder->id;
+         $childFolder->name = $userObj->id;
+         $childFolder->save();
 
-         if ( $child_folder->id > 0 ) {
-            return $child_folder;
+         if ( $childFolder->id > 0 ) {
+            return $childFolder;
          }
 
          return null;
@@ -175,94 +191,118 @@ class CTM_Site extends Light_MVC {
       return null;
    }
 
-   public function oddEvenReset() {
-      $this->_odd_even_class = null;
+   public function oddEvenReset()
+   {
+      $this->_oddEvenClass = null;
    }
 
-   public function oddEvenClass() {
-      if ( $this->_odd_even_class == 'odd' ) {
-         $this->_odd_even_class = 'even';
-      } else if ( $this->_odd_even_class == 'even' ) {
-         $this->_odd_even_class = 'odd';
+   public function oddEvenClass()
+   {
+      if ( $this->_oddEvenClass == 'odd' ) {
+         $this->_oddEvenClass = 'even';
+      } else if ( $this->_oddEvenClass == 'even' ) {
+         $this->_oddEvenClass = 'odd';
       } else {
-         $this->_odd_even_class = 'odd';
+         $this->_oddEvenClass = 'odd';
       }
-      return $this->_odd_even_class;
+      return $this->_oddEvenClass;
    }
 
-   public function cleanupUserName( $username ) {
-      $username = strtolower( $username );
-      $username = ltrim( $username );
-      $username = rtrim( $username );
+   public function cleanupUserName( $username )
+   {
+      $username = strtolower($username);
+      $username = ltrim($username);
+      $username = rtrim($username);
       return $username;
    }
 
-   public function _fetchFolderPath( $currentBaseurl, $parentId ) {
-      $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
+   public function _fetchFolderPath( $currentBaseurl, $parentId )
+   {
+      $folderCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Folder_Cache');
       $parents = array(); 
-      $folder_cache->getFolderParents( $parentId, $parents );
-      $parents = array_reverse( $parents );
-      $parents_cnt = count( $parents );
+      $folderCache->getFolderParents($parentId, $parents);
+      $parents = array_reverse($parents);
+      $parentsCnt = count($parents);
      
-      $folder_path = '';
-      $previous_parent = null;
+      $folderPath = '';
+      $previousParent = null;
       foreach ( $parents as $parent ) {
-         $folder_path .= '/';
-         if ( is_object( $previous_parent) && $previous_parent->name == 'CTM-Users' ) {
-            $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
+         $folderPath .= '/';
+         if ( is_object($previousParent) && $previousParent->name == 'CTM-Users' ) {
+            $userCache = Light_Database_Object_Cache_Factory::factory('CTM_User_Cache');
             // this is a user id in disguise.
-            $user_obj = $user_cache->getById( $parent->name );
-            $folder_path .= '<a href="' . $currentBaseurl . '?parentId=' . $parent->id . '">' . $this->escapeVariable( $user_obj->username ) . '</a>';
+            $userObj = $userCache->getById($parent->name);
+            $folderPath .= 
+               '<a href="' . $currentBaseurl . '?parentId=' . $parent->id . '">' . 
+               $this->escapeVariable($userObj->username) . 
+               '</a>';
          } else {
-            $folder_path .= '<a href="' . $currentBaseurl . '?parentId=' . $parent->id . '">' . $this->escapeVariable( $parent->name ) . '</a>';
+            $folderPath .= 
+               '<a href="' . $currentBaseurl . '?parentId=' . $parent->id . '">' .
+               $this->escapeVariable($parent->name) . 
+               '</a>';
          }
-         $previous_parent = $parent;
+         $previousParent = $parent;
       }
 
-      return $folder_path;
+      return $folderPath;
    }
 
-   public function _displayFolderBreadCrumb( $currentBaseurl, $parentId = 0 ) {
+   public function _displayFolderBreadCrumb( $currentBaseurl, $parentId = 0 )
+   {
 
-      $user_obj = $this->getUser();
-      $role_obj = $user_obj->getRole();
+      $userObj = $this->getUser();
+      $roleObj = $userObj->getRole();
 
-      $folder_path = $this->_fetchFolderPath( $currentBaseurl, $parentId ); 
-      $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
+      $folderPath = $this->_fetchFolderPath($currentBaseurl, $parentId); 
+      $folderCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Folder_Cache');
 
       $children = array();
-      $children = $folder_cache->getFolderChildren( $parentId ); 
+      $children = $folderCache->getFolderChildren($parentId); 
       
-      $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
-      $this->printHtml( '<table class="ctmTable aiFullWidth">' );
-      $this->printHtml( '<tr class="odd">' );
-      $this->printHtml( '<td>Current folder path: ' .  $folder_path . '</td>' );
+      $this->printHtml('<div class="aiTableContainer aiFullWidth">');
+      $this->printHtml('<table class="ctmTable aiFullWidth">');
+      $this->printHtml('<tr class="odd">');
+      $this->printHtml('<td>Current folder path: ' .  $folderPath . '</td>');
       
-      if ( $role_obj->name != 'user' ) {
-         if ( count( $children ) > 0 ) {
-            $this->printHtml( '<form action="' . $currentBaseurl . '" method="POST">' );
-            $this->printHtml( '<td><center>' );
-            $this->printHtml( 'Switch to Sub Folder: ' );
-            $this->printHtml( '<select name="parentId">' );
-            $this->printHtml( '<option value="0">Pick a sub-folder</option>' );
+      if ( $roleObj->name != 'user' ) {
+         if ( count($children) > 0 ) {
+            $this->printHtml('<form action="' . $currentBaseurl . '" method="POST">');
+            $this->printHtml('<td><center>');
+            $this->printHtml('Switch to Sub Folder: ');
+            $this->printHtml('<select name="parentId">');
+            $this->printHtml('<option value="0">Pick a sub-folder</option>');
             foreach ( $children as $child ) {
-               $this->printHtml( '<option value="' . $child->id . '">' . $this->escapeVariable( $child->name ) . '</option>' );
+               $this->printHtml(
+                   '<option value="' . $child->id . '">' . 
+                   $this->escapeVariable($child->name) . 
+                   '</option>'
+               );
             }
-            $this->printHtml( '</select>' );
-            $this->printHtml( '<input type="submit" value="Go!">' );
-            $this->printHtml( '&nbsp;<a href="' . $this->getBaseUrl() . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">New Sub Folder</a>' );
-            $this->printHtml( '</center></td>' );
-            $this->printHtml( '</form>' );
+            $this->printHtml('</select>');
+            $this->printHtml('<input type="submit" value="Go!">');
+            $this->printHtml(
+                '&nbsp;' .
+                '<a href="' . $this->getBaseUrl() . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">' .
+                'New Sub Folder' .
+                '</a>'
+            );
+            $this->printHtml('</center></td>');
+            $this->printHtml('</form>');
 
          } else {
-            $this->printHtml( '<td><center>' );
-            $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">New Sub Folder</a>' );
-            $this->printHtml( '</center></td>' );
+            $this->printHtml('<td><center>');
+            $this->printHtml(
+                '<a href="' . $this->getBaseUrl() . '/test/folder/add/?parentId=' . $parentId . '" class="ctmButton">' .
+                'New Sub Folder' .
+                '</a>'
+            );
+            $this->printHtml('</center></td>');
          }
       }
 
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</div>' );
+      $this->printHtml('</table>');
+      $this->printHtml('</div>');
 
    }
 

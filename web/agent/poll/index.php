@@ -66,8 +66,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          }
          $browser_link->test_machine_id = $test_machine->id;
          $browser_link->test_browser_id = $browser->id;
-         $browser_link->is_available = 1;
-         $browser_link->last_seen = time();
+         $browser_link->isAvailable = 1;
+         $browser_link->lastSeen = time();
          $browser_link->save();
       } catch ( Exception $e ) {
          $this->_serviceOutput( 'FAIL', "failed to update test_machine browser for: " . $browser->name );
@@ -187,7 +187,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             // disable all of the browsers.
             if ( count( $machine_browsers ) > 0 ) {
                foreach ( $machine_browsers as $machine_browser ) {
-                  $machine_browser->is_available = 0;
+                  $machine_browser->isAvailable = 0;
                   $machine_browser->save();
                }
             }
@@ -248,26 +248,26 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          $sel = new CTM_Test_Browser_Selector();
          $and_params = array( 
                new Light_Database_Selector_Criteria( 'name', '=', $name ),
-               new Light_Database_Selector_Criteria( 'major_version', '=', $major ),
-               new Light_Database_Selector_Criteria( 'minor_version', '=', $minor ),
-               new Light_Database_Selector_Criteria( 'patch_version', '=', $patch ),
+               new Light_Database_Selector_Criteria( 'majorVersion', '=', $major ),
+               new Light_Database_Selector_Criteria( 'minorVersion', '=', $minor ),
+               new Light_Database_Selector_Criteria( 'patchVersion', '=', $patch ),
          );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
             // return the browser
             $browser = $rows[0];
-            $browser->is_available = true;
-            $browser->last_seen = time();
+            $browser->isAvailable = true;
+            $browser->lastSeen = time();
             $browser->save();
             return $browser;
          } else {
             $browser = new CTM_Test_Browser();
             $browser->name = $name;
-            $browser->major_version = $major;
-            $browser->minor_version = $minor;
-            $browser->patch_version = $patch;
-            $browser->is_available = true;
-            $browser->last_seen = time();
+            $browser->majorVersion = $major;
+            $browser->minorVersion = $minor;
+            $browser->patchPersion = $patch;
+            $browser->isAvailable = true;
+            $browser->lastSeen = time();
             $browser->save();
             if ( $browser->id > 0 ) {
                return $browser;

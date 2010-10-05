@@ -134,7 +134,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
          $sel = new CTM_Test_Machine_Browser_Selector();
          $and_params = array( 
                new Light_Database_Selector_Criteria( 'test_machine_id', '=', $id ),
-               new Light_Database_Selector_Criteria( 'is_available', '=', 1 ),
+               new Light_Database_Selector_Criteria( 'isAvailable', '=', 1 ),
          );
          $machine_browsers = $sel->find( $and_params );
       } catch ( Exception $e ) {
@@ -160,9 +160,9 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
             $this->printHtml( '<tr>' );
             $this->printHtml( '<td class="' . $class . '">' . $test_browser->id . '</td>' );
             $this->printHtml( '<td class="' . $class . '">' . $test_browser->name . '</td>' );
-            $this->printHtml( '<td class="' . $class . '">' . $test_browser->major_version . '</td>' );
-            $this->printHtml( '<td class="' . $class . '">' . $test_browser->minor_version . '</td>' );
-            $this->printHtml( '<td class="' . $class . '">' . $test_browser->patch_version . '</td>' );
+            $this->printHtml( '<td class="' . $class . '">' . $test_browser->majorVersion . '</td>' );
+            $this->printHtml( '<td class="' . $class . '">' . $test_browser->minorVersion . '</td>' );
+            $this->printHtml( '<td class="' . $class . '">' . $test_browser->patchVersion . '</td>' );
             $this->printHtml( '</tr>' );
          }
       } else {

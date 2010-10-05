@@ -2,21 +2,24 @@
 
 require_once( 'Light/Database/Object.php' );
 
-class CTM_Test_Browser extends Light_Database_Object {
+class CTM_Test_Browser extends Light_Database_Object
+{
    public $id;
    public $name;
-   public $major_version;
-   public $minor_version;
-   public $patch_version;
-   public $is_available;
-   public $last_seen;
+   public $majorVersion;
+   public $minorVersion;
+   public $patchVersion;
+   public $isAvailable;
+   public $lastSeen;
 
-   public function init() {
-      $this->setSqlTable( 'test_browser' );
-      $this->setDbName( 'test' );
+   public function init()
+   {
+      $this->setSqlTable('ctm_test_browser');
+      $this->setDbName('test');
    }
 
-   public function getPrettyName() {
+   public function getPrettyName()
+   {
       if ( $this->name == 'firefox' ) {
          return 'FireFox';
       }
