@@ -5,60 +5,67 @@ require_once( 'Light/Database/Object/Relationship.php' );
 require_once( 'Light/Database/Object/Relationship/Container.php' );
 require_once( 'Light/Database/Object/Cache/Factory.php' );
 
-abstract class Light_Database_Object {
-   private $_sql_id_field;
-   private $_sql_table;
-   private $_db_name;
-   private $_object_relationships;
+abstract class Light_Database_Object
+{
+   private $_sqlIdField;
+   private $_sqlTable;
+   private $_dbName;
+   private $_objectRelationships;
 
-   public function __construct() {
+   public function __construct()
+   {
 
-      $this->_sql_id_field = 'id';
-      $this->_sql_table = null;
-      $this->_db_name = null;
-      $this->_object_relationships = new Light_Database_Object_Relationship_Container();
+      $this->_sqlIdField = 'id';
+      $this->_sqlTable = null;
+      $this->_dbName = null;
+      $this->_objectRelationships = new Light_Database_Object_Relationship_Container();
 
       $this->init();
 
-      if ( $this->_db_name == null ) {
-         throw new Exception( '_db_name: Database name is not configured' );
+      if ( $this->_dbName == null ) {
+         throw new Exception( '_dbName: Database name is not configured' );
       }
 
-      if ( $this->_sql_table == null ) {
-         throw new Exception( '_sql_table: Sql table is not configured' );
+      if ( $this->_sqlTable == null ) {
+         throw new Exception( '_sqlTable: Sql table is not configured' );
       }
 
    }
 
-   public function setSqlTable( $table_name ) {
-      $this->_sql_table = $table_name;
+   public function setSqlTable( $table_name )
+   {
+      $this->_sqlTable = $table_name;
       return true;
    }
 
-   public function getSqlTable() {
-      return $this->_sql_table;
+   public function getSqlTable()
+   {
+      return $this->_sqlTable;
    }
 
-   public function setDbName( $name ) {
-      $this->_db_name = $name;
+   public function setDbName( $name )
+   {
+      $this->_dbName = $name;
       return true; 
    }
 
-   public function getDbName() {
-      return $this->_db_name;
+   public function getDbName()
+   {
+      return $this->_dbName;
    }
 
-   public function setIdField( $field_name ) {
-      $this->_sql_id_field = $field_name;
+   public function setIdField( $field_name )
+   {
+      $this->_sqlIdField = $field_name;
       return true;
    }
 
    public function getIdField() {
-      return $this->_sql_id_field;
+      return $this->_sqlIdField;
    }
 
    public function addOneToOneRelationship( $localName, $objectName, $sourceField, $linkingField, $useCache = false ) {
-      $this->_object_relationships->add( 
+      $this->_objectRelationships->add( 
             new Light_Database_Object_Relationship( 
                $localName, 
                $objectName, 
@@ -71,7 +78,7 @@ abstract class Light_Database_Object {
    }
 
    public function addOneToManyRelationship( $localName, $objectName, $sourceField, $linkingField ) {
-      $this->_object_relationships->add( 
+      $this->_objectRelationships->add( 
             new Light_Database_Object_Relationship( 
                $localName, 
                $objectName, 
@@ -110,10 +117,10 @@ abstract class Light_Database_Object {
 
    private function _createInsertStatement() {
       $fields = $this->getFieldNames();
-      $ins_sql = 'INSERT INTO ' . $this->_sql_table . ' ( ';
+      $ins_sql = 'INSERT INTO ' . $this->_sqlTable . ' ( ';
       $is_first = true;
       foreach ( $fields as $field ) {
-         if ( $field != $this->_sql_id_field ) {
+         if ( $field != $this->_sqlIdField ) {
             if ( $is_first != true ) {
                $ins_sql .= ', ';
             }
@@ -124,7 +131,7 @@ abstract class Light_Database_Object {
       $ins_sql .= ') VALUES ( ';
       $is_first = true;
       foreach ( $fields as $field ) {
-         if ( $field != $this->_sql_id_field ) {
+         if ( $field != $this->_sqlIdField ) {
             if ( $is_first != true ) {
                $ins_sql .= ', ';
             }
@@ -138,10 +145,10 @@ abstract class Light_Database_Object {
 
    private function _createUpdateStatement() {
       $fields = $this->getFieldNames();
-      $upd_sql = 'UPDATE ' . $this->_sql_table . ' SET ';
+      $upd_sql = 'UPDATE ' . $this->_sqlTable . ' SET ';
       $is_first = true;
       foreach ( $fields as $field ) {
-         if ( $this->_sql_id_field != $field ) {
+         if ( $this->_sqlIdField != $field ) {
             if ( $is_first == false ) {
                $upd_sql .= ', ';
             }
@@ -149,21 +156,21 @@ abstract class Light_Database_Object {
             $is_first = false;
          }
       }
-      $upd_sql .= ' WHERE ' . $this->_sql_id_field . ' = ?';
+      $upd_sql .= ' WHERE ' . $this->_sqlIdField . ' = ?';
       return $upd_sql;
    }
 
    public function remove() {
 
-      $sql = 'DELETE FROM ' . $this->_sql_table . ' WHERE ' . $this->_sql_id_field . ' = ?';
+      $sql = 'DELETE FROM ' . $this->_sqlTable . ' WHERE ' . $this->_sqlIdField . ' = ?';
 
       try {
 
-         $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
+         $dbh = Light_Database_Connection_Factory::getDBH( $this->_dbName );
 
          $sth = $dbh->prepare( $sql );
          
-         $id_field = $this->_sql_id_field;
+         $id_field = $this->_sqlIdField;
 
          $sth->bindParam( 1, $this->$id_field );
 
@@ -183,7 +190,7 @@ abstract class Light_Database_Object {
       // is this a insert ? 
       $sql = null;
       $is_insert = false;
-      if ( $this->{ $this->_sql_id_field } == null ) {
+      if ( $this->{ $this->_sqlIdField } == null ) {
          $is_insert = true;
          $sql = $this->_createInsertStatement();
       } else {
@@ -194,7 +201,7 @@ abstract class Light_Database_Object {
 
       try {
         
-         $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
+         $dbh = Light_Database_Connection_Factory::getDBH( $this->_dbName );
 
          // prepare the sql statement
          $sth = $dbh->prepare( $sql );
@@ -203,7 +210,7 @@ abstract class Light_Database_Object {
          $field_id = 0;
          foreach ( $fields as $field ) {
             // both a insert and update skip their id fields
-            if ( $this->_sql_id_field != $field ) {
+            if ( $this->_sqlIdField != $field ) {
                $field_id++;
                // echo 'f- ' . $field . '[' . $field_id . '] - ' . $this->$field . "\n";
                $sth->bindParam( $field_id, $this->$field );
@@ -213,7 +220,7 @@ abstract class Light_Database_Object {
          // if we are doing a update we need to add the id
          if ( $is_insert != true ) {
             $field_id++;
-            $id_field = $this->_sql_id_field;
+            $id_field = $this->_sqlIdField;
             $sth->bindParam( $field_id, $this->$id_field );
          }
 
@@ -235,7 +242,7 @@ abstract class Light_Database_Object {
             } 
             
             if ( $last_id != null ) {
-               $id_field = $this->_sql_id_field;
+               $id_field = $this->_sqlIdField;
                $this->$id_field = $last_id;
             }
 
@@ -284,7 +291,7 @@ abstract class Light_Database_Object {
          $operand = $methodPregs[1];
          $localName = $methodPregs[2];
 
-         $rel = $this->_object_relationships->findByName( $localName );
+         $rel = $this->_objectRelationships->findByName( $localName );
 
          //---
          // TODO: Need to decide if we are going to support setAttribute() ever. 
@@ -331,7 +338,7 @@ abstract class Light_Database_Object {
       }
 
       // get all related objects.
-      $rels = $this->_object_relationships->getAll();
+      $rels = $this->_objectRelationships->getAll();
 
       foreach ( $rels as $rel ) {
 

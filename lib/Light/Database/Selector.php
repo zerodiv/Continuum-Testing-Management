@@ -2,156 +2,137 @@
 
 require_once( 'Light/Database/Connection/Factory.php' );
 require_once( 'Light/Database/Object.php' );
+require_once( 'Light/Database/Selector/Criteria.php' );
 
-class Light_Database_Selector_Criteria {
-   private $_field;
-   private $_operator;
-   private $_value;
-   function __construct( $field, $operator, $value ) {
-      $this->setField( $field );
-      $this->setOperator( $operator );
-      $this->setValue( $value );
-   }
-   public function setField( $field ) {
-      $this->_field = $field;
-   }
-   public function getField() {
-      return $this->_field;
-   }
-   public function setOperator( $operator ) {
-      $acceptable_ops = array( '=', '!=', '>', '<' );
-      if ( ! in_array( $operator, $acceptable_ops ) ) {
-         throw new Exception( 'acceptable_ops = ( ' . join( ', ', $acceptable_ops ) . ' ) and ' . $operator . ' was attempted' );
-      }
-      $this->_operator = $operator;
-   }
-   public function getOperator() {
-      return $this->_operator;
-   }
-   public function setValue( $value ) {
-      $this->_value = $value;
-   }
-   public function getValue() {
-      return $this->_value;
-   }
-}
+abstract class Light_Database_Selector
+{
+   private $_dbObject;
+   private $_dbName;
+   private $_sqlTable;
+   private $_sqlFields;
 
-abstract class Light_Database_Selector {
-   private $_db_object;
-   private $_db_name;
-   private $_sql_table;
-   private $_sql_fields;
+   function __construct()
+   {
 
-   function __construct() {
-
-      $this->_db_object = null;
-      $this->_db_name = null;
-      $this->_sql_table = null;
-      $this->_sql_fields = null;
+      $this->_dbObject = null;
+      $this->_dbName = null;
+      $this->_sqlTable = null;
+      $this->_sqlFields = null;
 
       $this->init();
 
       // we should be able to get all of the associated tables and dbs from the dbo
-      $dbo = new $this->_db_object();
+      $dbo = new $this->_dbObject();
 
-      $this->_db_name = $dbo->getDbName();
-      $this->_sql_table = $dbo->getSqlTable();
-      $this->_sql_fields = $dbo->getFieldNames();
+      $this->_dbName = $dbo->getDbName();
+      $this->_sqlTable = $dbo->getSqlTable();
+      $this->_sqlFields = $dbo->getFieldNames();
 
    }
 
-   public function setDbObject( $name ) {
-      $this->_db_object = $name;
+   public function setDbObject( $name )
+   {
+      $this->_dbObject = $name;
       return true;
    }
 
-   public function getDbObject() {
-      return $this->_db_object;
+   public function getDbObject()
+   {
+      return $this->_dbObject;
    }
 
-   public function init() {
+   public function init()
+   {
       throw new Exception( 'This should be overridenn with a local implementation' );
    }
 
-   public function find( $and_criteria = array(), $or_criteria = array(), $field_order = array(), $limit = null, $offset = null, $only_count = false, $hydrate = true ) {
+   public function find(
+         $andCriteria = array(),
+         $orCriteria = array(),
+         $fieldOrder = array(),
+         $limit = null,
+         $offset = null,
+         $onlyCount = false,
+         $hydrate = true )
+   {
       // create the sql statement for this op.
       $sql = 'SELECT ';
 
-      if ( $only_count == true ) {
+      if ( $onlyCount == true ) {
          $sql .= ' COUNT(*) ';
       } { 
          // add the fields wanted
-         $sql .= join( ', ', $this->_sql_fields );
+         $sql .= join(', ', $this->_sqlFields);
       }
 
       // add the target table
-      $sql .= ' FROM ' . $this->_sql_table;
+      $sql .= ' FROM ' . $this->_sqlTable;
 
-      if ( count( $and_criteria ) > 0 || count( $or_criteria ) > 0 ) {
+      if ( count($andCriteria) > 0 || count($orCriteria) > 0 ) {
          $sql .= ' WHERE ';
       }
 
-      if ( count( $and_criteria ) > 0 ) {
-         $is_first = true;
-         foreach ( $and_criteria as $and_criterion ) {
-            if ( $is_first == false ) {
+      if ( count($andCriteria) > 0 ) {
+         $isFirst = true;
+         foreach ( $andCriteria as $andCriterion ) {
+            if ( $isFirst == false ) {
                $sql .= ' AND ';
             }
-            $sql .= ' ' . $and_criterion->getField();
-            $sql .= ' ' . $and_criterion->getOperator();
+            $sql .= ' ' . $andCriterion->getField();
+            $sql .= ' ' . $andCriterion->getOperator();
             $sql .= ' ? ';
-            $is_first = false;
+            $isFirst = false;
          }
       }
       
-      if ( count( $or_criteria ) > 0 ) {
+      if ( count($orCriteria) > 0 ) {
 
-          if (count($and_criteria) > 0) {
+          if (count($andCriteria) > 0) {
                 $sql .= ' AND ';
           }
 
-         $is_first = true;
+         $isFirst = true;
          $sql .= '(';
-         foreach ( $or_criteria as $or_criterion ) {
-            if ( $is_first == false ) {
+         foreach ( $orCriteria as $orCriterion ) {
+            if ( $isFirst == false ) {
                $sql .= ' OR ';
             }
-            $sql .= ' ' . $or_criterion->getField();
-            $sql .= ' ' . $or_criterion->getOperator();
+            $sql .= ' ' . $orCriterion->getField();
+            $sql .= ' ' . $orCriterion->getOperator();
             $sql .= ' ? ';
-            $is_first = false;
+            $isFirst = false;
          }
          $sql .= ')';
       }
 
-      if ( count( $field_order ) > 0 ) {
+      if ( count($fieldOrder) > 0 ) {
          $sql .= ' ORDER BY ';
-         $sql .= join( ',', $field_order );
+         $sql .= join(',', $fieldOrder);
       }
 
       // echo "sql: $sql\n";
 
       try {
-         $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
+         $dbh = Light_Database_Connection_Factory::getDBH($this->_dbName);
 
-         $sth = $dbh->prepare( $sql );
+         $sth = $dbh->prepare($sql);
 
          // bind params..
-         $bind_id = 1;
+         $bindId = 1;
 
-         if ( count( $and_criteria ) > 0 ) {
-            foreach ( $and_criteria as $and_criterion ) { 
-               // echo "bind(and): $bind_id " . $and_criterion->getValue() . "\n";
-               $sth->bindParam( $bind_id, $and_criterion->getValue() );
-               $bind_id++;
+         if ( count($andCriteria) > 0 ) {
+            foreach ( $andCriteria as $andCriterion ) { 
+               // echo "bind(and): $bindId " . $andCriterion->getValue() . "\n";
+               $sth->bindParam($bindId, $andCriterion->getValue());
+               $bindId++;
             }
          }
          
-         if ( count( $or_criteria ) > 0 ) {
-            foreach ( $or_criteria as $or_criterion ) { 
-               // echo "bind(or): $bind_id " . $or_criterion->getValue() . "\n";
-               $sth->bindParam( $bind_id, $or_criterion->getValue() );
-               $bind_id++;
+         if ( count($orCriteria) > 0 ) {
+            foreach ( $orCriteria as $orCriterion ) { 
+               // echo "bind(or): $bindId " . $orCriterion->getValue() . "\n";
+               $sth->bindParam($bindId, $orCriterion->getValue());
+               $bindId++;
             }
          }
 
@@ -159,10 +140,10 @@ abstract class Light_Database_Selector {
 
          // fetch the rows
          $rows = array();
-         while(  $hash = $sth->fetch( PDO::FETCH_ASSOC ) ) {
+         while ($hash = $sth->fetch(PDO::FETCH_ASSOC)) {
             if ( $hydrate == true ) {
-               $obj = new $this->_db_object();
-               $obj->consumeHash( $hash );
+               $obj = new $this->_dbObject();
+               $obj->consumeHash($hash);
                $rows[] = $obj;
             } else {
                $rows[] = $hash;
@@ -172,20 +153,20 @@ abstract class Light_Database_Selector {
          return $rows;
 
       } catch ( Exception $e ) {
-         print_r( $e );
+         print_r($e);
          throw $e;
       }
    }
 
     public function lock()
     {
-        $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
-        $dbh->exec("LOCK TABLES {$this->_sql_table} WRITE");
+        $dbh = Light_Database_Connection_Factory::getDBH($this->_dbName);
+        $dbh->exec("LOCK TABLES {$this->_sqlTable} WRITE");
     }
 
     public function unlock()
     {
-        $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
+        $dbh = Light_Database_Connection_Factory::getDBH($this->_dbName);
         $dbh->exec("UNLOCK TABLES");
     }
 

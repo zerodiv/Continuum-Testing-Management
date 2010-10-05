@@ -3,4 +3,3 @@ Light/Database/Object/Cache.php
 Light/Database/Object/Relationship/Container.php
 Light/Database/Object/Relationship.php
 Light/Database/Object.php
-Light/Database/Selector.php
