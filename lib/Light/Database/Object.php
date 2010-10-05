@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'Light/Database/Factory.php' );
+require_once( 'Light/Database/Connection/Factory.php' );
 require_once( 'Light/Database/Object/Relationship.php' );
 require_once( 'Light/Database/Object/Relationship/Container.php' );
 require_once( 'Light/Database/Object/Cache/Factory.php' );
@@ -159,7 +159,7 @@ abstract class Light_Database_Object {
 
       try {
 
-         $dbh = Light_Database_Factory::getDBH( $this->_db_name );
+         $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
 
          $sth = $dbh->prepare( $sql );
          
@@ -194,7 +194,7 @@ abstract class Light_Database_Object {
 
       try {
         
-         $dbh = Light_Database_Factory::getDBH( $this->_db_name );
+         $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
 
          // prepare the sql statement
          $sth = $dbh->prepare( $sql );

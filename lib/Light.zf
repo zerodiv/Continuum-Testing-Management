@@ -1,4 +1,3 @@
-Light/Database/Factory.php
 Light/Database/Object/Cache/Factory.php
 Light/Database/Object/Cache.php
 Light/Database/Object/Relationship/Container.php

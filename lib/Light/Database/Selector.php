@@ -132,7 +132,7 @@ abstract class Light_Database_Selector {
       // echo "sql: $sql\n";
 
       try {
-         $dbh = Light_Database_Factory::getDBH( $this->_db_name );
+         $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
 
          $sth = $dbh->prepare( $sql );
 
@@ -179,13 +179,13 @@ abstract class Light_Database_Selector {
 
     public function lock()
     {
-        $dbh = Light_Database_Factory::getDBH( $this->_db_name );
+        $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
         $dbh->exec("LOCK TABLES {$this->_sql_table} WRITE");
     }
 
     public function unlock()
     {
-        $dbh = Light_Database_Factory::getDBH( $this->_db_name );
+        $dbh = Light_Database_Connection_Factory::getDBH( $this->_db_name );
         $dbh->exec("UNLOCK TABLES");
     }
 
