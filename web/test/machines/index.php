@@ -34,7 +34,7 @@ class CTM_Site_Test_Suites extends CTM_Site {
       $this->printHtml( '<table class="ctmTable">' );
       
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="7">' . $this->getSsiteTitle() . ': ' . $this->getPageTitle() . '</th>' );
+      $this->printHtml( '<th colspan="7">' . $this->getSiteTitle() . ': ' . $this->getPageTitle() . '</th>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr>' );
@@ -56,11 +56,11 @@ class CTM_Site_Test_Suites extends CTM_Site {
             $class = $this->oddEvenClass();
             $this->printHtml( '<tr class"' . $class . '">' );
             $this->printHtml( '<td>' . $row->id . '</td>' );
-            $this->printHtml( '<td>' . $row->machine_name . '</td>' );
+            $this->printHtml( '<td>' . $row->machineName . '</td>' );
             $this->printHtml( '<td>' . $row->os . '</td>' );
             $this->printHtml( '<td>' . $row->guid . '</td>' );
             $this->printHtml( '<td>' . $this->formatDate( $row->createdAt ) . '</td>' );
-            $this->printHtml( '<td>' . $this->formatDate( $row->last_modified ) . '</td>' );
+            $this->printHtml( '<td>' . $this->formatDate( $row->lastModified ) . '</td>' );
             $this->printHtml( '<td>' );
             $this->printHtml( '<center><a href="' . $this->getBaseUrl() . '/test/machine/edit/?id=' . $row->id . '" class="ctmButton">Edit</a>' );
             $this->printHtml( '</td>' );

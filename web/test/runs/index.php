@@ -197,8 +197,8 @@ class CTM_Site_Test_Runs extends CTM_Site {
 
                     $test_machine = $test_machine_cache->getById( $test_run_browser->test_machine_id );
                     $t_machine = $test_machine->ip;
-                    if ( $test_machine->machine_name != '' ) {
-                        $t_machine = $test_machine->machine_name;
+                    if ( $test_machine->machineName != '' ) {
+                        $t_machine = $test_machine->machineName;
                     }
 
                     $test_browser = $test_browser_cache->getById( $test_run_browser->test_browser_id );

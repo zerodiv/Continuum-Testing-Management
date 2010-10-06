@@ -34,6 +34,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
 
             $machine = $rows[0];
             $machine->isDisabled = (int) $isDisabled;
+            $machine->lastModified = time();
             $machine->save();
 
             // print_r( $machine );
@@ -97,7 +98,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
          
          $this->printHtml( '<tr>' );
          $this->printHtml( '<td class="odd">Last Updated:</td>' );
-         $this->printHtml( '<td class="odd">' . $this->formatDate( $machine->last_modified ) . '</td>' );
+         $this->printHtml( '<td class="odd">' . $this->formatDate( $machine->lastModified ) . '</td>' );
          $this->printHtml( '</tr>' ); 
          
          $this->printHtml( '<tr>' );

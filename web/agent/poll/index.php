@@ -121,7 +121,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       $guid             = $this->getOrPost('guid', '');
       $ip               = $_SERVER['REMOTE_ADDR'];
       $os               = $this->getOrPost('os', '');
-      $machine_name     = $this->getOrPost('machine_name', '' );
+      $machineName      = $this->getOrPost('machine_name', '' );
 
       if ( $guid == '' ) {
          echo $this->_serviceOutput( 'FAIL', "guid is required!" );
@@ -150,9 +150,9 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             $new->guid           = $guid;
             $new->ip             = $ip;
             $new->os             = $os;
-            $new->machine_name   = $machine_name;
+            $new->machineName   = $machineName;
             $new->createdAt     = time();
-            $new->last_modified  = time();
+            $new->lastModified  = time();
             $new->isDisabled    = 0;
             $new->save();
 
@@ -165,8 +165,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
 
          } else {
             $test_machine->ip = $ip;
-            $test_machine->machine_name = $machine_name;
-            $test_machine->last_modified = time();
+            $test_machine->machineName = $machineName;
+            $test_machine->lastModified = time();
             $test_machine->save();
          }
 

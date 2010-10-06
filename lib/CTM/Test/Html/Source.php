@@ -16,70 +16,74 @@ require_once( 'CTM/Test/Param.php' );
 require_once( 'CTM/Test/Param/Library.php' );
 
 
-class CTM_Test_Html_Source extends Light_Database_Object {
+class CTM_Test_Html_Source extends Light_Database_Object
+{
    public $id;
    public $testId;
-   public $html_source;
+   public $htmlSource;
 
-   public function init() {
-      $this->setSqlTable( 'test_html_source' );
-      $this->setDbName( 'test' );
+   public function init()
+   {
+      $this->setSqlTable('test_html_source');
+      $this->setDbName('test');
    }
 
-   public function save( CTM_User $user ) {
+   public function save( CTM_User $user )
+   {
 
       parent::save();
 
       // pass the user down into the save.
-      $this->parseToTestCommands( $user );
+      $this->parseToTestCommands($user);
 
    }
 
-   public function parseToTestCommands( CTM_User $user ) {
+   public function parseToTestCommands( CTM_User $user )
+   {
 
       try {
 
          // if there are commands associated to this test purge them.
          $sel = new CTM_Test_Command_Selector();
-         $and_params = array(
-               new Light_Database_Selector_Criteria( 'testId', '=', $this->testId ),
+         $andParams = array(
+               new Light_Database_Selector_Criteria('testId', '=', $this->testId)
          );
 
-         $command_rows = $sel->find( $and_params );
+         $commandRows = $sel->find($andParams);
 
-         if ( count( $command_rows ) ) {
-            foreach ( $command_rows as $command_row ) {
-               $command_row->remove();
+         if ( count($commandRows) > 0 ) {
+            foreach ( $commandRows as $commandRow ) {
+               $commandRow->remove();
             }
          }
 
-         $test_command_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Selenium_Command_Cache' );
-         $test_param_lib_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Param_Library_Cache' );
+         $testCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Cache');
+         $testCommandCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Selenium_Command_Cache');
+         $testParamLibCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Param_Library_Cache');
 
          // pull out a store command so we have a id to work with.
-         $store_command = $test_command_cache->getByName( 'store' );
+         $storeCommand = $testCommandCache->getByName('store');
 
-         $html_source = stripslashes( $this->html_source ); 
+         $htmlSource = stripslashes($this->htmlSource); 
         
-         $html_source_parser_obj = new CTM_Test_Html_Source_Parser();
-         $parsed_data = $html_source_parser_obj->parse( $html_source );
+         $htmlSourceParserObj = new CTM_Test_Html_Source_Parser();
+         $parsedData = $htmlSourceParserObj->parse($htmlSource);
 
-         $test_sel = new CTM_Test_Selector();
-         $test_params = array( new Light_Database_Selector_Criteria( 'id', '=', $this->testId ) );
-         $tests = $test_sel->find( $test_params );
-         if ( isset( $tests[0] ) ) {
-            $test = $tests[0];
+         $test = $testCache->getById($this->testId);
+
+         if ( ! isset( $test ) ) {
+            throw new Exception( 'Failed to find test: ' . $this->testId );
          }
 
-         $test->setBaseUrl( (string) $parsed_data['baseurl'] );
+         $test->setBaseUrl( (string) $parsedData['baseurl'] );
 
          $used_variables = array();
-         foreach ( $parsed_data['commands'] as $command_trinome ) {
+         foreach ( $parsedData['commands'] as $command_trinome ) {
             list( $command, $target, $value ) = $command_trinome;
 
             // first lookup the slenium command object
             $command_obj = null;
-            $command_obj = $test_command_cache->getByName( $command );
+            $command_obj = $testCommandCache->getByName( $command );
             
             if ( ! isset( $command_obj ) ) {
                // add it to the database.
@@ -94,8 +98,8 @@ class CTM_Test_Html_Source extends Light_Database_Object {
                // we only care about input_variables at this time, output variables are moot
                // see if there is a library item for this value.
                $test_param_lib_obj = null;
-               if ( $command_obj->id == $store_command->id && preg_match( '/^ctm_var_(.*)/', (string) $value ) ) { 
-                  $test_param_lib_obj = $test_param_lib_cache->getByName( (string) $value ); 
+               if ( $command_obj->id == $storeCommand->id && preg_match( '/^ctm_var_(.*)/', (string) $value ) ) { 
+                  $test_param_lib_obj = $testParamLibCache->getByName( (string) $value ); 
                   if ( ! isset( $test_param_lib_obj ) ) { 
                      $createdAt = time();
                      $test_param_lib_obj = new CTM_Test_Param_Library();
@@ -157,7 +161,7 @@ class CTM_Test_Html_Source extends Light_Database_Object {
          }
 
          foreach ( $used_variables as $var_name => $var_used ) {
-            $test_param_lib_obj = $test_param_lib_cache->getByName( $var_name );
+            $test_param_lib_obj = $testParamLibCache->getByName( $var_name );
             if ( isset( $test_param_lib_obj->id ) ) {
                // test_param_obj found... save the shit to the table.
                $test_param = new CTM_Test_Param();

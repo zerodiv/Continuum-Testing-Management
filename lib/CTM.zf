@@ -1,6 +1,5 @@
 --
 CTM/Test/Machine/Browser.php
-CTM/Test/Machine.php
 --
 CTM/Test/Command/Target.php
 CTM/Test/Command/Value.php

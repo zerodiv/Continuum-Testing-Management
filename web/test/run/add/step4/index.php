@@ -188,8 +188,8 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                   $this->oddEvenReset();
 
                   $t_machine = $test_machine->ip;
-                  if ( $test_machine->machine_name != '' ) {
-                     $t_machine = $test_machine->machine_name;
+                  if ( $test_machine->machineName != '' ) {
+                     $t_machine = $test_machine->machineName;
                   }
 
                   $this->printHtml( '<tr class="aiTableTitle">' );
