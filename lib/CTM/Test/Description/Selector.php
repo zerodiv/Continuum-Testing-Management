@@ -3,8 +3,10 @@
 require_once( 'Light/Database/Selector.php' );
 require_once( 'CTM/Test/Description.php' );
 
-class CTM_Test_Description_Selector extends Light_Database_Selector {
-   public function init() {
-      $this->setDbObject( 'CTM_Test_Description' );
+class CTM_Test_Description_Selector extends Light_Database_Selector
+{
+   public function init()
+   {
+      $this->setDbObject('CTM_Test_Description');
    }
 }

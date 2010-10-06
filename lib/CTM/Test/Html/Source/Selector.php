@@ -3,8 +3,10 @@
 require_once( 'Light/Database/Selector.php' );
 require_once( 'CTM/Test/Html/Source.php' );
 
-class CTM_Test_Html_Source_Selector extends Light_Database_Selector {
-   public function init() {
-      $this->setDbObject( 'CTM_Test_Html_Source' );
+class CTM_Test_Html_Source_Selector extends Light_Database_Selector
+{
+   public function init()
+   {
+      $this->setDbObject('CTM_Test_Html_Source');
    }
 }
