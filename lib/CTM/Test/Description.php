@@ -8,8 +8,9 @@ class CTM_Test_Description extends Light_Database_Object
    public $testId;
    public $description;
 
-   public function init() {
-      $this->setSqlTable('test_description');
+   public function init()
+   {
+      $this->setSqlTable('ctm_test_description');
       $this->setDbName('test');
    }
 

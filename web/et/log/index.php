@@ -55,14 +55,14 @@ class CTM_ET_Log extends CTM_Site
 
             // update test_run_browser state
             $test_run_browser = $test_run_browsers[0];
-            $test_run_browser->test_run_state_id = !empty($testStatus) ? CTM_Test_Run_State::STATE_COMPLETED : CTM_Test_Run_State::STATE_FAILED;
+            $test_run_browser->testRunStateId = !empty($testStatus) ? CTM_Test_Run_State::STATE_COMPLETED : CTM_Test_Run_State::STATE_FAILED;
             $test_run_browser->save();
 
             // update test_run state
 
             $test_run_sel = new CTM_Test_Run_Selector();
             $and_params = array(
-                new Light_Database_Selector_Criteria('id', '=', $test_run_browser->test_run_id),
+                new Light_Database_Selector_Criteria('id', '=', $test_run_browser->testRunId),
             );
 
             $test_runs = $test_run_sel->find($and_params);
@@ -75,37 +75,37 @@ class CTM_ET_Log extends CTM_Site
                 // only continue with test run state update if the test run is being executed
                 // this is to prevent multiple test browser runs updating test run status when
                 // a previous browser test fails
-                if ($test_run->test_run_state_id == CTM_Test_Run_State::STATE_EXECUTING) {
+                if ($test_run->testRunStateId == CTM_Test_Run_State::STATE_EXECUTING) {
 
                     // if the test run browser failed, fail the test run
-                    if ($test_run_browser->test_run_state_id == CTM_Test_Run_State::STATE_FAILED) {
-                        $test_run->test_run_state_id = CTM_Test_Run_State::STATE_FAILED;
+                    if ($test_run_browser->testRunStateId == CTM_Test_Run_State::STATE_FAILED) {
+                        $test_run->testRunStateId = CTM_Test_Run_State::STATE_FAILED;
                         $test_run->save();
                     }
 
                     // if the test run browser completed, check to see if there are any other
                     // running tests... Do not update test run if we have other tests running.
-                    if ($test_run_browser->test_run_state_id == CTM_Test_Run_State::STATE_COMPLETED) {
+                    if ($test_run_browser->testRunStateId == CTM_Test_Run_State::STATE_COMPLETED) {
 
                         // see if we have any other queued or running tests
 
                         $test_run_browser_other_sel = new CTM_Test_Run_Browser_Selector();
 
                         $and_params = array(
-                            new Light_Database_Selector_Criteria('test_run_id', '=', $test_run_browser->test_run_id),
+                            new Light_Database_Selector_Criteria('testRunId', '=', $test_run_browser->testRunId),
                             new Light_Database_Selector_Criteria('id', '!=', $test_run_browser->id),
                         );
 
                         $or_params = array(
-                            new Light_Database_Selector_Criteria('test_run_state_id', '=', CTM_Test_Run_State::STATE_QUEUED),
-                            new Light_Database_Selector_Criteria('test_run_state_id', '=', CTM_Test_Run_State::STATE_EXECUTING),
+                            new Light_Database_Selector_Criteria('testRunStateId', '=', CTM_Test_Run_State::STATE_QUEUED),
+                            new Light_Database_Selector_Criteria('testRunStateId', '=', CTM_Test_Run_State::STATE_EXECUTING),
                         );
 
                         $test_run_browser_others = $test_run_browser_other_sel->find($and_params, $or_params);
 
                         // if not, update test_run state
                         if (count($test_run_browser_others) == 0) {
-                            $test_run->test_run_state_id = CTM_Test_Run_State::STATE_COMPLETED;
+                            $test_run->testRunStateId = CTM_Test_Run_State::STATE_COMPLETED;
                             $test_run->save();
                         }
                     }
@@ -113,7 +113,7 @@ class CTM_ET_Log extends CTM_Site
             }
 
             // update the existance of a log for this run.
-            $test_run_browser->has_log = true;
+            $test_run_browser->hasLog = true;
             $test_run_browser->save();
 
             $test_run_log = new CTM_Test_Run_Log();

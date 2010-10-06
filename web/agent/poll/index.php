@@ -27,8 +27,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
       try {
          $sel = new CTM_Test_Machine_Browser_Selector();
          $and_params = array(
-               new Light_Database_Selector_Criteria( 'test_machine_id', '=', $machine_id ),
-               new Light_Database_Selector_Criteria( 'test_browser_id', '=', $browser_id )
+               new Light_Database_Selector_Criteria( 'testMachineId', '=', $machine_id ),
+               new Light_Database_Selector_Criteria( 'testBrowserId', '=', $browser_id )
          );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
@@ -64,8 +64,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          if ( $browser_link == null ) { 
             $browser_link = new CTM_Test_Machine_Browser();
          }
-         $browser_link->test_machine_id = $test_machine->id;
-         $browser_link->test_browser_id = $browser->id;
+         $browser_link->testMachineId = $test_machine->id;
+         $browser_link->testBrowserId = $browser->id;
          $browser_link->isAvailable = 1;
          $browser_link->lastSeen = time();
          $browser_link->save();
@@ -180,7 +180,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          try {
             $sel = new CTM_Test_Machine_Browser_Selector();
             $and_params = array( 
-               new Light_Database_Selector_Criteria( 'test_machine_id', '=', $test_machine->id ),
+               new Light_Database_Selector_Criteria( 'testMachineId', '=', $test_machine->id ),
             );
             $machine_browsers = $sel->find( $and_params );
 
@@ -209,16 +209,16 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          $testRunBrowserSel = new CTM_Test_Run_Browser_Selector();
 
          $and_params = array(
-               new Light_Database_Selector_Criteria('test_machine_id', '=', $test_machine->id),
-               new Light_Database_Selector_Criteria('test_run_state_id', '=', 1), // queued
+               new Light_Database_Selector_Criteria('testMachineId', '=', $test_machine->id),
+               new Light_Database_Selector_Criteria('testRunStateId', '=', 1), // queued
          ); 
          
          $queued_rows = $testRunBrowserSel->find($and_params, array(), array('id'), 1); 
          
          // pick up any work that might of failed in progress
          $and_params = array(
-               new Light_Database_Selector_Criteria('test_machine_id', '=', $test_machine->id),
-               new Light_Database_Selector_Criteria('test_run_state_id', '=', 2), // executing
+               new Light_Database_Selector_Criteria('testMachineId', '=', $test_machine->id),
+               new Light_Database_Selector_Criteria('testRunStateId', '=', 2), // executing
          );
                 
          $executing_rows = $testRunBrowserSel->find($and_params, array(), array('id'), 1); 
@@ -229,7 +229,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          if ( count($testRunBrowserRows) > 0 ) {
             // mark all the tests as executing.
             foreach ( $testRunBrowserRows as $testRunBrowser ) {
-               $testRunBrowser->test_run_state_id = 2; // executing.
+               $testRunBrowser->testRunStateId = 2; // executing.
                $testRunBrowser->save();
             }
          }

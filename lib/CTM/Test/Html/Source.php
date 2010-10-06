@@ -24,7 +24,7 @@ class CTM_Test_Html_Source extends Light_Database_Object
 
    public function init()
    {
-      $this->setSqlTable('test_html_source');
+      $this->setSqlTable('ctm_test_html_source');
       $this->setDbName('test');
    }
 
@@ -75,44 +75,44 @@ class CTM_Test_Html_Source extends Light_Database_Object
             throw new Exception( 'Failed to find test: ' . $this->testId );
          }
 
-         $test->setBaseUrl( (string) $parsedData['baseurl'] );
+         $test->setBaseUrl((string) $parsedData['baseurl']);
 
-         $used_variables = array();
-         foreach ( $parsedData['commands'] as $command_trinome ) {
-            list( $command, $target, $value ) = $command_trinome;
+         $usedVariables = array();
+         foreach ( $parsedData['commands'] as $commandTrinome ) {
+            list( $command, $target, $value ) = $commandTrinome;
 
             // first lookup the slenium command object
-            $command_obj = null;
-            $command_obj = $testCommandCache->getByName( $command );
+            $commandObj = null;
+            $commandObj = $testCommandCache->getByName($command);
             
-            if ( ! isset( $command_obj ) ) {
+            if ( ! isset( $commandObj ) ) {
                // add it to the database.
-               $command_obj = new CTM_Test_Selenium_Command();
-               $command_obj->name = $command;
-               $command_obj->save();
+               $commandObj = new CTM_Test_Selenium_Command();
+               $commandObj->name = $command;
+               $commandObj->save();
             } 
             
             // if they have a command
-            if ( isset( $command_obj ) && $command_obj->id > 0 ) {
+            if ( isset( $commandObj ) && $commandObj->id > 0 ) {
                // try to pull up the test lib object if available.
                // we only care about input_variables at this time, output variables are moot
                // see if there is a library item for this value.
-               $test_param_lib_obj = null;
-               if ( $command_obj->id == $storeCommand->id && preg_match( '/^ctm_var_(.*)/', (string) $value ) ) { 
-                  $test_param_lib_obj = $testParamLibCache->getByName( (string) $value ); 
-                  if ( ! isset( $test_param_lib_obj ) ) { 
+               $testParamLibObj = null;
+               if ( $commandObj->id == $storeCommand->id && preg_match('/^ctm_var_(.*)/', (string) $value) ) { 
+                  $testParamLibObj = $testParamLibCache->getByName((string) $value); 
+                  if ( ! isset( $testParamLibObj ) ) { 
                      $createdAt = time();
-                     $test_param_lib_obj = new CTM_Test_Param_Library();
-                     $test_param_lib_obj->name = (string) $value;
-                     $test_param_lib_obj->createdAt = $createdAt;
-                     $test_param_lib_obj->createdBy = $user->id;
-                     $test_param_lib_obj->modifiedAt = $createdAt;
-                     $test_param_lib_obj->modifiedBy = $user->id;
-                     $test_param_lib_obj->save();
+                     $testParamLibObj = new CTM_Test_Param_Library();
+                     $testParamLibObj->name = (string) $value;
+                     $testParamLibObj->createdAt = $createdAt;
+                     $testParamLibObj->createdBy = $user->id;
+                     $testParamLibObj->modifiedAt = $createdAt;
+                     $testParamLibObj->modifiedBy = $user->id;
+                     $testParamLibObj->save();
 
-                     if ( isset( $test_param_lib_obj->id ) ) {
-                        $test_param_lib_obj->setDescription( '' );
-                        $test_param_lib_obj->setDefault( $target );
+                     if ( isset( $testParamLibObj->id ) ) {
+                        $testParamLibObj->setDescription('');
+                        $testParamLibObj->setDefault($target);
                      } 
                   }
                } 
@@ -121,23 +121,23 @@ class CTM_Test_Html_Source extends Light_Database_Object
                // create the test command
                $c = new CTM_Test_Command();
                $c->testId = $this->testId;
-               $c->test_selenium_command_id = $command_obj->id;
-               $c->test_param_library_id = 0;
+               $c->testSeleniumCommandId = $commandObj->id;
+               $c->testParamLibraryId = 0;
                
-               if ( isset( $test_param_lib_obj->id ) ) {
-                  $c->test_param_library_id = $test_param_lib_obj->id;
+               if ( isset( $testParamLibObj->id ) ) {
+                  $c->testParamLibraryId = $testParamLibObj->id;
                } else { 
                   // Does this item use a test_param_library value?
-                  if ( preg_match_all( '/\$\{(ctm_var_.*?)\}/', $target, $target_matches, PREG_SET_ORDER ) ) {
-                     foreach ( $target_matches as $match ) {
-                        list( $m, $m_v ) = $match;
-                        $used_variables[ $m_v ] = 1;
+                  if ( preg_match_all('/\$\{(ctm_var_.*?)\}/', $target, $targetMatches, PREG_SET_ORDER) ) {
+                     foreach ( $targetMatches as $match ) {
+                        list( $m, $mV ) = $match;
+                        $usedVariables[ $mV ] = 1;
                      }
                   }
-                  if ( preg_match_all( '/\$\{(ctm_var_.*?)\}/', $value, $value_matches, PREG_SET_ORDER ) ) {
-                     foreach ( $value_matches as $match ) {
-                        list( $m, $m_v ) = $match;
-                        $used_variables[ $m_v ] = 1;
+                  if ( preg_match_all('/\$\{(ctm_var_.*?)\}/', $value, $valueMatches, PREG_SET_ORDER) ) {
+                     foreach ( $valueMatches as $match ) {
+                        list( $m, $mV ) = $match;
+                        $usedVariables[ $mV ] = 1;
                      }
                   }
                }
@@ -146,8 +146,8 @@ class CTM_Test_Html_Source extends Light_Database_Object
                $c->save(); 
                
                if ( isset( $c->id ) && $c->id > 0 ) {
-                  $c->setTarget( $target );
-                  $c->setValue( $value );
+                  $c->setTarget($target);
+                  $c->setValue($value);
                } 
             
             } 
@@ -160,14 +160,14 @@ class CTM_Test_Html_Source extends Light_Database_Object
                */
          }
 
-         foreach ( $used_variables as $var_name => $var_used ) {
-            $test_param_lib_obj = $testParamLibCache->getByName( $var_name );
-            if ( isset( $test_param_lib_obj->id ) ) {
+         foreach ( $usedVariables as $varName => $varUsed ) {
+            $testParamLibObj = $testParamLibCache->getByName($varName);
+            if ( isset( $testParamLibObj->id ) ) {
                // test_param_obj found... save the shit to the table.
-               $test_param = new CTM_Test_Param();
-               $test_param->testId = $this->testId;
-               $test_param->test_param_library_id = $test_param_lib_obj->id;
-               $test_param->save();
+               $testParam = new CTM_Test_Param();
+               $testParam->testId = $this->testId;
+               $testParam->testParamLibraryId = $testParamLibObj->id;
+               $testParam->save();
             }
          }
 

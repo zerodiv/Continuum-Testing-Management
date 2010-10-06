@@ -1,13 +1,5 @@
 --
-CTM/Test/Machine/Browser.php
 --
-CTM/Test/Command/Target.php
-CTM/Test/Command/Value.php
-CTM/Test/Command.php
-CTM/Test/Description.php
-CTM/Test/Folder.php
-CTM/Test/Html/Source/Parser.php
-CTM/Test/Html/Source.php
 CTM/Test/Param/Library/Cache.php
 CTM/Test/Param/Library/Default/Selector.php
 CTM/Test/Param/Library/Default.php

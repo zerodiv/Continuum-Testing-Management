@@ -3,37 +3,40 @@
 require_once( 'Light/Database/Object.php' );
 require_once( 'CTM/Test/Run/Cache.php' );
 
-class CTM_Test_Run_Browser extends Light_Database_Object {
+class CTM_Test_Run_Browser extends Light_Database_Object
+{
    public $id;
-   public $test_run_id;
-   public $test_browser_id;
-   public $test_machine_id;
-   public $test_run_state_id;
-   public $has_log;
+   public $testRunId;
+   public $testBrowserId;
+   public $testMachineId;
+   public $testRunStateId;
+   public $hasLog;
 
-   public function init() {
-      $this->setSqlTable( 'test_run_browser' );
-      $this->setDbName( 'test' );
-      $this->addOneToOneRelationship( 'Run', 'CTM_Test_Run', 'test_run_id', 'id' );
-      $this->addOneToOneRelationship( 'Browser', 'CTM_Test_Browser', 'test_browser_id', 'id' );
-      $this->addOneToOneRelationship( 'Machine', 'CTM_Test_Machine', 'test_machine_id', 'id' );
-      $this->addOneToOneRelationship( 'TestRunState', 'CTM_Test_Run_State', 'test_run_state_id', 'id' );
+   public function init()
+   {
+      $this->setSqlTable('ctm_test_run_browser');
+      $this->setDbName('test');
+      $this->addOneToOneRelationship('Run', 'CTM_Test_Run', 'testRunId', 'id');
+      $this->addOneToOneRelationship('Browser', 'CTM_Test_Browser', 'testBrowserId', 'id');
+      $this->addOneToOneRelationship('Machine', 'CTM_Test_Machine', 'testMachineId', 'id');
+      $this->addOneToOneRelationship('TestRunState', 'CTM_Test_Run_State', 'testRunStateId', 'id');
    }
 
-   public function save() {
+   public function save()
+   {
 
       // update our parent with our state too.
       try {
          $testRunCache = new CTM_Test_Run_Cache();
-         $test_run = $testRunCache->getById( $this->test_run_id );
+         $testRun = $testRunCache->getById($this->testRunId);
 
-         if ( $test_run->test_run_state_id == $this->test_run_state_id ) {
+         if ( $testRun->testRunStateId == $this->testRunStateId ) {
             // if the state is already set save the trouble of the save()
-         } else if ( $test_run->test_run_state_id == 5 ) {
+         } else if ( $testRun->testRunStateId == 5 ) {
             // If the test run has failed we cannot undo a failure.
          } else {
-            $test_run->test_run_state_id = $this->test_run_state_id;
-            $test_run->save();
+            $testRun->testRunStateId = $this->testRunStateId;
+            $testRun->save();
          }
 
       } catch ( Exception $e ) {

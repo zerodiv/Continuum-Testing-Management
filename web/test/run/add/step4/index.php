@@ -49,11 +49,11 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                      try {
                         // inject the test_run -> machine relationship.
                         $test_run_browser_obj = new CTM_Test_Run_Browser();
-                        $test_run_browser_obj->test_run_id = $id;
-                        $test_run_browser_obj->test_browser_id = $test_machine_browser->test_browser_id;
-                        $test_run_browser_obj->test_machine_id = $test_machine_browser->test_machine_id;
-                        $test_run_browser_obj->test_run_state_id = 1;
-                        $test_run_browser_obj->has_log = 0;
+                        $test_run_browser_obj->testRunId = $id;
+                        $test_run_browser_obj->testBrowserId = $test_machine_browser->testBrowserId;
+                        $test_run_browser_obj->testMachineId = $test_machine_browser->testMachineId;
+                        $test_run_browser_obj->testRunStateId = 1;
+                        $test_run_browser_obj->hasLog = 0;
                         $test_run_browser_obj->save();
                         // print_r( $test_run_browser_obj );
                      } catch (Exception $e) {
@@ -81,7 +81,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
          if ( isset( $test_run->id ) ) {
             $test_run->createTestSuite();
-            $test_run->test_run_state_id = 1; // enqueued
+            $test_run->testRunStateId = 1; // enqueued
             $test_run->save();
          }
 
@@ -95,7 +95,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                            
 
    public function displayBody() {
-      $test_run_id = $this->getOrPost( 'id', '' );
+      $testRunId = $this->getOrPost( 'id', '' );
       $test_run = null;
       $test_suite = null;
       $avail_machines_and_browsers = null;
@@ -103,7 +103,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       try {
 
          $sel = new CTM_Test_Run_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $testRunId ) );
          $test_runs = $sel->find( $and_params );
          
          if ( isset( $test_runs[0] ) ) {
@@ -128,7 +128,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                   new Light_Database_Selector_Criteria( 'lastSeen', '>', $floor_time )
             );
 
-            $avail_machines_and_browsers = $sel->find( $and_params, array(), array( 'test_machine_id' ) );
+            $avail_machines_and_browsers = $sel->find( $and_params, array(), array( 'testMachineId' ) );
 
          }
       } catch ( Exception $e ) {
@@ -139,7 +139,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          $test_run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
          $step4 = $test_run_state_cache->getByName('step4');
 
-         $test_run->test_run_state_id = $step4->id;
+         $test_run->testRunStateId = $step4->id;
          $test_run->save();
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
@@ -181,10 +181,10 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
             foreach ( $avail_machines_and_browsers as $avail_machine_browser ) {
                
-               $current_browser = $this->_test_browser_cache->getById( $avail_machine_browser->test_browser_id );
-               $test_machine = $this->_test_machine_cache->getById( $avail_machine_browser->test_machine_id );
+               $current_browser = $this->_test_browser_cache->getById( $avail_machine_browser->testBrowserId );
+               $test_machine = $this->_test_machine_cache->getById( $avail_machine_browser->testMachineId );
 
-               if ( $current_machine_id != $avail_machine_browser->test_machine_id ) {
+               if ( $current_machine_id != $avail_machine_browser->testMachineId ) {
                   $this->oddEvenReset();
 
                   $t_machine = $test_machine->ip;
@@ -202,7 +202,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                   $this->printHtml( '<td>Version:</td>' );
                   $this->printHtml( '</tr>' );
                   
-                  $current_machine_id = $avail_machine_browser->test_machine_id;
+                  $current_machine_id = $avail_machine_browser->testMachineId;
                }
 
                $class = $this->oddEvenClass();

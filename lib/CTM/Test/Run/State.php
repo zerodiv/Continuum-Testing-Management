@@ -2,7 +2,8 @@
 
 require_once( 'Light/Database/Object.php' );
 
-class CTM_Test_Run_State extends Light_Database_Object {
+class CTM_Test_Run_State extends Light_Database_Object
+{
 
     const STATE_QUEUED = 1;
     const STATE_EXECUTING = 2;
@@ -14,9 +15,10 @@ class CTM_Test_Run_State extends Light_Database_Object {
    public $name;
    public $description;
 
-   public function init() {
-      $this->setSqlTable( 'test_run_state' );
-      $this->setDbName( 'test' );
+   public function init()
+   {
+      $this->setSqlTable('ctm_test_run_state');
+      $this->setDbName('test');
    }
 
 }

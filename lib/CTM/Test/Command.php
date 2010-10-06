@@ -7,33 +7,36 @@ require_once( 'CTM/Test/Command/Target/Selector.php' );
 require_once( 'CTM/Test/Command/Value.php' );
 require_once( 'CTM/Test/Command/Value/Selector.php' );
 
-class CTM_Test_Command extends Light_Database_Object {
+class CTM_Test_Command extends Light_Database_Object
+{
    public $id;
    public $testId;
-   public $test_selenium_command_id;
-   public $test_param_library_id;
+   public $testSeleniumCommandId;
+   public $testParamLibraryId;
 
-   public function init() {
-      $this->setSqlTable( 'test_command' );
-      $this->setDbName( 'test' );
-      $this->addOneToOneRelationship( 'SeleniumCommand', 'CTM_Test_Selenium_Command', 'test_selenium_command_id', 'id' );
-      $this->addOneToOneRelationship( 'ParamLibrary', 'CTM_Test_Param_Library', 'test_param_library_id', 'id' );
+   public function init()
+   {
+      $this->setSqlTable('ctm_test_command');
+      $this->setDbName('test');
+      $this->addOneToOneRelationship('SeleniumCommand', 'CTM_Test_Selenium_Command', 'testSeleniumCommandId', 'id');
+      $this->addOneToOneRelationship('ParamLibrary', 'CTM_Test_Param_Library', 'testParamLibraryId', 'id');
    }
 
    // overloaded remove to take care of the object cleanup
-   public function remove() {
+   public function remove()
+   {
 
       try { 
 
          $target = $this->getTarget();
 
-         if ( isset( $target ) ) {
+         if ( isset($target) ) {
             $target->remove();
          }
 
          $value = $this->getValue();
 
-         if ( isset( $value ) ) {
+         if ( isset($value) ) {
             $value->remove();
          }
 
@@ -46,23 +49,24 @@ class CTM_Test_Command extends Light_Database_Object {
 
    }
 
-   public function setTarget( $target ) {
-      if ( ! isset( $this->id ) ) {
+   public function setTarget( $target )
+   {
+      if ( ! isset($this->id) ) {
          return false;
       }
       try {
          $sel = new CTM_Test_Command_Target_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_command_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testCommandId', '=', $this->id ) );
+         $rows = $sel->find($andParams);
          if ( isset( $rows[0] ) ) {
-            $a_obj = $rows[0];
-            $a_obj->target = $target;
-            $a_obj->save();
+            $aObj = $rows[0];
+            $aObj->target = $target;
+            $aObj->save();
          } else {
-            $a_obj = new CTM_Test_Command_Target();
-            $a_obj->test_command_id = $this->id;
-            $a_obj->target = $target;
-            $a_obj->save();
+            $aObj = new CTM_Test_Command_Target();
+            $aObj->testCommandId = $this->id;
+            $aObj->target = $target;
+            $aObj->save();
          }
       } catch ( Exception $e ) {
          throw $e;
@@ -70,14 +74,15 @@ class CTM_Test_Command extends Light_Database_Object {
       return false;
    }
 
-   public function getTarget() {
+   public function getTarget()
+   {
       if ( ! isset( $this->id ) ) {
          return null;
       } 
       try {
          $sel = new CTM_Test_Command_Target_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_command_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testCommandId', '=', $this->id ) );
+         $rows = $sel->find($andParams);
          if ( isset( $rows[0] ) ) {
             return $rows[0];
          }
@@ -87,23 +92,24 @@ class CTM_Test_Command extends Light_Database_Object {
       return null;
    }
 
-   public function setValue( $value ) {
+   public function setValue( $value )
+   {
       if ( ! isset( $this->id ) ) {
          return false;
       }
       try {
          $sel = new CTM_Test_Command_Value_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_command_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
+         $andParams = array(new Light_Database_Selector_Criteria( 'testCommandId', '=', $this->id));
+         $rows = $sel->find($andParams);
          if ( isset( $rows[0] ) ) {
-            $a_obj = $rows[0];
-            $a_obj->value = $target;
-            $a_obj->save();
+            $aObj = $rows[0];
+            $aObj->value = $target;
+            $aObj->save();
          } else {
-            $a_obj = new CTM_Test_Command_Value();
-            $a_obj->test_command_id = $this->id;
-            $a_obj->value = $value;
-            $a_obj->save();
+            $aObj = new CTM_Test_Command_Value();
+            $aObj->testCommandId = $this->id;
+            $aObj->value = $value;
+            $aObj->save();
          }
       } catch ( Exception $e ) {
          throw $e;
@@ -111,14 +117,15 @@ class CTM_Test_Command extends Light_Database_Object {
       return false;
    }
 
-   public function getValue() {
+   public function getValue()
+   {
       if ( ! isset( $this->id ) ) {
          return null;
       }
       try {
          $sel = new CTM_Test_Command_Value_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_command_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testCommandId', '=', $this->id ) );
+         $rows = $sel->find($andParams);
          if ( isset( $rows[0] ) ) {
             return $rows[0];
          }

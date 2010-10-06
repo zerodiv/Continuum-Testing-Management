@@ -2,24 +2,27 @@
 
 require_once( 'Light/Database/Object/Cache.php' );
 
-class CTM_Test_Run_BaseUrl_Cache extends Light_Database_Object_Cache {
+class CTM_Test_Run_BaseUrl_Cache extends Light_Database_Object_Cache
+{
 
-   public function init() {
-      $this->setObject( 'CTM_Test_Run_BaseUrl' );
+   public function init()
+   {
+      $this->setObject('CTM_Test_Run_BaseUrl');
    }
 
-   public function getByCompoundKey( $test_run_id, $test_suite_id, $testId ) {
+   public function getByCompoundKey( $testRunId, $test_suite_id, $testId )
+   {
       // iterate across the cache
       $_cache = $this->getCache();
       foreach ( $_cache as $cached ) {
-         if ( $cached->test_run_id == $test_run_id && $cached->test_suite_id == $test_suite_id && $cached->testId == $testId ) {
+         if ( $cached->testRunId == $testRunId && $cached->test_suite_id == $test_suite_id && $cached->testId == $testId ) {
             return $cached;
          }
       }
       try {
          $sel = new CTM_Test_Run_BaseUrl_Selector();
          $and_params = array(
-               new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run_id ),
+               new Light_Database_Selector_Criteria( 'testRunId', '=', $testRunId ),
                new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ),
                new Light_Database_Selector_Criteria( 'testId', '=', $testId ),
          );

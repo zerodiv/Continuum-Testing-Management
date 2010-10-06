@@ -15,7 +15,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
 
    public function handleRequest() {
       $action = $this->getOrPost( 'action', '' );
-      $test_run_id = $this->getOrPost( 'test_run_id', '' );
+      $testRunId = $this->getOrPost( 'testRunId', '' );
 
       $this->requiresAuth();
 
@@ -23,7 +23,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
          // try to find the target test_run
          try {
             $sel = new CTM_Test_Run_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run_id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $testRunId ) );
             $test_runs = $sel->find( $and_params );
             if ( isset( $test_runs[0] ) ) {
                $test_run = $test_runs[0];
@@ -64,7 +64,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
       $test_runs = null;
       try {
          $sel = new CTM_Test_Run_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_run_state_id', '!=', $archived_state->id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testRunStateId', '!=', $archived_state->id ) );
          $test_runs = $sel->find( $and_params );
       } catch ( Exception $e ) {
       }
@@ -112,14 +112,14 @@ class CTM_Site_Test_Runs extends CTM_Site {
             } catch ( Exception $e ) {
             }
             
-            if ($test_run->test_run_state_id == 5) {
+            if ($test_run->testRunStateId == 5) {
                $testRunColor = '#FF0000';
             } else {
                $testRunColor = '#00FF00';
             }
 
 
-            $run_state = $run_state_cache->getById($test_run->test_run_state_id);
+            $run_state = $run_state_cache->getById($test_run->testRunStateId);
 
             $this->printHtml( '<tr class="' . $class . '">' );
             $this->printHtml( '<td class="aiColumnOne">' . $test_run->id . '</td>' );
@@ -129,44 +129,44 @@ class CTM_Site_Test_Runs extends CTM_Site {
             $this->printHtml( '<td>' . $this->formatDate( $test_run->createdAt ) . '</td>' );
             $this->printHtml( '<td>' . $this->escapeVariable( $createdBy->username ) . '</td>' );
             $this->printHtml( '<td><center>' );
-            if ( $test_run->test_run_state_id != $step1_state->id &&
-                 $test_run->test_run_state_id != $step2_state->id &&
-                 $test_run->test_run_state_id != $step3_state->id &&
-                 $test_run->test_run_state_id != $step4_state->id 
+            if ( $test_run->testRunStateId != $step1_state->id &&
+                 $test_run->testRunStateId != $step2_state->id &&
+                 $test_run->testRunStateId != $step3_state->id &&
+                 $test_run->testRunStateId != $step4_state->id 
             ) {
                $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
             }
-            if ($test_run->test_run_state_id == $step1_state->id ) {
+            if ($test_run->testRunStateId == $step1_state->id ) {
                $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step1_state->description ) . '</a>' );
             }
-            if ($test_run->test_run_state_id == $step2_state->id ) {
+            if ($test_run->testRunStateId == $step2_state->id ) {
                $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step2/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step2_state->description ) . '</a>' );
             }
-            if ($test_run->test_run_state_id == $step3_state->id ) {
+            if ($test_run->testRunStateId == $step3_state->id ) {
                $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step3/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step3_state->description ) . '</a>' );
             }
-            if ($test_run->test_run_state_id == $step4_state->id ) {
+            if ($test_run->testRunStateId == $step4_state->id ) {
                $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step4/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step4_state->description ) . '</a>' );
             }
             // while a test is executing we cannot do any admin actions to it.
             $displayRemove = false;
-            if ( $test_run->test_run_state_id == $queued_state->id || 
-                 $test_run->test_run_state_id == $completed_state->id ||
-                 $test_run->test_run_state_id == $failed_state->id ||
-                 $test_run->test_run_state_id == $archived_state->id ) {
+            if ( $test_run->testRunStateId == $queued_state->id || 
+                 $test_run->testRunStateId == $completed_state->id ||
+                 $test_run->testRunStateId == $failed_state->id ||
+                 $test_run->testRunStateId == $archived_state->id ) {
                $displayRemove = true;
             } 
             if ( $role_obj->name == 'admin' ) {
                $displayRemove = true;
             }
             if ( $displayRemove == true ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/runs/?action=remove_test_run&test_run_id=' . $test_run->id . '" class="ctmButton">Remove</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/runs/?action=remove_test_run&testRunId=' . $test_run->id . '" class="ctmButton">Remove</a>' );
             }
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
 
             $sel = new CTM_Test_Run_Browser_Selector();
-            $and_params = array(new Light_Database_Selector_Criteria('test_run_id', '=', $test_run->id));
+            $and_params = array(new Light_Database_Selector_Criteria('testRunId', '=', $test_run->id));
             $test_run_browsers = $sel->find($and_params);
 
             if (count($test_run_browsers) > 0) {
@@ -189,26 +189,26 @@ class CTM_Site_Test_Runs extends CTM_Site {
                 foreach ($test_run_browsers as $test_run_browser) {
 
                     // failed?
-                    if ($test_run_browser->test_run_state_id == 5) {
+                    if ($test_run_browser->testRunStateId == 5) {
                         $testRunBrowserColor = '#FF0000';
                     } else {
                         $testRunBrowserColor = '#00FF00';
                     }
 
-                    $test_machine = $test_machine_cache->getById( $test_run_browser->test_machine_id );
+                    $test_machine = $test_machine_cache->getById( $test_run_browser->testMachineId );
                     $t_machine = $test_machine->ip;
                     if ( $test_machine->machineName != '' ) {
                         $t_machine = $test_machine->machineName;
                     }
 
-                    $test_browser = $test_browser_cache->getById( $test_run_browser->test_browser_id );
+                    $test_browser = $test_browser_cache->getById( $test_run_browser->testBrowserId );
 
                     $this->printHtml('<tr class="' . $this->oddEvenClass() . '">');
                     $this->printHtml('<td>' . $test_run_browser->id . '</td>');
                     $this->printHtml('<td>' . $test_machine->os . ' @ ' . $t_machine . '</td>');
                     $this->printHtml('<td>' . $test_browser->getPrettyName() . '</td>');
-                    $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';"><center>' . $run_state_cache->getById($test_run_browser->test_run_state_id)->name . '</center></td>');
-                    if ( $test_run_browser->has_log == true ) {
+                    $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';"><center>' . $run_state_cache->getById($test_run_browser->testRunStateId)->name . '</center></td>');
+                    if ( $test_run_browser->hasLog == true ) {
                         $this->printHtml('<td><center>' .
                               '<a href="' . $this->getBaseUrl() . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '&type=selenium" class="ctmButton" target="_blank">Selenium Log</a>' .
                               '</center></td>');

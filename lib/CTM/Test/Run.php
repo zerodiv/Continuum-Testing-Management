@@ -9,7 +9,7 @@ require_once( 'CTM/Test/Run/Browser/Selector.php' );
 class CTM_Test_Run extends Light_Database_Object {
    public $id;
    public $test_suite_id;
-   public $test_run_state_id;
+   public $testRunStateId;
    public $iterations;
    public $createdAt;
    public $createdBy;
@@ -26,19 +26,19 @@ class CTM_Test_Run extends Light_Database_Object {
 
          try {
             $command_sel = new CTM_Test_Run_Command_Selector();
-            $command_and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $this->id ) );
+            $command_and_params = array( new Light_Database_Selector_Criteria( 'testRunId', '=', $this->id ) );
             $commands = $command_sel->find( $command_and_params );
             foreach ( $commands as $command ) {
                $command->remove();
             }
             $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
-            $baseurl_and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $this->id ) );
+            $baseurl_and_params = array( new Light_Database_Selector_Criteria( 'testRunId', '=', $this->id ) );
             $baseurls = $baseurl_sel->find( $baseurl_and_params );
             foreach ( $baseurls as $baseurl ) {
                $baseurl->remove();
             }
             $browser_sel = new CTM_Test_Run_Browser_Selector();
-            $browser_and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $this->id ) );
+            $browser_and_params = array( new Light_Database_Selector_Criteria( 'testRunId', '=', $this->id ) );
             $browsers = $browser_sel->find( $browser_and_params );
             foreach ( $browsers as $browser ) {
                $browser->remove();

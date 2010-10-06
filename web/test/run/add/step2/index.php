@@ -62,7 +62,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                            
 
    public function displayBody() {
-      $test_run_id = $this->getOrPost( 'id', '' );
+      $testRunId = $this->getOrPost( 'id', '' );
 
       $test_run = null;
       $test_suite = null;
@@ -71,7 +71,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       try {
 
          $sel = new CTM_Test_Run_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $testRunId ) );
          $test_runs = $sel->find( $and_params );
          
          if ( isset( $test_runs[0] ) ) {
@@ -90,7 +90,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
             // fetch the test run commands that need their values changed / adjusted.
             $sel = new CTM_Test_Run_Command_Selector();
             $and_params = array( 
-                  new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ),
+                  new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
                   new Light_Database_Selector_Criteria( 'test_param_library_id', '!=', 0 )
             );
             $test_parms = $sel->find( $and_params );
@@ -103,7 +103,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          $test_run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
          $step2 = $test_run_state_cache->getByName('step2');
 
-         $test_run->test_run_state_id = $step2->id;
+         $test_run->testRunStateId = $step2->id;
          $test_run->save();
 
          $sel_command_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Selenium_Command_Cache' );
@@ -142,8 +142,6 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
             foreach ( $test_parms as $test_parm ) {
                
                $class = $this->oddEvenClass();
-
-               // $sel_comm = $sel_command_cache->getById( $test_parm->test_selenium_command_id );
 
                $target_obj = $test_parm->getTarget();
 

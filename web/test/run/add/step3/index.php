@@ -52,7 +52,7 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
                            
 
    public function displayBody() {
-      $test_run_id = $this->getOrPost( 'id', '' );
+      $testRunId = $this->getOrPost( 'id', '' );
       $test_run = null;
       $test_suite = null;
       $base_urls = null;
@@ -60,7 +60,7 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
       try {
 
          $sel = new CTM_Test_Run_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $testRunId ) );
          $test_runs = $sel->find( $and_params );
          
          if ( isset( $test_runs[0] ) ) {
@@ -77,7 +77,7 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
             }
 
             $sel = new CTM_Test_Run_BaseUrl_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_run_id', '=', $test_run->id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ) );
             $base_urls = $sel->find( $and_params ); 
          }
       } catch ( Exception $e ) {
@@ -89,7 +89,7 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
          $test_run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
          $step3 = $test_run_state_cache->getByName('step3');
 
-         $test_run->test_run_state_id = $step3->id;
+         $test_run->testRunStateId = $step3->id;
          $test_run->save();
 
          $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );

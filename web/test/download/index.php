@@ -31,7 +31,7 @@ class CTM_Site_Test_Download extends CTM_Site {
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
             $test_html = $rows[0];
-            echo $test_html->html_source;
+            echo $test_html->htmlSource;
             exit();
          }
       } catch ( Exception $e ) {

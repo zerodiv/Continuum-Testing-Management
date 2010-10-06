@@ -55,11 +55,11 @@ class CTM_Site_Test_Edit extends CTM_Site {
 
       $had_file = false;
 
-      $html_source = '';
-      $html_source_file = $_FILES['html_source_file']['tmp_name'];
+      $htmlSource = '';
+      $htmlSourceFile = $_FILES['htmlSourceFile']['tmp_name'];
 
-      if ( isset( $html_source_file ) && filesize( $html_source_file) > 0 ) {
-         $html_source = file_get_contents( $html_source_file );
+      if ( isset( $htmlSourceFile ) && filesize( $htmlSourceFile) > 0 ) {
+         $htmlSource = file_get_contents( $htmlSourceFile );
          $had_file = true;
       }
 
@@ -79,7 +79,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
             $test->setDescription( $description );
 
             if ( $had_file == true ) {
-               $test->setHtmlSource( $user_obj, $html_source );
+               $test->setHtmlSource( $user_obj, $htmlSource );
             }
 
             $baseurl_obj = $test->getBaseUrl();
@@ -178,14 +178,14 @@ class CTM_Site_Test_Edit extends CTM_Site {
          }
          $this->printHtml( '</tr>' );
 
-         $html_source_obj = $test->getHtmlSource();
+         $htmlSourceObj = $test->getHtmlSource();
 
          if ( $this->isFileUploadAvailable() ) {
 
             $this->printHtml( '<input type="hidden" name="MAX_FILE_SIZE" value="' . $this->maxFileUploadSize() . '">' ); 
             $this->printHtml( '<tr class="odd">' );
             $this->printHtml( '<td>File:</td>' );
-            $this->printHtml( '<td><input type="file" name="html_source_file"></td>' );
+            $this->printHtml( '<td><input type="file" name="htmlSourceFile"></td>' );
             $this->printHtml( '</tr>' ); 
          
          }
@@ -230,7 +230,7 @@ class CTM_Site_Test_Edit extends CTM_Site {
                $n++;
                $class = $this->oddEvenClass();
 
-               $sel_obj = $sel_comm_cache->getById( $command->test_selenium_command_id );
+               $sel_obj = $sel_comm_cache->getById( $command->testSeleniumCommandId );
                $value_obj = $command->getValue();
                $target_obj = $command->getTarget();
 

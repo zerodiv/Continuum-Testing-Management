@@ -31,7 +31,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
             // create the provisional test.
             $test_run = new CTM_Test_Run();
             $test_run->test_suite_id = $test_suite_id;
-            $test_run->test_run_state_id = $step1->id;
+            $test_run->testRunStateId = $step1->id;
             $test_run->iterations = 1; 
             $test_run->createdAt = time();
             $test_run->createdBy = $user->id;

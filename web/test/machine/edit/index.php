@@ -134,7 +134,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
       try {
          $sel = new CTM_Test_Machine_Browser_Selector();
          $and_params = array( 
-               new Light_Database_Selector_Criteria( 'test_machine_id', '=', $id ),
+               new Light_Database_Selector_Criteria( 'testMachineId', '=', $id ),
                new Light_Database_Selector_Criteria( 'isAvailable', '=', 1 ),
          );
          $machine_browsers = $sel->find( $and_params );
@@ -156,7 +156,7 @@ class CTM_Site_Test_Machine_Edit extends CTM_Site {
       if ( count( $machine_browsers ) > 0 ) {
          $browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Browser_Cache' );
          foreach ( $machine_browsers as $machine_browser ) {
-            $test_browser = $browser_cache->getById( $machine_browser->test_browser_id );
+            $test_browser = $browser_cache->getById( $machine_browser->testBrowserId );
             $class = $this->oddEvenClass();
             $this->printHtml( '<tr>' );
             $this->printHtml( '<td class="' . $class . '">' . $test_browser->id . '</td>' );
