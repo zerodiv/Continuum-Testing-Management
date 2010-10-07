@@ -26,13 +26,13 @@ class CTM_Test_Param_Library extends Light_Database_Object {
       try {
          $def_obj = $this->getDefault();
          if ( isset( $def_obj ) ) {
-            $def_obj->default_value = $default;
+            $def_obj->defaultValue = $default;
             $def_obj->save();
             return true;
          } else {
             $def_obj = new CTM_Test_Param_Library_Default();
-            $def_obj->test_param_library_id = $this->id;
-            $def_obj->default_value = $default;
+            $def_obj->testParamLibraryId = $this->id;
+            $def_obj->defaultValue = $default;
             $def_obj->save();
             if ( $def_obj->id > 0 ) {
                return true;
@@ -51,7 +51,7 @@ class CTM_Test_Param_Library extends Light_Database_Object {
       }
       try {
          $sel = new CTM_Test_Param_Library_Default_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $this->id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $this->id ) );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
             return $rows[0];
@@ -75,7 +75,7 @@ class CTM_Test_Param_Library extends Light_Database_Object {
             return true;
          } else {
             $def_obj = new CTM_Test_Param_Library_Description();
-            $def_obj->test_param_library_id = $this->id;
+            $def_obj->testParamLibraryId = $this->id;
             $def_obj->description = $description;
             $def_obj->save();
             if ( $def_obj->id > 0 ) {
@@ -95,7 +95,7 @@ class CTM_Test_Param_Library extends Light_Database_Object {
       }
       try {
          $sel = new CTM_Test_Param_Library_Description_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $this->id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $this->id ) );
          $rows = $sel->find( $and_params );
          if ( isset( $rows[0] ) ) {
             return $rows[0];

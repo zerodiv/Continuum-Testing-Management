@@ -91,7 +91,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
             $sel = new CTM_Test_Run_Command_Selector();
             $and_params = array( 
                   new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
-                  new Light_Database_Selector_Criteria( 'test_param_library_id', '!=', 0 )
+                  new Light_Database_Selector_Criteria( 'testParamLibraryId', '!=', 0 )
             );
             $test_parms = $sel->find( $and_params );
          }

@@ -16,7 +16,7 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
    public function handleRequest() {
       $action = $this->getOrPost( 'action', '' );
       $id = $this->getOrPost( 'id', '' );
-      $default_value = $this->getOrPost( 'default_value', '' );
+      $defaultValue = $this->getOrPost( 'defaultValue', '' );
       $description = $this->getOrPost( 'description', '' );
      
       $this->requiresAuth();
@@ -37,7 +37,7 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
             $param = $params[0];
 
             $param->setDescription( $description );
-            $param->setDefault( $default_value );
+            $param->setDefault( $defaultValue );
 
          }
 
@@ -120,7 +120,7 @@ class CTM_Site_Test_Param_Library extends CTM_Site {
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
-      $this->printHtml( '<td colspan="2"><center><textarea name="default_value" cols="60" rows="20">' . $this->escapeVariable( $def_obj->default_value ) . '</textarea></center></td>' );
+      $this->printHtml( '<td colspan="2"><center><textarea name="defaultValue" cols="60" rows="20">' . $this->escapeVariable( $def_obj->defaultValue ) . '</textarea></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="aiButtonRow">' );

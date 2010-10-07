@@ -187,11 +187,11 @@ class CTM_Test_Run_Builder {
          fwrite($fh, '         <td></td>' . "\n" );
          fwrite($fh, '</tr>' . "\n" );
 
-         // pull in all the test_param_library_id values
+         // pull in all the testParamLibraryId values
          $sel = new CTM_Test_Run_Command_Selector();
          $and_params = array( 
                new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
-               new Light_Database_Selector_Criteria( 'test_param_library_id', '!=', 0 )
+               new Light_Database_Selector_Criteria( 'testParamLibraryId', '!=', 0 )
          );
          $test_params = $sel->find( $and_params );
          if ( count( $test_params ) > 0 ) {
@@ -211,13 +211,13 @@ class CTM_Test_Run_Builder {
          if ( count( $test_commands ) > 0 ) {
             foreach ( $test_commands as $test_command ) {
 
-               if ( $test_command->test_param_library_id > 0 ) {
+               if ( $test_command->testParamLibraryId > 0 ) {
                   // get the runtime override from the test_run_version.
                   // fetch the test run commands that need their values changed / adjusted.
                   $sel = new CTM_Test_Run_Command_Selector();
                   $and_params = array( 
                      new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
-                     new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $test_command->test_param_library_id )
+                     new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $test_command->testParamLibraryId )
                   );
                   $override_commands = $sel->find( $and_params );
                   if ( count( $override_commands ) > 0 ) {
@@ -408,18 +408,18 @@ class CTM_Test_Run_Builder {
 
          if ( count( $test_params ) > 0 ) {
             foreach ( $test_params as $test_param ) {
-               $param_lib_obj = $this->_param_lib_cache->getById( $test_param->test_param_library_id );
+               $param_lib_obj = $this->_param_lib_cache->getById( $test_param->testParamLibraryId );
 
                $test_run_command = new CTM_Test_Run_Command();
                $test_run_command->testRunId = $test_run->id;
                $test_run_command->test_suite_id = $test_suite_id;
                $test_run_command->testId = $testId;
                $test_run_command->testSeleniumCommandId = 1; // store.
-               $test_run_command->test_param_library_id = $test_param->test_param_library_id;
+               $test_run_command->testParamLibraryId = $test_param->testParamLibraryId;
                $test_run_command->save();
 
                $default_obj = $param_lib_obj->getDefault();
-               $test_run_command->setTarget( $default_obj->default_value );
+               $test_run_command->setTarget( $default_obj->defaultValue );
                $test_run_command->setValue( $param_lib_obj->name );
 
             }
@@ -435,12 +435,12 @@ class CTM_Test_Run_Builder {
          if ( count( $test_commands ) > 0 ) {
             foreach ( $test_commands as $test_command ) {
                $add_to_stack = false;
-               if ( $test_command->test_param_library_id > 0 ) {
+               if ( $test_command->testParamLibraryId > 0 ) {
                   // only allow one copy of the param in the test set.
                   $param_sel = new CTM_Test_Run_Command_Selector();
                   $param_and_params = array( 
                         new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
-                        new Light_Database_Selector_Criteria( 'test_param_library_id', '=', $test_command->test_param_library_id ),
+                        new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $test_command->testParamLibraryId ),
                   );
                   $p_params = $param_sel->find( $param_and_params );
                   if ( count( $p_params ) > 0 ) {
@@ -455,19 +455,19 @@ class CTM_Test_Run_Builder {
 
                if ( $add_to_stack == true ) {
                   // copy only the parameter objects in.
-                  if ( $test_command->test_param_library_id > 0 ) {
+                  if ( $test_command->testParamLibraryId > 0 ) {
                      $test_run_command = new CTM_Test_Run_Command();
                      $test_run_command->testRunId = $test_run->id;
                      $test_run_command->test_suite_id = $test_suite_id;
                      $test_run_command->testId = $testId;
                      $test_run_command->testSeleniumCommandId = $test_command->testSeleniumCommandId;
-                     $test_run_command->test_param_library_id = $test_command->test_param_library_id;
+                     $test_run_command->testParamLibraryId = $test_command->testParamLibraryId;
                      $test_run_command->save();
 
                      // pull the test library item out-
-                     $param_lib_obj = $this->_param_lib_cache->getById( $test_run_command->test_param_library_id );
+                     $param_lib_obj = $this->_param_lib_cache->getById( $test_run_command->testParamLibraryId );
                      $default_obj = $param_lib_obj->getDefault();
-                     $test_run_command->setTarget( $default_obj->default_value );
+                     $test_run_command->setTarget( $default_obj->defaultValue );
                      $test_run_command->setValue( $param_lib_obj->name );
                   }
 
