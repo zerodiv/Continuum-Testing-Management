@@ -3,5 +3,5 @@ CREATE TABLE `ctm_test_description` (
   `testId` bigint(20) unsigned NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `test_id` (`testId`)
+  KEY `testId` (`testId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

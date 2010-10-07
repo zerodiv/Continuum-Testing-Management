@@ -104,7 +104,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
             $test_suite = null;
             try {
                $sel = new CTM_Test_Suite_Selector();
-               $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run->test_suite_id ) );
+               $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run->testSuiteId ) );
                $test_suites = $sel->find( $and_params );
                if ( isset( $test_suites[0] ) ) {
                   $test_suite = $test_suites[0];

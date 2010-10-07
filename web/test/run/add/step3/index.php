@@ -69,7 +69,7 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
 
          if ( isset( $test_run->id ) ) {
             $sel = new CTM_Test_Suite_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run->test_suite_id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run->testSuiteId ) );
             $test_suites = $sel->find( $and_params );
 
             if ( isset( $test_suites[0] ) ) {
@@ -132,8 +132,8 @@ class CTM_Site_Test_Run_Add_Step3 extends CTM_Site {
             $component_type = '';
             $component_text = '';
 
-            if ( $base_url->test_suite_id > 0 ) {
-               $suite_obj = $suite_cache->getById( $base_url->test_suite_id );
+            if ( $base_url->testSuiteId > 0 ) {
+               $suite_obj = $suite_cache->getById( $base_url->testSuiteId );
                $component_type = 'suite';
                $component_text = $suite_obj->name;
             } else if ( $base_url->testId > 0 ) {

@@ -3,16 +3,18 @@
 require_once( 'Light/Database/Object.php' );
 require_once( 'CTM/Revision/Framework.php' );
 
-class CTM_Test_Suite_Revision extends Light_Database_Object {
+class CTM_Test_Suite_Revision extends Light_Database_Object
+{
    public $id;
-   public $test_suite_id;
+   public $testSuiteId;
    public $modifiedAt;
    public $modifiedBy;
-   public $revision_id;
+   public $revisionId;
 
-   public function init() {
-      $this->setSqlTable( 'test_suite_revision' );
-      $this->setDbName( 'test' );
+   public function init()
+   {
+      $this->setSqlTable('test_suite_revision');
+      $this->setDbName('test');
    }
 
 }

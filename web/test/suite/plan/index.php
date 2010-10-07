@@ -23,7 +23,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       $action                 = $this->getOrPost( 'action', '' );
       $suite_id               = $this->getOrPost( 'suite_id', '' );
       $testId                = $this->getOrPost( 'testId', '' );
-      $test_suite_id          = $this->getOrPost( 'test_suite_id', '' );
+      $testSuiteId          = $this->getOrPost( 'testSuiteId', '' );
       $test_suite_plan_id     = $this->getOrPost( 'test_suite_plan_id', '' );
 
       // echo "id: $id action: $action suite_id: $suite_id\n";
@@ -60,7 +60,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
             }
 
             // resequence the test_order
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ) );
             $or_params = array();
             $field_order = array( 'test_order' );
 
@@ -85,7 +85,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
          $test_plans = null;
          try {
             $sel = new CTM_Test_Suite_Plan_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ) );
             $or_params = array();
             $field_order = array( 'test_order' );
             $test_plans = $sel->find( $and_params, $or_params, $field_order );
@@ -164,7 +164,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       $test_plans = null;
       try {
          $sel = new CTM_Test_Suite_Plan_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $id ) );
          $test_plans = $sel->find( $and_params );
       } catch ( Exception $e ) {
       }
@@ -179,7 +179,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
       if ( $action == 'add_suite_to_plan' && isset( $suite_id ) && $suite_id > 0 ) {
          $test_plan = new CTM_Test_Suite_Plan();
-         $test_plan->test_suite_id = $id;
+         $test_plan->testSuiteId = $id;
          $test_plan->linked_id = $suite_id;
          $test_plan->test_order = ( $high_id + 1 );
          $test_plan->test_suite_plan_type_id = 1; // this is a suite
@@ -190,7 +190,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
       if ( $action == 'add_test_to_plan' && isset( $testId ) && $testId > 0 ) {
          $test_plan = new CTM_Test_Suite_Plan();
-         $test_plan->test_suite_id = $id;
+         $test_plan->testSuiteId = $id;
          $test_plan->linked_id = $testId;
          $test_plan->test_order = ( $high_id + 1 );
          $test_plan->test_suite_plan_type_id = 2; // this is a test
@@ -225,7 +225,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
             $test_suite_plan_type_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Plan_Type_Cache' );
             
             $sel = new CTM_Test_Suite_Plan_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $id ) );
             $or_params = array();
             $field_order = array( 'test_order' );
             $test_suite_plans = $sel->find( $and_params, $or_params, $field_order );
@@ -298,13 +298,13 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                $this->printHtml('<tr class="' . $class . '">');
                $this->printHtml('<td><center>' );
                if ( $test_suite_plan->test_order != 0 && $test_suite_plan->test_order != $high_id ) {
-                  $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&action=move_item_down&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '">&darr;</a>' );
+                  $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&action=move_item_down&test_suite_plan_id=' . $test_suite_plan->id . '&testSuiteId=' . $test_suite_plan->testSuiteId . '">&darr;</a>' );
                } else {
                   $this->printHtml( '&nbsp;' );
                }
                $this->printHtml( $test_suite_plan->test_order );
                if ( $test_suite_plan->test_order != 0 && $test_suite_plan->test_order > 1 ) {
-                  $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&action=move_item_up&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '">&uarr;</a>' );
+                  $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&action=move_item_up&test_suite_plan_id=' . $test_suite_plan->id . '&testSuiteId=' . $test_suite_plan->testSuiteId . '">&uarr;</a>' );
                } else {
                   $this->printHtml( '&nbsp;' );
                }
@@ -317,7 +317,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                } else {
                   $this->printHtml('<td>Could not find suite or test associated.</td>' );
                }
-               $this->printHtml( '<td><center><a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&test_suite_plan_id=' . $test_suite_plan->id . '&test_suite_id=' . $test_suite_plan->test_suite_id . '&action=remove_from_plan" class="ctmButton">Remove from plan</a></center></td>' );
+               $this->printHtml( '<td><center><a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&test_suite_plan_id=' . $test_suite_plan->id . '&testSuiteId=' . $test_suite_plan->testSuiteId . '&action=remove_from_plan" class="ctmButton">Remove from plan</a></center></td>' );
                $this->printHtml('</tr>');
             }
          } else {

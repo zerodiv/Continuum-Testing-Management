@@ -25,7 +25,7 @@ class CTM_Test_Run_Builder {
    private $_suite_dir;
    private $_suite_compressed_file;
    private $_suite_tests;
-   private $_suite_test_id;
+   private $_suiteTestId;
 
    function __construct() {
 
@@ -40,7 +40,7 @@ class CTM_Test_Run_Builder {
       $this->_suite_dir = null;
       $this->_suite_compressed_file = null;
       $this->_suite_tests = array();
-      $this->_suite_test_id = 0;
+      $this->_suiteTestId = 0;
    }
 
    public function build( CTM_Test_Run $test_run ) {
@@ -51,7 +51,7 @@ class CTM_Test_Run_Builder {
          $this->_clearCurrentPlan( $test_run );
      
          // kick the build off with the parent suite
-         $this->_addSuiteToPlan( $test_run, $test_run->test_suite_id );
+         $this->_addSuiteToPlan( $test_run, $test_run->testSuiteId );
 
          return true;
 
@@ -65,13 +65,13 @@ class CTM_Test_Run_Builder {
          try {
         
             // bring the suite in so we can get the name
-            $test_suite = $this->_test_suite_cache->getById( $test_run->test_suite_id );
+            $test_suite = $this->_test_suite_cache->getById( $test_run->testSuiteId );
 
             $this->_suite_name = $test_suite->name;
             $this->_suite_dir = Light_Config::get('CTM_Config', 'SUITE_DIR' ) . '/' . $test_run->id;
             $this->_suite_compressed_file = $this->_suite_dir . '.zip';
             $this->_suite_tests = array();
-            $this->_suite_test_id = 0;
+            $this->_suiteTestId = 0;
 
             if ( is_dir( $this->_suite_dir ) ) {
                // cleanup the last try at building this out.
@@ -89,7 +89,7 @@ class CTM_Test_Run_Builder {
             }
 
             // select the tests off the suite_plan stack.
-            $this->_addTestSuiteToSuiteDir( $test_run, $test_run->test_suite_id );
+            $this->_addTestSuiteToSuiteDir( $test_run, $test_run->testSuiteId );
 
             // write the final suite index.html
             $this->_writeSuiteHtml();
@@ -103,11 +103,11 @@ class CTM_Test_Run_Builder {
 
    }
 
-   private function _addTestSuiteToSuiteDir( CTM_Test_Run $test_run, $test_suite_id ) {
+   private function _addTestSuiteToSuiteDir( CTM_Test_Run $test_run, $testSuiteId ) {
       try {
 
          $sel = new CTM_Test_Suite_Plan_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ) );
          $plan_steps = $sel->find( $and_params ); 
          
          if ( count( $plan_steps ) > 0 ) {
@@ -117,7 +117,7 @@ class CTM_Test_Run_Builder {
                
                // we have to exclude linking back to the parent for the run.. this prevents infinite
                // loops.
-               if ( $plan_type->name == 'suite' && $plan_step->linked_id != $test_run->test_suite_id ) {
+               if ( $plan_type->name == 'suite' && $plan_step->linked_id != $test_run->testSuiteId ) {
                   $this->_addTestSuiteToSuiteDir( $test_run, $plan_step->linked_id );
                } else if ( $plan_type->name == 'test' ) {
                   $this->_addTestToSuiteDir( $test_run, $plan_step->linked_id );
@@ -144,15 +144,15 @@ class CTM_Test_Run_Builder {
          $order = array( 'id' );
          $test_commands = $sel->find( $and_params, $or_params, $order );
 
-         // increment the _suite_test_id
-         $this->_suite_test_id++;
+         // increment the _suiteTestId
+         $this->_suiteTestId++;
 
          $this->_suite_tests[] = array(
-               'suite_test_id' => $this->_suite_test_id,
+               'suiteTestId' => $this->_suiteTestId,
                'test_obj' => $test_obj
          );
 
-         $filename = $this->_suite_dir . '/' . $this->_suite_test_id . '.html';
+         $filename = $this->_suite_dir . '/' . $this->_suiteTestId . '.html';
 
          $fh = fopen( $filename, 'w' );
 
@@ -282,7 +282,7 @@ class CTM_Test_Run_Builder {
       foreach ( $this->_suite_tests as $s_test ) {
          fwrite( $fh, 
                '<tr><td>' . 
-               '<a href="./' . $s_test['suite_test_id'] . '.html">' . $this->_escapeVariable( $s_test['test_obj']->name ) . '</a>' .
+               '<a href="./' . $s_test['suiteTestId'] . '.html">' . $this->_escapeVariable( $s_test['test_obj']->name ) . '</a>' .
                '</td></tr>' .
                "\n"
          );
@@ -323,22 +323,22 @@ class CTM_Test_Run_Builder {
       return true;
    }
 
-   private function _addSuiteToPlan( CTM_Test_Run $test_run, $test_suite_id ) {
+   private function _addSuiteToPlan( CTM_Test_Run $test_run, $testSuiteId ) {
       // loop across the test_suite_plan and assemble the run.
       try {
 
-         $test_suite = $this->_test_suite_cache->getById( $test_suite_id );
+         $test_suite = $this->_test_suite_cache->getById( $testSuiteId );
 
          $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
          $baseurl_and_params = array( 
                new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
-               new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ),
+               new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ),
                new Light_Database_Selector_Criteria( 'testId', '=', 0 )
          );
          $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
 
          $sel = new CTM_Test_Suite_Plan_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ) );
+         $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ) );
          $plan_steps = $sel->find( $and_params );
 
          if ( count( $plan_steps ) > 0 ) {
@@ -348,12 +348,12 @@ class CTM_Test_Run_Builder {
 
                // we have to exclude linking back to the parent for the run.. this prevents infinite
                // loops.
-               if ( $plan_type->name == 'suite' && $plan_step->linked_id != $test_run->test_suite_id ) {
+               if ( $plan_type->name == 'suite' && $plan_step->linked_id != $test_run->testSuiteId ) {
                   $this->_addSuiteToPlan( $test_run, $plan_step->linked_id );
                }
 
                if ( $plan_type->name == 'test' ) {
-                  $this->_addTestToPlan( $test_run, $test_suite_id, $plan_step->linked_id );
+                  $this->_addTestToPlan( $test_run, $testSuiteId, $plan_step->linked_id );
                }
 
             }
@@ -365,16 +365,16 @@ class CTM_Test_Run_Builder {
       return true;
    }
 
-   private function _addTestToPlan( CTM_Test_Run $test_run, $test_suite_id, $testId ) {
+   private function _addTestToPlan( CTM_Test_Run $test_run, $testSuiteId, $testId ) {
       try {
 
-         // increment the _suite_test_id
-         $this->_suite_test_id++;
+         // increment the _suiteTestId
+         $this->_suiteTestId++;
 
          $test_obj = $this->_test_cache->getById( $testId );
 
          $this->_suite_tests[] = array(
-               'suite_test_id' => $this->_suite_test_id,
+               'suiteTestId' => $this->_suiteTestId,
                'test_obj' => $test_obj
          );
 
@@ -384,7 +384,7 @@ class CTM_Test_Run_Builder {
             $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
             $baseurl_and_params = array( 
                new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
-               new Light_Database_Selector_Criteria( 'test_suite_id', '=', 0 ),
+               new Light_Database_Selector_Criteria( 'testSuiteId', '=', 0 ),
                new Light_Database_Selector_Criteria( 'testId', '=', $testId )
             );
             $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
@@ -393,7 +393,7 @@ class CTM_Test_Run_Builder {
                if ( is_object( $test_baseurl_obj ) ) {
                   $base_suite_obj = new CTM_Test_Run_BaseUrl();
                   $base_suite_obj->testRunId = $test_run->id;
-                  $base_suite_obj->test_suite_id = 0;
+                  $base_suite_obj->testSuiteId = 0;
                   $base_suite_obj->testId = $testId;
                   $base_suite_obj->baseurl = $test_baseurl_obj->baseurl;
                   $base_suite_obj->save();
@@ -412,7 +412,7 @@ class CTM_Test_Run_Builder {
 
                $test_run_command = new CTM_Test_Run_Command();
                $test_run_command->testRunId = $test_run->id;
-               $test_run_command->test_suite_id = $test_suite_id;
+               $test_run_command->testSuiteId = $testSuiteId;
                $test_run_command->testId = $testId;
                $test_run_command->testSeleniumCommandId = 1; // store.
                $test_run_command->testParamLibraryId = $test_param->testParamLibraryId;
@@ -458,7 +458,7 @@ class CTM_Test_Run_Builder {
                   if ( $test_command->testParamLibraryId > 0 ) {
                      $test_run_command = new CTM_Test_Run_Command();
                      $test_run_command->testRunId = $test_run->id;
-                     $test_run_command->test_suite_id = $test_suite_id;
+                     $test_run_command->testSuiteId = $testSuiteId;
                      $test_run_command->testId = $testId;
                      $test_run_command->testSeleniumCommandId = $test_command->testSeleniumCommandId;
                      $test_run_command->testParamLibraryId = $test_command->testParamLibraryId;

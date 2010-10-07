@@ -35,7 +35,7 @@ class CTM_Site_Test_Revision_Diff extends CTM_Site {
 
       if ( isset( $test ) && isset( $cur_obj ) && isset( $prev_obj ) ) {
          $rev_obj = new CTM_Revision_Framework( 'test' );
-         list( $rv, $diff, $diff_err ) = $rev_obj->diffRevision( (int) $test->id, $cur_obj->revision_id, $prev_obj->revision_id );
+         list( $rv, $diff, $diff_err ) = $rev_obj->diffRevision( (int) $test->id, $cur_obj->revisionId, $prev_obj->revisionId );
 
          if ( $rv == true ) {
             $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );

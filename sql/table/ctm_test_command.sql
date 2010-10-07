@@ -4,6 +4,6 @@ CREATE TABLE `ctm_test_command` (
   `testSeleniumCommandId` bigint(20) unsigned NOT NULL,
   `testParamLibraryId` bigint(20) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `test_id` (`testId`),
-  KEY `test_selenium_command_id` (`testSeleniumCommandId`)
+  KEY `testId` (`testId`),
+  KEY `testSeleniumCommandId` (`testSeleniumCommandId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

@@ -6,7 +6,8 @@ require_once( 'CTM/Test/Param/Library/Default/Selector.php' );
 require_once( 'CTM/Test/Param/Library/Description.php' );
 require_once( 'CTM/Test/Param/Library/Description/Selector.php' );
 
-class CTM_Test_Param_Library extends Light_Database_Object {
+class CTM_Test_Param_Library extends Light_Database_Object
+{
    public $id;
    public $name;
    public $createdAt;
@@ -14,27 +15,29 @@ class CTM_Test_Param_Library extends Light_Database_Object {
    public $modifiedAt;
    public $modifiedBy;
 
-   public function init() {
-      $this->setSqlTable( 'test_param_library' );
-      $this->setDbName( 'test' );
+   public function init()
+   {
+      $this->setSqlTable('test_param_library');
+      $this->setDbName('test');
    }
 
-   public function setDefault( $default ) {
+   public function setDefault( $default )
+   {
       if ( ! isset( $this->id ) ) {
          return false;
       }
       try {
-         $def_obj = $this->getDefault();
-         if ( isset( $def_obj ) ) {
-            $def_obj->defaultValue = $default;
-            $def_obj->save();
+         $defObj = $this->getDefault();
+         if ( isset( $defObj ) ) {
+            $defObj->defaultValue = $default;
+            $defObj->save();
             return true;
          } else {
-            $def_obj = new CTM_Test_Param_Library_Default();
-            $def_obj->testParamLibraryId = $this->id;
-            $def_obj->defaultValue = $default;
-            $def_obj->save();
-            if ( $def_obj->id > 0 ) {
+            $defObj = new CTM_Test_Param_Library_Default();
+            $defObj->testParamLibraryId = $this->id;
+            $defObj->defaultValue = $default;
+            $defObj->save();
+            if ( $defObj->id > 0 ) {
                return true;
             }
             return false;
@@ -45,14 +48,15 @@ class CTM_Test_Param_Library extends Light_Database_Object {
       return false;
    }
 
-   public function getDefault() {
+   public function getDefault()
+   {
       if ( ! isset( $this->id ) ) {
          return null;
       }
       try {
          $sel = new CTM_Test_Param_Library_Default_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $this->id ) );
+         $rows = $sel->find($andParams);
          if ( isset( $rows[0] ) ) {
             return $rows[0];
          }
@@ -63,22 +67,23 @@ class CTM_Test_Param_Library extends Light_Database_Object {
       return null;
    }
 
-   public function setDescription( $description ) {
+   public function setDescription( $description )
+   {
       if ( ! isset( $this->id ) ) {
          return false;
       }
       try {
-         $def_obj = $this->getDescription();
-         if ( isset( $def_obj ) ) {
-            $def_obj->description = $description;
-            $def_obj->save();
+         $defObj = $this->getDescription();
+         if ( isset( $defObj ) ) {
+            $defObj->description = $description;
+            $defObj->save();
             return true;
          } else {
-            $def_obj = new CTM_Test_Param_Library_Description();
-            $def_obj->testParamLibraryId = $this->id;
-            $def_obj->description = $description;
-            $def_obj->save();
-            if ( $def_obj->id > 0 ) {
+            $defObj = new CTM_Test_Param_Library_Description();
+            $defObj->testParamLibraryId = $this->id;
+            $defObj->description = $description;
+            $defObj->save();
+            if ( $defObj->id > 0 ) {
                return true;
             }
             return false;
@@ -89,14 +94,15 @@ class CTM_Test_Param_Library extends Light_Database_Object {
       return false;
    }
 
-   public function getDescription() {
+   public function getDescription()
+   {
       if ( ! isset( $this->id ) ) {
          return null;
       }
       try {
          $sel = new CTM_Test_Param_Library_Description_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $this->id ) );
+         $rows = $sel->find($andParams);
          if ( isset( $rows[0] ) ) {
             return $rows[0];
          }

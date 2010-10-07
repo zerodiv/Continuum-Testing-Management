@@ -23,8 +23,8 @@ class CTM_Test_Suite extends Light_Database_Object
    {
       $this->setSqlTable('test_suite');
       $this->setDbName('suite');
-      $this->addOneToOneRelationship('Description', 'CTM_Test_Suite_Description', 'id', 'test_suite_id');
-      $this->addOneToManyRelationship('Plan', 'CTM_Test_Suite_Plan', 'id', 'test_suite_id');
+      $this->addOneToOneRelationship('Description', 'CTM_Test_Suite_Description', 'id', 'testSuiteId');
+      $this->addOneToManyRelationship('Plan', 'CTM_Test_Suite_Plan', 'id', 'testSuiteId');
    }
 
    // overloaded remove to take care of the object cleanup
@@ -58,7 +58,7 @@ class CTM_Test_Suite extends Light_Database_Object
          } else {
             $aObj = null;
             $aObj = new CTM_Test_Suite_Description();
-            $aObj->test_suite_id = $this->id;
+            $aObj->testSuiteId = $this->id;
             $aObj->description = $description;
             $aObj->save();
          }
@@ -79,21 +79,22 @@ class CTM_Test_Suite extends Light_Database_Object
       if ( $rv == true ) {
          // update the revision database tracker.
          $revObj = new CTM_Test_Suite_Revision();
-         $revObj->test_suite_id = $this->id;
+         $revObj->testSuiteId = $this->id;
          $revObj->modifiedAt = $this->modifiedAt;
          $revObj->modifiedBy = $this->modifiedBy;
-         $revObj->revision_id = $revisionId;
+         $revObj->revisionId = $revisionId;
          $revObj->save();
       }
 
    }
 
-   public function removePlan() {
+   public function removePlan()
+   {
       try {
          $testPlanSel = new CTM_Test_Suite_Plan_Selector(); 
          
          $planParams = array(
-               new Light_Database_Selector_Criteria( 'test_suite_id', '=', $this->id )
+               new Light_Database_Selector_Criteria( 'testSuiteId', '=', $this->id )
          );
 
          $testPlans = $testPlanSel->find($planParams); 

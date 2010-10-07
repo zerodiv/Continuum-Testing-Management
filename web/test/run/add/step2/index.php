@@ -80,7 +80,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
 
          if ( isset( $test_run->id ) ) {
             $sel = new CTM_Test_Suite_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run->test_suite_id ) );
+            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run->testSuiteId ) );
             $test_suites = $sel->find( $and_params ); 
             
             if ( isset( $test_suites[0] ) ) {

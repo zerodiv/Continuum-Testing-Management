@@ -10,7 +10,7 @@ require_once( 'CTM/Test/Run/Command/Value/Selector.php' );
 class CTM_Test_Run_Command extends Light_Database_Object {
    public $id;
    public $testRunId;
-   public $test_suite_id;
+   public $testSuiteId;
    public $testId;
    public $testSeleniumCommandId;
    public $test_param_library_id;

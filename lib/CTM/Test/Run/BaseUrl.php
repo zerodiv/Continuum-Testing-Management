@@ -2,23 +2,26 @@
 
 require_once( 'Light/Database/Object.php' );
 
-class CTM_Test_Run_BaseUrl extends Light_Database_Object {
+class CTM_Test_Run_BaseUrl extends Light_Database_Object
+{
    public $id;
    public $testRunId;
-   public $test_suite_id;
+   public $testSuiteId;
    public $testId;
    public $baseurl;
 
-   public function init() {
-      $this->setSqlTable( 'test_run_baseurl' );
-      $this->setDbName( 'test' );
+   public function init()
+   {
+      $this->setSqlTable('ctm_test_run_baseurl');
+      $this->setDbName('test');
    }
 
-   public function cleanBaseUrl() {
-      $parsed_url = parse_url( $this->baseurl );
-      $baseurl = $parsed_url[ 'scheme' ] . '://' . $parsed_url['host'];
-      if ( isset( $parsed_url['port'] ) && $parsed_url['port'] > 0 ) {
-         $baseurl .= ':' . $parsed_url['port'];
+   public function cleanBaseUrl()
+   {
+      $parsedUrl = parse_url($this->baseurl);
+      $baseurl = $parsedUrl[ 'scheme' ] . '://' . $parsedUrl['host'];
+      if ( isset( $parsedUrl['port'] ) && $parsedUrl['port'] > 0 ) {
+         $baseurl .= ':' . $parsedUrl['port'];
       }
       $baseurl .= '/';
       return $baseurl;

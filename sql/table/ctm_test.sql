@@ -9,6 +9,6 @@ CREATE TABLE `ctm_test` (
   `modifiedBy` bigint(20) unsigned NOT NULL,
   `revisionCount` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `created_by` (`createdBy`),
+  KEY `createdBy` (`createdBy`),
   KEY `testFolderId` (`testFolderId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

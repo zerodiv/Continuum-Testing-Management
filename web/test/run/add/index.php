@@ -15,14 +15,14 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
    }
 
    public function handleRequest() {
-      $test_suite_id = $this->getOrPost( 'test_suite_id', '' );
+      $testSuiteId = $this->getOrPost( 'testSuiteId', '' );
       $iterations = $this->getOrPost( 'iterations', '' );
 
       $this->requiresAuth();
 
       try {
 
-         if ( $test_suite_id > 0 ) {
+         if ( $testSuiteId > 0 ) {
             $user = $this->getUser();
 
             $test_run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
@@ -30,7 +30,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
 
             // create the provisional test.
             $test_run = new CTM_Test_Run();
-            $test_run->test_suite_id = $test_suite_id;
+            $test_run->testSuiteId = $testSuiteId;
             $test_run->testRunStateId = $step1->id;
             $test_run->iterations = 1; 
             $test_run->createdAt = time();
@@ -55,10 +55,10 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
 
    public function displayBody() {
       $testFolderId = $this->getOrPost( 'testFolderId', 1 );
-      $test_suite_id = $this->getOrPost( 'test_suite_id', '' );
+      $testSuiteId = $this->getOrPost( 'testSuiteId', '' );
 
       $testFolderId += 0;
-      $test_suite_id += 0;
+      $testSuiteId += 0;
 
       // folder_cacheing
       $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
@@ -130,7 +130,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
          foreach ( $test_suites as $test_suite ) {
             $class = $this->oddEvenClass();
             $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td colspan="2"><a href="' . $this->getBaseUrl() . '/test/run/add/?test_suite_id=' . $test_suite->id . '">' . $this->escapeVariable( $test_suite->name ) . '</a></td>' );
+            $this->printHtml( '<td colspan="2"><a href="' . $this->getBaseUrl() . '/test/run/add/?testSuiteId=' . $test_suite->id . '">' . $this->escapeVariable( $test_suite->name ) . '</a></td>' );
             $this->printHtml( '</tr>' );
          } 
       } else {
