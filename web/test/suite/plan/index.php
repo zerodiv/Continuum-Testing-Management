@@ -59,17 +59,17 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                return true;
             }
 
-            // resequence the test_order
+            // resequence the testOrder
             $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ) );
             $or_params = array();
-            $field_order = array( 'test_order' );
+            $field_order = array( 'testOrder' );
 
             $test_plans = $sel->find( $and_params, $or_params, $field_order );
 
-            $test_order_id = 0;
+            $testOrderId = 0;
             foreach ( $test_plans as $test_plan ) {
-               $test_order_id++;
-               $test_plan->test_order = $test_order_id;
+               $testOrderId++;
+               $test_plan->testOrder = $testOrderId;
                $test_plan->save();
             }
 
@@ -87,7 +87,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
             $sel = new CTM_Test_Suite_Plan_Selector();
             $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ) );
             $or_params = array();
-            $field_order = array( 'test_order' );
+            $field_order = array( 'testOrder' );
             $test_plans = $sel->find( $and_params, $or_params, $field_order );
          } catch ( Exception $e ) {
          }
@@ -102,8 +102,8 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                if ( $test_plan->id == $test_suite_plan_id ) {
                   $target_item = $test_plan;
                }
-               if ( $high_id < $test_plan->test_order ) {
-                  $high_id = $test_plan->test_order;
+               if ( $high_id < $test_plan->testOrder ) {
+                  $high_id = $test_plan->testOrder;
                }
             } 
             
@@ -111,43 +111,43 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
                return true;
             }
 
-            $current_order_id = $target_item->test_order;
+            $current_order_id = $target_item->testOrder;
 
             if ( $action == 'move_item_down' ) {
                
                // this item is already at the max
-               if ( $target_item->test_order == $high_id ) {
+               if ( $target_item->testOrder == $high_id ) {
                   return true;
                }
 
                foreach ( $test_plans as $test_plan ) {
                   // find the next item and drop it by one
-                  if ( $test_plan->test_order == ( $current_order_id + 1) ) {
-                     $test_plan->test_order = $current_order_id;
+                  if ( $test_plan->testOrder == ( $current_order_id + 1) ) {
+                     $test_plan->testOrder = $current_order_id;
                      $test_plan->save();
                   }
                }
 
-               $target_item->test_order = $target_item->test_order + 1;
+               $target_item->testOrder = $target_item->testOrder + 1;
                $target_item->save();
 
             } // move_item_down
 
             if ( $action == 'move_item_up' ) {
 
-               if ( $target_item->test_order == 1 ) {
+               if ( $target_item->testOrder == 1 ) {
                   return true;
                }
 
                foreach ( $test_plans as $test_plan ) {
                   // find the previous item and bump it up by one
-                  if ( $test_plan->test_order == ( $current_order_id - 1 ) ) {
-                     $test_plan->test_order = $current_order_id;
+                  if ( $test_plan->testOrder == ( $current_order_id - 1 ) ) {
+                     $test_plan->testOrder = $current_order_id;
                      $test_plan->save();
                   }
                }
 
-               $target_item->test_order = $target_item->test_order - 1;
+               $target_item->testOrder = $target_item->testOrder - 1;
                $target_item->save();
 
             } // move_item_up
@@ -171,8 +171,8 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
       if ( count( $test_plans ) > 0 ) {
          foreach ( $test_plans as $test_plan ) {
-            if ( $high_id < $test_plan->test_order ) {
-               $high_id = $test_plan->test_order;
+            if ( $high_id < $test_plan->testOrder ) {
+               $high_id = $test_plan->testOrder;
             }
          }
       }
@@ -180,9 +180,9 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       if ( $action == 'add_suite_to_plan' && isset( $suite_id ) && $suite_id > 0 ) {
          $test_plan = new CTM_Test_Suite_Plan();
          $test_plan->testSuiteId = $id;
-         $test_plan->linked_id = $suite_id;
-         $test_plan->test_order = ( $high_id + 1 );
-         $test_plan->test_suite_plan_type_id = 1; // this is a suite
+         $test_plan->linkedId = $suite_id;
+         $test_plan->testOrder = ( $high_id + 1 );
+         $test_plan->testSuitePlanTypeId = 1; // this is a suite
          $test_plan->save();
          $test_suite->saveRevision();
          return true;
@@ -191,9 +191,9 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
       if ( $action == 'add_test_to_plan' && isset( $testId ) && $testId > 0 ) {
          $test_plan = new CTM_Test_Suite_Plan();
          $test_plan->testSuiteId = $id;
-         $test_plan->linked_id = $testId;
-         $test_plan->test_order = ( $high_id + 1 );
-         $test_plan->test_suite_plan_type_id = 2; // this is a test
+         $test_plan->linkedId = $testId;
+         $test_plan->testOrder = ( $high_id + 1 );
+         $test_plan->testSuitePlanTypeId = 2; // this is a test
          $test_plan->save();
          $test_suite->saveRevision();
          return true;
@@ -227,7 +227,7 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
             $sel = new CTM_Test_Suite_Plan_Selector();
             $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $id ) );
             $or_params = array();
-            $field_order = array( 'test_order' );
+            $field_order = array( 'testOrder' );
             $test_suite_plans = $sel->find( $and_params, $or_params, $field_order );
 
          }
@@ -274,8 +274,8 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
             $high_id = 0;
 
             foreach ( $test_suite_plans as $test_suite_plan ) {
-               if ( $high_id < $test_suite_plan->test_order ) {
-                  $high_id = $test_suite_plan->test_order;
+               if ( $high_id < $test_suite_plan->testOrder ) {
+                  $high_id = $test_suite_plan->testOrder;
                }
             }
 
@@ -283,27 +283,27 @@ class CTM_Site_Test_Suite_Plan extends CTM_Site {
 
                $class = $this->oddEvenClass();
 
-               $plan_type = $plan_type_cache->getById( $test_suite_plan->test_suite_plan_type_id );
+               $plan_type = $plan_type_cache->getById( $test_suite_plan->testSuitePlanTypeId );
 
                $test_suite = null;
                if ( $plan_type->name == 'suite' ) {
-                  $test_suite = $test_suite_cache->getById( $test_suite_plan->linked_id );
+                  $test_suite = $test_suite_cache->getById( $test_suite_plan->linkedId );
                }
 
                $test = null;
                if ( $plan_type->name == 'test' ) {
-                  $test = $test_cache->getById( $test_suite_plan->linked_id );
+                  $test = $test_cache->getById( $test_suite_plan->linkedId );
                }
 
                $this->printHtml('<tr class="' . $class . '">');
                $this->printHtml('<td><center>' );
-               if ( $test_suite_plan->test_order != 0 && $test_suite_plan->test_order != $high_id ) {
+               if ( $test_suite_plan->testOrder != 0 && $test_suite_plan->testOrder != $high_id ) {
                   $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&action=move_item_down&test_suite_plan_id=' . $test_suite_plan->id . '&testSuiteId=' . $test_suite_plan->testSuiteId . '">&darr;</a>' );
                } else {
                   $this->printHtml( '&nbsp;' );
                }
-               $this->printHtml( $test_suite_plan->test_order );
-               if ( $test_suite_plan->test_order != 0 && $test_suite_plan->test_order > 1 ) {
+               $this->printHtml( $test_suite_plan->testOrder );
+               if ( $test_suite_plan->testOrder != 0 && $test_suite_plan->testOrder > 1 ) {
                   $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/suite/plan/?id=' . $id . '&action=move_item_up&test_suite_plan_id=' . $test_suite_plan->id . '&testSuiteId=' . $test_suite_plan->testSuiteId . '">&uarr;</a>' );
                } else {
                   $this->printHtml( '&nbsp;' );

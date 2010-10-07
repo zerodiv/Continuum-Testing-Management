@@ -13,7 +13,7 @@ class CTM_Test_Suite_Revision extends Light_Database_Object
 
    public function init()
    {
-      $this->setSqlTable('test_suite_revision');
+      $this->setSqlTable('ctm_test_suite_revision');
       $this->setDbName('test');
    }
 

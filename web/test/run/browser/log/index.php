@@ -23,7 +23,7 @@ class CTM_Site_Test_Run_Browser_Log extends CTM_Site {
          if ( $testRunBrowserId > 0 ) { 
             $test_run_log_sel = new CTM_Test_Run_Log_Selector();
             $and_params = array(
-                  new Light_Database_Selector_Criteria('test_run_browser_id', '=', $testRunBrowserId)
+                  new Light_Database_Selector_Criteria('testRunBrowserId', '=', $testRunBrowserId)
             );
             
             $test_run_logs = $test_run_log_sel->find( $and_params ); 

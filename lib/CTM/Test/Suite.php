@@ -21,7 +21,7 @@ class CTM_Test_Suite extends Light_Database_Object
 
    public function init()
    {
-      $this->setSqlTable('test_suite');
+      $this->setSqlTable('ctm_test_suite');
       $this->setDbName('suite');
       $this->addOneToOneRelationship('Description', 'CTM_Test_Suite_Description', 'id', 'testSuiteId');
       $this->addOneToManyRelationship('Plan', 'CTM_Test_Suite_Plan', 'id', 'testSuiteId');

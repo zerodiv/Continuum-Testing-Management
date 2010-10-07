@@ -7,21 +7,24 @@ require_once( 'CTM/Test/Run/Command/Target/Selector.php' );
 require_once( 'CTM/Test/Run/Command/Value.php' );
 require_once( 'CTM/Test/Run/Command/Value/Selector.php' );
 
-class CTM_Test_Run_Command extends Light_Database_Object {
+class CTM_Test_Run_Command extends Light_Database_Object
+{
    public $id;
    public $testRunId;
    public $testSuiteId;
    public $testId;
    public $testSeleniumCommandId;
-   public $test_param_library_id;
+   public $testParamLibraryId;
 
-   public function init() {
-      $this->setSqlTable( 'test_run_command' );
-      $this->setDbName( 'test' );
+   public function init()
+   {
+      $this->setSqlTable('ctm_test_run_command');
+      $this->setDbName('test');
    }
 
    // overloaded remove to take care of the object cleanup
-   public function remove() {
+   public function remove()
+   {
 
       try { 
 
@@ -46,20 +49,21 @@ class CTM_Test_Run_Command extends Light_Database_Object {
 
    }
 
-   public function setTarget( $target ) {
+   public function setTarget( $target )
+   {
       if ( ! isset( $this->id ) ) {
          return false;
       }
       try {
-         $a_obj = $this->getTarget();
-         if ( isset( $a_obj ) ) {
-            $a_obj->target = $target;
-            $a_obj->save();
+         $aObj = $this->getTarget();
+         if ( isset( $aObj ) ) {
+            $aObj->target = $target;
+            $aObj->save();
          } else {
-            $a_obj = new CTM_Test_Run_Command_Target();
-            $a_obj->test_run_command_id = $this->id;
-            $a_obj->target = $target;
-            $a_obj->save();
+            $aObj = new CTM_Test_Run_Command_Target();
+            $aObj->testRunCommandId = $this->id;
+            $aObj->target = $target;
+            $aObj->save();
          }
       } catch ( Exception $e ) {
          throw $e;
@@ -67,14 +71,15 @@ class CTM_Test_Run_Command extends Light_Database_Object {
       return false;
    }
 
-   public function getTarget() {
+   public function getTarget()
+   {
       if ( ! isset( $this->id ) ) {
          return null;
       } 
       try {
          $sel = new CTM_Test_Run_Command_Target_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_run_command_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testRunCommandId', '=', $this->id ) );
+         $rows = $sel->find($andParams);
          if ( isset( $rows[0] ) ) {
             return $rows[0];
          }
@@ -84,20 +89,21 @@ class CTM_Test_Run_Command extends Light_Database_Object {
       return null;
    }
 
-   public function setValue( $value ) {
+   public function setValue( $value )
+   {
       if ( ! isset( $this->id ) ) {
          return false;
       }
       try {
-         $a_obj = $this->getValue();
-         if ( isset( $a_obj ) ) {
-            $a_obj->value = $value;
-            $a_obj->save();
+         $aObj = $this->getValue();
+         if ( isset( $aObj ) ) {
+            $aObj->value = $value;
+            $aObj->save();
          } else {
-            $a_obj = new CTM_Test_Run_Command_Value();
-            $a_obj->test_run_command_id = $this->id;
-            $a_obj->value = $value;
-            $a_obj->save();
+            $aObj = new CTM_Test_Run_Command_Value();
+            $aObj->testRunCommandId = $this->id;
+            $aObj->value = $value;
+            $aObj->save();
          }
       } catch ( Exception $e ) {
          throw $e;
@@ -105,14 +111,15 @@ class CTM_Test_Run_Command extends Light_Database_Object {
       return false;
    }
 
-   public function getValue() {
+   public function getValue()
+   {
       if ( ! isset( $this->id ) ) {
          return null;
       }
       try {
          $sel = new CTM_Test_Run_Command_Value_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'test_run_command_id', '=', $this->id ) );
-         $rows = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testRunCommandId', '=', $this->id ) );
+         $rows = $sel->find($andParams);
          if ( isset( $rows[0] ) ) {
             return $rows[0];
          }

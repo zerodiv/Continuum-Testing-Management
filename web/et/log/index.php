@@ -116,13 +116,13 @@ class CTM_ET_Log extends CTM_Site
             $test_run_browser->hasLog = true;
             $test_run_browser->save();
 
-            $test_run_log = new CTM_Test_Run_Log();
-            $test_run_log->test_run_browser_id = $test_run_browser->id;
-            $test_run_log->run_log = $runLog;
-            $test_run_log->selenium_log = $seleniumLog;
-            $test_run_log->duration = $testDuration;
-            $test_run_log->createdAt = time();
-            $test_run_log->save();
+            $testRunLog = new CTM_Test_Run_Log();
+            $testRunLog->testRunBrowserId = $test_run_browser->id;
+            $testRunLog->runLog = $runLog;
+            $testRunLog->seleniumLog = $seleniumLog;
+            $testRunLog->duration = $testDuration;
+            $testRunLog->createdAt = time();
+            $testRunLog->save();
 
             $this->_serviceOutput('OK', '');
 

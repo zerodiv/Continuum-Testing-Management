@@ -1,57 +1,60 @@
 <?php
 
-require_once( 'Light/Config.php' );
-require_once( 'Light/Database/Object/Cache/Factory.php' );
+require_once( 'Light/Config.php');
+require_once( 'Light/Database/Object/Cache/Factory.php');
 
-require_once( 'CTM/Test/Param.php' );
-require_once( 'CTM/Test/Param/Selector.php' );
-require_once( 'CTM/Test/Run.php' );
-require_once( 'CTM/Test/Command/Selector.php' );
-require_once( 'CTM/Test/Run/BaseUrl.php' );
-require_once( 'CTM/Test/Run/BaseUrl/Selector.php' );
-require_once( 'CTM/Test/Run/Command.php' );
-require_once( 'CTM/Test/Run/Command/Selector.php' );
-require_once( 'CTM/Test/Suite/Plan/Selector.php' );
+require_once( 'CTM/Test/Param.php');
+require_once( 'CTM/Test/Param/Selector.php');
+require_once( 'CTM/Test/Run.php');
+require_once( 'CTM/Test/Command/Selector.php');
+require_once( 'CTM/Test/Run/BaseUrl.php');
+require_once( 'CTM/Test/Run/BaseUrl/Selector.php');
+require_once( 'CTM/Test/Run/Command.php');
+require_once( 'CTM/Test/Run/Command/Selector.php');
+require_once( 'CTM/Test/Suite/Plan/Selector.php');
 
-class CTM_Test_Run_Builder {
-   private $_plan_type_cache;
-   private $_test_suite_cache;
-   private $_test_cache;
-   private $_param_lib_cache;
-   private $_test_run_baseurl_cache;
-   private $_selenium_command_cache;
+class CTM_Test_Run_Builder
+{
+   private $_planTypeCache;
+   private $_testSuiteCache;
+   private $_testCache;
+   private $_paramLibCache;
+   private $_testRunBaseurlCache;
+   private $_seleniumCommandCache;
 
-   private $_suite_name;
-   private $_suite_dir;
-   private $_suite_compressed_file;
-   private $_suite_tests;
+   private $_suiteName;
+   private $_suiteDir;
+   private $_suiteCompressedFile;
+   private $_suiteTests;
    private $_suiteTestId;
 
-   function __construct() {
+   function __construct()
+   {
 
-      $this->_plan_type_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Plan_Type_Cache' );
-      $this->_test_suite_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Cache' );
-      $this->_test_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Cache' );
-      $this->_param_lib_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Param_Library_Cache' );
-      $this->_test_run_baseurl_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_BaseUrl_Cache' );
-      $this->_selenium_command_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Selenium_Command_Cache' );
+      $this->_planTypeCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Suite_Plan_Type_Cache');
+      $this->_testSuiteCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Suite_Cache');
+      $this->_testCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Cache');
+      $this->_paramLibCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Param_Library_Cache');
+      $this->_testRunBaseurlCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Run_BaseUrl_Cache');
+      $this->_seleniumCommandCache = Light_Database_Object_Cache_Factory::factory('CTM_Test_Selenium_Command_Cache');
 
-      $this->_suite_name = null;
-      $this->_suite_dir = null;
-      $this->_suite_compressed_file = null;
-      $this->_suite_tests = array();
+      $this->_suiteName = null;
+      $this->_suiteDir = null;
+      $this->_suiteCompressedFile = null;
+      $this->_suiteTests = array();
       $this->_suiteTestId = 0;
    }
 
-   public function build( CTM_Test_Run $test_run ) {
+   public function build( CTM_Test_Run $testRun )
+   {
 
       try {
 
          // clear the existing run plan - if any.
-         $this->_clearCurrentPlan( $test_run );
+         $this->_clearCurrentPlan($testRun);
      
          // kick the build off with the parent suite
-         $this->_addSuiteToPlan( $test_run, $test_run->testSuiteId );
+         $this->_addSuiteToPlan($testRun, $testRun->testSuiteId);
 
          return true;
 
@@ -61,41 +64,46 @@ class CTM_Test_Run_Builder {
 
    }
 
-   public function buildTestSuite( CTM_Test_Run $test_run ) {
+   public function buildTestSuite( CTM_Test_Run $testRun )
+   {
          try {
         
             // bring the suite in so we can get the name
-            $test_suite = $this->_test_suite_cache->getById( $test_run->testSuiteId );
+            $testSuite = $this->_testSuiteCache->getById($testRun->testSuiteId);
 
-            $this->_suite_name = $test_suite->name;
-            $this->_suite_dir = Light_Config::get('CTM_Config', 'SUITE_DIR' ) . '/' . $test_run->id;
-            $this->_suite_compressed_file = $this->_suite_dir . '.zip';
-            $this->_suite_tests = array();
+            $this->_suiteName = $testSuite->name;
+            $this->_suiteDir = Light_Config::get('CTM_Config', 'SUITE_DIR') . '/' . $testRun->id;
+            $this->_suiteCompressedFile = $this->_suiteDir . '.zip';
+            $this->_suiteTests = array();
             $this->_suiteTestId = 0;
 
-            if ( is_dir( $this->_suite_dir ) ) {
+            if ( is_dir($this->_suiteDir) ) {
                // cleanup the last try at building this out.
-               system( 'rm -rf ' . $this->_suite_dir );
+               system('rm -rf ' . $this->_suiteDir);
             }
             
-            mkdir( $this->_suite_dir, 0755, true );
+            mkdir($this->_suiteDir, 0755, true);
 
-            if ( ! is_dir( $this->_suite_dir ) ) {
+            if ( ! is_dir($this->_suiteDir) ) {
                return false;
             }
 
-            if ( is_file( $this->_suite_compressed_file ) ) {
-               unlink( $this->_suite_compressed_file );
+            if ( is_file($this->_suiteCompressedFile) ) {
+               unlink($this->_suiteCompressedFile);
             }
 
             // select the tests off the suite_plan stack.
-            $this->_addTestSuiteToSuiteDir( $test_run, $test_run->testSuiteId );
+            $this->_addTestSuiteToSuiteDir($testRun, $testRun->testSuiteId);
 
             // write the final suite index.html
             $this->_writeSuiteHtml();
 
             // compress off the suite and make it easy for the agent to download.
-            system( 'cd ' . Light_Config::get( 'CTM_Config', 'SUITE_DIR' ) . ' ; zip -q -r ' . $this->_suite_compressed_file . ' ' . $test_run->id . ' >/dev/null 2> /dev/null' );
+            system(
+                'cd ' . Light_Config::get('CTM_Config', 'SUITE_DIR') . ' ; ' .
+                'zip -q -r ' . $this->_suiteCompressedFile . ' ' . $testRun->id . 
+                ' >/dev/null 2> /dev/null'
+            );
 
          } catch ( Exception $e ) {
             throw $e;
@@ -103,24 +111,25 @@ class CTM_Test_Run_Builder {
 
    }
 
-   private function _addTestSuiteToSuiteDir( CTM_Test_Run $test_run, $testSuiteId ) {
+   private function _addTestSuiteToSuiteDir( CTM_Test_Run $testRun, $testSuiteId )
+   {
       try {
 
          $sel = new CTM_Test_Suite_Plan_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ) );
-         $plan_steps = $sel->find( $and_params ); 
+         $andParams = array( new Light_Database_Selector_Criteria('testSuiteId', '=', $testSuiteId ));
+         $planSteps = $sel->find($andParams); 
          
-         if ( count( $plan_steps ) > 0 ) {
-            foreach ( $plan_steps as $plan_step ) {
+         if ( count($planSteps) > 0 ) {
+            foreach ( $planSteps as $planStep ) {
                // is the step a suite or a test?
-               $plan_type = $this->_plan_type_cache->getById( $plan_step->test_suite_plan_type_id ); 
+               $planType = $this->_planTypeCache->getById($planStep->testSuitePlanTypeId); 
                
                // we have to exclude linking back to the parent for the run.. this prevents infinite
                // loops.
-               if ( $plan_type->name == 'suite' && $plan_step->linked_id != $test_run->testSuiteId ) {
-                  $this->_addTestSuiteToSuiteDir( $test_run, $plan_step->linked_id );
-               } else if ( $plan_type->name == 'test' ) {
-                  $this->_addTestToSuiteDir( $test_run, $plan_step->linked_id );
+               if ( $planType->name == 'suite' && $planStep->linkedId != $testRun->testSuiteId ) {
+                  $this->_addTestSuiteToSuiteDir($testRun, $planStep->linkedId);
+               } else if ( $planType->name == 'test' ) {
+                  $this->_addTestToSuiteDir($testRun, $planStep->linkedId);
                }
 
             }
@@ -131,190 +140,208 @@ class CTM_Test_Run_Builder {
 
    }
 
-   private function _addTestToSuiteDir( CTM_Test_Run $test_run, $testId ) {
+   private function _addTestToSuiteDir( CTM_Test_Run $testRun, $testId )
+   {
 
       try {
-         // fetch the test_obj
-         $test_obj = $this->_test_cache->getById( $testId );
+         // fetch the testObj
+         $testObj = $this->_testCache->getById($testId);
 
          // fetch all the test commands
          $sel = new CTM_Test_Command_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ) );
-         $or_params = array();
-         $order = array( 'id' );
-         $test_commands = $sel->find( $and_params, $or_params, $order );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ));
+         $orParams = array();
+         $order = array( 'id');
+         $testCommands = $sel->find($andParams, $orParams, $order);
 
          // increment the _suiteTestId
          $this->_suiteTestId++;
 
-         $this->_suite_tests[] = array(
+         $this->_suiteTests[] = array(
                'suiteTestId' => $this->_suiteTestId,
-               'test_obj' => $test_obj
+               'testObj' => $testObj
          );
 
-         $filename = $this->_suite_dir . '/' . $this->_suiteTestId . '.html';
+         $filename = $this->_suiteDir . '/' . $this->_suiteTestId . '.html';
 
-         $fh = fopen( $filename, 'w' );
+         $fh = fopen($filename, 'w');
 
-         if ( ! is_resource( $fh ) ) {
+         if ( ! is_resource($fh) ) {
             return false;
          }
 
          // determine the baseurl for this test.
-         $baseurl_obj = $this->_test_run_baseurl_cache->getByCompoundKey( $test_run->id, 0, $testId );
+         $baseurlObj = $this->_testRunBaseurlCache->getByCompoundKey($testRun->id, 0, $testId);
 
          // eject the headers.
-         fwrite($fh, '<?xml version="1.0" encoding="UTF-8"?>' . "\n" );
-         fwrite($fh, '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\n" );
-         fwrite($fh, '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . "\n" );
-         fwrite($fh, '<head profile="http://selenium-ide.openqa.org/profiles/test-case">' . "\n" );
+         fwrite($fh, '<?xml version="1.0" encoding="UTF-8"?>' . "\n");
+         fwrite(
+             $fh,
+             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" ' .
+             '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . 
+             "\n"
+         );
+         fwrite($fh, '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . "\n");
+         fwrite($fh, '<head profile="http://selenium-ide.openqa.org/profiles/test-case">' . "\n");
         
          // jeo - temporarily removing this piece.
-         // fwrite($fh, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' . "\n" );
+         // fwrite($fh, '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' . "\n");
 
-         fwrite($fh, '<link rel="selenium.base" href="' . $baseurl_obj->cleanBaseUrl() . '" />' . "\n" ); 
-         fwrite($fh, '<title>' . $this->_escapeVariable( $test_obj->name ) . '</title>' . "\n" );
-         fwrite($fh, '</head>' . "\n" );
-         fwrite($fh, '<body>' . "\n" );
-         fwrite($fh, '<table cellpadding="1" cellspacing="1" border="1">' . "\n" );
-         fwrite($fh, '<thead>' . "\n" );
-         fwrite($fh, '<tr><td rowspan="1" colspan="3">' . $this->_escapeVariable( $test_obj->name ) . '</td></tr>' . "\n" );
-         fwrite($fh, '</thead><tbody>' . "\n" );
+         fwrite($fh, '<link rel="selenium.base" href="' . $baseurlObj->cleanBaseUrl() . '" />' . "\n"); 
+         fwrite($fh, '<title>' . $this->_escapeVariable($testObj->name) . '</title>' . "\n");
+         fwrite($fh, '</head>' . "\n");
+         fwrite($fh, '<body>' . "\n");
+         fwrite($fh, '<table cellpadding="1" cellspacing="1" border="1">' . "\n");
+         fwrite($fh, '<thead>' . "\n");
+         fwrite(
+             $fh,
+             '<tr><td rowspan="1" colspan="3">' . 
+             $this->_escapeVariable($testObj->name) . 
+             '</td></tr>' . 
+             "\n"
+         );
+         fwrite($fh, '</thead><tbody>' . "\n");
 
-         fwrite($fh, '<tr>' . "\n" );
-         fwrite($fh, '         <td>open</td>' . "\n" );
-         fwrite($fh, '         <td>' . $baseurl_obj->baseurl . '</td>' . "\n" );
-         fwrite($fh, '         <td></td>' . "\n" );
-         fwrite($fh, '</tr>' . "\n" );
+         fwrite($fh, '<tr>' . "\n");
+         fwrite($fh, '         <td>open</td>' . "\n");
+         fwrite($fh, '         <td>' . $baseurlObj->baseurl . '</td>' . "\n");
+         fwrite($fh, '         <td></td>' . "\n");
+         fwrite($fh, '</tr>' . "\n");
 
          // pull in all the testParamLibraryId values
          $sel = new CTM_Test_Run_Command_Selector();
-         $and_params = array( 
-               new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
+         $andParams = array( 
+               new Light_Database_Selector_Criteria( 'testRunId', '=', $testRun->id ),
                new Light_Database_Selector_Criteria( 'testParamLibraryId', '!=', 0 )
          );
-         $test_params = $sel->find( $and_params );
-         if ( count( $test_params ) > 0 ) {
-            foreach ( $test_params as $test_command ) {
-               $sel_obj = $this->_selenium_command_cache->getById( $test_command->testSeleniumCommandId );
-               $value_obj = $test_command->getValue();
-               $target_obj = $test_command->getTarget();
-               fwrite($fh, '<tr>' . "\n" );
-               fwrite($fh, '         <td>' . $sel_obj->name . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $this->_escapeVariable( $target_obj->target ) . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $this->_escapeVariable( $value_obj->value ) . '</td>' . "\n" );
-               fwrite($fh, '</tr>' . "\n" );
+         $testParams = $sel->find($andParams);
+         if ( count($testParams) > 0 ) {
+            foreach ( $testParams as $testCommand ) {
+               $selObj = $this->_seleniumCommandCache->getById($testCommand->testSeleniumCommandId);
+               $valueObj = $testCommand->getValue();
+               $targetObj = $testCommand->getTarget();
+               fwrite($fh, '<tr>' . "\n");
+               fwrite($fh, '         <td>' . $selObj->name . '</td>' . "\n");
+               fwrite($fh, '         <td>' . $this->_escapeVariable($targetObj->target) . '</td>' . "\n");
+               fwrite($fh, '         <td>' . $this->_escapeVariable($valueObj->value) . '</td>' . "\n");
+               fwrite($fh, '</tr>' . "\n");
             }
          }
 
          // dump all the test command combos to the file.
-         if ( count( $test_commands ) > 0 ) {
-            foreach ( $test_commands as $test_command ) {
+         if ( count($testCommands) > 0 ) {
+            foreach ( $testCommands as $testCommand ) {
 
-               if ( $test_command->testParamLibraryId > 0 ) {
-                  // get the runtime override from the test_run_version.
+               if ( $testCommand->testParamLibraryId > 0 ) {
+                  // get the runtime override from the testRun_version.
                   // fetch the test run commands that need their values changed / adjusted.
                   $sel = new CTM_Test_Run_Command_Selector();
-                  $and_params = array( 
-                     new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
-                     new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $test_command->testParamLibraryId )
+                  $andParams = array( 
+                     new Light_Database_Selector_Criteria( 'testRunId', '=', $testRun->id ),
+                     new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $testCommand->testParamLibraryId )
                   );
-                  $override_commands = $sel->find( $and_params );
-                  if ( count( $override_commands ) > 0 ) {
-                     $test_command = $override_commands[0];
+                  $overrideCommands = $sel->find($andParams);
+                  if ( count($overrideCommands) > 0 ) {
+                     $testCommand = $overrideCommands[0];
                   }
                }
          
-               $sel_obj = $this->_selenium_command_cache->getById( $test_command->testSeleniumCommandId );
-               $value_obj = $test_command->getValue();
-               $target_obj = $test_command->getTarget();
+               $selObj = $this->_seleniumCommandCache->getById($testCommand->testSeleniumCommandId);
+               $valueObj = $testCommand->getValue();
+               $targetObj = $testCommand->getTarget();
 
                /*
                JEO - This adds the base url to the open call.. we shouldn't be needing this anymore
-               if ($sel_obj->name == 'open') {
-                   $target = preg_replace('#/$#', '', $baseurl_obj->baseurl) . $target_obj->target;
+               if ($selObj->name == 'open') {
+                   $target = preg_replace('#/$#', '', $baseurlObj->baseurl) . $target_obj->target;
                } else {
                    $target = $target_obj->target;
                }
                */
 
-               fwrite($fh, '<tr>' . "\n" );
-               fwrite($fh, '         <td>' . $sel_obj->name . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $this->_escapeVariable( $target_obj->target ) . '</td>' . "\n" );
-               fwrite($fh, '         <td>' . $this->_escapeVariable( $value_obj->value ) . '</td>' . "\n" );
-               fwrite($fh, '</tr>' . "\n" );
+               fwrite($fh, '<tr>' . "\n");
+               fwrite($fh, '         <td>' . $selObj->name . '</td>' . "\n");
+               fwrite($fh, '         <td>' . $this->_escapeVariable($targetObj->target) . '</td>' . "\n");
+               fwrite($fh, '         <td>' . $this->_escapeVariable($valueObj->value) . '</td>' . "\n");
+               fwrite($fh, '</tr>' . "\n");
                
             }
          }
-         fwrite( $fh, '</tbody></table>' . "\n" );
-         fwrite( $fh, '</body>' . "\n" );
-         fwrite( $fh, '</html>' . "\n" );
+         fwrite($fh, '</tbody></table>' . "\n");
+         fwrite($fh, '</body>' . "\n");
+         fwrite($fh, '</html>' . "\n");
          
-         fclose( $fh );
+         fclose($fh);
 
       } catch ( Exception $e ) {
          throw $e;
       }
    }
 
-   private function _escapeVariable( $var ) {
-      $var = stripslashes( $var );
-      return htmlentities( $var, ENT_QUOTES, 'UTF-8' );
+   private function _escapeVariable( $var )
+   {
+      $var = stripslashes($var);
+      return htmlentities($var, ENT_QUOTES, 'UTF-8');
    }
 
-   private function _writeSuiteHtml() {
+   private function _writeSuiteHtml()
+   {
 
-      $filename = $this->_suite_dir . '/index.html';
+      $filename = $this->_suiteDir . '/index.html';
 
-      $fh = fopen( $filename, 'w' );
+      $fh = fopen($filename, 'w');
 
-      if ( ! is_resource( $fh ) ) {
+      if ( ! is_resource($fh) ) {
          return false;
       }
 
-      fwrite( $fh, '<html>' . "\n" );
-      fwrite( $fh, '<head>' . "\n" );
-      fwrite( $fh, '<title>' . $this->_escapeVariable( $this->_suite_name ) . '</title>' . "\n" );
-      fwrite( $fh, '</head>' . "\n" );
-      fwrite( $fh, '<body>' . "\n" );
-      fwrite( $fh, '<table>' . "\n" );
-      fwrite( $fh, '<tr><td><b>' . $this->_escapeVariable( $this->_suite_name ) . '</b></td></tr>' . "\n" );
-      foreach ( $this->_suite_tests as $s_test ) {
-         fwrite( $fh, 
-               '<tr><td>' . 
-               '<a href="./' . $s_test['suiteTestId'] . '.html">' . $this->_escapeVariable( $s_test['test_obj']->name ) . '</a>' .
-               '</td></tr>' .
-               "\n"
+      fwrite($fh, '<html>' . "\n");
+      fwrite($fh, '<head>' . "\n");
+      fwrite($fh, '<title>' . $this->_escapeVariable($this->_suiteName) . '</title>' . "\n");
+      fwrite($fh, '</head>' . "\n");
+      fwrite($fh, '<body>' . "\n");
+      fwrite($fh, '<table>' . "\n");
+      fwrite($fh, '<tr><td><b>' . $this->_escapeVariable($this->_suiteName) . '</b></td></tr>' . "\n");
+      foreach ( $this->_suiteTests as $sTest ) {
+         fwrite(
+             $fh, 
+             '<tr><td>' . 
+             '<a href="./' . $sTest['suiteTestId'] . '.html">' . 
+             $this->_escapeVariable($sTest['testObj']->name) . 
+             '</a>' .
+             '</td></tr>' .
+             "\n"
          );
       }
-      fwrite( $fh, '</table>' . "\n" );
-      fwrite( $fh, '</body>' . "\n" );
-      fwrite( $fh, '</html>' . "\n" );
+      fwrite($fh, '</table>' . "\n");
+      fwrite($fh, '</body>' . "\n");
+      fwrite($fh, '</html>' . "\n");
 
-      fclose( $fh );
+      fclose($fh);
 
       return true;
 
    }
 
-   private function _clearCurrentPlan( CTM_Test_Run $test_run ) {
+   private function _clearCurrentPlan( CTM_Test_Run $testRun )
+   {
       try {
          $sel = new CTM_Test_Run_Command_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ) );
-         $existing_commands = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testRunId', '=', $testRun->id ));
+         $existingCommands = $sel->find($andParams);
 
-         if ( count( $existing_commands ) > 0 ) {
-            foreach ( $existing_commands as $existing_command ) {
-               $existing_command->remove();
+         if ( count($existingCommands) > 0 ) {
+            foreach ( $existingCommands as $existingCommand ) {
+               $existingCommand->remove();
             }
          }
 
-         if ( is_dir( $this->_suite_dir ) ) {
-            system( 'rm -rf ' . $this->_suite_dir );
+         if ( is_dir($this->_suiteDir) ) {
+            system('rm -rf ' . $this->_suiteDir);
          }
 
-         if ( is_file( $this->_suite_compressed_file ) ) {
-            unlink( $this->_suite_compressed_file );
+         if ( is_file($this->_suiteCompressedFile) ) {
+            unlink($this->_suiteCompressedFile);
          }
 
       } catch ( Exception $e ) {
@@ -323,37 +350,38 @@ class CTM_Test_Run_Builder {
       return true;
    }
 
-   private function _addSuiteToPlan( CTM_Test_Run $test_run, $testSuiteId ) {
+   private function _addSuiteToPlan( CTM_Test_Run $testRun, $testSuiteId )
+   {
       // loop across the test_suite_plan and assemble the run.
       try {
 
-         $test_suite = $this->_test_suite_cache->getById( $testSuiteId );
+         $testSuite = $this->_testSuiteCache->getById($testSuiteId);
 
-         $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
-         $baseurl_and_params = array( 
-               new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
+         $baseurlSel = new CTM_Test_Run_BaseUrl_Selector();
+         $baseurlAndParams = array( 
+               new Light_Database_Selector_Criteria( 'testRunId', '=', $testRun->id ),
                new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ),
                new Light_Database_Selector_Criteria( 'testId', '=', 0 )
          );
-         $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
+         $runBaseurls = $baseurlSel->find($baseurlAndParams);
 
          $sel = new CTM_Test_Suite_Plan_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ) );
-         $plan_steps = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ));
+         $planSteps = $sel->find($andParams);
 
-         if ( count( $plan_steps ) > 0 ) {
-            foreach ( $plan_steps as $plan_step ) {
+         if ( count($planSteps) > 0 ) {
+            foreach ( $planSteps as $planStep ) {
                // is the step a suite or a test?
-               $plan_type = $this->_plan_type_cache->getById( $plan_step->test_suite_plan_type_id );
+               $planType = $this->_planTypeCache->getById($planStep->testSuitePlanTypeId);
 
                // we have to exclude linking back to the parent for the run.. this prevents infinite
                // loops.
-               if ( $plan_type->name == 'suite' && $plan_step->linked_id != $test_run->testSuiteId ) {
-                  $this->_addSuiteToPlan( $test_run, $plan_step->linked_id );
+               if ( $planType->name == 'suite' && $planStep->linkedId != $testRun->testSuiteId ) {
+                  $this->_addSuiteToPlan($testRun, $planStep->linkedId);
                }
 
-               if ( $plan_type->name == 'test' ) {
-                  $this->_addTestToPlan( $test_run, $testSuiteId, $plan_step->linked_id );
+               if ( $planType->name == 'test' ) {
+                  $this->_addTestToPlan($testRun, $testSuiteId, $planStep->linkedId);
                }
 
             }
@@ -365,110 +393,113 @@ class CTM_Test_Run_Builder {
       return true;
    }
 
-   private function _addTestToPlan( CTM_Test_Run $test_run, $testSuiteId, $testId ) {
+   private function _addTestToPlan( CTM_Test_Run $testRun, $testSuiteId, $testId )
+   {
       try {
 
          // increment the _suiteTestId
          $this->_suiteTestId++;
 
-         $test_obj = $this->_test_cache->getById( $testId );
+         $testObj = $this->_testCache->getById($testId);
 
-         $this->_suite_tests[] = array(
+         $this->_suiteTests[] = array(
                'suiteTestId' => $this->_suiteTestId,
-               'test_obj' => $test_obj
+               'testObj' => $testObj
          );
 
-         if ( is_object( $test_obj ) ) {
+         if ( is_object($testObj) ) {
          
 
-            $baseurl_sel = new CTM_Test_Run_BaseUrl_Selector();
-            $baseurl_and_params = array( 
-               new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
+            $baseurlSel = new CTM_Test_Run_BaseUrl_Selector();
+            $baseurlAndParams = array( 
+               new Light_Database_Selector_Criteria( 'testRunId', '=', $testRun->id ),
                new Light_Database_Selector_Criteria( 'testSuiteId', '=', 0 ),
                new Light_Database_Selector_Criteria( 'testId', '=', $testId )
             );
-            $run_baseurls = $baseurl_sel->find( $baseurl_and_params );
-            if ( count( $run_baseurls ) == 0 ) {
-               $test_baseurl_obj = $test_obj->getBaseUrl();
-               if ( is_object( $test_baseurl_obj ) ) {
-                  $base_suite_obj = new CTM_Test_Run_BaseUrl();
-                  $base_suite_obj->testRunId = $test_run->id;
-                  $base_suite_obj->testSuiteId = 0;
-                  $base_suite_obj->testId = $testId;
-                  $base_suite_obj->baseurl = $test_baseurl_obj->baseurl;
-                  $base_suite_obj->save();
+            $runBaseurls = $baseurlSel->find($baseurlAndParams);
+            if ( count($runBaseurls) == 0 ) {
+               $testBaseurlObj = $testObj->getBaseUrl();
+               if ( is_object($testBaseurlObj) ) {
+                  $baseSuiteObj = new CTM_Test_Run_BaseUrl();
+                  $baseSuiteObj->testRunId = $testRun->id;
+                  $baseSuiteObj->testSuiteId = 0;
+                  $baseSuiteObj->testId = $testId;
+                  $baseSuiteObj->baseurl = $testBaseurlObj->baseurl;
+                  $baseSuiteObj->save();
                }
             }
          }
 
          // pull in all the ctm test parameters that this test needs first.
          $sel = new CTM_Test_Param_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ) );
-         $test_params = $sel->find( $and_params );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ));
+         $testParams = $sel->find($andParams);
 
-         if ( count( $test_params ) > 0 ) {
-            foreach ( $test_params as $test_param ) {
-               $param_lib_obj = $this->_param_lib_cache->getById( $test_param->testParamLibraryId );
+         if ( count($testParams) > 0 ) {
+            foreach ( $testParams as $testParam ) {
+               $paramLibObj = $this->_paramLibCache->getById($testParam->testParamLibraryId);
 
-               $test_run_command = new CTM_Test_Run_Command();
-               $test_run_command->testRunId = $test_run->id;
-               $test_run_command->testSuiteId = $testSuiteId;
-               $test_run_command->testId = $testId;
-               $test_run_command->testSeleniumCommandId = 1; // store.
-               $test_run_command->testParamLibraryId = $test_param->testParamLibraryId;
-               $test_run_command->save();
+               $testRunCommand = new CTM_Test_Run_Command();
+               $testRunCommand->testRunId = $testRun->id;
+               $testRunCommand->testSuiteId = $testSuiteId;
+               $testRunCommand->testId = $testId;
+               $testRunCommand->testSeleniumCommandId = 1; // store.
+               $testRunCommand->testParamLibraryId = $testParam->testParamLibraryId;
+               $testRunCommand->save();
 
-               $default_obj = $param_lib_obj->getDefault();
-               $test_run_command->setTarget( $default_obj->defaultValue );
-               $test_run_command->setValue( $param_lib_obj->name );
+               $defaultObj = $paramLibObj->getDefault();
+               $testRunCommand->setTarget($defaultObj->defaultValue);
+               $testRunCommand->setValue($paramLibObj->name);
 
             }
          }
 
          // now loop across the normal commands for the 
          $sel = new CTM_Test_Command_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ) );
-         $or_params = array();
-         $order = array( 'id' );
-         $test_commands = $sel->find( $and_params, $or_params, $order );
+         $andParams = array( new Light_Database_Selector_Criteria( 'testId', '=', $testId ));
+         $orParams = array();
+         $order = array( 'id');
+         $testCommands = $sel->find($andParams, $orParams, $order);
 
-         if ( count( $test_commands ) > 0 ) {
-            foreach ( $test_commands as $test_command ) {
-               $add_to_stack = false;
-               if ( $test_command->testParamLibraryId > 0 ) {
+         if ( count($testCommands) > 0 ) {
+            foreach ( $testCommands as $testCommand ) {
+               $addToStack = false;
+               if ( $testCommand->testParamLibraryId > 0 ) {
                   // only allow one copy of the param in the test set.
-                  $param_sel = new CTM_Test_Run_Command_Selector();
-                  $param_and_params = array( 
-                        new Light_Database_Selector_Criteria( 'testRunId', '=', $test_run->id ),
-                        new Light_Database_Selector_Criteria( 'testParamLibraryId', '=', $test_command->testParamLibraryId ),
+                  $paramSel = new CTM_Test_Run_Command_Selector();
+                  $paramAndParams = array( 
+                        new Light_Database_Selector_Criteria( 'testRunId', '=', $testRun->id ),
+                        new Light_Database_Selector_Criteria( 
+                           'testParamLibraryId', '=', $testCommand->testParamLibraryId
+                        )
                   );
-                  $p_params = $param_sel->find( $param_and_params );
-                  if ( count( $p_params ) > 0 ) {
-                     $add_to_stack = false;
+                  $pParams = $paramSel->find($paramAndParams);
+                  if ( count($pParams) > 0 ) {
+                     $addToStack = false;
                   } else {
-                     $add_to_stack = true;
+                     $addToStack = true;
                   }
                } else {
                   // inject the command into the run.
-                  $add_to_stack = true;
+                  $addToStack = true;
                }
 
-               if ( $add_to_stack == true ) {
+               if ( $addToStack == true ) {
                   // copy only the parameter objects in.
-                  if ( $test_command->testParamLibraryId > 0 ) {
-                     $test_run_command = new CTM_Test_Run_Command();
-                     $test_run_command->testRunId = $test_run->id;
-                     $test_run_command->testSuiteId = $testSuiteId;
-                     $test_run_command->testId = $testId;
-                     $test_run_command->testSeleniumCommandId = $test_command->testSeleniumCommandId;
-                     $test_run_command->testParamLibraryId = $test_command->testParamLibraryId;
-                     $test_run_command->save();
+                  if ( $testCommand->testParamLibraryId > 0 ) {
+                     $testRunCommand = new CTM_Test_Run_Command();
+                     $testRunCommand->testRunId = $testRun->id;
+                     $testRunCommand->testSuiteId = $testSuiteId;
+                     $testRunCommand->testId = $testId;
+                     $testRunCommand->testSeleniumCommandId = $testCommand->testSeleniumCommandId;
+                     $testRunCommand->testParamLibraryId = $testCommand->testParamLibraryId;
+                     $testRunCommand->save();
 
                      // pull the test library item out-
-                     $param_lib_obj = $this->_param_lib_cache->getById( $test_run_command->testParamLibraryId );
-                     $default_obj = $param_lib_obj->getDefault();
-                     $test_run_command->setTarget( $default_obj->defaultValue );
-                     $test_run_command->setValue( $param_lib_obj->name );
+                     $paramLibObj = $this->_paramLibCache->getById($testRunCommand->testParamLibraryId);
+                     $defaultObj = $paramLibObj->getDefault();
+                     $testRunCommand->setTarget($defaultObj->defaultValue);
+                     $testRunCommand->setValue($paramLibObj->name);
                   }
 
                }

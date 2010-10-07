@@ -1,9 +1,7 @@
-CREATE TABLE `ctm_test_suite_revision` (
+CREATE TABLE `ctm_test_suite_description` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `testSuiteId` bigint(20) unsigned NOT NULL,
-  `modifiedAt` bigint(20) unsigned NOT NULL,
-  `modifiedBy` bigint(20) unsigned NOT NULL,
-  `revision_id` varchar(256) NOT NULL,
+  `description` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `testSuiteId` (`testSuiteId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
