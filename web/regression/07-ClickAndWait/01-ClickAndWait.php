@@ -1,5 +1,5 @@
 <?php 
-if ( is_array( $_POST['selectionBox'] ) ) {
+if ( isset( $_POST['selectionBox'] ) && is_array( $_POST['selectionBox'] ) ) {
 ?>
 <html>
 <head>

@@ -11,7 +11,7 @@ class CTM_Test_Param extends Light_Database_Object
    public function init()
    {
       $this->setSqlTable('ctm_test_param');
-      $this->setDbName'test');
+      $this->setDbName('test');
    }
 
 }
