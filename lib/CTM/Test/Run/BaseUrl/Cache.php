@@ -10,23 +10,23 @@ class CTM_Test_Run_BaseUrl_Cache extends Light_Database_Object_Cache
       $this->setObject('CTM_Test_Run_BaseUrl');
    }
 
-   public function getByCompoundKey( $testRunId, $test_suite_id, $testId )
+   public function getByCompoundKey( $testRunId, $testSuiteId, $testId )
    {
       // iterate across the cache
       $_cache = $this->getCache();
       foreach ( $_cache as $cached ) {
-         if ( $cached->testRunId == $testRunId && $cached->test_suite_id == $test_suite_id && $cached->testId == $testId ) {
+         if ( $cached->testRunId == $testRunId && $cached->testSuiteId == $testSuiteId && $cached->testId == $testId ) {
             return $cached;
          }
       }
       try {
          $sel = new CTM_Test_Run_BaseUrl_Selector();
-         $and_params = array(
+         $andParams = array(
                new Light_Database_Selector_Criteria( 'testRunId', '=', $testRunId ),
-               new Light_Database_Selector_Criteria( 'test_suite_id', '=', $test_suite_id ),
+               new Light_Database_Selector_Criteria( 'testSuiteId', '=', $testSuiteId ),
                new Light_Database_Selector_Criteria( 'testId', '=', $testId ),
          );
-         $rows = $sel->find( $and_params );
+         $rows = $sel->find($andParams);
 
          if ( isset( $rows[0] ) ) {
             $_cache[] = $rows[0];
