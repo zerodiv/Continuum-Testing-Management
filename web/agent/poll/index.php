@@ -58,7 +58,10 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          } else {
             return false;
          }
-         
+        
+         if ( ! isset( $browser->id ) ) {
+            return false;
+         }
 
          $browser_link = $this->_findBrowserByMachine( $test_machine->id, $browser->id );
          if ( $browser_link == null ) { 

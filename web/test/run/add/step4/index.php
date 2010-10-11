@@ -33,10 +33,19 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
       $this->requiresAuth();
 
       if ( $action == 'step4' ) {
+
+         $testRunStateCache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
+         $queuedState = $testRunStateCache->getByName('queued');
+
+         $testRunCache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_Cache' );
+         $testRun = $testRunCache->getById($id);
+
+
          //print_r( $test_browsers );
 
          // push the on ones as requests to specific machines by browser type.
          if ( is_array( $test_browsers ) && count($test_browsers) > 0 ) {
+            $pickedOne = false;
             foreach ( $test_browsers as $test_machine_browser_id => $on_off ) {
 
                $test_machine_browser = $this->_test_machine_browser_cache->getById( $test_machine_browser_id );
@@ -55,6 +64,7 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                         $test_run_browser_obj->testRunStateId = 1;
                         $test_run_browser_obj->hasLog = 0;
                         $test_run_browser_obj->save();
+                        $pickedOne = true;
                         // print_r( $test_run_browser_obj );
                      } catch (Exception $e) {
                         $e = null;
@@ -62,6 +72,14 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
                   }
                }
             }
+        
+            /*
+            if ( $pickedOne == true ) {
+               $testRun->testRunStateId = $queuedState->id;
+               $testRun->save();
+            }
+            */
+
          } else {
             $this->_errorMessage = 'You need to pick at least one machine / browser combination.';
             return true;
@@ -71,21 +89,14 @@ class CTM_Site_Test_Run_Add_Step2 extends CTM_Site {
          // echo "fin?\n";
          // exit();
 
-         $sel = new CTM_Test_Run_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $id ) );
-         $test_runs = $sel->find( $and_params );
-         
-         if ( isset( $test_runs[0] ) ) {
-            $test_run = $test_runs[0];
-         }
-
-         if ( isset( $test_run->id ) ) {
-            $test_run->createTestSuite();
-            $test_run->testRunStateId = 1; // enqueued
-            $test_run->save();
+         if ( isset( $testRun->id ) ) {
+            $testRun->createTestSuite();
+            $testRun->testRunStateId = 1; // enqueued
+            $testRun->save();
          }
 
          header( 'Location: ' . $this->getBaseUrl() . '/test/runs/' );
+         return false;
 
       }
 
