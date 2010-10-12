@@ -33,8 +33,9 @@ if ( file_exists( dirname(__FILE__) . '/etc/installer.done' ) ) {
 
 if (
       $missingConfigFile == true || 
-      $installerDone == false || 
-      (isset($_GET['installerTesting']) && $_GET['installerTesting'] == 1)
+      $installerDone == false 
+      // JEO: This is for my internal testing you shouldn't need to re-run this this way in production.
+      // || (isset($_GET['installerTesting']) && $_GET['installerTesting'] == 1)
    ) {
    require_once( 'CTM/Installer.php' );
    $ctmInstallerObj = new CTM_Installer();
