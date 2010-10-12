@@ -14,27 +14,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
    }
 
    public function handleRequest() {
-      $action = $this->getOrPost( 'action', '' );
-      $testRunId = $this->getOrPost( 'testRunId', '' );
-
       $this->requiresAuth();
-
-      if ( $action == 'remove_test_run' ) {
-         // try to find the target test_run
-         try {
-            $sel = new CTM_Test_Run_Selector();
-            $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $testRunId ) );
-            $test_runs = $sel->find( $and_params );
-            if ( isset( $test_runs[0] ) ) {
-               $test_run = $test_runs[0];
-               $test_run->remove();
-            }
-         } catch ( Exception $e ) {
-            // we failed to delete.
-            return true;
-         }
-      }
-
       return true;
    }
 
@@ -150,17 +130,22 @@ class CTM_Site_Test_Runs extends CTM_Site {
             }
             // while a test is executing we cannot do any admin actions to it.
             $displayRemove = false;
+            $displayRetest = false;
             if ( $test_run->testRunStateId == $queued_state->id || 
                  $test_run->testRunStateId == $completed_state->id ||
                  $test_run->testRunStateId == $failed_state->id ||
                  $test_run->testRunStateId == $archived_state->id ) {
                $displayRemove = true;
+               $displayRetest = true;
             } 
             if ( $role_obj->name == 'admin' ) {
                $displayRemove = true;
             }
+            if ( $displayRetest == true ) {
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/retest/?testRunId=' . $test_run->id . '" class="ctmButton">Re-Test</a>' );
+            }
             if ( $displayRemove == true ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/runs/?action=remove_test_run&testRunId=' . $test_run->id . '" class="ctmButton">Remove</a>' );
+               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/remove/?testRunId=' . $test_run->id . '" class="ctmButton">Remove</a>' );
             }
             $this->printHtml( '</center></td>' );
             $this->printHtml( '</tr>' );
