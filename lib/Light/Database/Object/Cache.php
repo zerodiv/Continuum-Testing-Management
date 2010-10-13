@@ -73,10 +73,17 @@ abstract class Light_Database_Object_Cache
    public function __call( $method, $args )
    {
       if ( preg_match('/^getBy(.*)$/i', $method, $methodPregs) ) {
+         // lower case the field name to see if we're in the money
          $fieldName = strtolower($methodPregs[1]);
-         if ( in_array($fieldName, $this->_sqlFields) ) {
-            return $this->_getByField($fieldName, $args[0]);
+
+         foreach ( $this->_sqlFields as $sqlField ) {
+            // lower case the field name to match up with the input
+            $lowerSqlField = strtolower($sqlField);
+            if ( $lowerSqlField == $fieldName ) {
+               return $this->_getByField($sqlField, $args[0]);
+            }
          }
+
       }
       return;
    }
