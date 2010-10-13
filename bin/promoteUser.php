@@ -28,7 +28,7 @@ class CTM_Promote_User_CommandLine extends Light_CommandLine_Script
 
       if ( isset($user) && $user->id > 0 ) { 
          $adminRole = $userRoleCache->getByName('admin'); 
-         $user->userRoleId = $adminRole->id;
+         $user->ctmUserRoleId = $adminRole->id;
          $user->save(); 
          $this->message('Granted administrator role to id: ' . $user->id); 
       } else {
