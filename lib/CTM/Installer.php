@@ -25,6 +25,12 @@ class CTM_Installer extends CTM_Site
 
          $dbh = Light_Database_Connection_Factory::getDBH('test');
 
+         if ( ! isset($dbh) ) {
+            header('Content-Type: text/plain');
+            echo 'Failed to connect to database, please check your db.ini';
+            return false;
+         }
+
          foreach ( $rawTables as $rawTable ) {
             $tableFile = $tableDir . '/' . $rawTable;
             $dataFile = $dataDir . '/' . $rawTable;
@@ -41,9 +47,9 @@ class CTM_Installer extends CTM_Site
                if ( $rowCount > 0 ) {
                   $this->_tables[$tableName] = 'existed';
                } else {
-                  $dbh->exec(file($tableFile));
+                  $dbh->exec(file_get_contents($tableFile));
                   if ( is_file($dataFile) ) {
-                     $dbh->exec(file($dataFile));
+                     $dbh->exec(file_get_contents($dataFile));
                   }
                   $this->_tables[$tableName] = 'created';
                } 

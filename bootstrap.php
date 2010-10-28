@@ -31,12 +31,23 @@ if ( file_exists( dirname(__FILE__) . '/etc/installer.done' ) ) {
 
 // echo "missingConfigFile: $missingConfigFile installerDone: $installerDone\n";
 
-if (
-      $missingConfigFile == true || 
-      $installerDone == false 
-      // JEO: This is for my internal testing you shouldn't need to re-run this this way in production.
-      // || (isset($_GET['installerTesting']) && $_GET['installerTesting'] == 1)
-   ) {
+if ( $missingConfigFile == true ) {
+   header('Content-type: text/plain');
+   echo "You are missing expected configuration files:\n";
+   foreach ( $configFiles as $configFile ) {
+      echo sprintf( "%50s - ", $configFile );
+      if ( file_exists($configFile) ) {
+         echo "Exists\n";
+      } else {
+         echo "Missing\n";
+      }
+   }
+   exit();
+}
+
+if ( $installerDone == false ) {
+   // JEO: This is for my internal testing you shouldn't need to re-run this this way in production.
+   // || (isset($_GET['installerTesting']) && $_GET['installerTesting'] == 1)
    require_once( 'CTM/Installer.php' );
    $ctmInstallerObj = new CTM_Installer();
    $ctmInstallerObj->displayPage();
