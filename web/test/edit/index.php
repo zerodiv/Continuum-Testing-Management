@@ -228,18 +228,25 @@ class CTM_Site_Test_Edit extends CTM_Site {
             foreach ( $commands as $command ) {
 
                $n++;
-               $class = $this->oddEvenClass();
 
                $sel_obj = $sel_comm_cache->getById( $command->testSeleniumCommandId );
                $value_obj = $command->getValue();
                $target_obj = $command->getTarget();
 
-               $this->printHtml( '<tr class="' . $class . '">' );
-               $this->printHtml( '<td>' . $n . '</td>' );
-               $this->printHtml( '<td>' . $sel_obj->name . '</td>' );
-               $this->printHTml( '<td>' . $this->escapeVariable( $target_obj->target ) . '</td>' );
-               $this->printHTml( '<td>' . $this->escapeVariable( $value_obj->value ) . '</td>' );
-               $this->printHtml( '</tr>' );
+               if ( $sel_obj->name == '#comment#' ) {
+                  $this->printHtml( '<tr>' );
+                  $this->printHtml( '<td class="comments" colspan="4"><center>' . $this->escapeVariable( $target_obj->target ) . '</center></td>' );
+                  $this->printHtml( '</tr>' );
+               } else {
+                  $class = $this->oddEvenClass();
+
+                  $this->printHtml( '<tr class="' . $class . '">' );
+                  $this->printHtml( '<td>' . $n . '</td>' );
+                  $this->printHtml( '<td>' . $sel_obj->name . '</td>' );
+                  $this->printHTml( '<td>' . $this->escapeVariable( $target_obj->target ) . '</td>' );
+                  $this->printHTml( '<td>' . $this->escapeVariable( $value_obj->value ) . '</td>' );
+                  $this->printHtml( '</tr>' );
+               }
 
             }
          } else {

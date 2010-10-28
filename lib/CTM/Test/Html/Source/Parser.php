@@ -27,6 +27,25 @@ class CTM_Test_Html_Source_Parser
 
       $tbody = $domDocument->documentElement->getElementsByTagName('tbody');
 
+      if ( $tbody->length > 0 ) {
+         foreach ( $tbody->item(0)->childNodes as $childNode ) {
+            if ( $childNode->nodeName == '#comment' ) {
+               $results['commands'][] = array('#comment#', $childNode->nodeValue, '' );
+            }
+            if ( $childNode->nodeName == 'tr' ) {
+               // iterate across the children to get the command
+               $tCommand = array();
+               foreach ( $childNode->childNodes as $commandBit ) {
+                  if ( $commandBit->nodeName != '#text' ) {
+                     $tCommand[] = $commandBit->nodeValue;
+                  }
+               }
+               $results['commands'][] = $tCommand;
+            }
+         }
+      }
+
+      /*
       $testCommands = $tbody->item(0)->getElementsByTagName('tr');
       foreach ( $testCommands as $testCommand ) {
          $tds = $testCommand->getElementsByTagName('td');
@@ -36,6 +55,7 @@ class CTM_Test_Html_Source_Parser
          }
          $results['commands'][] = $tCommand;
       }
+      */
 
       return $results;
 

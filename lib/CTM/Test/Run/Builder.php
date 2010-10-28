@@ -259,11 +259,16 @@ class CTM_Test_Run_Builder
                }
                */
 
-               fwrite($fh, '<tr>' . "\n");
-               fwrite($fh, '         <td>' . $selObj->name . '</td>' . "\n");
-               fwrite($fh, '         <td>' . $this->_escapeVariable($targetObj->target) . '</td>' . "\n");
-               fwrite($fh, '         <td>' . $this->_escapeVariable($valueObj->value) . '</td>' . "\n");
-               fwrite($fh, '</tr>' . "\n");
+               if ( $selObj->name == '#comment#' ) {
+                  fwrite($fh, '<!-- ' . $this->_escapeVariable($targetObj->target) . ' -->' . "\n");
+               } else {
+                  fwrite($fh, '<tr>' . "\n");
+                  fwrite($fh, '         <td>' . $selObj->name . '</td>' . "\n");
+                  fwrite($fh, '         <td>' . $this->_escapeVariable($targetObj->target) . '</td>' . "\n");
+                  fwrite($fh, '         <td>' . $this->_escapeVariable($valueObj->value) . '</td>' . "\n");
+                  fwrite($fh, '</tr>' . "\n");
+               }
+
                
             }
          }

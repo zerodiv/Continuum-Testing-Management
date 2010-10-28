@@ -81,6 +81,7 @@ class CTM_Test_Html_Source extends Light_Database_Object
          foreach ( $parsedData['commands'] as $commandTrinome ) {
             list( $command, $target, $value ) = $commandTrinome;
 
+
             // first lookup the slenium command object
             $commandObj = null;
             $commandObj = $testCommandCache->getByName($command);
