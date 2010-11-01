@@ -268,7 +268,7 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
             $browser->name = $name;
             $browser->majorVersion = $major;
             $browser->minorVersion = $minor;
-            $browser->patchPersion = $patch;
+            $browser->patchVersion = $patch;
             $browser->isAvailable = true;
             $browser->lastSeen = time();
             $browser->save();

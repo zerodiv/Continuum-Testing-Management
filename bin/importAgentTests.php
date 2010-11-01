@@ -221,7 +221,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
          $testFile = $testDir . '/' . $testItem;
          
          if ( is_file($testFile) && preg_match('/.html$/', $testItem) ) {
-            $this->message('testFile: ' . $testFile);
+            // $this->message('   testFile: ' . $testFile);
 
             $isDisabled = $testFile . '.disabled';
             if ( is_file($isDisabled) ) {

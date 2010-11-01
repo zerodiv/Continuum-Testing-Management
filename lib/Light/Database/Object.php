@@ -289,6 +289,7 @@ abstract class Light_Database_Object
                " leftside($leftsideField): " . $this->$leftsideField . 
             "\n";
          */
+
          $andParams = array(
                new Light_Database_Selector_Criteria(
                   $rel->getLinkingField(),
@@ -296,6 +297,10 @@ abstract class Light_Database_Object
                   $this->$leftsideField
                )
          );
+
+         // Debugging joins.
+         // print_r( $andParams );
+
          $rows = $sel->find($andParams);
          if ( $rel->getType() == Light_Database_Object_Relationship::ONE_TO_ONE && isset($rows[0]) ) {
             return $rows[0];
