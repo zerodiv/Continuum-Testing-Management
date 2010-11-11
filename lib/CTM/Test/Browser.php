@@ -32,6 +32,12 @@ class CTM_Test_Browser extends Light_Database_Object
       if ( $this->name == 'safari' ) {
          return 'Safari';
       }
+      if ( $this->name == 'iphone' ) {
+         return 'iPhone';
+      }
+      if ( $this->name == 'android' ) {
+         return 'Google Android';
+      }
    }
 
 }

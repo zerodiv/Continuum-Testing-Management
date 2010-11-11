@@ -205,6 +205,8 @@ class CTM_ET_Phone_Home_Main extends CTM_Site {
          $this->_associateBrowserToMachine( $test_machine, 'googlechrome' );
          $this->_associateBrowserToMachine( $test_machine, 'firefox' );
          $this->_associateBrowserToMachine( $test_machine, 'safari' );
+         $this->_associateBrowserToMachine( $test_machine, 'android' );
+         $this->_associateBrowserToMachine( $test_machine, 'iphone' );
 
          // let's find any work for them and push it.
 
