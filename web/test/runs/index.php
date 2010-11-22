@@ -130,13 +130,12 @@ class CTM_Site_Test_Runs extends CTM_Site {
             }
             // while a test is executing we cannot do any admin actions to it.
             $displayRemove = false;
-            $displayRetest = false;
+            $displayRetest = true;
             if ( $test_run->testRunStateId == $queued_state->id || 
                  $test_run->testRunStateId == $completed_state->id ||
                  $test_run->testRunStateId == $failed_state->id ||
                  $test_run->testRunStateId == $archived_state->id ) {
                $displayRemove = true;
-               $displayRetest = true;
             } 
             if ( $role_obj->name == 'admin' ) {
                $displayRemove = true;
