@@ -40,4 +40,11 @@ class CTM_Test_Browser extends Light_Database_Object
       }
    }
 
+   public function getPrettyVersion() {
+      return 
+         $this->majorVersion . '.' .
+         $this->minorVersion . '.' . 
+         $this->patchVersion;
+   }
+
 }

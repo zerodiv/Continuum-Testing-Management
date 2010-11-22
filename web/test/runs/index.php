@@ -190,7 +190,7 @@ class CTM_Site_Test_Runs extends CTM_Site {
                     $this->printHtml('<tr class="' . $this->oddEvenClass() . '">');
                     $this->printHtml('<td>' . $test_run_browser->id . '</td>');
                     $this->printHtml('<td>' . $test_machine->os . ' @ ' . $t_machine . '</td>');
-                    $this->printHtml('<td>' . $test_browser->getPrettyName() . '</td>');
+                    $this->printHtml('<td>' . $test_browser->getPrettyName() . ' - ' . $test_browser->getPrettyVersion() . '</td>');
                     $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';"><center>' . $run_state_cache->getById($test_run_browser->testRunStateId)->name . '</center></td>');
                     if ( $test_run_browser->hasLog == true ) {
                         $this->printHtml('<td><center>' .
