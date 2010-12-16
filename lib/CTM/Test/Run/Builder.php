@@ -231,7 +231,6 @@ class CTM_Test_Run_Builder
          // dump all the test command combos to the file.
          if ( count($testCommands) > 0 ) {
 
-            $firstOpenFound = false;
             foreach ( $testCommands as $testCommand ) {
 
                if ( $testCommand->testParamLibraryId > 0 ) {
@@ -264,16 +263,11 @@ class CTM_Test_Run_Builder
                if ( $selObj->name == '#comment#' ) {
                   fwrite($fh, '<!-- ' . $this->_escapeVariable($targetObj->target) . ' -->' . "\n");
                } else {
-                  if ( $firstOpenFound == false && $selObj->name == 'open' ) {
-                    // Strip the first open, by not outputting it
-                    $firstOpenFound = true;
-                  } else {
-                    fwrite($fh, '<tr>' . "\n");
-                    fwrite($fh, '         <td>' . $selObj->name . '</td>' . "\n");
-                    fwrite($fh, '         <td>' . $this->_escapeVariable($targetObj->target) . '</td>' . "\n");
-                    fwrite($fh, '         <td>' . $this->_escapeVariable($valueObj->value) . '</td>' . "\n");
-                    fwrite($fh, '</tr>' . "\n");
-                  }
+                  fwrite($fh, '<tr>' . "\n");
+                  fwrite($fh, '         <td>' . $selObj->name . '</td>' . "\n");
+                  fwrite($fh, '         <td>' . $this->_escapeVariable($targetObj->target) . '</td>' . "\n");
+                  fwrite($fh, '         <td>' . $this->_escapeVariable($valueObj->value) . '</td>' . "\n");
+                  fwrite($fh, '</tr>' . "\n");
                }
 
                
