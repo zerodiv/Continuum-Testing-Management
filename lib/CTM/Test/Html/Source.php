@@ -64,10 +64,8 @@ class CTM_Test_Html_Source extends Light_Database_Object
          // pull out a store command so we have a id to work with.
          $storeCommand = $testCommandCache->getByName('store');
 
-         $htmlSource = stripslashes($this->htmlSource); 
-        
          $htmlSourceParserObj = new CTM_Test_Html_Source_Parser();
-         $parsedData = $htmlSourceParserObj->parse($htmlSource);
+         $parsedData = $htmlSourceParserObj->parse($this->htmlSource);
 
          $test = $testCache->getById($this->testId);
 
