@@ -46,7 +46,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
 
             $suite->saveRevision();
 
-            header( 'Location: ' . $this->getBaseUrl() . '/test/suites/?parentId=' . $suite->testFolderId );
+            header( 'Location: ' . $this->getBaseUrl() . '/test/suites/?parentId=' . $suite->testSuiteFolderId );
 
          }
 
@@ -102,7 +102,7 @@ class CTM_Site_Test_Suite_Edit extends CTM_Site {
          
          $this->printHtml( '<tr class="odd">' );
          $this->printHtml( '<td>Folder:</td>' );
-         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $test_suite->testFolderId ) . '</td>' );
+         $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $test_suite->testSuiteFolderId, true ) . '</td>' );
          $this->printHtml( '</tr>' );
          
          $this->printHtml( '<tr class="odd">' );

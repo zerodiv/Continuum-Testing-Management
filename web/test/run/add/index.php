@@ -54,18 +54,18 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
                            
 
    public function displayBody() {
-      $testFolderId = $this->getOrPost( 'testFolderId', 1 );
+      $testSuiteFolderId = $this->getOrPost( 'testSuiteFolderId', 1 );
       $testSuiteId = $this->getOrPost( 'testSuiteId', '' );
 
-      $testFolderId += 0;
+      $testSuiteFolderId += 0;
       $testSuiteId += 0;
 
       // folder_cacheing
-      $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Folder_Cache' );
+      $folder_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Suite_Folder_Cache' );
 
       // New style folder browser.
       $parents = array(); 
-      $folder_cache->getFolderParents( $testFolderId, $parents );
+      $folder_cache->getFolderParents( $testSuiteFolderId, $parents );
       $parents = array_reverse( $parents );
       $parents_cnt = count( $parents );
 
@@ -79,7 +79,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       foreach ( $parents as $parent ) {
          $current_parent++;
          $folder_path .= '/';
-         $folder_path .= '<a href="' . $this->getBaseUrl() . '/test/run/add/?testFolderId=' . $parent->id . '">' . $parent->name . '</a>';
+         $folder_path .= '<a href="' . $this->getBaseUrl() . '/test/run/add/?testSuiteFolderId=' . $parent->id . '">' . $parent->name . '</a>';
       }
 
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
@@ -90,14 +90,14 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       $this->printHtml( '</tr>' );
       
       $this->printHtml( '<tr class="aiTableTitle">' );
-      $this->printHtml( '<td colspan="2">Pick a test suite from the test folders:</td>' );
+      $this->printHtml( '<td colspan="2">Pick a test suite from the suite folders:</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Current folder path: ' . $folder_path . '</td>' );
       if ( count( $children ) > 0 ) {
          $this->printHtml( '<form action="' . $this->getBaseUrl() . '/test/run/add/" method="POST">' );
-         $this->printHtml( '<td>Sub Folders: <select name="testFolderId">' );
+         $this->printHtml( '<td>Sub Folders: <select name="testSuiteFolderId">' );
          foreach ( $children as $child ) {
             $this->printHtml( '<option value="' . $child->id . '">' . $child->name . '</option>' );
          }
@@ -116,7 +116,7 @@ class CTM_Site_Test_Run_Add extends CTM_Site {
       try {
          $sel = new CTM_Test_Suite_Selector();
          $and_params = array();
-         $or_params = array( new Light_Database_Selector_Criteria( 'testFolderId', '=', $testFolderId ) );
+         $or_params = array( new Light_Database_Selector_Criteria( 'testSuiteFolderId', '=', $testSuiteFolderId ) );
          $order = array( 'name' );
          $test_suites = $sel->find( $and_params, $or_params, $order );
       } catch ( Exception $e ) {

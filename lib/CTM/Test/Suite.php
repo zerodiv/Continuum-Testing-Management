@@ -11,7 +11,7 @@ require_once( 'CTM/Revision/Framework.php' );
 class CTM_Test_Suite extends Light_Database_Object
 {
    public $id;
-   public $testFolderId;
+   public $testSuiteFolderId;
    public $name;
    public $createdAt;
    public $createdBy;

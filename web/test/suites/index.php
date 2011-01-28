@@ -5,9 +5,10 @@ require_once( 'Light/Database/Object/Cache/Factory.php' );
 require_once( 'CTM/Site.php' );
 require_once( 'CTM/Test/Folder/Selector.php' );
 require_once( 'CTM/Test/Suite/Selector.php' );
+require_once( 'CTM/Test/Suite/Folder/Selector.php' );
 require_once( 'CTM/Test/Selector.php' );
 
-class CTM_Site_Test_Folders extends CTM_Site { 
+class CTM_Site_Test_Suite_Folders extends CTM_Site { 
 
    public function setupPage() {
       $this->setPageTitle('Test Suites');
@@ -31,10 +32,12 @@ class CTM_Site_Test_Folders extends CTM_Site {
          $parentId = 1;
       }
 
+      /*
       if ( $role_obj->name == 'user' ) {
          $user_folder = $this->getUserFolder();
          $parentId = $user_folder->id;
       }
+      */
 
       // need these caches for this page to hum.
       $test_status_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Status_Cache' );
@@ -48,7 +51,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       try {
          $sel = new CTM_Test_Suite_Selector();
          $and_params = array(
-               new Light_Database_Selector_Criteria( 'testFolderId', '=', $parentId ),
+               new Light_Database_Selector_Criteria( 'testSuiteFolderId', '=', $parentId ),
                new Light_Database_Selector_Criteria( 'testStatusId', '!=', $deleted_status->id )
          );
          $suite_rows = $sel->find( $and_params );
@@ -64,7 +67,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
       $this->printHtml( '<tr>' );
       $this->printHtml( '<td colspan="5">' );
-      $this->_displayFolderBreadCrumb( $this->getBaseUrl() . '/test/suites/', $parentId );
+      $this->_displayFolderBreadCrumb( $this->getBaseUrl() . '/test/suites/', $parentId, true );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
 
@@ -124,7 +127,7 @@ class CTM_Site_Test_Folders extends CTM_Site {
       }
 
       $this->printHtml( '<tr>' );
-      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->getBaseUrl() . '/test/suite/add/?testFolderId=' . $parentId . '" class="ctmButton">New Test Suite</a></center></td>' );
+      $this->printHtml( '<td class="aiButtonRow" colspan="6"><center><a href="' . $this->getBaseUrl() . '/test/suite/add/?testSuiteFolderId=' . $parentId . '" class="ctmButton">New Test Suite</a></center></td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '</table>' );
@@ -138,5 +141,5 @@ class CTM_Site_Test_Folders extends CTM_Site {
 
 }
 
-$test_folders_obj = new CTM_Site_Test_Folders();
+$test_folders_obj = new CTM_Site_Test_Suite_Folders();
 $test_folders_obj->displayPage();

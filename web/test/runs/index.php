@@ -8,217 +8,119 @@ require_once( 'CTM/Test/Run/Selector.php' );
 
 class CTM_Site_Test_Runs extends CTM_Site { 
 
-   public function setupPage() {
-      $this->setPageTitle('Test Runs');
-      return true;
-   }
+    public function setupPage() {
+        $this->setPageTitle('Test Runs');
+        return true;
+    }
 
-   public function handleRequest() {
-      $this->requiresAuth();
-      return true;
-   }
+    public function handleRequest() {
+        $this->requiresAuth();
+        return true;
+    }
 
-   public function displayBody() {
-      $run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
-      $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
-      $test_machine_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Machine_Cache' );
-      $test_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Browser_Cache' );
+    public function displayBody() {
+        $run_state_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Run_State_Cache' );
+        $user_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_User_Cache' );
+        $test_machine_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Machine_Cache' );
+        $test_browser_cache = Light_Database_Object_Cache_Factory::factory( 'CTM_Test_Browser_Cache' );
 
-      $queued_state = $run_state_cache->getByName('queued');
-      $executing_state = $run_state_cache->getByName('exeecuting');
-      $completed_state = $run_state_cache->getByName('completed');
-      $archived_state = $run_state_cache->getByName('archived');
-      $failed_state = $run_state_cache->getByName('failed');
-      $step1_state = $run_state_cache->getByName('step1');
-      $step2_state = $run_state_cache->getByName('step2');
-      $step3_state = $run_state_cache->getByName('step3');
-      $step4_state = $run_state_cache->getByName('step4');
+        $queued_state = $run_state_cache->getByName('queued');
+        $executing_state = $run_state_cache->getByName('exeecuting');
+        $completed_state = $run_state_cache->getByName('completed');
+        $archived_state = $run_state_cache->getByName('archived');
+        $failed_state = $run_state_cache->getByName('failed');
+        $step1_state = $run_state_cache->getByName('step1');
+        $step2_state = $run_state_cache->getByName('step2');
+        $step3_state = $run_state_cache->getByName('step3');
+        $step4_state = $run_state_cache->getByName('step4');
 
-      $role_obj = $this->getUser()->getRole();
+        $role_obj = $this->getUser()->getRole();
 
-      if ( ! isset( $run_state->id ) ) {
-         // load up the queued page if we cannot find the current run state.
-         $run_state = $run_state_cache->getById( 1 );
-      }
+        if ( ! isset( $run_state->id ) ) {
+            // load up the queued page if we cannot find the current run state.
+            $run_state = $run_state_cache->getById( 1 );
+        }
 
-      $test_runs = null;
-      try {
-         $sel = new CTM_Test_Run_Selector();
-         $and_params = array( new Light_Database_Selector_Criteria( 'testRunStateId', '!=', $archived_state->id ) );
-         $test_runs = $sel->find( $and_params );
-      } catch ( Exception $e ) {
-      }
+        $test_runs = null;
+        try {
+            $sel = new CTM_Test_Run_Selector();
+            $and_params = array( new Light_Database_Selector_Criteria( 'testRunStateId', '!=', $archived_state->id ) );
+            $test_runs = $sel->find( $and_params );
+        } catch ( Exception $e ) {
+        }
 
-      $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
-      $this->printHtml( '<table class="ctmTable aiFullWidth">' );
-      
-      $this->printHtml( '<tr>' );
-      $this->printHtml( '<th colspan="7">Test Runs</th>' );
-      $this->printHtml( '</tr>' );
+        $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
+        $this->printHtml( '<table class="ctmTable aiFullWidth">' );
 
-      $this->printHtml( '<tr class="aiButtonRow">' );
-      $this->printHtml( '<td colspan="7"><center><a href="' . $this->getBaseUrl() . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
-      $this->printHtml( '</tr>' );
+        $this->printHtml( '<tr>' );
+        $this->printHtml( '<th colspan="7">Test Runs</th>' );
+        $this->printHtml( '</tr>' );
 
-      if ( count( $test_runs ) == 0 ) {
-         $this->printHtml( '<tr class="odd">' );
-         $this->printHtml( '<td colspan="7"><center> - There are no test runs in a non archived state.</center></td>' );
-         $this->printHtml( '</tr>' );
-      } else {
-         foreach ( $test_runs as $test_run ) {
-      
+        $this->printHtml( '<tr class="aiButtonRow">' );
+        $this->printHtml( '<td colspan="7"><center><a href="' . $this->getBaseUrl() . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
+        $this->printHtml( '</tr>' );
+
+        if ( count( $test_runs ) == 0 ) {
+            $this->printHtml( '<tr class="odd">' );
+            $this->printHtml( '<td colspan="7"><center> - There are no test runs in a non archived state.</center></td>' );
+            $this->printHtml( '</tr>' );
+        } else {
             $this->printHtml( '<tr class="aiTableTitle">' );
             $this->printHtml( '<td class="aiColumnOne">ID</td>' );
             $this->printHtml( '<td>Test Suite</td>' );
             $this->printHtml( '<td>Status</td>' );
-            $this->printHtml( '<td>Iterations</td>' );
             $this->printHtml( '<td>Created At</td>' );
             $this->printHtml( '<td>Created By</td>' );
-            $this->printHtml( '<td>Actions</td>' );
             $this->printHtml( '</tr>' );
-
-            $class = $this->oddEvenClass();
-            $createdBy = $user_cache->getById( $test_run->createdBy );
-
-            // lookup the test suite that is associated to this test run.
-            $test_suite = null;
-            try {
-               $sel = new CTM_Test_Suite_Selector();
-               $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run->testSuiteId ) );
-               $test_suites = $sel->find( $and_params );
-               if ( isset( $test_suites[0] ) ) {
-                  $test_suite = $test_suites[0];
-               }
-            } catch ( Exception $e ) {
-            }
-            
-            if ($test_run->testRunStateId == 5) {
-               $testRunColor = '#FF0000';
-            } else {
-               $testRunColor = '#00FF00';
-            }
+            foreach ( $test_runs as $test_run ) {
 
 
-            $run_state = $run_state_cache->getById($test_run->testRunStateId);
+                $class = $this->oddEvenClass();
+                $createdBy = $user_cache->getById( $test_run->createdBy );
 
-            $this->printHtml( '<tr class="' . $class . '">' );
-            $this->printHtml( '<td class="aiColumnOne">' . $test_run->id . '</td>' );
-            $this->printHtml( '<td>' . $this->escapeVariable( $test_suite->name ) . '</td>' );
-            $this->printHtml('<td style="background-color:' . $testRunColor . ';"><center>' . $run_state->description . '</center></td>');
-            $this->printHtml( '<td>' . $test_run->iterations . '</td>' );
-            $this->printHtml( '<td>' . $this->formatDate( $test_run->createdAt ) . '</td>' );
-            $this->printHtml( '<td>' . $this->escapeVariable( $createdBy->username ) . '</td>' );
-            $this->printHtml( '<td><center>' );
-            if ( $test_run->testRunStateId != $step1_state->id &&
-                 $test_run->testRunStateId != $step2_state->id &&
-                 $test_run->testRunStateId != $step3_state->id &&
-                 $test_run->testRunStateId != $step4_state->id 
-            ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/download/?id=' . $test_run->id . '" class="ctmButton">Download</a>' );
-            }
-            if ($test_run->testRunStateId == $step1_state->id ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step1_state->description ) . '</a>' );
-            }
-            if ($test_run->testRunStateId == $step2_state->id ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step2/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step2_state->description ) . '</a>' );
-            }
-            if ($test_run->testRunStateId == $step3_state->id ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step3/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step3_state->description ) . '</a>' );
-            }
-            if ($test_run->testRunStateId == $step4_state->id ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step4/?id=' . $test_run->id . '" class="ctmButton">' . $this->escapeVariable( $step4_state->description ) . '</a>' );
-            }
-            // while a test is executing we cannot do any admin actions to it.
-            $displayRemove = false;
-            $displayRetest = true;
-            if ( $test_run->testRunStateId == $queued_state->id || 
-                 $test_run->testRunStateId == $completed_state->id ||
-                 $test_run->testRunStateId == $failed_state->id ||
-                 $test_run->testRunStateId == $archived_state->id ) {
-               $displayRemove = true;
-            } 
-            if ( $role_obj->name == 'admin' ) {
-               $displayRemove = true;
-            }
-            if ( $displayRetest == true ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/retest/?testRunId=' . $test_run->id . '" class="ctmButton">Re-Test</a>' );
-            }
-            if ( $displayRemove == true ) {
-               $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/remove/?testRunId=' . $test_run->id . '" class="ctmButton">Remove</a>' );
-            }
-            $this->printHtml( '</center></td>' );
-            $this->printHtml( '</tr>' );
-
-            $sel = new CTM_Test_Run_Browser_Selector();
-            $and_params = array(new Light_Database_Selector_Criteria('testRunId', '=', $test_run->id));
-            $test_run_browsers = $sel->find($and_params);
-
-            if (count($test_run_browsers) > 0) {
-
-                $this->printHtml('<tr><td valign="top" colspan="7">' );
-                $this->printHtml( '<table class="ctmTable aiFullWidth">' );
-
-                $this->printHtml('<tr class="aiTableTitle">');
-                $this->printHtml('<td colspan="6">Test Browser Runs for: ' . $this->escapeVariable( $test_suite->name ) . '</td>');
-                $this->printHtml('</tr>');
-
-                $this->printHtml('<tr class="aiTableTitle">' );
-                $this->printHtml('<td>ID</td>' );
-                $this->printHtml('<td>OS</td>' );
-                $this->printHtml('<td>Browser</td>' );
-                $this->printHtml('<td>Status</td>' );
-                $this->printHtml('<td>Actions</td>' );
-                $this->printHtml('</tr>' );
-
-                foreach ($test_run_browsers as $test_run_browser) {
-
-                    // failed?
-                    if ($test_run_browser->testRunStateId == 5) {
-                        $testRunBrowserColor = '#FF0000';
-                    } else {
-                        $testRunBrowserColor = '#00FF00';
+                // lookup the test suite that is associated to this test run.
+                $test_suite = null;
+                try {
+                    $sel = new CTM_Test_Suite_Selector();
+                    $and_params = array( new Light_Database_Selector_Criteria( 'id', '=', $test_run->testSuiteId ) );
+                    $test_suites = $sel->find( $and_params );
+                    if ( isset( $test_suites[0] ) ) {
+                        $test_suite = $test_suites[0];
                     }
-
-                    $test_machine = $test_machine_cache->getById( $test_run_browser->testMachineId );
-                    $t_machine = $test_machine->ip;
-                    if ( $test_machine->machineName != '' ) {
-                        $t_machine = $test_machine->machineName;
-                    }
-
-                    $test_browser = $test_browser_cache->getById( $test_run_browser->testBrowserId );
-
-                    $this->printHtml('<tr class="' . $this->oddEvenClass() . '">');
-                    $this->printHtml('<td>' . $test_run_browser->id . '</td>');
-                    $this->printHtml('<td>' . $test_machine->os . ' @ ' . $t_machine . '</td>');
-                    $this->printHtml('<td>' . $test_browser->getPrettyName() . ' - ' . $test_browser->getPrettyVersion() . '</td>');
-                    $this->printHtml('<td style="background-color:' . $testRunBrowserColor . ';"><center>' . $run_state_cache->getById($test_run_browser->testRunStateId)->name . '</center></td>');
-                    $this->printHtml('<td><center>');
-                    if ( $test_run_browser->hasLog == true ) {
-                        $this->printHtml('<a href="' . $this->getBaseUrl() . '/test/run/browser/log/?testRunBrowserId=' . $test_run_browser->id . '&type=selenium" class="ctmButton" target="_blank">Selenium Log</a>');
-                    }
-                    $this->printHtml('<a href="' . $this->getBaseUrl() . '/test/run/browser/remove/?testRunBrowserId=' . $test_run_browser->id . '" class="ctmButton">Remove Run</a>');
-                    $this->printHtml('</center></td>');
-                    $this->printHtml('</tr>');
+                } catch ( Exception $e ) {
                 }
 
-                $this->printHtml('</table>');
-                $this->printHtml('</td>' );
-                $this->printHtml('</tr>' );
+                if ($test_run->testRunStateId == 5) {
+                    $testRunColor = '#FF0000';
+                } else {
+                    $testRunColor = '#00FF00';
+                }
+
+
+                $run_state = $run_state_cache->getById($test_run->testRunStateId);
+
+                $testRunLink = '<a href="' . $this->getBaseUrl() . '/test/run/?id=' . $test_run->id . '">';
+
+                $this->printHtml( '<tr class="' . $class . '">' );
+                $this->printHtml( '<td class="aiColumnOne">' . $testRunLink . $test_run->id . '</a></td>' );
+                $this->printHtml( '<td>' . $testRunLink . $this->escapeVariable( $test_suite->name ) . '</a></td>' );
+                $this->printHtml('<td style="background-color:' . $testRunColor . ';"><center>' . $testRunLink . $run_state->description . '</a></center></td>');
+                $this->printHtml( '<td>' . $testRunLink . $this->formatDate( $test_run->createdAt ) . '</a></td>' );
+                $this->printHtml( '<td>' . $testRunLink . $this->escapeVariable( $createdBy->username ) . '</a></td>' );
+                $this->printHtml( '</tr>' );
 
             }
-            
-         }
-      }
+        }
 
-      $this->printHtml( '<tr class="aiButtonRow">' );
-      $this->printHtml( '<td colspan="7"><center><a href="' . $this->getBaseUrl() . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
-      $this->printHtml( '</tr>' );
+        $this->printHtml( '<tr class="aiButtonRow">' );
+        $this->printHtml( '<td colspan="7"><center><a href="' . $this->getBaseUrl() . '/test/run/add" class="ctmButton">Add Test Run</a></center></td>' );
+        $this->printHtml( '</tr>' );
 
-      $this->printHtml( '</table>' );
-      $this->printHtml( '</div>' );
+        $this->printHtml( '</table>' );
+        $this->printHtml( '</div>' );
 
-      return true;
-   }
+        return true;
+    }
 
 }
 

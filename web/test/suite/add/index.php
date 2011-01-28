@@ -17,7 +17,7 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
       $this->requiresAuth();
       $this->requiresRole( array( 'user', 'qa', 'admin' ) );
 
-      $testFolderId   = $this->getOrPost( 'testFolderId', '' );
+      $testSuiteFolderId   = $this->getOrPost( 'testSuiteFolderId', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
 
@@ -31,7 +31,7 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
 
          // create the test suite and it's associated description.
          $new = new CTM_Test_Suite();
-         $new->testFolderId = $testFolderId;
+         $new->testSuiteFolderId = $testSuiteFolderId;
          $new->name = $name;
          $create_at = time(); // yes i know this is paranoia
          $new->createdAt = $create_at;
@@ -48,7 +48,7 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
             $new->saveRevision();
 
             // added our child send us back to our parent
-            header( 'Location: ' . $this->getBaseUrl() . '/test/suites/?parentId=' . $testFolderId );
+            header( 'Location: ' . $this->getBaseUrl() . '/test/suites/?parentId=' . $testSuiteFolderId );
             return false;
          }
 
@@ -63,13 +63,13 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
                            
 
    public function displayBody() {
-      $testFolderId   = $this->getOrPost( 'testFolderId', '' );
+      $testSuiteFolderId   = $this->getOrPost( 'testSuiteFolderId', '' );
       $name             = $this->getOrPost( 'name', '' );
       $description      = $this->getOrPost( 'description', '' );
 
       $this->printHtml( '<div class="aiTableContainer aiFullWidth">' );
       $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/test/suite/add/">' );
-      $this->printHtml( '<input type="hidden" value="' . $testFolderId . '" name="testFolderId">' );
+      $this->printHtml( '<input type="hidden" value="' . $testSuiteFolderId . '" name="testSuiteFolderId">' );
       $this->printHtml( '<table class="ctmTable aiFullWidth">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="4">Add Test Suite</th>' );
@@ -82,7 +82,7 @@ class CTM_Site_Test_Suite_Add extends CTM_Site {
 
       $this->printHtml( '<tr class="odd">' );
       $this->printHtml( '<td>Folder:</td>' );
-      $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $testFolderId ) . '</td>' );
+      $this->printHtml( '<td>' . $this->_fetchFolderPath( $this->getBaseUrl() . '/tests/', $testSuiteFolderId, true ) . '</td>' );
       $this->printHtml( '</tr>' );
 
       $this->printHtml( '<tr class="odd">' );
