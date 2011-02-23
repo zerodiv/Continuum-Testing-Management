@@ -251,7 +251,7 @@ class CTM_Site extends Light_MVC
         $userObj = $this->getUser();
         $roleObj = $userObj->getRole();
 
-        $folderPath = $this->_fetchFolderPath($currentBaseurl, $parentId, true);
+        $folderPath = $this->_fetchFolderPath($currentBaseurl, $parentId, $isSuite );
 
         $folderCache = null;
         $newFolderText = null;
