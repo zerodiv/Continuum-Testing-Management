@@ -63,7 +63,7 @@ class CTM_Site_User_ForgotPassword_TempPassword extends CTM_Site {
       $this->printHtml( '<center>' );
       $this->printHtml( '<table class="ctmTable">' );
 
-      $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/forgot_password/tempPassword/">' );
+      $this->printHtml( '<form method="POST" action="' . $this->getBaseUrl() . '/user/forgot_password/temp_password/">' );
       foreach ( $secure_params as $n => $v ) {
          $this->printHtml( '<input type="hidden" name="' . $n . '" value="' . $v . '">' );
       }

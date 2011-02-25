@@ -58,7 +58,7 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
             $more_headers .= "Reply-To: zerodiv@zerodivide.net\r\n";
             mail( '<' . $user->username . '>', "Forgot password - " . $this->getSiteTitle(), $message ); 
             
-            header( 'Location: /user/forgot_password/sent/' );
+            header( 'Location: ' . $this->getBaseUrl() . '/user/forgot_password/sent/' );
             return false;
          } else {
             $this->_errorMessage = 'Failed to find a user by that username.';
@@ -77,7 +77,7 @@ class CTM_Site_User_ForgotPassword extends CTM_Site {
       $username = $this->getOrPost( 'username', null ); 
       
       $this->printHtml( '<center>' );
-      $this->printHtml( '<form action="/user/forgot_password/" method="POST">' );
+      $this->printHtml( '<form action="' . $this->getBaseUrl() . '/user/forgot_password/" method="POST">' );
       $this->printHtml( '<table class="ctmTable">' );
       $this->printHtml( '<tr>' );
       $this->printHtml( '<th colspan="2">' . $this->getPageTitle() . '</th>' );

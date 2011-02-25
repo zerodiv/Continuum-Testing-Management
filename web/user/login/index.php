@@ -99,7 +99,7 @@ class CTM_Site_User_Login extends CTM_Site {
       $this->printHtml( '<td colspan="2" class="aiButtonRow">' );
       $this->printHtml( '<center>' );
       $this->printHtml( '<input type="submit" value="Login!">' );
-      $this->printHtml( '<a href="/user/forgot_password/" class="ctmButton">Forgot my password</a>' );
+      $this->printHtml( '<a href="' . $this->getBaseUrl() . '/user/forgot_password/" class="ctmButton">Forgot my password</a>' );
       $this->printHtml( '</center>' );
       $this->printHtml( '</td>' );
       $this->printHtml( '</tr>' );
