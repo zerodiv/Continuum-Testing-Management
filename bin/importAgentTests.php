@@ -13,6 +13,9 @@ require_once( 'CTM/Test/Folder/Selector.php' );
 require_once( 'CTM/Test/Suite/Cache.php' );
 require_once( 'CTM/Test/Suite/Plan/Selector.php' );
 
+require_once( 'CTM/Test/Suite/Folder/Cache.php' );
+require_once( 'CTM/Test/Suite/Folder/Selector.php' );
+
 require_once( 'CTM/Test/Selector.php' );
 
 /**
@@ -34,6 +37,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
 
    private $_adminUserObj;
    private $_regressionFolderObj;
+   private $_regressionSuiteFolderObj;
    private $_regressionSuiteObj;
    private $_planCounter;
    private $_testCounter;
@@ -81,8 +85,27 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
                 ' folder: ' .  $this->_regressionFolderObj->name . 
                 ' id: ' . $this->_regressionFolderObj->id
             );
+         }
+         
+         $suiteFolderCacheObj = new CTM_Test_Suite_Folder_Cache();
+         $this->_regressionSuiteFolderObj = $suiteFolderCacheObj->getByName(self::CTM_REGRESSION_FOLDER_NAME);
+         
+         if ( ! isset( $this->_regressionSuiteFolderObj ) ) {
+            $this->_regressionSuiteFolderObj = new CTM_Test_Suite_Folder();
+            $this->_regressionSuiteFolderObj->parentId = 1;
+            $this->_regressionSuiteFolderObj->name = self::CTM_REGRESSION_FOLDER_NAME;
+            $this->_regressionSuiteFolderObj->save();
+         }
+
+         if ( isset( $this->_regressionSuiteFolderObj ) && $this->_regressionSuiteFolderObj->id > 0 ) {
+            $this->message(
+                'Regression parent' .
+                ' folder: ' .  $this->_regressionSuiteFolderObj->name . 
+                ' id: ' . $this->_regressionSuiteFolderObj->id
+            );
             return true;
          }
+         
 
          throw new Exception( 'Failed to find regression folder named: ' . self::CTM_REGRESSION_FOLDER_NAME );
 
@@ -100,7 +123,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
 
          if ( ! isset( $this->_regressionSuiteObj ) ) {
             $this->_regressionSuiteObj = new CTM_Test_Suite();
-            $this->_regressionSuiteObj->testFolderId = $this->_regressionFolderObj->id;
+            $this->_regressionSuiteObj->testSuiteFolderId = $this->_regressionSuiteFolderObj->id;
             $this->_regressionSuiteObj->name = self::CTM_REGRESSION_SUITE_NAME;
             $this->_regressionSuiteObj->createdAt = time();
             $this->_regressionSuiteObj->createdBy = $this->_adminUserObj->id;
@@ -150,7 +173,6 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
          if ( $fileOrDirectory == '.' || $fileOrDirectory == '..' ) {
          } else if ( is_dir($testDir) ) {
 
-
             $folderSel = new CTM_Test_Folder_Selector();
             $folderAndParams = array(
                   new Light_Database_Selector_Criteria( 'parentId', '=', $this->_regressionFolderObj->id ),
@@ -161,7 +183,6 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
 
             $folderObj = null;
 
-            // Look up the suite folder entry.
             if ( count($folderObjs) == 1 ) {
                $folderObj = $folderObjs[0];
             } else {
@@ -170,17 +191,35 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
                $folderObj->name = $fileOrDirectory;
                $folderObj->save();
             }
-
          
             $this->message(' Test Folder: ' . $testDir . ' id: ' . $folderObj->id);
 
-            $this->processTestDir($testDir, $folderObj);
+            $suiteFolderSel = new CTM_Test_Suite_Folder_Selector();
+            $folderAndParams = array(
+                  new Light_Database_Selector_Criteria( 'parentId', '=', $this->_regressionSuiteFolderObj->id ),
+                  new Light_Database_Selector_Criteria( 'name', '=', $fileOrDirectory )
+            );
+
+            $suiteFolderObjs = $suiteFolderSel->find($folderAndParams);
+
+            $suiteFolderObj = null;
+            
+            if ( count($suiteFolderObjs) == 1 ) {
+               $suiteFolderObj = $suiteFolderObjs[0];
+            } else {
+               $suiteFolderObj = new CTM_Test_Suite_Folder();
+               $suiteFolderObj->parentId = $this->_regressionSuiteFolderObj->id;
+               $suiteFolderObj->name = $fileOrDirectory;
+               $suiteFolderObj->save();
+            }
+
+            $this->processTestDir($testDir, $folderObj, $suiteFolderObj);
 
          }
       }
    }
 
-   private function processTestDir( $testDir, CTM_Test_Folder $folderObj )
+   private function processTestDir( $testDir, CTM_Test_Folder $folderObj, CTM_Test_Suite_Folder $suiteFolderObj )
    {
       // Remove all existing tests in this folder
       $testSel = new CTM_Test_Selector();
@@ -203,7 +242,7 @@ class CTM_Regression_ImportAgent extends Light_Commandline_Script
          $suiteObj->removePlan();
       } else {
          $suiteObj = new CTM_Test_Suite();
-         $suiteObj->testFolderId = $folderObj->id;
+         $suiteObj->testSuiteFolderId = $suiteFolderObj->id;
          $suiteObj->name = $folderObj->name;
          $suiteObj->createdAt = time();
          $suiteObj->createdBy = $this->_adminUserObj->id;

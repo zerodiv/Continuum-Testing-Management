@@ -116,13 +116,16 @@ class CTM_ET_Log extends CTM_Site
             $test_run_browser->hasLog = true;
             $test_run_browser->save();
 
-            $testRunLog = new CTM_Test_Run_Log();
-            $testRunLog->testRunBrowserId = $test_run_browser->id;
-            $testRunLog->runLog = $runLog;
-            $testRunLog->seleniumLog = $seleniumLog;
-            $testRunLog->duration = $testDuration;
-            $testRunLog->createdAt = time();
-            $testRunLog->save();
+            // Take the file and push it to our log location.
+            $logPath = $test_run_browser->getLogPath();
+
+            if ( ! is_dir($logPath) ) {
+              mkdir($logPath, 0755, true);
+            }
+
+            // Write all the contents to disk.
+            file_put_contents( $test_run_browser->getAgentLogFile(), $seleniumLog);
+            file_put_contents( $test_run_browser->getJavaLogFile(), $runLog);
 
             $this->_serviceOutput('OK', '');
 

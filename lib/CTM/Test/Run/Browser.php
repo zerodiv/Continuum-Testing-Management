@@ -46,4 +46,20 @@ class CTM_Test_Run_Browser extends Light_Database_Object
       return parent::save();
    }
 
+   public function getLogPath() 
+   {
+     // TODO: Implement dir hashing.
+     return Light_Config::get('CTM_Config', 'log_dir') . '/' . $this->id;
+   }
+
+   public function getJavaLogFile()
+   {
+     return $this->getLogPath() . '/java.log';
+   }
+
+   public function getAgentLogFile()
+   {
+     return $this->getLogPath() . '/agent.html';
+   }
+
 }

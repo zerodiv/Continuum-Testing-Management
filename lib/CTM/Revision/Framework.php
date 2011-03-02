@@ -36,6 +36,11 @@ class CTM_Revision_Framework
 
       $this->_basedir = $this->_gitDir . '/' . $namespace;
 
+      // Attempt to make the directory if it's not there.
+      if ( ! is_dir($this->_basedir) ) {
+        mkdir( $this->_basedir, 0755 );
+      }
+
       if ( ! is_dir($this->_basedir) ) {
          throw new Exception( 'basedir is invalid: ' . $this->_basedir );
       }

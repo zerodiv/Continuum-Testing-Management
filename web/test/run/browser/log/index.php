@@ -1,7 +1,7 @@
 <?php
 
 require_once( '../../../../../bootstrap.php' ); require_once( 'CTM/Site.php' );
-require_once( 'CTM/Test/Run/Log/Selector.php' );
+require_once( 'CTM/Test/Run/Browser/Selector.php' );
 
 class CTM_Site_Test_Run_Browser_Log extends CTM_Site { 
    public function setupPage() { 
@@ -21,21 +21,30 @@ class CTM_Site_Test_Run_Browser_Log extends CTM_Site {
          }
 
          if ( $testRunBrowserId > 0 ) { 
-            $test_run_log_sel = new CTM_Test_Run_Log_Selector();
+
+            $test_run_log_sel = new CTM_Test_Run_Browser_Selector();
+
             $and_params = array(
-                  new Light_Database_Selector_Criteria('testRunBrowserId', '=', $testRunBrowserId)
+                  new Light_Database_Selector_Criteria('id', '=', $testRunBrowserId)
             );
             
             $test_run_logs = $test_run_log_sel->find( $and_params ); 
             
             if (!empty($test_run_logs)) { 
-               foreach ($test_run_logs as $test_run_log) { 
-                  if ( $type == 'selenium' ) {
-                     echo stripslashes($test_run_log->seleniumLog);
-                  } else {
-                     echo $test_run_log->run_log;
-                  }
-               } 
+              $test_run_log = $test_run_logs[0];
+              if ( $type == 'selenium' ) {
+                if ( is_file( $test_run_log->getAgentLogFile() ) ) {
+                  echo stripslashes( file_get_contents( $test_run_log->getAgentLogFile() ) );
+                } else {
+                  echo 'Failed to find log file!';
+                }
+              } else {
+                if ( is_file( $test_run_log->getJavaLogFile() ) ) {
+                  echo file_get_contents($test_run_log->getJavaLogFile());
+                } else {
+                  echo 'Failed to find log file!';
+                }
+              }
             } else {
                echo 'Invalid id.';
             } 

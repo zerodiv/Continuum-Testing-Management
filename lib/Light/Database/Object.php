@@ -250,7 +250,10 @@ abstract class Light_Database_Object
             } else {
                $lastId = null;
             } 
-            
+         $fh = fopen( '/tmp/ctmB.log', 'w');
+         fputs($fh, "lastId: $lastId");
+         fclose($fh);
+
             if ( $lastId != null ) {
                $idField = $this->_sqlIdField;
                $this->$idField = $lastId;

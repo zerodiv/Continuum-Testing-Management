@@ -125,27 +125,8 @@ class CTM_Site_Test_Run extends CTM_Site {
             $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/add/step4/?id=' . $this->_testRun->id . '" class="ctmButton">' . $this->escapeVariable( $step4_state->description ) . '</a>' );
         }
 
-        // while a test is executing we cannot do any admin actions to it.
-        $displayRemove = false;
-        $displayRetest = true;
-        if ( $this->_testRun->testRunStateId == $queued_state->id || 
-                $this->_testRun->testRunStateId == $completed_state->id ||
-                $this->_testRun->testRunStateId == $failed_state->id ||
-                $this->_testRun->testRunStateId == $archived_state->id ) {
-            $displayRemove = true;
-        } 
-
-        if ( $role_obj->name == 'admin' ) {
-            $displayRemove = true;
-        }
-
-        if ( $displayRetest == true ) {
-            $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/retest/?testRunId=' . $this->_testRun->id . '" class="ctmButton">Re-Test</a>' );
-        }
-
-        if ( $displayRemove == true ) {
-            $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/remove/?testRunId=' . $this->_testRun->id . '" class="ctmButton">Remove</a>' );
-        }
+        $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/retest/?testRunId=' . $this->_testRun->id . '" class="ctmButton">Re-Test</a>' );
+        $this->printHtml( '<a href="' . $this->getBaseUrl() . '/test/run/remove/?testRunId=' . $this->_testRun->id . '" class="ctmButton">Remove</a>' );
 
         $this->printHtml( '</center></td>' );
         $this->printHtml( '</tr>' ); 
